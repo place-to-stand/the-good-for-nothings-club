@@ -79,7 +79,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
-        <PromoPopup />
+        {/* <PromoPopup /> */}
         <Analytics />
         <Script src='https://www.googletagmanager.com/gtag/js?id=G-RK8DQY3F32' />
         <Script id='google-analytics'>

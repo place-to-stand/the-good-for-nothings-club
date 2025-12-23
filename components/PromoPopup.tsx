@@ -147,7 +147,7 @@ export default function PromoPopup() {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className='max-h-[90vh] !max-w-3xl overflow-y-auto border-black bg-white px-4 py-14 sm:p-10'>
+      <DialogContent className='max-h-[90vh] max-w-3xl! overflow-y-auto border-black bg-white px-4 py-14 sm:p-10'>
         <div className='space-y-8'>
           <DialogHeader className='gap-1 text-center'>
             <DialogTitle className='text-[32px] leading-none font-black tracking-tight sm:text-[36px]'>

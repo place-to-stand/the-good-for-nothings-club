@@ -52,8 +52,8 @@ export default function InstagramFeed({ feedId }: { feedId: string }) {
       <Image
         src={post.sizes.medium.mediaUrl}
         alt={post.prunedCaption}
-        width={post.sizes.medium.width}
-        height={post.sizes.medium.height}
+        width={post.sizes.medium.width ?? 640}
+        height={post.sizes.medium.height ?? 640}
         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
         className='h-full w-full object-cover'
       />

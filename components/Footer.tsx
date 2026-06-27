@@ -4,6 +4,7 @@ import { Check, Loader2 } from 'lucide-react'
 import { Input } from './ui/Input'
 import { Button } from './ui/Button'
 import SocialMediaLinks from './SocialMediaLinks'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { newsletterSignUpSchema } from '../data/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -80,6 +81,19 @@ function NewsletterSignUpForm() {
   )
 }
 
+// Full site map for the footer. Projects lives here while it's deprioritized
+// in the main header nav, but the /projects route is still live.
+const FOOTER_LINKS = [
+  { href: '/', text: 'Home' },
+  { href: '/facilities', text: 'Facilities' },
+  { href: '/services', text: 'Services' },
+  { href: '/events', text: 'Events' },
+  { href: 'https://shop.thegoodfornothings.club/', text: 'Shop' },
+  { href: '/about', text: 'About' },
+  { href: '/contact', text: 'Contact' },
+  { href: '/projects', text: 'Projects' },
+]
+
 export default function Footer() {
   return (
     <footer className='pt-8 pb-8 font-sans md:px-8 md:pt-16 xl:px-16 xl:pb-16'>
@@ -88,6 +102,13 @@ export default function Footer() {
           <div className=''>Subscribe to our newsletter</div>
           <NewsletterSignUpForm />
         </div>
+        <nav className='mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 font-black uppercase md:justify-start'>
+          {FOOTER_LINKS.map(link => (
+            <Link key={link.href} href={link.href} className='text-sm'>
+              {link.text}
+            </Link>
+          ))}
+        </nav>
         <div className='mt-10 flex flex-col-reverse items-center justify-between gap-6 md:flex-row'>
           <div className='text-center'>
             &copy; {new Date().getFullYear()} The Good for Nothings Club LLC.

@@ -88,6 +88,7 @@ const FOOTER_LINKS = [
   { href: '/facilities', text: 'Facilities' },
   { href: '/services', text: 'Services' },
   { href: '/events', text: 'Events' },
+  { href: '/membership', text: 'Membership' },
   { href: 'https://shop.thegoodfornothings.club/', text: 'Shop' },
   { href: '/about', text: 'About' },
   { href: '/contact', text: 'Contact' },

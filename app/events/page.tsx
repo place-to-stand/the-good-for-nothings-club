@@ -1,7 +1,11 @@
 import Link from 'next/link'
 import type { Metadata, ResolvingMetadata } from 'next'
 
-import { events } from '@/data/events'
+import InquiryDialog from '@/components/InquiryDialog'
+import { events, eventsCopy, upcomingOccurrences } from '@/data/events'
+
+// Recompute the upcoming schedule daily.
+export const revalidate = 86400
 
 export async function generateMetadata(
   _props: unknown,
@@ -13,7 +17,7 @@ export async function generateMetadata(
   return {
     title: 'Events',
     description:
-      'Upcoming events at The Good for Nothings Club — including our weekly accountability club and monthly music jam. Join the waitlist.',
+      'The club, in session — regular happenings at the clubhouse in Austin, TX. Members and friends of members welcome.',
     alternates: {
       canonical: pathname,
     },
@@ -24,21 +28,18 @@ export async function generateMetadata(
   }
 }
 
-function formatOccurrence(iso: string) {
-  const date = new Date(iso)
-  const hasTime = iso.includes('T')
-
-  return date.toLocaleString('en-US', {
-    weekday: 'long',
-    month: 'long',
+function formatDay(iso: string) {
+  return new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
     day: 'numeric',
-    year: 'numeric',
-    ...(hasTime ? { hour: 'numeric', minute: '2-digit' } : {}),
-    timeZone: hasTime ? undefined : 'UTC',
+    timeZone: 'UTC',
   })
 }
 
 export default function Events() {
+  const upcoming = upcomingOccurrences(new Date(), 6)
+
   return (
     <main>
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
@@ -49,11 +50,36 @@ export default function Events() {
 
           <div className='mt-10 border-t-2 border-black pt-12 sm:mt-12 md:mt-20'>
             <p className='mx-auto max-w-3xl text-center font-serif text-2xl leading-tight sm:text-[28px]'>
-              The club runs on a rhythm of recurring gatherings. Some are open,
-              and some we grow slowly — join a waitlist and we&apos;ll bring you
-              in as space opens up.
+              The club, in session. {eventsCopy.lead}
             </p>
 
+            {/* Upcoming schedule */}
+            <h2 className='mt-12 text-[28px] font-black tracking-[-0.03em] md:mt-16 md:text-[40px]'>
+              {eventsCopy.upcomingTitle}
+            </h2>
+            <ol className='mt-6 divide-y-2 divide-black border-2 border-black'>
+              {upcoming.map(occurrence => (
+                <li
+                  key={`${occurrence.event.slug}-${occurrence.date}`}
+                  className='flex flex-wrap items-baseline gap-x-6 gap-y-1 px-4 py-3 font-sans md:px-6'
+                >
+                  <span className='w-28 font-black uppercase'>
+                    {formatDay(occurrence.date)}
+                  </span>
+                  <span className='w-16 text-sm font-bold'>
+                    {occurrence.event.time}
+                  </span>
+                  <a
+                    href={`#${occurrence.event.slug}`}
+                    className='font-bold hover:underline'
+                  >
+                    {occurrence.event.name}
+                  </a>
+                </li>
+              ))}
+            </ol>
+
+            {/* Event details */}
             <div className='mt-12 flex flex-col gap-6 md:mt-16 md:gap-8'>
               {events.map(event => (
                 <article
@@ -62,70 +88,44 @@ export default function Events() {
                   className='flex scroll-mt-28 flex-col gap-6 border-2 border-black p-6 md:flex-row md:items-start md:justify-between md:p-8'
                 >
                   <div className='flex-1'>
-                    <div className='flex flex-wrap items-center gap-3'>
-                      <span className='inline-block border-2 border-black px-3 py-1 font-sans text-xs font-black tracking-widest uppercase'>
-                        {event.cadence}
-                      </span>
-                      {event.waitlist && (
-                        <span className='inline-block bg-black px-3 py-1 font-sans text-xs font-black tracking-widest text-white uppercase'>
-                          Waitlist
-                        </span>
-                      )}
-                    </div>
+                    <span className='inline-block border-2 border-black px-3 py-1 font-sans text-xs font-black tracking-widest uppercase'>
+                      {event.schedule}
+                    </span>
 
                     <h2 className='mt-4 text-[28px] leading-none font-black tracking-[-0.03em] md:text-[32px]'>
                       {event.name}
                     </h2>
 
-                    <p className='mt-3 font-serif text-xl leading-snug'>
-                      {event.summary}
+                    <p className='mt-4 font-sans leading-snug'>{event.blurb}</p>
+
+                    <p className='mt-3 font-sans text-sm'>
+                      <span className='font-black tracking-wide uppercase'>
+                        Where:{' '}
+                      </span>
+                      {event.location ?? 'The clubhouse, Austin, TX'}
                     </p>
-
-                    <dl className='mt-4 space-y-1 font-sans text-sm'>
-                      <div className='flex gap-2'>
-                        <dt className='font-black tracking-wide uppercase'>
-                          When:
-                        </dt>
-                        <dd>{event.recurrenceLabel}</dd>
-                      </div>
-                      {event.nextOccurrence && (
-                        <div className='flex gap-2'>
-                          <dt className='font-black tracking-wide uppercase'>
-                            Next:
-                          </dt>
-                          <dd>{formatOccurrence(event.nextOccurrence)}</dd>
-                        </div>
-                      )}
-                      <div className='flex gap-2'>
-                        <dt className='font-black tracking-wide uppercase'>
-                          Where:
-                        </dt>
-                        <dd>{event.location ?? 'The club space, Austin, TX'}</dd>
-                      </div>
-                    </dl>
-
-                    <div className='mt-4 space-y-3 font-sans leading-snug'>
-                      {event.description.map((paragraph, i) => (
-                        <p key={i}>{paragraph}</p>
-                      ))}
-                    </div>
                   </div>
 
                   <div className='md:w-64 md:shrink-0'>
-                    <Link
-                      href={`/contact?subject=${encodeURIComponent(
-                        event.waitlist
-                          ? `Waitlist: ${event.name}`
-                          : `RSVP: ${event.name}`
-                      )}`}
-                      className='inline-flex w-full items-center justify-center border-2 border-black bg-black px-6 py-4 text-center font-sans text-sm font-black tracking-tight text-white uppercase transition-colors hover:bg-black/80 hover:no-underline active:bg-black/70'
-                    >
-                      {event.waitlist ? 'Join the waitlist' : 'RSVP'}
-                    </Link>
+                    <InquiryDialog
+                      kind='event'
+                      item={event.name}
+                      triggerLabel='RSVP'
+                      title={`RSVP — ${event.name}`}
+                      description={`${event.schedule} at the clubhouse.`}
+                      submitLabel='RSVP'
+                    />
                   </div>
                 </article>
               ))}
             </div>
+
+            <p className='mt-12 text-center font-sans leading-snug'>
+              {eventsCopy.friendNote}{' '}
+              <Link href='/membership' className='font-bold underline'>
+                Join as a friend
+              </Link>
+            </p>
           </div>
         </div>
       </section>

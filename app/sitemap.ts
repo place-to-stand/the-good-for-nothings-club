@@ -37,6 +37,13 @@ const eventsPage: MetadataRoute.Sitemap[0] = {
   priority: 0.9,
 }
 
+const membershipPage: MetadataRoute.Sitemap[0] = {
+  url: 'https://www.thegoodfornothings.club/membership',
+  lastModified: new Date(),
+  changeFrequency: 'weekly',
+  priority: 0.9,
+}
+
 const aboutPage: MetadataRoute.Sitemap[0] = {
   url: 'https://www.thegoodfornothings.club/about',
   lastModified: new Date(),
@@ -96,6 +103,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     facilitiesPage,
     servicesPage,
     eventsPage,
+    membershipPage,
     projectsPage,
     ...projectPages,
     ...memberPages,

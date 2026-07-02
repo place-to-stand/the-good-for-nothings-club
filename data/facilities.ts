@@ -1,104 +1,136 @@
 /**
- * Facilities — the physical space and what's available to rent.
+ * Facilities — the clubhouse, room by room.
  *
- * This is plain, version-controlled data (no CMS). Edit it directly — add,
- * remove, or reorder entries and the /facilities page updates on the next
- * build. Keep `slug` URL-safe and unique; it's used for anchors and as the
- * subject line when someone inquires about a specific space.
+ * Plain, version-controlled data (no CMS). Edit directly. `slug` must be
+ * URL-safe and unique; it's used for anchors and inquiry subjects.
+ *
+ * `model: 'monthly'` facilities rent by the month; `'hourly'` by the hour.
+ * `status: 'planned'` facilities render without rates or booking buttons.
  */
+
+export type RateLine = {
+  group: 'Room' | 'Staff'
+  item: string
+  price: string
+}
 
 export type Facility = {
   /** URL-safe unique id. Used for anchor links + inquiry subject. */
   slug: string
   name: string
-  /** One-line hook shown under the name. */
-  tagline: string
-  /** Longer description. Each string renders as its own paragraph. */
-  description: string[]
-  /** Bulleted highlights (what's included / specs). */
-  features: string[]
-  /** Human-readable rate, e.g. "$25 / hour" or "From $150 / day". Optional. */
+  description: string
+  model: 'monthly' | 'hourly'
+  /** Not yet bookable — shown without rates or booking. */
+  status?: 'planned'
+  /** Display rate, e.g. "$275 / mo" or "From $30 / hr". */
   rate?: string
-  /** Max occupancy or size note, e.g. "Seats 12" or "400 sq ft". Optional. */
-  capacity?: string
-  /**
-   * Image path under /public (e.g. "/facilities/studio.jpg") OR a full URL.
-   * Optional — the page renders a clean placeholder when omitted, so you can
-   * publish before photos exist.
-   */
+  rateNote?: string
+  /** e.g. "8 desks total" */
+  quantity?: string
+  rateCard?: RateLine[]
+  /** Image path under /public or full URL. Placeholder shown when omitted. */
   image?: string
-  /** Show an "Inquire" button for this space. Defaults to true. */
-  inquiryEnabled?: boolean
 }
+
+export const facilitiesCopy = {
+  lead: 'Monthly members get keys and 24/7 access to the facilities.',
+  monthlyTitle: 'Monthly rental',
+  hourlyTitle: 'Hourly rental',
+  hourlyLead:
+    'Standard booking hours are 9–5. Evenings and weekends are available for an added rate, and special times can be arranged with enough notice.',
+  plannedTitle: 'In the works',
+}
+
+export const amenities = [
+  'Wi-Fi',
+  'Full kitchen',
+  'Drip coffee',
+  'Milk',
+  'Filtered water',
+  'Seltzer',
+  'Snacks',
+]
+
+/** The parts of the house rules an outside renter needs before booking. */
+export const bookingNotes = [
+  {
+    label: 'Parking',
+    points: [
+      '11am–7pm — park in the neighborhood; the front lot is reserved for the vintage store up front',
+      'Before 11am and after 7pm — the front lot is open',
+      '15-minute load-in out front, anytime',
+    ],
+  },
+  {
+    label: 'Sound',
+    points: [
+      'While the vintage store is open (11am–7pm), keep studio sound to a reasonable volume — no restrictions before or after',
+      'Band practice starts at 3pm at the earliest',
+    ],
+  },
+]
 
 export const facilities: Facility[] = [
   {
-    slug: 'main-studio',
-    name: 'Main Studio',
-    tagline: 'Our flexible flagship room for shoots, sessions, and gatherings.',
-    description: [
-      'The Main Studio is the heart of the space — an open, configurable room that adapts to whatever you bring to it, from photo and video shoots to workshops and member meetups.',
-      'Natural light, blackout options, and plenty of floor space make it equally at home for a product shoot or a 30-person event.',
-    ],
-    features: [
-      'Open, reconfigurable floor plan',
-      'Controllable natural + blackout lighting',
-      'High-speed Wi-Fi',
-      'Access to shared kitchen + restrooms',
-    ],
-    rate: 'From $40 / hour',
-    capacity: 'Up to 30 people',
-    inquiryEnabled: true,
+    slug: 'permanent-desk',
+    name: 'Permanent desk',
+    model: 'monthly',
+    description:
+      'An assigned space — bring your own furniture, set it up how you like, and leave it that way between visits.',
+    quantity: '8 desks total',
+    rate: '$275 / mo',
   },
   {
-    slug: 'recording-room',
-    name: 'Recording Room',
-    tagline: 'A treated room for music, voiceover, and podcasting.',
-    description: [
-      'An acoustically treated space built for capturing clean audio, whether you are tracking music, recording a podcast, or cutting voiceover.',
-    ],
-    features: [
-      'Acoustic treatment + isolation',
-      'Monitor speakers available',
-      'Bring-your-own or on-site interface',
-      'Quiet, dedicated entrance',
-    ],
-    rate: 'From $30 / hour',
-    capacity: 'Seats 4',
-    inquiryEnabled: true,
+    slug: 'band-room',
+    name: 'Band practice room',
+    model: 'monthly',
+    description:
+      'One practice room, shared by four bands on a calendar. Drum kit (without breakables), PA, mics, and mic stands provided.',
+    quantity: '4 band slots',
+    rate: '$150 / mo',
   },
   {
-    slug: 'workshop-bench',
-    name: 'Workshop & Maker Bench',
-    tagline: 'Hands-on space for building, prototyping, and making a mess.',
-    description: [
-      'A practical work area for physical projects — prototyping, set building, props, and general making. Designed to be used, not babied.',
+    slug: 'photo-studio',
+    name: 'Photo studio',
+    model: 'hourly',
+    description:
+      'Photo/video shooting space with backdrops and lighting (grip available). First 15 minutes of setup help are free; an assistant who knows the gear is available by the hour.',
+    rate: 'From $30 / hr',
+    rateNote: 'Two-hour minimum.',
+    rateCard: [
+      { group: 'Room', item: 'Weekday · 9–5, Mon–Fri', price: '$30 / hr' },
+      { group: 'Room', item: 'Evenings & weekends', price: '$40 / hr' },
+      { group: 'Staff', item: 'Assistant (optional)', price: '$50 / hr' },
     ],
-    features: [
-      'Durable work surfaces',
-      'Shared hand tools',
-      'Ample power + ventilation',
-      'Storage for works in progress',
-    ],
-    rate: 'From $20 / hour',
-    capacity: 'Up to 6 people',
-    inquiryEnabled: true,
   },
   {
-    slug: 'desk-day-pass',
-    name: 'Day Desk',
-    tagline: 'Drop in and work alongside the club for the day.',
-    description: [
-      'A single desk and a power outlet when you just need a focused place to work for a few hours, surrounded by people doing the same.',
+    slug: 'recording-studio',
+    name: 'Recording control room',
+    model: 'hourly',
+    description:
+      'A control room for mixing with studio monitors, a Mac mini loaded with Pro Tools, and plugins. An engineer who knows the room is available by the hour.',
+    rate: 'From $30 / hr',
+    rateNote: 'Two-hour minimum.',
+    rateCard: [
+      { group: 'Room', item: 'Weekday · 9–5, Mon–Fri', price: '$30 / hr' },
+      { group: 'Room', item: 'Evenings & weekends', price: '$40 / hr' },
+      { group: 'Staff', item: 'Engineer (optional)', price: '$50 / hr' },
     ],
-    features: [
-      'Dedicated desk for the day',
-      'High-speed Wi-Fi',
-      'Coffee + shared kitchen',
-      'Member community on-site',
-    ],
-    rate: '$15 / day',
-    capacity: 'Single desk',
-    inquiryEnabled: true,
+  },
+  {
+    slug: 'darkroom',
+    name: 'Darkroom',
+    model: 'hourly',
+    status: 'planned',
+    description:
+      'A black-and-white darkroom for developing and printing — chemicals included.',
+  },
+  {
+    slug: 'repair-bench',
+    name: 'Electronics & guitar bench',
+    model: 'hourly',
+    status: 'planned',
+    description:
+      'A workbench with the necessary tools and materials for fixing electronics and setting up instruments.',
   },
 ]

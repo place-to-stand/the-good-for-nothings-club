@@ -1,105 +1,138 @@
 /**
- * Services — the work our members can take on for clients.
+ * Services — hire club members and their extended network.
  *
  * Plain, version-controlled data (no CMS). Edit directly. `slug` must be
- * URL-safe and unique; it's used for anchors and as the inquiry subject.
+ * URL-safe and unique; it's used for anchors and inquiry subjects.
  */
+
+export type ServiceCategoryKey = 'visual' | 'audio' | 'print' | 'av'
+
+export type ServiceItem = {
+  /** e.g. "At the clubhouse" / "On-site" — omit when there's no grouping. */
+  group?: string
+  label: string
+  price: string
+}
 
 export type Service = {
   /** URL-safe unique id. Used for anchor links + inquiry subject. */
   slug: string
   name: string
-  /** One-line summary shown under the name. */
-  summary: string
-  /** Longer description. Each string renders as its own paragraph. */
-  description: string[]
-  /** What a client actually gets — deliverables, skills, formats. */
-  deliverables: string[]
-  /** Optional human-readable starting price, e.g. "From $500". */
-  startingPrice?: string
-  /** Show an "Inquire" button for this service. Defaults to true. */
-  inquiryEnabled?: boolean
+  blurb: string
+  price: string
+  category: ServiceCategoryKey
+  detail?: string
+  items?: ServiceItem[]
+}
+
+export const servicesCopy = {
+  lead: 'Hire club members and their extended network of multimedia creatives to make your project happen.',
+  categories: [
+    {
+      key: 'visual' as const,
+      title: 'Visual',
+      lead: 'Photo and video — shot, edited, and delivered ready to use.',
+    },
+    {
+      key: 'audio' as const,
+      title: 'Audio',
+      lead: 'Songs made with you, starting anywhere from a rough demo to the final tracks.',
+    },
+    {
+      key: 'print' as const,
+      title: 'Print',
+      lead: 'Custom zines, designed in-house and sent off to print.',
+    },
+    {
+      key: 'av' as const,
+      title: 'AV & events',
+      lead: 'Professional gear and an operator, brought to your event.',
+    },
+  ],
 }
 
 export const services: Service[] = [
   {
-    slug: 'web-app-development',
-    name: 'Web & App Development',
-    summary: 'Sites, web apps, and tools built by working engineers.',
-    description: [
-      'From marketing sites to full product builds, our members ship modern, maintainable web and app experiences.',
-    ],
-    deliverables: [
-      'Marketing & brand websites',
-      'Web applications & internal tools',
-      'E-commerce storefronts',
-      'Ongoing maintenance & support',
-    ],
-    startingPrice: 'From $1,500',
-    inquiryEnabled: true,
-  },
-  {
-    slug: 'video-production',
-    name: 'Video Production',
-    summary: 'Concept to final cut — films, promos, and social content.',
-    description: [
-      'Our filmmakers handle the full pipeline: pre-production, shooting, and post — for brand films, music videos, event coverage, and short-form social.',
-    ],
-    deliverables: [
-      'Brand & promo films',
-      'Music videos',
-      'Event coverage',
-      'Short-form social content',
-    ],
-    startingPrice: 'From $1,000',
-    inquiryEnabled: true,
-  },
-  {
     slug: 'photography',
     name: 'Photography',
-    summary: 'Product, portrait, and event photography.',
-    description: [
-      'Clean, considered photography for products, people, and events — shot in our studio or on location.',
+    category: 'visual',
+    blurb:
+      'From headshots and lookbooks at the studio to your event covered end to end. We can shoot digital or film, with vintage gear on hand when needed.',
+    price: 'From $250',
+    items: [
+      { group: 'At the clubhouse', label: 'Portrait', price: 'From $250' },
+      { group: 'At the clubhouse', label: 'Product / promo', price: 'From $300' },
+      { group: 'On-site', label: 'Event coverage', price: 'From $250' },
+      { group: 'On-site', label: 'Portrait', price: 'From $300' },
+      { group: 'On-site', label: 'Product / promo', price: 'From $350' },
     ],
-    deliverables: [
-      'Product & e-commerce photography',
-      'Portraits & headshots',
-      'Event photography',
-      'Edited, ready-to-use galleries',
-    ],
-    startingPrice: 'From $400',
-    inquiryEnabled: true,
   },
   {
-    slug: 'audio-music',
-    name: 'Audio & Music',
-    summary: 'Recording, production, mixing, and sound design.',
-    description: [
-      'Our musicians and engineers cover recording, production, mixing, and sound design for music, podcasts, and media.',
+    slug: 'video',
+    name: 'Video',
+    category: 'visual',
+    blurb:
+      'Music videos, promos, and event recaps — shot on modern or vintage gear, filmed and cut into something you can use immediately.',
+    price: 'From $400',
+    items: [
+      { group: 'At the clubhouse', label: 'Product / promo', price: 'From $400' },
+      { group: 'On-site', label: 'Event coverage', price: 'From $400' },
+      { group: 'On-site', label: 'Product / promo', price: 'From $450' },
+      { group: 'On-site', label: 'Music video', price: 'From $1000' },
     ],
-    deliverables: [
-      'Recording & production',
-      'Mixing & mastering',
-      'Podcast editing',
-      'Sound design for video',
-    ],
-    startingPrice: 'From $300',
-    inquiryEnabled: true,
   },
   {
-    slug: 'design-branding',
-    name: 'Design & Branding',
-    summary: 'Identity, graphics, and design systems.',
-    description: [
-      'Brand identities, graphic design, and design systems that hold up across everything you make.',
+    slug: 'music',
+    name: 'Music production',
+    category: 'audio',
+    blurb: 'Mixing, production, and writing with people who live in the studio.',
+    price: 'From $300',
+    items: [
+      { label: 'Mixing', price: '$300 / song' },
+      { label: 'Production', price: 'By quote' },
+      { label: 'Composition', price: 'By quote' },
     ],
-    deliverables: [
-      'Logos & brand identity',
-      'Graphic & print design',
-      'Design systems',
-      'Marketing collateral',
-    ],
-    startingPrice: 'From $500',
-    inquiryEnabled: true,
+  },
+  {
+    slug: 'zines',
+    name: 'Branded zines',
+    category: 'print',
+    blurb:
+      "We publish LIMO, our own quarterly art zine, and we'll do the same for your company end to end — concept, design, layout, and the printed run.",
+    price: 'From $1,000',
+    detail: 'Quoted to your page count, print quality, and run size.',
+  },
+  {
+    slug: 'photo-booth',
+    name: 'Photo booth',
+    category: 'av',
+    blurb:
+      'A real photographer with a DSLR behind pro lighting with instant prints — not a vending-machine booth.',
+    price: 'From $150 / hr',
+  },
+  {
+    slug: 'cinema',
+    name: 'Pop-up cinema',
+    category: 'av',
+    blurb:
+      'Projector, big screen, and sound, set up and run wherever you want it — backyard, rooftop, or indoors. Movie night without the hassle.',
+    price: 'From $400',
+  },
+  {
+    slug: 'sound-system',
+    name: 'Sound system + operator',
+    category: 'av',
+    blurb:
+      'A PA sized to your room and an engineer to run it, so the show sounds right and you never touch a knob.',
+    price: 'From $400',
+    detail: 'Includes setup, operation, and teardown.',
+  },
+  {
+    slug: 'event-planning',
+    name: 'Event planning',
+    category: 'av',
+    blurb:
+      "We've thrown indoor and outdoor parties with live music and vendors, plus outdoor movie nights — and we'll plan and run yours end to end, from space and gear to staffing. Tell us what you have in mind and we'll quote it.",
+    price: 'From $1,000',
   },
 ]

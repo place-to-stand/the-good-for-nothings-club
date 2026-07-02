@@ -29,7 +29,8 @@ const MENU_ITEMS: MenuItem[] = [
   { href: '/', text: 'Home' },
   { href: '/facilities', text: 'Facilities' },
   { href: '/services', text: 'Services' },
-  { href: '/events', text: 'Events', showOnMobile: true },
+  { href: '/events', text: 'Events' },
+  { href: '/membership', text: 'Membership', showOnMobile: true },
   { href: 'https://shop.thegoodfornothings.club/', text: 'Shop' },
   { href: '/about', text: 'About' },
   { href: '/contact', text: 'Contact', showOnMobile: true },
@@ -40,7 +41,7 @@ export default function Header() {
 
   return (
     <header className='relative text-center font-sans font-black uppercase md:px-8 md:pt-8 xl:px-16 xl:pt-16'>
-      <div className='bg-background relative z-10 m-auto grid max-w-(--page-max-width) grid-cols-[64px_1fr_1fr] border-b-2 border-black md:border-2 lg:grid-cols-7'>
+      <div className='bg-background relative z-10 m-auto grid max-w-(--page-max-width) grid-cols-[64px_1fr_1fr] border-b-2 border-black md:border-2 lg:grid-cols-8'>
         <Sheet key={pathname}>
           <SheetTrigger className='flex cursor-pointer items-center justify-center transition-colors hover:bg-black/10 active:bg-black/20 lg:hidden'>
             <Menu height='28px' width='28px' />
@@ -78,7 +79,7 @@ export default function Header() {
               className={cn(
                 !item.showOnMobile && 'hidden lg:block',
                 isActive && 'bg-black/5',
-                'relative overflow-hidden border-black px-4 py-5 transition-all duration-500 not-first-of-type:border-l-2 hover:bg-black/10 hover:no-underline active:bg-black/20 md:border-b-0 md:px-5 md:py-6 lg:px-4 xl:px-6 xl:py-8'
+                'relative overflow-hidden border-black px-4 py-5 transition-all duration-500 not-first-of-type:border-l-2 hover:bg-black/10 hover:no-underline active:bg-black/20 md:border-b-0 md:px-5 md:py-6 lg:px-2 lg:text-sm xl:px-3 xl:text-base'
               )}
             >
               {item.text}

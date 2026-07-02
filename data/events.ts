@@ -1,68 +1,99 @@
 /**
- * Events — the club's recurring and scheduled happenings.
+ * Events — regular happenings at the clubhouse.
  *
  * Plain, version-controlled data (no CMS). Edit directly.
  *
- * Two kinds of recurrence are supported:
- *   - "recurring": a standing rule (e.g. every Monday). Describe it in
- *     `recurrenceLabel`. Permanent fixtures live here and rarely change.
- *   - For recurring events that occasionally move, set `nextOccurrence` to the
- *     real date/time of the next one. The page shows that override alongside
- *     the standing rule, so you can reschedule a single instance without
- *     rewriting the rule. Clear it (or roll it forward) after it passes.
- *
- * `waitlist: true` swaps the CTA from "RSVP / Join" to "Join the waitlist",
- * for events we slow-roll new people into.
+ * Recurrence is a rule (`weekly` on a weekday, or `monthly` on the nth
+ * weekday). Upcoming dates are computed from the rule. To reschedule or
+ * cancel a single occurrence, add its computed ISO date (YYYY-MM-DD) to
+ * `skipDates` and, if it moved, put the replacement in `extraDates`.
  */
 
+export type EventRule =
+  | { freq: 'weekly'; weekday: number } // 0 = Sunday … 6 = Saturday
+  | { freq: 'monthly'; weekday: number; nth: number }
+
 export type GFNCEvent = {
-  /** URL-safe unique id. Used for anchor links + waitlist subject. */
+  /** URL-safe unique id. Used for anchor links + RSVP subject. */
   slug: string
   name: string
-  /** One-line summary shown under the name. */
-  summary: string
-  /** Longer description. Each string renders as its own paragraph. */
-  description: string[]
-  /** "Weekly" | "Monthly" | "One-time" — drives the badge label. */
-  cadence: 'Weekly' | 'Monthly' | 'One-time'
-  /** Human-readable standing schedule, e.g. "Every Monday · 7–9pm". */
-  recurrenceLabel: string
-  /**
-   * ISO date or datetime for the next occurrence when it differs from the
-   * standing rule (a rescheduled instance). Optional.
-   * e.g. "2026-07-10T19:00:00-05:00"
-   */
-  nextOccurrence?: string
-  /** Where it happens. Defaults to the club space when omitted. */
+  blurb: string
+  rule: EventRule
+  /** Display time, e.g. "4 PM". */
+  time: string
+  /** Human-readable standing schedule, e.g. "Thursdays · 4 PM". */
+  schedule: string
+  /** Cancelled/rescheduled occurrences, as YYYY-MM-DD. */
+  skipDates?: string[]
+  /** One-off replacement dates, as YYYY-MM-DD. */
+  extraDates?: string[]
   location?: string
-  /** Slow-roll signups through a waitlist instead of open RSVP. */
-  waitlist?: boolean
+}
+
+export const eventsCopy = {
+  lead: 'Regular happenings at the clubhouse — members and friends of members welcome.',
+  upcomingTitle: 'Next up',
+  friendNote:
+    "Not a member yet? Join as a friend of the club — it's free — and you'll be invited to everything.",
 }
 
 export const events: GFNCEvent[] = [
   {
-    slug: 'weekly-accountability-club',
-    name: 'Weekly Accountability Club',
-    summary:
-      'Show up, set a goal, and get it done alongside other makers — every week.',
-    description: [
-      'Our core ritual: members and guests meet weekly to share what they are working on, set concrete goals, and hold each other accountable on progress.',
-      'We are growing this intentionally, so new faces join from the waitlist a few at a time to keep the group tight and the sessions useful.',
-    ],
-    cadence: 'Weekly',
-    recurrenceLabel: 'Every week',
-    waitlist: true,
+    slug: 'accountability-hour',
+    name: 'Accountability Hour',
+    rule: { freq: 'weekly', weekday: 4 },
+    time: '4 PM',
+    schedule: 'Thursdays · 4 PM',
+    blurb:
+      "Bring whatever you're working on for accountability and honest feedback from the group. We usually head to happy hour right after.",
   },
   {
-    slug: 'monthly-music-jam',
-    name: 'Monthly Music Jam',
-    summary: 'An open, low-pressure jam for musicians of every stripe.',
-    description: [
-      'Once a month we turn the space over to music — bring an instrument, your voice, or just your ears. All skill levels welcome.',
-      'Space is limited, so we bring new players in gradually from the waitlist. Join it and we will reach out as spots open up.',
-    ],
-    cadence: 'Monthly',
-    recurrenceLabel: 'Once a month',
-    waitlist: true,
+    slug: 'off-genre-jam',
+    name: 'Off Genre Jam',
+    rule: { freq: 'monthly', weekday: 0, nth: 3 },
+    time: '7 PM',
+    schedule: 'Third Sunday · 7 PM',
+    blurb: 'Exploring varieties of rock music and other neglected genres of jam.',
   },
 ]
+
+/** YYYY-MM-DD in UTC for a date constructed at UTC noon. */
+function isoDay(date: Date) {
+  return date.toISOString().slice(0, 10)
+}
+
+function matchesRule(date: Date, rule: EventRule) {
+  if (date.getUTCDay() !== rule.weekday) return false
+  if (rule.freq === 'weekly') return true
+  return Math.ceil(date.getUTCDate() / 7) === rule.nth
+}
+
+export type Occurrence = {
+  event: GFNCEvent
+  /** YYYY-MM-DD */
+  date: string
+}
+
+/**
+ * Next occurrences across all events, chronological. `from` should be a
+ * date-only anchor; days are iterated at UTC noon so DST never shifts them.
+ */
+export function upcomingOccurrences(from: Date, count: number): Occurrence[] {
+  const occurrences: Occurrence[] = []
+  const cursor = new Date(
+    Date.UTC(from.getFullYear(), from.getMonth(), from.getDate(), 12)
+  )
+
+  for (let day = 0; day < 120 && occurrences.length < count; day++) {
+    const iso = isoDay(cursor)
+    for (const event of events) {
+      const matches =
+        (matchesRule(cursor, event.rule) && !event.skipDates?.includes(iso)) ||
+        event.extraDates?.includes(iso)
+      if (matches) occurrences.push({ event, date: iso })
+    }
+    cursor.setUTCDate(cursor.getUTCDate() + 1)
+  }
+
+  return occurrences.slice(0, count)
+}

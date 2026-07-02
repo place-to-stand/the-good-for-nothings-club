@@ -22,6 +22,7 @@
     "@sanity/image-url": "^1.2.0",
     "@sanity/react-loader": "^1.11.22",
     "@sentry/nextjs": "^10.59.0",
+    "@supabase/supabase-js": "^2.108.2",
     "@types/lodash.debounce": "^4.0.9",
     "@vercel/analytics": "^1.6.1",
     "@vis.gl/react-google-maps": "^1.8.3",

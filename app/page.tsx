@@ -58,6 +58,11 @@ export default function Home() {
               title: 'Membership',
               body: 'Join the club, at your level.',
             },
+            {
+              href: 'https://shop.thegoodfornothings.club/',
+              title: 'Shop',
+              body: 'Work and merch from members and friends of the club.',
+            },
           ].map(card => (
             <Link
               key={card.href}

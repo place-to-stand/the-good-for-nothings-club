@@ -124,7 +124,7 @@ export default function Footer() {
               Join the club, at your level. Apply anytime to join the waitlist
               — onboarding happens in waves as space opens up.
             </p>
-            <Button asChild className='mt-4'>
+            <Button asChild className='mt-4 hover:no-underline'>
               <Link href='/membership'>Apply to Join</Link>
             </Button>
           </div>

@@ -78,10 +78,9 @@ function NewsletterSignUpForm() {
   )
 }
 
-// Full site map. Projects lives here while it's out of the header nav;
-// Membership gets the featured card instead of a list entry.
+// Full site map. The wordmark covers Home, Projects lives here while
+// it's out of the header nav, and Membership gets its own feature block.
 const FOOTER_LINKS = [
-  { href: '/', text: 'Home' },
   { href: '/facilities', text: 'Facilities' },
   { href: '/services', text: 'Services' },
   { href: '/events', text: 'Events' },
@@ -95,38 +94,40 @@ export default function Footer() {
   return (
     <footer className='pt-8 pb-8 font-sans md:px-8 md:pt-16 xl:px-16 xl:pb-16'>
       <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black md:border-x-2'>
-        <div className='grid grid-cols-1 gap-10 px-4 py-8 md:px-12 md:py-12 lg:grid-cols-[auto_1fr_minmax(320px,420px)] lg:gap-16'>
-          <div className='text-[22px] leading-[0.9] font-black tracking-[-0.02em] uppercase'>
-            Good For
-            <br />
-            Nothings
+        <div className='grid grid-cols-1 gap-12 px-4 py-8 md:px-12 md:py-12 lg:grid-cols-[auto_1fr] lg:gap-24'>
+          <div>
+            <Link
+              href='/'
+              className='inline-block text-[22px] leading-[0.9] font-black tracking-[-0.02em] uppercase hover:no-underline'
+            >
+              Good For
+              <br />
+              Nothings
+            </Link>
+            <nav className='mt-8 flex flex-col items-start gap-3'>
+              {FOOTER_LINKS.map(link => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className='text-[15px] font-extrabold tracking-[0.06em] uppercase'
+                >
+                  {link.text}
+                </Link>
+              ))}
+            </nav>
           </div>
-          <nav className='flex flex-col items-start gap-3'>
-            {FOOTER_LINKS.map(link => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className='text-[15px] font-extrabold tracking-[0.06em] uppercase'
-              >
-                {link.text}
-              </Link>
-            ))}
-          </nav>
-          <div className='space-y-8'>
-            <div className='border-2 border-black p-6'>
-              <h3 className='text-[20px] leading-none font-black tracking-[-0.02em] uppercase'>
+          <div className='grid grid-cols-1 content-start gap-10 sm:grid-cols-2 lg:gap-16'>
+            <div>
+              <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
                 Membership
               </h3>
-              <p className='mt-3 text-sm leading-snug'>
+              <p className='mt-2 text-sm leading-snug'>
                 Join the club, at your level. Apply anytime to join the
                 waitlist — onboarding happens in waves as space opens up.
               </p>
-              <Link
-                href='/membership'
-                className='mt-4 inline-flex bg-black px-5 py-3 text-sm font-black tracking-[0.06em] text-white uppercase transition-colors hover:bg-black/80 hover:no-underline active:bg-black/70'
-              >
-                Join
-              </Link>
+              <Button asChild className='mt-4'>
+                <Link href='/membership'>Join</Link>
+              </Button>
             </div>
             <div>
               <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
@@ -136,7 +137,7 @@ export default function Footer() {
                 Occasional updates from the clubhouse — events, openings, and
                 new work.
               </p>
-              <div className='mt-3'>
+              <div className='mt-4'>
                 <NewsletterSignUpForm />
               </div>
             </div>

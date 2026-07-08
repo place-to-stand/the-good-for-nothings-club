@@ -69,8 +69,8 @@ export default function Header() {
           href='/'
           aria-current={pathname === '/' ? 'page' : undefined}
           className={cn(
-            'flex items-center border-r border-r-transparent px-4 py-4 transition-colors hover:border-r-transparent hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 lg:px-6',
-            pathname === '/' && 'border-r-black/10 bg-black/5'
+            'flex items-center px-4 py-4 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 lg:px-6',
+            pathname === '/' && 'bg-black/5'
           )}
         >
           <span className='text-[18px] leading-[0.9] font-black tracking-[-0.02em] uppercase md:text-[22px]'>
@@ -91,8 +91,8 @@ export default function Header() {
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
-                  'border border-transparent px-3 py-3 text-[15px] font-extrabold tracking-[0.06em] uppercase transition-colors hover:border-transparent hover:bg-black/10 hover:no-underline active:bg-black/20',
-                  isActive && 'border-black/10 bg-black/5'
+                  'px-3 py-3 text-[15px] font-extrabold tracking-[0.06em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20',
+                  isActive && 'bg-black/5'
                 )}
               >
                 {item.text}

@@ -15,6 +15,6 @@ export const leadershipSlugs = [
 ]
 
 export const leadershipCopy = {
-  title: 'Leadership',
-  lead: 'The founding crew that runs the clubhouse.',
+  title: 'Founding Members',
+  lead: 'The crew that runs the clubhouse.',
 }

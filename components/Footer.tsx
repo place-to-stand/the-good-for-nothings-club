@@ -78,8 +78,8 @@ function NewsletterSignUpForm() {
   )
 }
 
-// Full site map. The wordmark covers Home, Projects lives here while
-// it's out of the header nav, and Membership gets its own feature block.
+// Site map, two columns of three. The wordmark covers Home; Membership
+// gets its own feature block. (/projects is still live, just unlinked.)
 const FOOTER_LINKS = [
   { href: '/facilities', text: 'Facilities' },
   { href: '/services', text: 'Services' },
@@ -87,14 +87,13 @@ const FOOTER_LINKS = [
   { href: 'https://shop.thegoodfornothings.club/', text: 'Shop' },
   { href: '/about', text: 'About' },
   { href: '/contact', text: 'Contact' },
-  { href: '/projects', text: 'Projects' },
 ]
 
 export default function Footer() {
   return (
     <footer className='pt-8 pb-8 font-sans md:px-8 md:pt-16 xl:px-16 xl:pb-16'>
       <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black md:border-x-2'>
-        <div className='grid grid-cols-1 gap-12 px-4 py-8 md:px-12 md:py-12 lg:grid-cols-[auto_1fr] lg:gap-24'>
+        <div className='grid grid-cols-1 gap-12 px-4 py-8 md:px-12 md:py-12 lg:grid-cols-3 lg:gap-16'>
           <div>
             <Link
               href='/'
@@ -104,7 +103,7 @@ export default function Footer() {
               <br />
               Nothings
             </Link>
-            <nav className='mt-8 flex flex-col items-start gap-3'>
+            <nav className='mt-8 grid grid-flow-col grid-rows-3 justify-start gap-x-12 gap-y-3'>
               {FOOTER_LINKS.map(link => (
                 <Link
                   key={link.href}
@@ -116,30 +115,28 @@ export default function Footer() {
               ))}
             </nav>
           </div>
-          <div className='grid grid-cols-1 content-start gap-10 sm:grid-cols-2 lg:gap-16'>
-            <div>
-              <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
-                Membership
-              </h3>
-              <p className='mt-2 text-sm leading-snug'>
-                Join the club, at your level. Apply anytime to join the
-                waitlist — onboarding happens in waves as space opens up.
-              </p>
-              <Button asChild className='mt-4'>
-                <Link href='/membership'>Join</Link>
-              </Button>
-            </div>
-            <div>
-              <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
-                Newsletter
-              </h3>
-              <p className='mt-2 text-sm leading-snug'>
-                Occasional updates from the clubhouse — events, openings, and
-                new work.
-              </p>
-              <div className='mt-4'>
-                <NewsletterSignUpForm />
-              </div>
+          <div>
+            <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
+              Membership
+            </h3>
+            <p className='mt-2 text-sm leading-snug'>
+              Join the club, at your level. Apply anytime to join the waitlist
+              — onboarding happens in waves as space opens up.
+            </p>
+            <Button asChild className='mt-4'>
+              <Link href='/membership'>Join</Link>
+            </Button>
+          </div>
+          <div>
+            <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
+              Newsletter
+            </h3>
+            <p className='mt-2 text-sm leading-snug'>
+              Occasional updates from the clubhouse — events, openings, and new
+              work.
+            </p>
+            <div className='mt-4'>
+              <NewsletterSignUpForm />
             </div>
           </div>
         </div>

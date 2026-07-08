@@ -85,8 +85,9 @@ export default async function About() {
               <h2>Overview</h2>
               <p>
                 The Good for Nothings Club is a creators club based in Austin,
-                TX made up of designers, engineers, filmmakers, musicians, and
-                writers. It started as a weekly accountability meeting between
+                TX made up of musicians, photographers, writers, filmmakers,
+                and engineers. It started as a weekly accountability meeting
+                between
                 friends and grew into a clubhouse: studios, rehearsal rooms,
                 and workspace under one roof.
               </p>

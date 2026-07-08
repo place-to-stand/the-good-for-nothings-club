@@ -95,35 +95,31 @@ export default function Footer() {
   return (
     <footer className='pt-8 pb-8 font-sans md:px-8 md:pt-16 xl:px-16 xl:pb-16'>
       <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black md:border-x-2'>
-        <div className='grid grid-cols-1 gap-10 px-4 py-8 md:px-12 md:py-12 lg:grid-cols-[1fr_minmax(300px,400px)] lg:gap-20'>
-          <div>
-            <div className='text-[15px] leading-[0.95] font-black tracking-tight uppercase'>
-              Good For
-              <br />
-              Nothings
-            </div>
-            <nav className='mt-8 grid max-w-sm grid-cols-2 gap-x-8 gap-y-2.5 sm:grid-cols-3'>
+        <div className='px-4 py-8 md:px-12 md:py-12'>
+          <div className='text-[40px] leading-[0.9] font-black tracking-[-0.04em] uppercase md:text-[64px] lg:text-[80px]'>
+            Good For
+            <br />
+            Nothings
+          </div>
+          <div className='mt-10 flex flex-col justify-between gap-10 md:mt-14 lg:flex-row lg:items-end lg:gap-16'>
+            <nav className='grid max-w-md flex-1 grid-cols-2 gap-x-10 gap-y-3 sm:grid-cols-3'>
               {FOOTER_LINKS.map(link => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className='text-sm font-semibold tracking-[0.08em] uppercase'
+                  className='text-[15px] font-extrabold tracking-[0.06em] uppercase'
                 >
                   {link.text}
                 </Link>
               ))}
             </nav>
-          </div>
-          <div>
-            <h3 className='text-sm font-black tracking-[0.08em] uppercase'>
-              Newsletter
-            </h3>
-            <p className='mt-2 text-sm leading-snug'>
-              Occasional updates from the clubhouse — events, openings, and new
-              work.
-            </p>
-            <div className='mt-4'>
-              <NewsletterSignUpForm />
+            <div className='w-full lg:max-w-md'>
+              <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
+                Newsletter
+              </h3>
+              <div className='mt-3'>
+                <NewsletterSignUpForm />
+              </div>
             </div>
           </div>
         </div>

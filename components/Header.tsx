@@ -39,8 +39,8 @@ export default function Header() {
     <header className='relative font-sans md:px-8 md:pt-8 xl:px-16 xl:pt-16'>
       <div className='bg-background relative z-10 m-auto flex max-w-(--page-max-width) items-stretch border-b-2 border-black md:border-2'>
         <Sheet key={pathname}>
-          <SheetTrigger className='flex w-12 cursor-pointer items-center justify-center border-r-2 border-black transition-colors hover:bg-black/10 active:bg-black/20 lg:hidden'>
-            <Menu height='24px' width='24px' />
+          <SheetTrigger className='flex w-14 cursor-pointer items-center justify-center transition-colors hover:bg-black/10 active:bg-black/20 lg:hidden'>
+            <Menu height='28px' width='28px' />
           </SheetTrigger>
           <SheetContent side='left'>
             <SheetHeader>
@@ -68,9 +68,9 @@ export default function Header() {
         <Link
           href='/'
           aria-current={pathname === '/' ? 'page' : undefined}
-          className='flex items-center px-4 py-2.5 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 lg:border-r-2 lg:border-black lg:px-5'
+          className='flex items-center px-4 py-4 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 lg:px-6'
         >
-          <span className='text-[13px] leading-[0.95] font-black tracking-tight uppercase'>
+          <span className='text-[18px] leading-[0.9] font-black tracking-[-0.02em] uppercase md:text-[22px]'>
             Good For
             <br />
             Nothings
@@ -78,7 +78,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className='hidden flex-1 items-center px-2 lg:flex'>
+        <nav className='hidden flex-1 items-center gap-1 px-4 lg:flex'>
           {NAV_ITEMS.map(item => {
             const isActive = pathname === item.href
 
@@ -88,8 +88,8 @@ export default function Header() {
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
-                  isActive && 'underline decoration-[3px] underline-offset-4',
-                  'px-3 py-2 text-[13px] font-semibold tracking-[0.08em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20'
+                  isActive && 'underline decoration-[3px] underline-offset-[6px]',
+                  'px-3 py-3 text-[15px] font-extrabold tracking-[0.06em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20'
                 )}
               >
                 {item.text}
@@ -101,11 +101,11 @@ export default function Header() {
         <div className='flex-1 lg:hidden' />
 
         {/* Membership CTA */}
-        <div className='flex items-center px-3'>
+        <div className='flex items-center px-3 md:px-4'>
           <Link
             href='/membership'
             aria-current={pathname === '/membership' ? 'page' : undefined}
-            className='bg-black px-4 py-2 text-xs font-black tracking-[0.08em] text-white uppercase transition-colors hover:bg-black/80 hover:no-underline active:bg-black/70'
+            className='bg-black px-5 py-3 text-sm font-black tracking-[0.06em] text-white uppercase transition-colors hover:bg-black/80 hover:no-underline active:bg-black/70'
           >
             Join
           </Link>

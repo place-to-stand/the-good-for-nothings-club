@@ -104,7 +104,7 @@ export default function Header() {
           <Link
             href='/membership'
             aria-current={pathname === '/membership' ? 'page' : undefined}
-            className='bg-black px-4 py-3 text-sm font-black tracking-[0.06em] whitespace-nowrap text-white uppercase transition-colors hover:bg-black/80 hover:no-underline active:bg-black/70 xl:px-5'
+            className='bg-black px-4 py-3 text-sm font-medium tracking-[0.06em] whitespace-nowrap text-white uppercase transition-colors hover:bg-black/80 hover:no-underline active:bg-black/70 xl:px-5'
           >
             Apply to Join
           </Link>

@@ -73,7 +73,7 @@ export default function Home() {
                 {card.title}
                 <FaCaretRight className='size-6 transition-transform duration-500 group-hover:translate-x-1' />
               </span>
-              <span className='font-serif text-xl leading-snug md:text-right md:text-2xl'>
+              <span className='font-sans text-lg leading-snug md:text-right md:text-xl'>
                 {card.body}
               </span>
             </Link>

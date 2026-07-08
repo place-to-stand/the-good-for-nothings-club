@@ -19,8 +19,8 @@ export default function Home() {
           <p className='font-serif text-2xl leading-tight sm:text-[32px] 2xl:text-[48px] 2xl:leading-[1.16]'>
             <em>The Good for Nothings Club</em> is a creators club from Austin,
             TX made up of musicians, photographers, writers, filmmakers, and
-            engineers. Our clubhouse puts studios, rehearsal rooms, and workspace
-            under one roof. Good for nothings. Doing everything.
+            engineers. Our clubhouse puts studios, rehearsal rooms, and
+            workspace under one roof. Good for nothings. Doing everything.
           </p>
         </div>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black md:border-x-2'>
@@ -51,17 +51,17 @@ export default function Home() {
             {
               href: '/events',
               title: 'Events',
-              body: 'The club, in session — friends welcome.',
+              body: 'The clubhouse, in session — friends welcome.',
             },
             {
               href: '/membership',
               title: 'Membership',
-              body: 'Join the club, at your level.',
+              body: 'Join the club, at the level that makes sense for you.',
             },
             {
               href: 'https://shop.thegoodfornothings.club/',
               title: 'Shop',
-              body: 'Work and merch from members and friends of the club.',
+              body: 'Works and merch from members and friends of the club.',
             },
           ].map(card => (
             <Link

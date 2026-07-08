@@ -65,7 +65,7 @@ export default function Header() {
           href='/'
           aria-current={pathname === '/' ? 'page' : undefined}
           className={cn(
-            'flex items-center px-4 py-4 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 lg:px-6',
+            'flex items-center px-4 py-4 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 xl:px-6',
             pathname === '/' && 'bg-black/5'
           )}
         >
@@ -87,7 +87,7 @@ export default function Header() {
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
-                  'px-2 py-3 text-[15px] font-extrabold tracking-[0.06em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 xl:px-3',
+                  'px-2 py-3 text-sm font-extrabold tracking-[0.06em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 xl:px-3 xl:text-[15px]',
                   isActive && 'bg-black/5'
                 )}
               >
@@ -100,13 +100,13 @@ export default function Header() {
         <div className='flex-1 lg:hidden' />
 
         {/* Membership CTA */}
-        <div className='flex items-center px-3 md:px-4'>
+        <div className='flex items-center px-3 md:px-4 lg:px-2 xl:px-4'>
           <Link
             href='/membership'
             aria-current={pathname === '/membership' ? 'page' : undefined}
-            className='bg-black px-5 py-3 text-sm font-black tracking-[0.06em] text-white uppercase transition-colors hover:bg-black/80 hover:no-underline active:bg-black/70'
+            className='bg-black px-4 py-3 text-sm font-black tracking-[0.06em] whitespace-nowrap text-white uppercase transition-colors hover:bg-black/80 hover:no-underline active:bg-black/70 xl:px-5'
           >
-            Join
+            Apply to Join
           </Link>
         </div>
       </div>

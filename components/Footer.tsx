@@ -125,7 +125,7 @@ export default function Footer() {
               — onboarding happens in waves as space opens up.
             </p>
             <Button asChild className='mt-4'>
-              <Link href='/membership'>Join</Link>
+              <Link href='/membership'>Apply to Join</Link>
             </Button>
           </div>
           <div>

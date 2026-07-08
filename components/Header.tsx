@@ -14,23 +14,19 @@ import {
 import { Menu } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
-// The wordmark is the Home link and "Join" is the membership CTA, so
-// neither appears here. Projects stays out of the nav for now (route
-// still live, linked in the footer).
+// The wordmark is the Home link; the Join chip is a second door to
+// /membership. Projects stays out of the nav for now (route still live).
 const NAV_ITEMS = [
   { href: '/facilities', text: 'Facilities' },
   { href: '/services', text: 'Services' },
   { href: '/events', text: 'Events' },
+  { href: '/membership', text: 'Membership' },
   { href: 'https://shop.thegoodfornothings.club/', text: 'Shop' },
   { href: '/about', text: 'About' },
   { href: '/contact', text: 'Contact' },
 ]
 
-const SHEET_ITEMS = [
-  { href: '/', text: 'Home' },
-  ...NAV_ITEMS,
-  { href: '/membership', text: 'Membership' },
-]
+const SHEET_ITEMS = [{ href: '/', text: 'Home' }, ...NAV_ITEMS]
 
 export default function Header() {
   const pathname = usePathname()
@@ -81,7 +77,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className='hidden flex-1 items-center gap-1 px-4 lg:flex'>
+        <nav className='hidden flex-1 items-center px-2 lg:flex xl:gap-1 xl:px-4'>
           {NAV_ITEMS.map(item => {
             const isActive = pathname === item.href
 
@@ -91,7 +87,7 @@ export default function Header() {
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
-                  'px-3 py-3 text-[15px] font-extrabold tracking-[0.06em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20',
+                  'px-2 py-3 text-[15px] font-extrabold tracking-[0.06em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 xl:px-3',
                   isActive && 'bg-black/5'
                 )}
               >

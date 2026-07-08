@@ -78,12 +78,13 @@ function NewsletterSignUpForm() {
   )
 }
 
-// Site map, two columns of three. The wordmark covers Home; Membership
-// gets its own feature block. (/projects is still live, just unlinked.)
+// Site map, two columns. The wordmark covers Home. (/projects is still
+// live, just unlinked.)
 const FOOTER_LINKS = [
   { href: '/facilities', text: 'Facilities' },
   { href: '/services', text: 'Services' },
   { href: '/events', text: 'Events' },
+  { href: '/membership', text: 'Membership' },
   { href: 'https://shop.thegoodfornothings.club/', text: 'Shop' },
   { href: '/about', text: 'About' },
   { href: '/contact', text: 'Contact' },
@@ -103,7 +104,7 @@ export default function Footer() {
               <br />
               Nothings
             </Link>
-            <nav className='mt-8 grid grid-flow-col grid-rows-3 justify-start gap-x-12 gap-y-3'>
+            <nav className='mt-8 grid grid-flow-col grid-rows-4 justify-start gap-x-12 gap-y-3'>
               {FOOTER_LINKS.map(link => (
                 <Link
                   key={link.href}

@@ -69,7 +69,7 @@ export default function Header() {
           href='/'
           aria-current={pathname === '/' ? 'page' : undefined}
           className={cn(
-            'flex items-center border-r-2 border-r-transparent px-4 py-4 transition-colors hover:border-r-black/10 hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 lg:px-6',
+            'flex items-center border-r border-r-transparent px-4 py-4 transition-colors hover:border-r-black/10 hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 lg:px-6',
             pathname === '/' && 'border-r-black/10 bg-black/5'
           )}
         >
@@ -91,7 +91,7 @@ export default function Header() {
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
-                  'border-2 border-transparent px-3 py-3 text-[15px] font-extrabold tracking-[0.06em] uppercase transition-colors hover:border-black/10 hover:bg-black/10 hover:no-underline active:bg-black/20',
+                  'border border-transparent px-3 py-3 text-[15px] font-extrabold tracking-[0.06em] uppercase transition-colors hover:border-black/10 hover:bg-black/10 hover:no-underline active:bg-black/20',
                   isActive && 'border-black/10 bg-black/5'
                 )}
               >

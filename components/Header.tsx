@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import ScrollTopLink from './ScrollTopLink'
 import { cn } from '../lib/utils'
 
 import {
@@ -46,13 +46,13 @@ export default function Header() {
               {SHEET_ITEMS.map(item => (
                 <li key={item.href}>
                   <SheetClose asChild>
-                    <Link
+                    <ScrollTopLink
                       href={item.href}
                       className='block'
                       aria-current={pathname === item.href ? 'page' : undefined}
                     >
                       {item.text}
-                    </Link>
+                    </ScrollTopLink>
                   </SheetClose>
                 </li>
               ))}
@@ -61,7 +61,7 @@ export default function Header() {
         </Sheet>
 
         {/* Wordmark = home */}
-        <Link
+        <ScrollTopLink
           href='/'
           aria-current={pathname === '/' ? 'page' : undefined}
           className={cn(
@@ -74,7 +74,7 @@ export default function Header() {
             <br />
             Nothings
           </span>
-        </Link>
+        </ScrollTopLink>
 
         {/* Desktop nav */}
         <nav className='hidden flex-1 items-center px-2 lg:flex xl:gap-1 xl:px-4'>
@@ -82,7 +82,7 @@ export default function Header() {
             const isActive = pathname === item.href
 
             return (
-              <Link
+              <ScrollTopLink
                 key={item.href}
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
@@ -92,7 +92,7 @@ export default function Header() {
                 )}
               >
                 {item.text}
-              </Link>
+              </ScrollTopLink>
             )
           })}
         </nav>
@@ -101,13 +101,13 @@ export default function Header() {
 
         {/* Membership CTA */}
         <div className='flex items-center px-3 md:px-4 lg:px-2 xl:px-4'>
-          <Link
+          <ScrollTopLink
             href='/membership'
             aria-current={pathname === '/membership' ? 'page' : undefined}
             className='bg-black px-4 py-3 text-sm font-medium tracking-[0.06em] whitespace-nowrap text-white uppercase transition-colors hover:bg-black/80 hover:no-underline active:bg-black/70 xl:px-5'
           >
             Apply to Join
-          </Link>
+          </ScrollTopLink>
         </div>
       </div>
     </header>

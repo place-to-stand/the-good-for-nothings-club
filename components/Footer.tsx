@@ -4,7 +4,7 @@ import { Check, Loader2 } from 'lucide-react'
 import { Input } from './ui/Input'
 import { Button } from './ui/Button'
 import SocialMediaLinks from './SocialMediaLinks'
-import Link from 'next/link'
+import ScrollTopLink from './ScrollTopLink'
 import { useForm } from 'react-hook-form'
 import { newsletterSignUpSchema } from '../data/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -96,23 +96,23 @@ export default function Footer() {
       <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black md:border-x-2'>
         <div className='grid grid-cols-1 gap-12 px-4 py-8 md:px-12 md:py-12 lg:grid-cols-3 lg:gap-16'>
           <div>
-            <Link
+            <ScrollTopLink
               href='/'
               className='inline-block text-[22px] leading-[0.9] font-black tracking-[-0.02em] uppercase hover:no-underline'
             >
               Good For
               <br />
               Nothings
-            </Link>
-            <nav className='mt-8 grid grid-flow-col grid-rows-4 justify-start gap-x-12 gap-y-3'>
+            </ScrollTopLink>
+            <nav className='mt-10 grid grid-flow-col grid-rows-4 justify-start gap-x-14 gap-y-2'>
               {FOOTER_LINKS.map(link => (
-                <Link
+                <ScrollTopLink
                   key={link.href}
                   href={link.href}
                   className='text-[15px] font-extrabold tracking-[0.06em] uppercase'
                 >
                   {link.text}
-                </Link>
+                </ScrollTopLink>
               ))}
             </nav>
           </div>
@@ -121,11 +121,11 @@ export default function Footer() {
               Membership
             </h3>
             <p className='mt-2 text-sm leading-snug'>
-              Join the club, at your level. Apply anytime to join the waitlist
-              — onboarding happens in waves as space opens up.
+              Join the club, at your level. Apply anytime to join the waitlist —
+              onboarding happens in waves as space opens up.
             </p>
             <Button asChild className='mt-4 hover:no-underline'>
-              <Link href='/membership'>Apply to Join</Link>
+              <ScrollTopLink href='/membership'>Apply to Join</ScrollTopLink>
             </Button>
           </div>
           <div>

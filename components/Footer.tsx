@@ -98,11 +98,9 @@ export default function Footer() {
           <div>
             <ScrollTopLink
               href='/'
-              className='inline-block text-[22px] leading-[0.9] font-black tracking-[-0.02em] uppercase hover:no-underline'
+              className='inline-block text-[40px] leading-[0.9] font-black tracking-[-0.02em] uppercase hover:no-underline'
             >
-              Good For
-              <br />
-              Nothings
+              GFNC
             </ScrollTopLink>
             <nav className='mt-10 grid grid-flow-col grid-rows-4 justify-start gap-x-14 gap-y-2'>
               {FOOTER_LINKS.map(link => (

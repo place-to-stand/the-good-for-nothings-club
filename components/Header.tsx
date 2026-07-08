@@ -69,10 +69,8 @@ export default function Header() {
             pathname === '/' && 'lg:bg-black/5'
           )}
         >
-          <span className='text-[18px] leading-[0.9] font-black tracking-[-0.02em] uppercase md:text-[22px]'>
-            Good For
-            <br />
-            Nothings
+          <span className='text-[28px] leading-[0.9] font-black tracking-[-0.02em] uppercase md:text-[40px]'>
+            GFNC
           </span>
         </ScrollTopLink>
 

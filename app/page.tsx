@@ -19,8 +19,8 @@ export default function Home() {
           <p className='font-serif text-2xl leading-tight sm:text-[32px] 2xl:text-[48px] 2xl:leading-[1.16]'>
             <em>The Good for Nothings Club</em> is a creators club from Austin,
             TX made up of designers, engineers, filmmakers, musicians, and
-            writers — with a clubhouse to match: studios, rehearsal rooms, and
-            workspace under one roof. Good for nothings. Great at everything.
+            writers. Our clubhouse puts studios, rehearsal rooms, and workspace
+            under one roof. Good for nothings. Doing everything.
           </p>
         </div>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black md:border-x-2'>

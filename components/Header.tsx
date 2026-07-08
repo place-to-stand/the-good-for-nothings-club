@@ -66,7 +66,7 @@ export default function Header() {
           aria-current={pathname === '/' ? 'page' : undefined}
           className={cn(
             'flex items-center px-4 py-4 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 xl:px-6',
-            pathname === '/' && 'bg-black/5'
+            pathname === '/' && 'lg:bg-black/5'
           )}
         >
           <span className='text-[18px] leading-[0.9] font-black tracking-[-0.02em] uppercase md:text-[22px]'>

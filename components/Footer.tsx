@@ -118,18 +118,6 @@ export default function Footer() {
           </div>
           <div>
             <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
-              Membership
-            </h3>
-            <p className='mt-2 text-sm leading-snug'>
-              Join the club, at your level. Apply anytime to join the waitlist —
-              onboarding happens in waves as space opens up.
-            </p>
-            <Button asChild className='mt-4 hover:no-underline'>
-              <ScrollTopLink href='/membership'>Apply to Join</ScrollTopLink>
-            </Button>
-          </div>
-          <div>
-            <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
               Newsletter
             </h3>
             <p className='mt-2 text-sm leading-snug'>
@@ -139,6 +127,18 @@ export default function Footer() {
             <div className='mt-4'>
               <NewsletterSignUpForm />
             </div>
+          </div>
+          <div>
+            <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
+              Membership
+            </h3>
+            <p className='mt-2 text-sm leading-snug'>
+              Join the club, at your level. Apply anytime to join the waitlist —
+              onboarding happens in waves as space opens up.
+            </p>
+            <Button asChild className='mt-4 hover:no-underline'>
+              <ScrollTopLink href='/membership'>Apply to Join</ScrollTopLink>
+            </Button>
           </div>
         </div>
         <div className='flex flex-col-reverse items-center justify-between gap-4 border-t-2 border-black px-4 py-5 md:flex-row md:px-12'>

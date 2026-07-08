@@ -39,7 +39,7 @@ function NewsletterSignUpForm() {
   const { isSubmitting, isSubmitSuccessful } = form.formState
 
   return isSubmitSuccessful ? (
-    <Alert className='max-w-96'>
+    <Alert>
       <Check className='h-4 w-4' />
       <AlertTitle>Success</AlertTitle>
       <AlertDescription>
@@ -48,10 +48,7 @@ function NewsletterSignUpForm() {
     </Alert>
   ) : (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className='flex w-full max-w-96 grow'
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className='flex w-full'>
         <FormField
           name='email'
           control={form.control}
@@ -81,8 +78,7 @@ function NewsletterSignUpForm() {
   )
 }
 
-// Full site map for the footer. Projects lives here while it's deprioritized
-// in the main header nav, but the /projects route is still live.
+// Full site map. Projects lives here while it's out of the header nav.
 const FOOTER_LINKS = [
   { href: '/', text: 'Home' },
   { href: '/facilities', text: 'Facilities' },
@@ -98,24 +94,45 @@ const FOOTER_LINKS = [
 export default function Footer() {
   return (
     <footer className='pt-8 pb-8 font-sans md:px-8 md:pt-16 xl:px-16 xl:pb-16'>
-      <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
-        <div className='flex flex-col items-center justify-between gap-5 bg-black/5 p-5 text-center text-xl sm:p-10 md:text-left md:text-2xl lg:flex-row lg:p-12'>
-          <div className=''>Subscribe to our newsletter</div>
-          <NewsletterSignUpForm />
+      <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black md:border-x-2'>
+        <div className='grid grid-cols-1 gap-10 px-4 py-8 md:px-12 md:py-12 lg:grid-cols-[1fr_minmax(300px,400px)] lg:gap-20'>
+          <div>
+            <div className='text-[15px] leading-[0.95] font-black tracking-tight uppercase'>
+              Good For
+              <br />
+              Nothings
+            </div>
+            <nav className='mt-8 grid max-w-sm grid-cols-2 gap-x-8 gap-y-2.5 sm:grid-cols-3'>
+              {FOOTER_LINKS.map(link => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className='text-sm font-semibold tracking-[0.08em] uppercase'
+                >
+                  {link.text}
+                </Link>
+              ))}
+            </nav>
+          </div>
+          <div>
+            <h3 className='text-sm font-black tracking-[0.08em] uppercase'>
+              Newsletter
+            </h3>
+            <p className='mt-2 text-sm leading-snug'>
+              Occasional updates from the clubhouse — events, openings, and new
+              work.
+            </p>
+            <div className='mt-4'>
+              <NewsletterSignUpForm />
+            </div>
+          </div>
         </div>
-        <nav className='mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 font-black uppercase md:justify-start'>
-          {FOOTER_LINKS.map(link => (
-            <Link key={link.href} href={link.href} className='text-sm'>
-              {link.text}
-            </Link>
-          ))}
-        </nav>
-        <div className='mt-10 flex flex-col-reverse items-center justify-between gap-6 md:flex-row'>
-          <div className='text-center'>
+        <div className='flex flex-col-reverse items-center justify-between gap-4 border-t-2 border-black px-4 py-5 md:flex-row md:px-12'>
+          <div className='text-center text-sm'>
             &copy; {new Date().getFullYear()} The Good for Nothings Club LLC.
             All rights reserved.
           </div>
-          <div className='text-2xl'>
+          <div className='text-xl'>
             <SocialMediaLinks />
           </div>
         </div>

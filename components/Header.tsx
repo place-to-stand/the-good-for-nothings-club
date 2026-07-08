@@ -14,44 +14,40 @@ import {
 import { Menu } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
-type MenuItem = {
-  href: string
-  text: string
-  // Shown inline (outside the hamburger) on small screens. Keep this to two
-  // conversion-focused items so the compact bar stays a tidy "hamburger + 2".
-  showOnMobile?: boolean
-}
-
-// Projects is intentionally omitted from the nav for now (the /projects route
-// still works and is linked from the footer). The space-sustaining pages —
-// Facilities, Services, Events — take its place.
-const MENU_ITEMS: MenuItem[] = [
-  { href: '/', text: 'Home' },
+// The wordmark is the Home link and "Join" is the membership CTA, so
+// neither appears here. Projects stays out of the nav for now (route
+// still live, linked in the footer).
+const NAV_ITEMS = [
   { href: '/facilities', text: 'Facilities' },
   { href: '/services', text: 'Services' },
   { href: '/events', text: 'Events' },
-  { href: '/membership', text: 'Membership', showOnMobile: true },
   { href: 'https://shop.thegoodfornothings.club/', text: 'Shop' },
   { href: '/about', text: 'About' },
-  { href: '/contact', text: 'Contact', showOnMobile: true },
+  { href: '/contact', text: 'Contact' },
+]
+
+const SHEET_ITEMS = [
+  { href: '/', text: 'Home' },
+  ...NAV_ITEMS,
+  { href: '/membership', text: 'Membership' },
 ]
 
 export default function Header() {
   const pathname = usePathname()
 
   return (
-    <header className='relative text-center font-sans font-black uppercase md:px-8 md:pt-8 xl:px-16 xl:pt-16'>
-      <div className='bg-background relative z-10 m-auto grid max-w-(--page-max-width) grid-cols-[64px_1fr_1fr] border-b-2 border-black md:border-2 lg:grid-cols-8'>
+    <header className='relative font-sans md:px-8 md:pt-8 xl:px-16 xl:pt-16'>
+      <div className='bg-background relative z-10 m-auto flex max-w-(--page-max-width) items-stretch border-b-2 border-black md:border-2'>
         <Sheet key={pathname}>
-          <SheetTrigger className='flex cursor-pointer items-center justify-center transition-colors hover:bg-black/10 active:bg-black/20 lg:hidden'>
-            <Menu height='28px' width='28px' />
+          <SheetTrigger className='flex w-12 cursor-pointer items-center justify-center border-r-2 border-black transition-colors hover:bg-black/10 active:bg-black/20 lg:hidden'>
+            <Menu height='24px' width='24px' />
           </SheetTrigger>
           <SheetContent side='left'>
             <SheetHeader>
               <SheetTitle className='font-normal'>Menu</SheetTitle>
             </SheetHeader>
             <ul className='flex flex-col gap-4 py-12 font-sans text-3xl font-black uppercase'>
-              {MENU_ITEMS.map(item => (
+              {SHEET_ITEMS.map(item => (
                 <li key={item.href}>
                   <SheetClose asChild>
                     <Link
@@ -68,24 +64,52 @@ export default function Header() {
           </SheetContent>
         </Sheet>
 
-        {MENU_ITEMS.map(item => {
-          const isActive = pathname === item.href
+        {/* Wordmark = home */}
+        <Link
+          href='/'
+          aria-current={pathname === '/' ? 'page' : undefined}
+          className='flex items-center px-4 py-2.5 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 lg:border-r-2 lg:border-black lg:px-5'
+        >
+          <span className='text-[13px] leading-[0.95] font-black tracking-tight uppercase'>
+            Good For
+            <br />
+            Nothings
+          </span>
+        </Link>
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={isActive ? 'page' : undefined}
-              className={cn(
-                !item.showOnMobile && 'hidden lg:block',
-                isActive && 'bg-black/5',
-                'relative overflow-hidden border-black px-4 py-5 transition-all duration-500 not-first-of-type:border-l-2 hover:bg-black/10 hover:no-underline active:bg-black/20 md:border-b-0 md:px-5 md:py-6 lg:px-2 lg:text-sm xl:px-3 xl:text-base'
-              )}
-            >
-              {item.text}
-            </Link>
-          )
-        })}
+        {/* Desktop nav */}
+        <nav className='hidden flex-1 items-center px-2 lg:flex'>
+          {NAV_ITEMS.map(item => {
+            const isActive = pathname === item.href
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? 'page' : undefined}
+                className={cn(
+                  isActive && 'underline decoration-[3px] underline-offset-4',
+                  'px-3 py-2 text-[13px] font-semibold tracking-[0.08em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20'
+                )}
+              >
+                {item.text}
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div className='flex-1 lg:hidden' />
+
+        {/* Membership CTA */}
+        <div className='flex items-center px-3'>
+          <Link
+            href='/membership'
+            aria-current={pathname === '/membership' ? 'page' : undefined}
+            className='bg-black px-4 py-2 text-xs font-black tracking-[0.08em] text-white uppercase transition-colors hover:bg-black/80 hover:no-underline active:bg-black/70'
+          >
+            Join
+          </Link>
+        </div>
       </div>
     </header>
   )

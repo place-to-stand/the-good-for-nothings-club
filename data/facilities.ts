@@ -33,8 +33,10 @@ export type Facility = {
 }
 
 export const facilitiesCopy = {
-  lead: 'Monthly members get keys and 24/7 access to the facilities.',
+  lead: 'The clubhouse, room by room.',
   monthlyTitle: 'Monthly rental',
+  monthlyLead:
+    'Monthly members get keys, 24/7 access to the facilities, and half off hourly rooms.',
   hourlyTitle: 'Hourly rental',
   hourlyLead:
     'Standard booking hours are weekdays from 9-5. Evenings & weekends can typically be arranged with enough notice. Monthly members pay half the weekday rate, nights and weekends included.',

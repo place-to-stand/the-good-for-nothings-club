@@ -80,9 +80,12 @@ export default function Facilities() {
   return (
     <PageShell
       title='Facilities'
-      lead={`The clubhouse, room by room. ${facilitiesCopy.lead}`}
+      lead={facilitiesCopy.lead}
     >
-      <SectionHeading title={facilitiesCopy.monthlyTitle} />
+      <SectionHeading
+        title={facilitiesCopy.monthlyTitle}
+        lead={facilitiesCopy.monthlyLead}
+      />
       <div className='mt-6 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2'>
         {monthly.map(facility => (
           <FacilityCard key={facility.slug} facility={facility} />

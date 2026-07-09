@@ -57,7 +57,7 @@ export const facilities: Facility[] = [
     name: 'Permanent desk',
     model: 'monthly',
     description:
-      'An assigned space — bring your own furniture, set it up how you like, and leave it that way between visits.',
+      'An assigned space — bring your own furniture or use ours, set it up how you like, and leave it that way between visits.',
     quantity: '8 desks total',
     rate: '$400 / mo',
   },
@@ -66,7 +66,7 @@ export const facilities: Facility[] = [
     name: 'Band practice room',
     model: 'monthly',
     description:
-      'One practice room, shared by four bands on a calendar. Drum kit (without breakables), PA, mics, and mic stands provided.',
+      'One practice room, shared by four bands on a calendar. Drum kit (minus breakables), PA, mics, and mic stands provided.',
     quantity: '4 bands total',
     rate: '$200 / mo',
   },
@@ -86,7 +86,7 @@ export const facilities: Facility[] = [
   },
   {
     slug: 'recording-studio',
-    name: 'Recording control room',
+    name: 'Mixing control room',
     model: 'hourly',
     description:
       'A control room for mixing with studio monitors, a Mac mini loaded with Pro Tools, and plugins. An engineer who knows the room is available by the hour.',

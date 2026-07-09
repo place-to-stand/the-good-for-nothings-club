@@ -13,24 +13,24 @@ export default function PriceMenu({ lines }: { lines: PriceMenuLine[] }) {
   const groups = [...new Set(lines.map(line => line.group))]
 
   return (
-    <div className='font-sans text-sm'>
+    <div className='space-y-4 font-sans text-sm'>
       {groups.map(group => (
         <div key={group ?? 'flat'}>
           {group && (
-            <div className='mt-3 mb-1 text-xs font-black tracking-[0.08em] text-black/60 uppercase first:mt-0'>
+            <div className='text-sm font-black tracking-[0.08em] text-black/60 uppercase first:mt-0'>
               {group}
             </div>
           )}
           {lines
             .filter(line => line.group === group)
             .map(line => (
-              <div key={line.item} className='flex items-baseline gap-2 py-1'>
+              <div key={line.item} className='flex items-baseline gap-2 py-px'>
                 <span>{line.item}</span>
                 <span
                   aria-hidden
                   className='min-w-6 flex-1 border-b-2 border-dotted border-black/25'
                 />
-                <span className='font-bold whitespace-nowrap'>
+                <span className='text-base font-bold whitespace-nowrap'>
                   {line.price}
                 </span>
               </div>

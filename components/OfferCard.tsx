@@ -33,17 +33,13 @@ export default function OfferCard({
       id={id}
       className='flex scroll-mt-28 flex-col border-2 border-black p-6 md:p-8'
     >
-      <div className='flex items-baseline gap-2'>
+      <div className='flex items-center justify-between gap-2'>
         <h3 className='text-[24px] leading-none font-black tracking-[-0.03em] md:text-[28px]'>
           {title}
         </h3>
         {price && (
           <>
-            <span
-              aria-hidden
-              className='min-w-6 flex-1 border-b-2 border-dotted border-black/25'
-            />
-            <span className='font-sans text-sm font-black tracking-tight whitespace-nowrap uppercase'>
+            <span className='font-sans text-base font-bold tracking-tight whitespace-nowrap uppercase'>
               {price}
             </span>
           </>
@@ -51,7 +47,7 @@ export default function OfferCard({
       </div>
 
       {meta && (
-        <p className='mt-2 font-sans text-xs font-bold tracking-[0.08em] text-black/60 uppercase'>
+        <p className='mt-1 font-sans text-xs font-bold tracking-[0.08em] text-black/60 uppercase'>
           {meta}
         </p>
       )}
@@ -60,7 +56,7 @@ export default function OfferCard({
         <p className='mt-4 font-sans leading-snug'>{description}</p>
       )}
 
-      {children && <div className='mt-5'>{children}</div>}
+      {children && <div className='mt-6'>{children}</div>}
 
       {footer && <div className='mt-auto pt-6'>{footer}</div>}
     </article>

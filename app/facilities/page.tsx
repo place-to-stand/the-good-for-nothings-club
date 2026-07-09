@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 
+import FeatureBand from '@/components/FeatureBand'
 import InquiryDialog from '@/components/InquiryDialog'
 import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
@@ -111,12 +112,9 @@ export default function Facilities() {
         </>
       )}
 
-      <p className='mt-14 text-center font-sans md:mt-20'>
-        <span className='text-xs font-black tracking-[0.08em] text-black/60 uppercase'>
-          Included with every rental
-        </span>
-        <span className='mt-2 block text-sm'>{amenities.join('  ·  ')}</span>
-      </p>
+      <div className='mt-14 md:mt-20'>
+        <FeatureBand label='Included with every rental' items={amenities} />
+      </div>
     </PageShell>
   )
 }

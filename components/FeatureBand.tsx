@@ -7,20 +7,20 @@ type FeatureBandProps = {
 }
 
 /**
- * An inverted statement band: black block, display-type item list.
- * For the selling points that shouldn't whisper (amenities, perks).
+ * A tinted band calling out a list of selling points (amenities, perks) —
+ * visible without shouting.
  */
 export default function FeatureBand({ label, items }: FeatureBandProps) {
   return (
-    <section className='bg-black px-6 py-8 md:px-10 md:py-10'>
-      <h2 className='font-sans text-xs font-black tracking-[0.08em] text-white/60 uppercase'>
+    <section className='bg-black/5 px-6 py-7 md:px-10 md:py-8'>
+      <h2 className='font-sans text-xs font-black tracking-[0.08em] text-black/60 uppercase'>
         {label}
       </h2>
-      <p className='mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-3 font-sans text-[22px] leading-none font-black tracking-[-0.02em] text-white uppercase md:gap-x-4 md:text-[28px]'>
+      <p className='mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-2 font-sans text-lg leading-none font-bold md:text-xl'>
         {items.map((item, index) => (
           <Fragment key={item}>
             {index > 0 && (
-              <span aria-hidden className='text-white/40'>
+              <span aria-hidden className='text-black/30'>
                 ·
               </span>
             )}

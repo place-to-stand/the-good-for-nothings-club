@@ -1,6 +1,8 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 
 import InquiryDialog from '@/components/InquiryDialog'
+import PageShell from '@/components/PageShell'
+import SectionHeading from '@/components/SectionHeading'
 import { services, servicesCopy, type Service } from '@/data/services'
 
 export async function generateMetadata(
@@ -94,43 +96,27 @@ function ServiceCard({ service }: { service: Service }) {
 
 export default function Services() {
   return (
-    <main>
-      <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
-        <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
-          <h1 className='pt-6 text-center text-[32px] leading-none font-black tracking-[-0.04em] md:pt-8 md:text-[48px] lg:text-[96px]'>
-            Services
-          </h1>
+    <PageShell
+      title='Services'
+      lead={`Bring the project. We'll make it. ${servicesCopy.lead}`}
+    >
+      {servicesCopy.categories.map(category => {
+        const categoryServices = services.filter(
+          service => service.category === category.key
+        )
+        if (categoryServices.length === 0) return null
 
-          <div className='mt-10 border-t-2 border-black pt-12 sm:mt-12 md:mt-20'>
-            <p className='mx-auto max-w-3xl text-center font-serif text-2xl leading-tight sm:text-[28px]'>
-              Bring the project. We&apos;ll make it. {servicesCopy.lead}
-            </p>
-
-            {servicesCopy.categories.map(category => {
-              const categoryServices = services.filter(
-                service => service.category === category.key
-              )
-              if (categoryServices.length === 0) return null
-
-              return (
-                <div key={category.key} id={category.key} className='scroll-mt-28'>
-                  <h2 className='mt-14 text-[28px] font-black tracking-[-0.03em] md:mt-20 md:text-[40px]'>
-                    {category.title}
-                  </h2>
-                  <p className='mt-3 max-w-3xl font-sans leading-snug'>
-                    {category.lead}
-                  </p>
-                  <div className='mt-6 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2'>
-                    {categoryServices.map(service => (
-                      <ServiceCard key={service.slug} service={service} />
-                    ))}
-                  </div>
-                </div>
-              )
-            })}
+        return (
+          <div key={category.key} id={category.key} className='scroll-mt-28'>
+            <SectionHeading title={category.title} lead={category.lead} />
+            <div className='mt-6 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2'>
+              {categoryServices.map(service => (
+                <ServiceCard key={service.slug} service={service} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-    </main>
+        )
+      })}
+    </PageShell>
   )
 }

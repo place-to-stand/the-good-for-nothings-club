@@ -19,12 +19,12 @@ export default function PageShell({ title, lead, children }: PageShellProps) {
           <h1 className='pt-6 text-center text-[32px] leading-none font-black tracking-[-0.04em] md:pt-8 md:text-[48px] lg:text-[96px]'>
             {title}
           </h1>
-          <div className='mt-10 border-t-2 border-black pt-12 sm:mt-12 md:mt-20'>
-            {lead && (
-              <p className='mx-auto max-w-3xl text-center font-serif text-2xl leading-tight sm:text-[28px]'>
-                {lead}
-              </p>
-            )}
+          {lead && (
+            <p className='mx-auto max-w-3xl text-center font-serif text-2xl leading-tight sm:text-[28px]'>
+              {lead}
+            </p>
+          )}
+          <div className='mt-10 border-t-2 border-black pt-2 sm:mt-12 md:mt-20'>
             {children}
           </div>
         </div>

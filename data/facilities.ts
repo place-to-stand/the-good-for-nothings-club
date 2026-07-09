@@ -46,10 +46,10 @@ export const facilitiesCopy = {
 export const storefrontCopy = {
   title: 'Consignment Shop',
   name: 'Online Store',
-  rate: '25% of net profit',
+  rate: '25% of net',
   description:
-    'An online store for members and friends of members. You make the work — we handle shipping, returns, customer service, and Texas sales tax for 25% of the net profit on each sale.',
-  note: 'Every seller receives a custom landing page to link to.',
+    'An online store for members and friends of members. You make the work — we handle shipping, returns, customer service, and sales tax for 25% of the net profit on each sale.',
+  note: 'Custom landing page included.',
 }
 
 export const amenities = [

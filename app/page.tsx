@@ -16,7 +16,7 @@ export default function Home() {
       </section>
       <section className='md:px-8 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
-          <p className='font-serif text-2xl leading-tight sm:text-[32px] 2xl:text-[48px] 2xl:leading-[1.16]'>
+          <p className='font-serif text-2xl leading-tight sm:text-[36px] lg:text-[48px] lg:leading-[1.16]'>
             <em>The Good for Nothings Club</em> is a creators club from Austin,
             TX made up of musicians, photographers, writers, filmmakers, and
             engineers. Our clubhouse puts studios, rehearsal rooms, and
@@ -83,10 +83,10 @@ export default function Home() {
 
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
-          <h2 className='pt-6 text-[32px] font-black tracking-[-0.04em] md:pt-8 md:text-[48px] lg:text-[84px]'>
+          <h2 className='pt-6 text-[32px] font-black tracking-[-0.04em] md:pt-4 md:text-[48px] lg:text-[64px]'>
             Find Us Online
           </h2>
-          <div className='mt-10 grid grid-cols-1 gap-8 md:mt-18 lg:grid-cols-2'>
+          <div className='mt-10 grid grid-cols-1 gap-8 md:mt-14 lg:grid-cols-2'>
             <Suspense fallback={<div>Loading...</div>}>
               <InstagramFeed feedId='y09WG1s5frlBs5IYL0XM' />
               <SpotifyPlaylistEmbed />

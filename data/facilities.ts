@@ -43,14 +43,23 @@ export const facilitiesCopy = {
   plannedTitle: 'In the works',
 }
 
+export const storefrontCopy = {
+  title: 'Consignment Shop',
+  name: 'Online Store',
+  rate: '25% of net profit',
+  description:
+    'An online store for members and friends of members. You make the work — we handle shipping, returns, customer service, and Texas sales tax for 25% of the net profit on each sale.',
+  note: 'Every seller receives a custom landing page to link to.',
+}
+
 export const amenities = [
-  'Wi-Fi',
-  'Full kitchen',
   'Drip coffee',
   'Milk',
   'Filtered water',
   'Seltzer',
   'Snacks',
+  'Fast Wi-Fi',
+  'Full kitchen',
 ]
 
 export const facilities: Facility[] = [

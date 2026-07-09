@@ -10,6 +10,7 @@ import {
   amenities,
   facilities,
   facilitiesCopy,
+  storefrontCopy,
   type Facility,
 } from '@/data/facilities'
 
@@ -78,10 +79,7 @@ export default function Facilities() {
   const planned = facilities.filter(f => f.status === 'planned')
 
   return (
-    <PageShell
-      title='Facilities'
-      lead={facilitiesCopy.lead}
-    >
+    <PageShell title='Facilities' lead={facilitiesCopy.lead}>
       <SectionHeading
         title={facilitiesCopy.monthlyTitle}
         lead={facilitiesCopy.monthlyLead}
@@ -124,8 +122,29 @@ export default function Facilities() {
         </>
       )}
 
+      <SectionHeading title={storefrontCopy.title} />
+      <div className='mt-6 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2'>
+        <OfferCard
+          id='online-store'
+          title={storefrontCopy.name}
+          price={storefrontCopy.rate}
+          meta={storefrontCopy.note}
+          description={storefrontCopy.description}
+          footer={
+            <InquiryDialog
+              kind='facility'
+              item={storefrontCopy.name}
+              triggerLabel='Ask about selling'
+              title={storefrontCopy.name}
+              description="Tell us who you are and what you make, and we'll reach out."
+              submitLabel='Send'
+            />
+          }
+        />
+      </div>
+
       <div className='mt-14 md:mt-20'>
-        <FeatureBand label='Included with every rental' items={amenities} />
+        <FeatureBand label='The Clubhouse is stocked with' items={amenities} />
       </div>
     </PageShell>
   )

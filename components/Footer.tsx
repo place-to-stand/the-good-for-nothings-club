@@ -115,7 +115,7 @@ export default function Footer() {
             </nav>
           </div>
           <div>
-            <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
+            <h3 className='text-[20px] font-black tracking-[0.06em] uppercase'>
               Newsletter
             </h3>
             <p className='mt-2 text-sm leading-snug'>
@@ -127,7 +127,7 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <h3 className='text-[15px] font-black tracking-[0.06em] uppercase'>
+            <h3 className='text-[20px] font-black tracking-[0.06em] uppercase'>
               Membership
             </h3>
             <p className='mt-2 text-sm leading-snug'>

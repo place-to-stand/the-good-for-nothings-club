@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/sheet'
 import { Menu } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+import { Button } from './ui/Button'
 
 // The wordmark is the Home link; the Join chip is a second door to
 // /membership. Projects stays out of the nav for now (route still live).
@@ -35,7 +36,7 @@ export default function Header() {
     <header className='relative font-sans md:px-8 md:pt-8 xl:px-16 xl:pt-16'>
       <div className='bg-background relative z-10 m-auto flex max-w-(--page-max-width) items-stretch border-b-2 border-black md:border-2'>
         <Sheet key={pathname}>
-          <SheetTrigger className='flex w-14 cursor-pointer items-center justify-center transition-colors hover:bg-black/10 active:bg-black/20 lg:hidden'>
+          <SheetTrigger className='flex w-14 cursor-pointer items-center justify-center border-r-2 border-black transition-colors hover:bg-black/10 active:bg-black/20 lg:hidden'>
             <Menu height='28px' width='28px' />
           </SheetTrigger>
           <SheetContent side='left'>
@@ -65,8 +66,7 @@ export default function Header() {
           href='/'
           aria-current={pathname === '/' ? 'page' : undefined}
           className={cn(
-            'flex items-center px-4 py-4 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 xl:px-6',
-            pathname === '/' && 'lg:bg-black/5'
+            'flex items-center border-r-2 border-black px-4 py-4 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 xl:px-6'
           )}
         >
           <span className='text-[32px] leading-[0.9] font-black tracking-[-0.02em] uppercase md:text-[40px]'>
@@ -86,7 +86,7 @@ export default function Header() {
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
                   'px-2 py-3 text-sm font-extrabold tracking-[0.06em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 xl:px-3 xl:text-[15px]',
-                  isActive && 'bg-black/5'
+                  isActive && 'bg-black/10'
                 )}
               >
                 {item.text}
@@ -99,13 +99,17 @@ export default function Header() {
 
         {/* Membership CTA */}
         <div className='flex items-center px-3 md:px-4 lg:px-2 xl:px-4'>
-          <ScrollTopLink
-            href='/membership'
-            aria-current={pathname === '/membership' ? 'page' : undefined}
-            className='bg-black px-4 py-3 text-sm font-medium tracking-[0.06em] whitespace-nowrap text-white uppercase transition-colors hover:bg-black/80 hover:no-underline active:bg-black/70 xl:px-5'
+          <Button
+            asChild
+            className='py-4 text-[14px] leading-none hover:no-underline'
           >
-            Apply to Join
-          </ScrollTopLink>
+            <ScrollTopLink
+              href='/membership'
+              aria-current={pathname === '/membership' ? 'page' : undefined}
+            >
+              Apply to Join
+            </ScrollTopLink>
+          </Button>
         </div>
       </div>
     </header>

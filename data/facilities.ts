@@ -37,7 +37,7 @@ export const facilitiesCopy = {
   monthlyTitle: 'Monthly rental',
   hourlyTitle: 'Hourly rental',
   hourlyLead:
-    'Standard booking hours are 9–5. Evenings and weekends are available for an added rate, and special times can be arranged with enough notice.',
+    'Standard booking hours are weekdays from 9-5. Evenings & weekends can typically be arranged with enough notice. Monthly members pay half the weekday rate, nights and weekends included.',
   plannedTitle: 'In the works',
 }
 
@@ -89,7 +89,7 @@ export const facilities: Facility[] = [
     name: 'Mixing control room',
     model: 'hourly',
     description:
-      'A control room for mixing with studio monitors, a Mac mini loaded with Pro Tools, and plugins. An engineer who knows the room is available by the hour.',
+      'A control room for mixing with studio monitors, a Mac mini loaded with Pro Tools, and plugins. First 15 minutes of setup help are free; An engineer who knows the room is available by the hour.',
     rate: 'From $30 / hr',
     rateNote: 'Two-hour minimum.',
     rateCard: [

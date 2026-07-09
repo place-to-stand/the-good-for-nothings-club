@@ -20,7 +20,7 @@ export default function Home() {
             <em>The Good for Nothings Club</em> is a creators club from Austin,
             TX made up of musicians, photographers, writers, filmmakers, and
             engineers. Our clubhouse puts studios, rehearsal rooms, and
-            workspace under one roof. Good for nothings. Doing everything.
+            workspace under one roof. Good for nothings. Making everything.
           </p>
         </div>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black md:border-x-2'>

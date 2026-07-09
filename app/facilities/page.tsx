@@ -6,7 +6,12 @@ import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
 import PriceMenu from '@/components/PriceMenu'
 import SectionHeading from '@/components/SectionHeading'
-import { amenities, facilities, facilitiesCopy, type Facility } from '@/data/facilities'
+import {
+  amenities,
+  facilities,
+  facilitiesCopy,
+  type Facility,
+} from '@/data/facilities'
 
 export async function generateMetadata(
   _props: unknown,
@@ -42,7 +47,9 @@ function FacilityCard({ facility }: { facility: Facility }) {
           kind='facility'
           item={facility.name}
           triggerLabel={
-            facility.model === 'monthly' ? 'Ask about availability' : 'Book time'
+            facility.model === 'monthly'
+              ? 'Ask about availability'
+              : 'Book time'
           }
           title={facility.name}
           description={
@@ -50,7 +57,9 @@ function FacilityCard({ facility }: { facility: Facility }) {
               ? "Spots are limited. Tell us who you are and we'll reach out about availability."
               : `${facility.rate}${facility.rateNote ? ` · ${facility.rateNote}` : ''} We'll confirm timing by email.`
           }
-          submitLabel={facility.model === 'monthly' ? 'Send' : 'Request booking'}
+          submitLabel={
+            facility.model === 'monthly' ? 'Send' : 'Request booking'
+          }
         />
       }
     >
@@ -82,7 +91,7 @@ export default function Facilities() {
 
       <SectionHeading
         title={facilitiesCopy.hourlyTitle}
-        lead={`${facilitiesCopy.hourlyLead} Monthly members get 50% off hourly rates.`}
+        lead={`${facilitiesCopy.hourlyLead}`}
       />
       <div className='mt-6 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2'>
         {hourly.map(facility => (

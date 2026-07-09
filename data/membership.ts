@@ -51,7 +51,7 @@ export const membershipCopy = {
   moreTitle: 'More than a room',
   moreCards: [
     {
-      title: 'Our channels, your work',
+      title: 'Our community channels, your work',
       body: "Members can be featured in the club newsletter and across our social. Both go out on a regular cadence, and we ask what you'd like included before each one does.",
     },
     {
@@ -77,7 +77,8 @@ export const membershipCopy = {
     },
     {
       label: 'Service work',
-      value: '75% to the person doing the work · 25% to the club for admin + equipment',
+      value:
+        '75% to the person doing the work · 25% to the club for admin + equipment',
     },
   ],
 }
@@ -111,7 +112,7 @@ export const membershipTiers: MembershipTier[] = [
     name: 'Member',
     tagline:
       'A monthly rental commitment — a permanent desk or a band practice slot — and full run of the clubhouse.',
-    price: 'From $150 / mo',
+    price: 'From $200 / mo',
     includes: 'Everything in associate and friend, plus:',
     perks: [
       'Keys and 24/7 access to the clubhouse',

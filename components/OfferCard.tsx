@@ -47,7 +47,7 @@ export default function OfferCard({
       </div>
 
       {meta && (
-        <p className='mt-1 font-sans text-xs font-bold tracking-[0.08em] text-black/60 uppercase'>
+        <p className='mt-1 font-sans text-xs font-semibold tracking-[0.08em] text-black/60 uppercase'>
           {meta}
         </p>
       )}

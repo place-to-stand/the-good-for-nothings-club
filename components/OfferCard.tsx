@@ -1,0 +1,68 @@
+import type { ReactNode } from 'react'
+
+type OfferCardProps = {
+  /** Anchor id for deep links. */
+  id?: string
+  title: string
+  /** Headline price, set on the title line with a dotted leader. */
+  price?: string
+  /** Small-caps line under the title, e.g. "8 desks total" or "Two-hour minimum." */
+  meta?: string
+  description?: string
+  /** Extra content, e.g. a PriceMenu. */
+  children?: ReactNode
+  /** CTA area, pinned to the bottom of the card. */
+  footer?: ReactNode
+}
+
+/**
+ * A bordered offer card: one structural frame, menu-style interior.
+ * Used for facilities, services, and anything else with a price tag.
+ */
+export default function OfferCard({
+  id,
+  title,
+  price,
+  meta,
+  description,
+  children,
+  footer,
+}: OfferCardProps) {
+  return (
+    <article
+      id={id}
+      className='flex scroll-mt-28 flex-col border-2 border-black p-6 md:p-8'
+    >
+      <div className='flex items-baseline gap-2'>
+        <h3 className='text-[24px] leading-none font-black tracking-[-0.03em] md:text-[28px]'>
+          {title}
+        </h3>
+        {price && (
+          <>
+            <span
+              aria-hidden
+              className='min-w-6 flex-1 border-b-2 border-dotted border-black/25'
+            />
+            <span className='font-sans text-sm font-black tracking-tight whitespace-nowrap uppercase'>
+              {price}
+            </span>
+          </>
+        )}
+      </div>
+
+      {meta && (
+        <p className='mt-2 font-sans text-xs font-bold tracking-[0.08em] text-black/60 uppercase'>
+          {meta}
+        </p>
+      )}
+
+      {description && (
+        <p className='mt-4 font-sans leading-snug'>{description}</p>
+      )}
+
+      {children && <div className='mt-5'>{children}</div>}
+
+      {footer && <div className='mt-auto pt-6'>{footer}</div>}
+    </article>
+  )
+}

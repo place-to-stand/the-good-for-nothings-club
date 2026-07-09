@@ -28,7 +28,18 @@ export const inquirySchema = z.object({
   item: z.string().min(1).max(256),
   name: z.string().min(1).max(256),
   email: z.string().email(),
-  phone: z.string().max(256).optional(),
+  phone: z
+    .string()
+    .trim()
+    .max(25)
+    .optional()
+    .refine(
+      value =>
+        !value ||
+        (/^\+?[\d\s().-]+$/.test(value) &&
+          (value.match(/\d/g)?.length ?? 0) >= 7),
+      { message: 'Enter a valid phone number.' }
+    ),
   message: z.string().max(5000).optional(),
 })
 

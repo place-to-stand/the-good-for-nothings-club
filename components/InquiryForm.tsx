@@ -168,7 +168,7 @@ export default function InquiryForm({
                 <Input
                   type='tel'
                   id='phone'
-                  maxLength={256}
+                  maxLength={25}
                   autoComplete='tel'
                   {...field}
                 />

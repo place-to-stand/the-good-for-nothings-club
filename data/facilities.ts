@@ -22,7 +22,7 @@ export type Facility = {
   model: 'monthly' | 'hourly'
   /** Not yet bookable — shown without rates or booking. */
   status?: 'planned'
-  /** Display rate, e.g. "$275 / mo" or "From $30 / hr". */
+  /** Display rate, e.g. "$400 / mo" or "From $30 / hr". */
   rate?: string
   rateNote?: string
   /** e.g. "8 desks total" */
@@ -51,25 +51,6 @@ export const amenities = [
   'Snacks',
 ]
 
-/** The parts of the house rules an outside renter needs before booking. */
-export const bookingNotes = [
-  {
-    label: 'Parking',
-    points: [
-      '11am–7pm — park in the neighborhood; the front lot is reserved for the vintage store up front',
-      'Before 11am and after 7pm — the front lot is open',
-      '15-minute load-in out front, anytime',
-    ],
-  },
-  {
-    label: 'Sound',
-    points: [
-      'While the vintage store is open (11am–7pm), keep studio sound to a reasonable volume — no restrictions before or after',
-      'Band practice starts at 3pm at the earliest',
-    ],
-  },
-]
-
 export const facilities: Facility[] = [
   {
     slug: 'permanent-desk',
@@ -78,7 +59,7 @@ export const facilities: Facility[] = [
     description:
       'An assigned space — bring your own furniture, set it up how you like, and leave it that way between visits.',
     quantity: '8 desks total',
-    rate: '$275 / mo',
+    rate: '$400 / mo',
   },
   {
     slug: 'band-room',
@@ -86,8 +67,8 @@ export const facilities: Facility[] = [
     model: 'monthly',
     description:
       'One practice room, shared by four bands on a calendar. Drum kit (without breakables), PA, mics, and mic stands provided.',
-    quantity: '4 band slots',
-    rate: '$150 / mo',
+    quantity: '4 bands total',
+    rate: '$200 / mo',
   },
   {
     slug: 'photo-studio',
@@ -117,20 +98,20 @@ export const facilities: Facility[] = [
       { group: 'Staff', item: 'Engineer (optional)', price: '$50 / hr' },
     ],
   },
-  {
-    slug: 'darkroom',
-    name: 'Darkroom',
-    model: 'hourly',
-    status: 'planned',
-    description:
-      'A black-and-white darkroom for developing and printing — chemicals included.',
-  },
-  {
-    slug: 'repair-bench',
-    name: 'Electronics & guitar bench',
-    model: 'hourly',
-    status: 'planned',
-    description:
-      'A workbench with the necessary tools and materials for fixing electronics and setting up instruments.',
-  },
+  // {
+  //   slug: 'darkroom',
+  //   name: 'Darkroom',
+  //   model: 'hourly',
+  //   status: 'planned',
+  //   description:
+  //     'A black-and-white darkroom for developing and printing — chemicals included.',
+  // },
+  // {
+  //   slug: 'repair-bench',
+  //   name: 'Electronics & guitar bench',
+  //   model: 'hourly',
+  //   status: 'planned',
+  //   description:
+  //     'A workbench with the necessary tools and materials for fixing electronics and setting up instruments.',
+  // },
 ]

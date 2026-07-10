@@ -17,7 +17,7 @@ export async function generateMetadata(
   return {
     title: 'Services',
     description:
-      'Bring the project, we’ll make it — photography, video, music production, zines, photo booth, pop-up cinema, sound systems, and event planning from The Good for Nothings Club in Austin, TX.',
+      'You bring the project, we make it — photography, video, music production, zines, photo booth, pop-up cinema, sound systems, and event planning from The Good for Nothings Club in Austin, TX.',
     alternates: {
       canonical: pathname,
     },
@@ -40,7 +40,7 @@ function ServiceCard({ service }: { service: Service }) {
         <InquiryDialog
           kind='service'
           item={service.name}
-          triggerLabel='Start a project'
+          triggerLabel={service.cta ?? 'Start a project'}
           title={service.name}
           description="Tell us what you have in mind and we'll get back to you with a quote."
           submitLabel='Send'
@@ -64,7 +64,7 @@ export default function Services() {
   return (
     <PageShell
       title='Services'
-      lead={`Bring the project. We'll make it. ${servicesCopy.lead}`}
+      lead={`You bring the project. We make it. ${servicesCopy.lead}`}
     >
       {servicesCopy.categories.map(category => {
         const categoryServices = services.filter(

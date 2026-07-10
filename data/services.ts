@@ -21,6 +21,8 @@ export type Service = {
   blurb: string
   price: string
   category: ServiceCategoryKey
+  /** Inquiry button label; defaults to "Start a project". */
+  cta?: string
   detail?: string
   items?: ServiceItem[]
 }
@@ -54,6 +56,7 @@ export const servicesCopy = {
 export const services: Service[] = [
   {
     slug: 'photography',
+    cta: 'Book a shoot',
     name: 'Photography',
     category: 'visual',
     blurb:
@@ -61,7 +64,11 @@ export const services: Service[] = [
     price: 'From $250',
     items: [
       { group: 'At the clubhouse', label: 'Portrait', price: 'From $250' },
-      { group: 'At the clubhouse', label: 'Product / promo', price: 'From $300' },
+      {
+        group: 'At the clubhouse',
+        label: 'Product / promo',
+        price: 'From $300',
+      },
       { group: 'On-site', label: 'Event coverage', price: 'From $250' },
       { group: 'On-site', label: 'Portrait', price: 'From $300' },
       { group: 'On-site', label: 'Product / promo', price: 'From $350' },
@@ -69,13 +76,18 @@ export const services: Service[] = [
   },
   {
     slug: 'video',
+    cta: 'Plan a video',
     name: 'Video',
     category: 'visual',
     blurb:
       'Music videos, promos, and event recaps — shot on modern or vintage gear, filmed and cut into something you can use immediately.',
     price: 'From $400',
     items: [
-      { group: 'At the clubhouse', label: 'Product / promo', price: 'From $400' },
+      {
+        group: 'At the clubhouse',
+        label: 'Product / promo',
+        price: 'From $400',
+      },
       { group: 'On-site', label: 'Event coverage', price: 'From $400' },
       { group: 'On-site', label: 'Product / promo', price: 'From $450' },
       { group: 'On-site', label: 'Music video', price: 'From $1000' },
@@ -83,9 +95,11 @@ export const services: Service[] = [
   },
   {
     slug: 'music',
+    cta: 'Start a song',
     name: 'Music production',
     category: 'audio',
-    blurb: 'Mixing, production, and writing with people who live in the studio.',
+    blurb:
+      'Mixing, production, and writing with people who live in the studio.',
     price: 'From $300',
     items: [
       { label: 'Mixing', price: '$300 / song' },
@@ -95,15 +109,16 @@ export const services: Service[] = [
   },
   {
     slug: 'zines',
+    cta: 'Start a zine',
     name: 'Branded zines',
     category: 'print',
     blurb:
       "We publish LIMO, our own quarterly art zine, and we'll do the same for your company end to end — concept, design, layout, and the printed run.",
     price: 'From $1,000',
-    detail: 'Quoted to your page count, print quality, and run size.',
   },
   {
     slug: 'photo-booth',
+    cta: 'Book the booth',
     name: 'Photo booth',
     category: 'av',
     blurb:
@@ -112,6 +127,7 @@ export const services: Service[] = [
   },
   {
     slug: 'cinema',
+    cta: 'Plan a movie night',
     name: 'Pop-up cinema',
     category: 'av',
     blurb:
@@ -120,6 +136,7 @@ export const services: Service[] = [
   },
   {
     slug: 'sound-system',
+    cta: 'Book sound',
     name: 'Sound system + operator',
     category: 'av',
     blurb:
@@ -129,6 +146,7 @@ export const services: Service[] = [
   },
   {
     slug: 'event-planning',
+    cta: 'Plan your event',
     name: 'Event planning',
     category: 'av',
     blurb:

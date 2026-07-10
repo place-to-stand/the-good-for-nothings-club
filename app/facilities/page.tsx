@@ -49,18 +49,16 @@ function FacilityCard({ facility }: { facility: Facility }) {
           item={facility.name}
           triggerLabel={
             facility.model === 'monthly'
-              ? 'Ask about availability'
-              : 'Book time'
+              ? 'Apply for membership'
+              : 'Apply to book time'
           }
           title={facility.name}
           description={
             facility.model === 'monthly'
-              ? "Spots are limited. Tell us who you are and we'll reach out about availability."
-              : `${facility.rate}${facility.rateNote ? ` · ${facility.rateNote}` : ''} We'll confirm timing by email.`
+              ? "A monthly rental is a full membership. Spots are limited — tell us who you are and we'll reach out about availability."
+              : `${facility.rate}${facility.rateNote ? ` · ${facility.rateNote}.` : ''} Hourly renters join as associates — we'll confirm timing by email.`
           }
-          submitLabel={
-            facility.model === 'monthly' ? 'Send' : 'Request booking'
-          }
+          submitLabel={facility.model === 'monthly' ? 'Apply' : 'Request booking'}
         />
       }
     >
@@ -134,10 +132,10 @@ export default function Facilities() {
             <InquiryDialog
               kind='facility'
               item={storefrontCopy.name}
-              triggerLabel='Ask about selling'
+              triggerLabel='Apply to sell'
               title={storefrontCopy.name}
-              description="Tell us who you are and what you make, and we'll reach out."
-              submitLabel='Send'
+              description="Sellers join as associates. Tell us who you are and what you make, and we'll reach out."
+              submitLabel='Apply'
             />
           }
         />

@@ -83,16 +83,19 @@ export const membershipCopy = {
   ],
 }
 
-/** Ascending: free connection → pay-as-you-go → monthly commitment. */
+/** Descending: monthly commitment → pay-as-you-go → free connection. */
 export const membershipTiers: MembershipTier[] = [
   {
-    slug: 'friend',
-    name: 'Friend',
-    tagline: 'A connection to the club and its community, all for free.',
-    price: 'Free',
+    slug: 'member',
+    name: 'Member',
+    tagline:
+      'A monthly rental commitment — a permanent desk or a band practice slot — and full run of the clubhouse.',
+    price: 'From $200 / mo',
+    includes: 'Everything in associate and friend, plus:',
     perks: [
-      'Invitations to events and open houses',
-      'Access to community Discord channels',
+      'Keys and 24/7 access to the clubhouse',
+      '50% off hourly facility rates',
+      'A members only space in the club Discord',
     ],
   },
   {
@@ -108,16 +111,13 @@ export const membershipTiers: MembershipTier[] = [
     ],
   },
   {
-    slug: 'member',
-    name: 'Member',
-    tagline:
-      'A monthly rental commitment — a permanent desk or a band practice slot — and full run of the clubhouse.',
-    price: 'From $200 / mo',
-    includes: 'Everything in associate and friend, plus:',
+    slug: 'friend',
+    name: 'Friend',
+    tagline: 'A connection to the club and its community, all for free.',
+    price: 'Free',
     perks: [
-      'Keys and 24/7 access to the clubhouse',
-      '50% off hourly facility rates',
-      'A members only space in the club Discord',
+      'Invitations to events and open houses',
+      'Access to community Discord channels',
     ],
   },
 ]

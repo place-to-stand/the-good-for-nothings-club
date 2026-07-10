@@ -31,9 +31,12 @@ export async function POST(request: Request) {
     text: [
       `Kind: ${inquiry.kind}`,
       `Item: ${inquiry.item}`,
+      `Offering: ${inquiry.offering || '—'}`,
       `Name: ${inquiry.name}`,
       `Email: ${inquiry.email}`,
       `Phone: ${inquiry.phone || '—'}`,
+      `Socials: ${inquiry.socials?.length ? inquiry.socials.join(', ') : '—'}`,
+      `Portfolio: ${inquiry.portfolio || '—'}`,
       '',
       inquiry.message || '(no message)',
       '',

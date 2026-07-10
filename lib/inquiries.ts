@@ -24,9 +24,12 @@ export async function saveInquiry(inquiry: Inquiry): Promise<boolean> {
     const { error } = await supabase.from('inquiries').insert({
       kind: inquiry.kind,
       item: inquiry.item,
+      offering: inquiry.offering ?? null,
       name: inquiry.name,
       email: inquiry.email,
       phone: inquiry.phone ?? null,
+      socials: inquiry.socials?.length ? inquiry.socials.join(', ') : null,
+      portfolio: inquiry.portfolio || null,
       message: inquiry.message ?? null,
     })
 

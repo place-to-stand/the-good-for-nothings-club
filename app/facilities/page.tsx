@@ -1,7 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 
 import FeatureBand from '@/components/FeatureBand'
-import InquiryDialog from '@/components/InquiryDialog'
+import MembershipApplicationDialog from '@/components/MembershipApplicationDialog'
 import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
 import PriceMenu from '@/components/PriceMenu'
@@ -44,9 +44,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
       meta={[facility.quantity, facility.rateNote].filter(Boolean).join(' · ')}
       description={facility.description}
       footer={
-        <InquiryDialog
-          kind='facility'
-          item={facility.name}
+        <MembershipApplicationDialog
           triggerLabel={
             facility.model === 'monthly'
               ? 'Apply for membership'
@@ -58,7 +56,8 @@ function FacilityCard({ facility }: { facility: Facility }) {
               ? "A monthly rental is a full membership. Spots are limited — tell us who you are and we'll reach out about availability."
               : `${facility.rate}${facility.rateNote ? ` · ${facility.rateNote}.` : ''} Hourly renters join as associates — we'll confirm timing by email.`
           }
-          submitLabel={facility.model === 'monthly' ? 'Apply' : 'Request booking'}
+          defaultTier={facility.model === 'monthly' ? 'Member' : 'Associate'}
+          defaultOffering={facility.name}
         />
       }
     >
@@ -129,13 +128,12 @@ export default function Facilities() {
           meta={storefrontCopy.note}
           description={storefrontCopy.description}
           footer={
-            <InquiryDialog
-              kind='facility'
-              item={storefrontCopy.name}
+            <MembershipApplicationDialog
               triggerLabel='Apply to sell'
               title={storefrontCopy.name}
               description="Sellers join as associates. Tell us who you are and what you make, and we'll reach out."
-              submitLabel='Apply'
+              defaultTier='Associate'
+              defaultOffering={storefrontCopy.name}
             />
           }
         />

@@ -22,24 +22,35 @@ export const INQUIRY_KINDS = [
   'event',
 ] as const
 
+export const phoneSchema = z
+  .string()
+  .trim()
+  .max(25)
+  .optional()
+  .refine(
+    value =>
+      !value ||
+      (/^\+?[\d\s().-]+$/.test(value) &&
+        (value.match(/\d/g)?.length ?? 0) >= 7),
+    { message: 'Enter a valid phone number.' }
+  )
+
+export const portfolioSchema = z.union([
+  z.literal(''),
+  z.string().trim().url({ message: 'Enter a valid URL.' }),
+])
+
 export const inquirySchema = z.object({
   kind: z.enum(INQUIRY_KINDS),
   /** What the inquiry is about: facility, service, event, or tier name. */
   item: z.string().min(1).max(256),
+  /** A specific offering within the item, e.g. the facility applied for. */
+  offering: z.string().trim().max(256).optional(),
   name: z.string().min(1).max(256),
   email: z.string().email(),
-  phone: z
-    .string()
-    .trim()
-    .max(25)
-    .optional()
-    .refine(
-      value =>
-        !value ||
-        (/^\+?[\d\s().-]+$/.test(value) &&
-          (value.match(/\d/g)?.length ?? 0) >= 7),
-      { message: 'Enter a valid phone number.' }
-    ),
+  phone: phoneSchema,
+  socials: z.array(z.string().trim().max(100)).max(5).optional(),
+  portfolio: portfolioSchema.optional(),
   message: z.string().max(5000).optional(),
 })
 

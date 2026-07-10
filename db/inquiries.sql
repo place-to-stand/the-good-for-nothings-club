@@ -6,9 +6,12 @@ create table if not exists inquiries (
   id bigint generated always as identity primary key,
   kind text not null check (kind in ('facility', 'service', 'membership', 'event')),
   item text not null,
+  offering text,
   name text not null,
   email text not null,
   phone text,
+  socials text,
+  portfolio text,
   message text,
   status text not null default 'new',
   created_at timestamptz not null default now()

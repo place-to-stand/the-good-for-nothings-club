@@ -1,7 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 
 import GroupLabel from '@/components/GroupLabel'
-import InquiryForm from '@/components/InquiryForm'
+import MembershipApplicationForm from '@/components/MembershipApplicationForm'
 import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
@@ -44,7 +44,7 @@ export default function Membership() {
           <OfferCard
             key={tier.slug}
             id={tier.slug}
-            className='lg:grid lg:row-span-3 lg:grid-rows-subgrid'
+            className='lg:row-span-3 lg:grid lg:grid-rows-subgrid'
             title={tier.name}
             price={tier.price}
             description={tier.tagline}
@@ -79,9 +79,9 @@ export default function Membership() {
               </li>
             ))}
           </ol>
-          <div className='mt-6 space-y-4 font-sans text-sm'>
+          <div className='mt-6 space-y-7 bg-black/5 px-5 py-7 font-sans text-sm'>
             {membershipCopy.policies.map(policy => (
-              <div key={policy.label} className='bg-black/5 p-5'>
+              <div key={policy.label} className=''>
                 <h3 className='font-black tracking-wide uppercase'>
                   {policy.label}
                 </h3>
@@ -95,13 +95,7 @@ export default function Membership() {
           </div>
         </div>
         <OfferCard title='Apply'>
-          <InquiryForm
-            kind='membership'
-            item={membershipTiers[0].name}
-            itemOptions={membershipTiers.map(tier => tier.name)}
-            itemLabel='Membership level'
-            submitLabel='Apply'
-          />
+          <MembershipApplicationForm />
         </OfferCard>
       </div>
 

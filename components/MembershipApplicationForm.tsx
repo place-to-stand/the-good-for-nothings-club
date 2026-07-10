@@ -51,7 +51,7 @@ function offeringConfig(tier: string) {
       label: 'Which facility?',
       options: facilities
         .filter(f => f.model === 'monthly' && f.status !== 'planned')
-        .map(f => f.name),
+        .map(f => ({ value: f.name, price: f.rate })),
     }
   }
   if (tier === 'Associate') {
@@ -60,8 +60,8 @@ function offeringConfig(tier: string) {
       options: [
         ...facilities
           .filter(f => f.model === 'hourly' && f.status !== 'planned')
-          .map(f => f.name),
-        storefrontCopy.name,
+          .map(f => ({ value: f.name, price: f.rate })),
+        { value: storefrontCopy.name, price: storefrontCopy.rate },
       ],
     }
   }
@@ -129,7 +129,11 @@ export default function MembershipApplicationForm({
 
   // Keep the offering valid for the selected tier.
   useEffect(() => {
-    if (config && offering !== NOT_SURE && !config.options.includes(offering)) {
+    if (
+      config &&
+      offering !== NOT_SURE &&
+      !config.options.some(option => option.value === offering)
+    ) {
       form.setValue('offering', NOT_SURE)
     }
   }, [config, offering, form])
@@ -230,8 +234,9 @@ export default function MembershipApplicationForm({
                     >
                       <option value={NOT_SURE}>{NOT_SURE}</option>
                       {config.options.map(option => (
-                        <option key={option} value={option}>
-                          {option}
+                        <option key={option.value} value={option.value}>
+                          {option.value}
+                          {option.price ? ` — ${option.price}` : ''}
                         </option>
                       ))}
                     </select>

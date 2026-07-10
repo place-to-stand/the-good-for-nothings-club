@@ -20,27 +20,27 @@ export const membershipCopy = {
   lead: 'Three levels, each with its own perks. Apply anytime to join the waitlist — onboarding happens in waves as space opens up.',
   tiersTitle: 'Tiers',
   tiersLead:
-    "Since space is limited, acceptance isn't guaranteed. If your application is selected when space opens up, we'll reach out with onboarding instructions.",
+    "Apply anytime to join the waitlist — onboarding happens in waves as space opens up.  Since space is limited, acceptance isn't guaranteed.",
   joiningTitle: 'How to join',
   joining: [
     {
-      label: 'Everyone',
-      text: 'Fill out an application below.',
+      label: 'Apply',
+      text: 'Pick your level and tell us about yourself and what you make.',
     },
     {
-      label: 'Friend',
-      text: "Once accepted, you'll receive an invite to the club Discord.",
+      label: 'We reach out',
+      text: "Applications are accepted in waves as space opens up. Associates and members come by for a tour and a conversation first — so both sides can be sure it's a fit. Friends go straight to a Discord invite.",
     },
     {
-      label: 'Associate & member',
-      text: "We'll invite you out for a tour and a conversation, so both sides can be sure the space is a good fit. Spots are limited — if there isn't an opening right away, you'll hold a place on the waitlist.",
+      label: 'Get onboarded',
+      text: 'Sign the paperwork for your level, get your access, and jump into the club Discord.',
     },
   ],
   policies: [
     {
       label: 'Paperwork',
       points: [
-        'Members sign the membership agreement and liability waiver before keys are issued',
+        'Members sign a rental agreement and liability waiver before keys are issued',
         'Associates sign a liability waiver before their first booking',
       ],
     },

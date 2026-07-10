@@ -60,20 +60,17 @@ export const membershipCopy = {
         'Active associates get priority consideration when a desk or band slot opens up',
       ],
     },
-  ],
-  moreTitle: 'More than a room',
-  moreCards: [
     {
-      title: 'Our community channels, your work',
-      body: "Members can be featured in the club newsletter and across our social. Both go out on a regular cadence, and we ask what you'd like included before each one does.",
+      label: 'Our community channels, your work',
+      points: [
+        "Members can be featured in the club newsletter and across our social. Both go out on a regular cadence, and we ask what you'd like included before each one does.",
+      ],
     },
     {
-      title: 'A members only chatroom',
-      body: 'An always-on space to organize, trade feedback, ask for a hand, and find collaborators across disciplines.',
-    },
-    {
-      title: 'Consignment shop',
-      body: 'An online store for members and friends of members. You make the work — we handle shipping, returns, customer service, and Texas sales tax for 25% of the net profit on each sale. Every seller receives a custom landing page to link to.',
+      label: 'A members only chatroom',
+      points: [
+        'An always-on space to organize, trade feedback, ask for a hand, and find collaborators across disciplines.',
+      ],
     },
   ],
 }

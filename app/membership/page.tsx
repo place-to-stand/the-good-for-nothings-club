@@ -85,7 +85,7 @@ export default function Membership() {
               </li>
             ))}
           </ol>
-          <div className='mx-16 mt-20 space-y-7 bg-black/5 px-5 py-7 font-sans text-sm'>
+          <div className='mx-16 mt-20 space-y-7 bg-black/5 px-5 py-7 font-sans text-xs'>
             {membershipCopy.policies.map(policy => (
               <div key={policy.label} className=''>
                 <h3 className='font-black tracking-wide uppercase'>
@@ -103,18 +103,6 @@ export default function Membership() {
         <OfferCard title='Application'>
           <MembershipApplicationForm />
         </OfferCard>
-      </div>
-
-      {/* More than a room */}
-      <SectionHeading title={membershipCopy.moreTitle} />
-      <div className='mt-6 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3'>
-        {membershipCopy.moreCards.map(card => (
-          <OfferCard
-            key={card.title}
-            title={card.title}
-            description={card.body}
-          />
-        ))}
       </div>
 
     </PageShell>

@@ -102,11 +102,11 @@ export default async function About() {
               workspace under one roof. As members, we have always tried to
               strike a balance between work and pursuing our passions such as
               film, music, app development, and more. Our growth is deliberate
-              and gradual, focused on keeping the work within our team and
-              close friends. We are not building a business of infinite
-              revenue and scale — that tends to consume all of your time and
-              prevent you from pursuing your creative endeavors. The club
-              exists to keep the space sustainable and the work flowing.
+              and gradual, focused on keeping the work within our team and close
+              friends. We are not building a business of infinite revenue and
+              scale — that tends to consume all of your time and prevent you
+              from pursuing your creative endeavors. The club exists to keep the
+              space sustainable and the work flowing.
             </p>
           </div>
 
@@ -137,6 +137,15 @@ export default async function About() {
               </Link>{' '}
               at three levels — member, associate, and friend.
             </li>
+            <li>
+              <Link
+                href='https://shop.thegoodfornothings.club/'
+                className='font-bold'
+              >
+                The shop
+              </Link>{' '}
+              carries works and merch from members and friends of the club.
+            </li>
           </ul>
         </div>
 
@@ -152,12 +161,12 @@ export default async function About() {
           </ul>
 
           {past.length > 0 && (
-            <details className='group mt-10'>
-              <summary className='inline-flex cursor-pointer list-none items-center gap-2 font-sans text-xs font-extrabold tracking-[0.08em] text-black/60 uppercase transition-colors hover:text-black [&::-webkit-details-marker]:hidden'>
+            <details className='group details-animated mt-10'>
+              <summary className='inline-flex cursor-pointer list-none items-center gap-1 font-sans text-base font-bold text-black/80 uppercase transition-colors hover:text-black [&::-webkit-details-marker]:hidden'>
                 {leadershipCopy.pastTitle}
                 <FaCaretDown
                   aria-hidden
-                  className='size-3.5 transition-transform duration-300 group-open:rotate-180'
+                  className='size-4 transition-transform duration-300 group-open:rotate-180'
                 />
               </summary>
               <ul className='mt-4 grid grid-cols-2 gap-6'>

@@ -241,3 +241,23 @@
     --tw-enter-translate-x: -100%;
   }
 }
+
+/* Smooth open/close for native <details> (progressive enhancement —
+   browsers without ::details-content support just toggle instantly). */
+@layer base {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  details.details-animated::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 300ms ease-out,
+      content-visibility 300ms allow-discrete;
+  }
+
+  details.details-animated[open]::details-content {
+    block-size: auto;
+  }
+}

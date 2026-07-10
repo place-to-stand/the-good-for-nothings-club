@@ -1,3 +1,5 @@
+import GroupLabel from './GroupLabel'
+
 export type PriceMenuLine = {
   /** Optional group label, e.g. "Room" / "Staff" — renders once per run. */
   group?: string
@@ -13,17 +15,10 @@ export default function PriceMenu({ lines }: { lines: PriceMenuLine[] }) {
   const groups = [...new Set(lines.map(line => line.group))]
 
   return (
-    <div className='space-y-4 font-sans text-sm'>
+    <div className='space-y-6 font-sans text-sm'>
       {groups.map(group => (
         <div key={group ?? 'flat'}>
-          {group && (
-            <div className='mb-1.5 flex items-center gap-3'>
-              <span className='text-xs font-extrabold tracking-[0.08em] uppercase'>
-                {group}
-              </span>
-              <span aria-hidden className='h-px flex-1 bg-black/20' />
-            </div>
-          )}
+          {group && <GroupLabel>{group}</GroupLabel>}
           {lines
             .filter(line => line.group === group)
             .map(line => (

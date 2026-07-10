@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 
+import GroupLabel from '@/components/GroupLabel'
 import InquiryForm from '@/components/InquiryForm'
 import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
@@ -44,11 +45,7 @@ export default function Membership() {
             price={tier.price}
             description={tier.tagline}
           >
-            {tier.includes && (
-              <p className='-mx-2 mb-1.5 flex items-center gap-3 border border-black/8 bg-black/5 px-2 py-1 text-xs font-extrabold tracking-[0.08em] text-black/80 uppercase'>
-                {tier.includes}
-              </p>
-            )}
+            {tier.includes && <GroupLabel>{tier.includes}</GroupLabel>}
             <ul className='mt-2 list-disc space-y-1 pl-5 font-sans text-sm'>
               {tier.perks.map(perk => (
                 <li key={perk}>{perk}</li>

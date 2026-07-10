@@ -31,7 +31,7 @@ export default function Membership() {
   return (
     <PageShell
       title='Membership'
-      lead={`Join the club, at your level. ${membershipCopy.lead}`}
+      lead={`Join the club, gain a community. ${membershipCopy.lead}`}
     >
       {/* Tiers */}
       <div className='mt-12 grid grid-cols-1 gap-6 md:mt-16 md:gap-8 lg:grid-cols-3'>
@@ -44,7 +44,7 @@ export default function Membership() {
             description={tier.tagline}
           >
             {tier.includes && (
-              <p className='text-xs font-semibold tracking-[0.08em] text-black/60 uppercase'>
+              <p className='-mx-2 mb-1.5 flex items-center gap-3 border border-black/8 bg-black/5 px-2 py-1 text-xs font-extrabold tracking-[0.08em] text-black/80 uppercase'>
                 {tier.includes}
               </p>
             )}
@@ -107,7 +107,11 @@ export default function Membership() {
       <SectionHeading title={membershipCopy.moreTitle} />
       <div className='mt-6 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3'>
         {membershipCopy.moreCards.map(card => (
-          <OfferCard key={card.title} title={card.title} description={card.body} />
+          <OfferCard
+            key={card.title}
+            title={card.title}
+            description={card.body}
+          />
         ))}
       </div>
 

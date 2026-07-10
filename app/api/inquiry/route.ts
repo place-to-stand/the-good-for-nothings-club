@@ -31,17 +31,19 @@ export async function POST(request: Request) {
     text: [
       `Kind: ${inquiry.kind}`,
       `Item: ${inquiry.item}`,
-      `Offering: ${inquiry.offering || '—'}`,
+      `Offering: ${inquiry.offering || '-'}`,
       `Name: ${inquiry.name}`,
       `Email: ${inquiry.email}`,
-      `Phone: ${inquiry.phone || '—'}`,
-      `Socials: ${inquiry.socials?.length ? inquiry.socials.join(', ') : '—'}`,
-      `Portfolio: ${inquiry.portfolio || '—'}`,
-      `References available: ${inquiry.references || '—'}`,
+      `Phone: ${inquiry.phone || '-'}`,
+      `Socials: ${inquiry.socials?.length ? inquiry.socials.join(', ') : '-'}`,
+      `Portfolio: ${inquiry.portfolio || '-'}`,
+      `References available: ${inquiry.references || '-'}`,
       '',
       inquiry.message || '(no message)',
       '',
-      persisted ? 'Saved to inquiries table.' : 'NOT saved to database — this email is the only record.',
+      persisted
+        ? 'Saved to inquiries table.'
+        : 'NOT saved to database - this email is the only record.',
     ].join('\n'),
   })
 

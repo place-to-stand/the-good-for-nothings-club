@@ -1,5 +1,5 @@
 /**
- * Events — regular happenings at the clubhouse.
+ * Events - regular happenings at the clubhouse.
  *
  * Plain, version-controlled data (no CMS). Edit directly.
  *
@@ -31,7 +31,7 @@ export type GFNCEvent = {
 }
 
 export const eventsCopy = {
-  lead: 'Regular happenings at the clubhouse — members, associates, and friends of the club welcome.',
+  lead: 'Regular happenings at the clubhouse - members, associates, and friends of the club welcome.',
   calendarTitle: 'Calendar',
   recurringTitle: 'Recurring',
   friendNote: 'Events are for members, associates, and friends of the club.',
@@ -46,7 +46,7 @@ export const events: GFNCEvent[] = [
     time: '4 PM',
     schedule: 'Second Thursday · 4 PM',
     blurb:
-      'A show & tell for creatives of any discipline. Bring something unfinished — everyone who attends is expected to give honest critique, and everyone who shows is expected to be open to it.',
+      'A show & tell for creatives of any discipline. Bring something unfinished - everyone who attends is expected to give honest critique, and everyone who shows is expected to be open to it.',
   },
   {
     slug: 'off-genre-jam',

@@ -1,9 +1,9 @@
 /**
- * Leadership — the founding crew that runs the club — plus past members.
+ * Leadership - the founding crew that runs the club - plus past members.
  *
  * "Members" now means people with a monthly rental subscription (see
  * /membership); the people listed on the site are the founding team.
- * Profiles still live in Sanity — these allowlists control who appears.
+ * Profiles still live in Sanity - these allowlists control who appears.
  * Edit directly to add/remove someone.
  */
 

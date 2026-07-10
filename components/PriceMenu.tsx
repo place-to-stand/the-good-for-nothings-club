@@ -1,7 +1,7 @@
 import GroupLabel from './GroupLabel'
 
 export type PriceMenuLine = {
-  /** Optional group label, e.g. "Room" / "Staff" — renders once per run. */
+  /** Optional group label, e.g. "Room" / "Staff" - renders once per run. */
   group?: string
   item: string
   price: string
@@ -9,7 +9,7 @@ export type PriceMenuLine = {
 
 /**
  * A menu-card price list: item ····· price, with optional group labels.
- * No boxes or rules — dotted leaders carry the eye to the number.
+ * No boxes or rules - dotted leaders carry the eye to the number.
  */
 export default function PriceMenu({ lines }: { lines: PriceMenuLine[] }) {
   const groups = [...new Set(lines.map(line => line.group))]

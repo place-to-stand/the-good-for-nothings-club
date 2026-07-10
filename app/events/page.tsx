@@ -21,7 +21,7 @@ export async function generateMetadata(
   return {
     title: 'Events',
     description:
-      'The club, in session — regular happenings at the clubhouse in Austin, TX. Members and friends of members welcome.',
+      'The club, in session - regular happenings at the clubhouse in Austin, TX. Members and friends of members welcome.',
     alternates: {
       canonical: pathname,
     },
@@ -80,7 +80,7 @@ export default function Events() {
                     kind='event'
                     item={event.name}
                     triggerLabel='RSVP'
-                    title={`RSVP — ${event.name}`}
+                    title={`RSVP - ${event.name}`}
                     description={`${event.schedule} at the clubhouse.`}
                     submitLabel='RSVP'
                   />

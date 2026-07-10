@@ -175,7 +175,7 @@ export default function MembershipApplicationForm({
       <Check className='h-4 w-4' />
       <AlertTitle>Success</AlertTitle>
       <AlertDescription>
-        Application received. We accept in waves as space opens up — we&apos;ll
+        Application received. We accept in waves as space opens up - we&apos;ll
         be in touch.
       </AlertDescription>
     </Alert>
@@ -236,7 +236,7 @@ export default function MembershipApplicationForm({
                       {config.options.map(option => (
                         <option key={option.value} value={option.value}>
                           {option.value}
-                          {option.price ? ` — ${option.price}` : ''}
+                          {option.price ? ` - ${option.price}` : ''}
                         </option>
                       ))}
                     </select>

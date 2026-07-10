@@ -6,7 +6,7 @@ import type { ComponentProps, MouseEvent } from 'react'
 
 /**
  * next/link does nothing when the target route is the one you're already
- * on — this wrapper scrolls back to the top instead, so nav links always
+ * on - this wrapper scrolls back to the top instead, so nav links always
  * respond to a click.
  */
 export default function ScrollTopLink({

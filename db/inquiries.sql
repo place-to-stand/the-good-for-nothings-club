@@ -1,4 +1,4 @@
--- Inquiries table — run once in the Supabase SQL editor (or via CLI migration).
+-- Inquiries table - run once in the Supabase SQL editor (or via CLI migration).
 -- Captures every public intent: facility bookings, service hires,
 -- membership applications (the waitlist), and event RSVPs.
 

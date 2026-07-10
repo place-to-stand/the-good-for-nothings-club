@@ -95,7 +95,7 @@ export default async function About() {
       <div className='grid grid-cols-1 gap-x-12 lg:grid-cols-[1fr_minmax(300px,26rem)]'>
         <div>
           <SectionHeading title='Overview' />
-          <div className='mt-4 max-w-3xl space-y-4 font-sans leading-snug'>
+          <div className='mt-4 max-w-3xl space-y-4 font-sans text-lg leading-snug'>
             <p>
               The club started as a weekly accountability meeting between
               friends and grew into a clubhouse: studios, rehearsal rooms, and
@@ -112,7 +112,7 @@ export default async function About() {
           </div>
 
           <SectionHeading title='What happens here' />
-          <ul className='font-base mt-4 max-w-3xl list-disc space-y-2 pl-5 font-sans leading-snug'>
+          <ul className='mt-4 max-w-3xl list-disc space-y-2 pl-5 font-sans text-base leading-snug'>
             <li>
               <Link href='/facilities' className='font-bold'>
                 The clubhouse

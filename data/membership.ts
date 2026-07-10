@@ -1,5 +1,5 @@
 /**
- * Membership — three levels, application-based, accepted in waves.
+ * Membership - three levels, application-based, accepted in waves.
  *
  * Plain, version-controlled data (no CMS). Edit directly.
  */
@@ -17,10 +17,10 @@ export type MembershipTier = {
 }
 
 export const membershipCopy = {
-  lead: 'Three levels, each with its own perks. Apply anytime to join the waitlist — onboarding happens in waves as space opens up.',
+  lead: 'Three levels, each with its own perks. Apply anytime to join the waitlist - onboarding happens in waves as space opens up.',
   tiersTitle: 'Tiers',
   tiersLead:
-    "Apply anytime to join the waitlist — onboarding happens in waves as space opens up.  Since space is limited, acceptance isn't guaranteed.",
+    "Apply anytime to join the waitlist - onboarding happens in waves as space opens up.  Since space is limited, acceptance isn't guaranteed.",
   joiningTitle: 'How to join',
   joining: [
     {
@@ -34,7 +34,7 @@ export const membershipCopy = {
       label: 'We reach out',
       points: [
         'Applications are accepted in waves as space opens up',
-        "Associates and members come by for a tour and a conversation first — so both sides can be sure it's a fit",
+        "Associates and members come by for a tour and a conversation first - so both sides can be sure it's a fit",
         'Friends go straight to a Discord invite',
       ],
     },
@@ -48,6 +48,18 @@ export const membershipCopy = {
   ],
   policies: [
     {
+      label: 'Our community channels, your work',
+      points: [
+        'We feature the work of our members in the club newsletter and across our socials.',
+      ],
+    },
+    {
+      label: 'Community chatrooms',
+      points: [
+        'An always-on Discord server to organize, trade feedback, ask for a hand, and find collaborators across disciplines.',
+      ],
+    },
+    {
       label: 'Paperwork',
       points: [
         'Members sign a rental agreement and liability waiver before keys are issued',
@@ -60,18 +72,6 @@ export const membershipCopy = {
         'Active associates get priority consideration when a desk or band slot opens up',
       ],
     },
-    {
-      label: 'Our community channels, your work',
-      points: [
-        "Members can be featured in the club newsletter and across our social. Both go out on a regular cadence, and we ask what you'd like included before each one does.",
-      ],
-    },
-    {
-      label: 'A members only chatroom',
-      points: [
-        'An always-on space to organize, trade feedback, ask for a hand, and find collaborators across disciplines.',
-      ],
-    },
   ],
 }
 
@@ -81,7 +81,7 @@ export const membershipTiers: MembershipTier[] = [
     slug: 'member',
     name: 'Member',
     tagline:
-      'A monthly rental commitment — a permanent desk or a band practice slot — and full run of the clubhouse.',
+      'A monthly rental commitment - a permanent desk or a band practice slot - and full run of the clubhouse.',
     price: 'From $200 / mo',
     includes: 'Includes everything in associate, plus:',
     perks: [

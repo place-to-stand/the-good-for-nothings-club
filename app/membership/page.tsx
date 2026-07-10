@@ -17,7 +17,7 @@ export async function generateMetadata(
   return {
     title: 'Membership',
     description:
-      'Join the club, at your level — member, associate, or friend. Apply anytime to join the waitlist; onboarding happens in waves as space opens up.',
+      'Join the club, at your level - member, associate, or friend. Apply anytime to join the waitlist; onboarding happens in waves as space opens up.',
     alternates: {
       canonical: pathname,
     },
@@ -85,7 +85,7 @@ export default function Membership() {
               </li>
             ))}
           </ol>
-          <div className='mx-16 mt-20 space-y-7 bg-black/5 px-5 py-7 font-sans text-xs'>
+          <div className='mx-12 mt-20 space-y-7 bg-black/5 px-5 py-7 font-sans text-xs'>
             {membershipCopy.policies.map(policy => (
               <div key={policy.label} className=''>
                 <h3 className='font-black tracking-wide uppercase'>
@@ -104,7 +104,6 @@ export default function Membership() {
           <MembershipApplicationForm />
         </OfferCard>
       </div>
-
     </PageShell>
   )
 }

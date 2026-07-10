@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 /**
- * The tinted small-caps label bar that groups rows inside a card —
+ * The tinted small-caps label bar that groups rows inside a card -
  * price menu groups, tier perk headers, and the like.
  */
 export default function GroupLabel({

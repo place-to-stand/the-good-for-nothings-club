@@ -17,7 +17,7 @@ export async function generateMetadata(
   return {
     title: 'Services',
     description:
-      'You bring the project, we make it — photography, video, music production, zines, photo booth, pop-up cinema, sound systems, and event planning from The Good for Nothings Club in Austin, TX.',
+      'You bring the project, we make it - photography, video, music production, zines, photo booth, pop-up cinema, sound systems, and event planning from The Good for Nothings Club in Austin, TX.',
     alternates: {
       canonical: pathname,
     },

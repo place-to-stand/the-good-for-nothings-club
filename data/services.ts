@@ -1,5 +1,5 @@
 /**
- * Services — hire club members and their extended network.
+ * Services - hire club members and their extended network.
  *
  * Plain, version-controlled data (no CMS). Edit directly. `slug` must be
  * URL-safe and unique; it's used for anchors and inquiry subjects.
@@ -8,7 +8,7 @@
 export type ServiceCategoryKey = 'visual' | 'audio' | 'print' | 'av'
 
 export type ServiceItem = {
-  /** e.g. "At the clubhouse" / "On-site" — omit when there's no grouping. */
+  /** e.g. "At the clubhouse" / "On-site" - omit when there's no grouping. */
   group?: string
   label: string
   price: string
@@ -33,7 +33,7 @@ export const servicesCopy = {
     {
       key: 'visual' as const,
       title: 'Visual',
-      lead: 'Photo and video — shot, edited, and delivered ready to use.',
+      lead: 'Photo and video - shot, edited, and delivered ready to use.',
     },
     {
       key: 'audio' as const,
@@ -80,7 +80,7 @@ export const services: Service[] = [
     name: 'Video',
     category: 'visual',
     blurb:
-      'Music videos, promos, and event recaps — shot on modern or vintage gear, filmed and cut into something you can use immediately.',
+      'Music videos, promos, and event recaps - shot on modern or vintage gear, filmed and cut into something you can use immediately.',
     price: 'From $400',
     items: [
       {
@@ -113,7 +113,7 @@ export const services: Service[] = [
     name: 'Branded zines',
     category: 'print',
     blurb:
-      "We publish LIMO, our own quarterly art zine, and we'll do the same for your company end to end — concept, design, layout, and the printed run.",
+      "We publish LIMO, our own quarterly art zine, and we'll do the same for your company end to end - concept, design, layout, and the printed run.",
     price: 'From $1,000',
   },
   {
@@ -122,7 +122,7 @@ export const services: Service[] = [
     name: 'Photo booth',
     category: 'av',
     blurb:
-      'A real photographer with a DSLR behind pro lighting with instant prints — not a vending-machine booth.',
+      'A real photographer with a DSLR behind pro lighting with instant prints - not a vending-machine booth.',
     price: 'From $150 / hr',
   },
   {
@@ -131,7 +131,7 @@ export const services: Service[] = [
     name: 'Pop-up cinema',
     category: 'av',
     blurb:
-      'Projector, big screen, and sound, set up and run wherever you want it — backyard, rooftop, or indoors. Movie night without the hassle.',
+      'Projector, big screen, and sound, set up and run wherever you want it - backyard, rooftop, or indoors. Movie night without the hassle.',
     price: 'From $400',
   },
   {
@@ -150,7 +150,7 @@ export const services: Service[] = [
     name: 'Event planning',
     category: 'av',
     blurb:
-      "We've thrown indoor and outdoor parties with live music and vendors, plus outdoor movie nights — and we'll plan and run yours end to end, from space and gear to staffing. Tell us what you have in mind and we'll quote it.",
+      "We've thrown indoor and outdoor parties with live music and vendors, plus outdoor movie nights - and we'll plan and run yours end to end, from space and gear to staffing. Tell us what you have in mind and we'll quote it.",
     price: 'From $1,000',
   },
 ]

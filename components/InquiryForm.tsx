@@ -27,11 +27,11 @@ const MESSAGE_LABELS: Record<InquiryKind, string> = {
 }
 
 const SUCCESS_COPY: Record<InquiryKind, string> = {
-  facility: "Got it — we'll get back to you to confirm timing and details.",
-  service: "Got it — we'll get back to you to talk through the project.",
+  facility: "Got it - we'll get back to you to confirm timing and details.",
+  service: "Got it - we'll get back to you to talk through the project.",
   membership:
-    "Application received. We accept in waves as space opens up — we'll be in touch.",
-  event: "You're on the list — see you there.",
+    "Application received. We accept in waves as space opens up - we'll be in touch.",
+  event: "You're on the list - see you there.",
 }
 
 type InquiryFormProps = {
@@ -72,7 +72,8 @@ export default function InquiryForm({
 
     if (!response.ok) {
       form.setError('root', {
-        message: 'Something went wrong. Email us at hello@thegoodfornothings.club.',
+        message:
+          'Something went wrong. Email us at hello@thegoodfornothings.club.',
       })
       throw new Error('Inquiry submission failed')
     }
@@ -89,7 +90,11 @@ export default function InquiryForm({
   ) : (
     <Form {...form}>
       <form
-        onSubmit={e => form.handleSubmit(onSubmit)(e).catch(() => {})}
+        onSubmit={e =>
+          form
+            .handleSubmit(onSubmit)(e)
+            .catch(() => {})
+        }
         className='space-y-4 text-left'
       >
         {itemOptions && (

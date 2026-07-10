@@ -17,15 +17,15 @@ export default function Home() {
       <section className='md:px-8 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
           <p className='font-serif text-2xl leading-tight sm:text-[36px] lg:text-[48px] lg:leading-[1.16]'>
-            <em>The Good for Nothings Club</em> is a creators club from Austin,
-            TX made up of musicians, photographers, writers, filmmakers, and
-            engineers. Our clubhouse puts studios, rehearsal rooms, and
+            <em>The Good for Nothings Club</em> is a creators club based in
+            Austin, TX made up of musicians, photographers, writers, filmmakers,
+            and engineers. Our clubhouse puts studios, rehearsal rooms, and
             workspace under one roof. Good for nothings. Making everything.
           </p>
         </div>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black md:border-x-2'>
           <Link
-            className='group flex w-full items-center justify-center gap-0.5 py-4 text-center font-sans text-sm leading-none font-extrabold uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-8 md:text-base'
+            className='group flex w-full items-center justify-center gap-0.5 py-4 text-center font-sans text-sm leading-none font-extrabold uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 md:text-base'
             href='/about'
           >
             <span>Learn More</span>{' '}
@@ -51,7 +51,7 @@ export default function Home() {
             {
               href: '/events',
               title: 'Events',
-              body: 'The clubhouse, in session — friends of the club welcome.',
+              body: 'The clubhouse, in session - friends of the club welcome.',
             },
             {
               href: '/membership',

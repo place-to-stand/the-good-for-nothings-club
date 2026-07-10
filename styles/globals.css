@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@plugin "@tailwindcss/typography";
+@plugin '@tailwindcss/typography';
 
 @theme {
   --font-sans:
@@ -242,7 +242,7 @@
   }
 }
 
-/* Smooth open/close for native <details> (progressive enhancement —
+/* Smooth open/close for native <details> (progressive enhancement -
    browsers without ::details-content support just toggle instantly). */
 @layer base {
   :root {

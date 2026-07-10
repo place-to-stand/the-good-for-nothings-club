@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 type PageShellProps = {
   title: string
-  /** Serif intro under the title — the one serif use per page. */
+  /** Serif intro under the title - the one serif use per page. */
   lead?: ReactNode
   children: ReactNode
 }

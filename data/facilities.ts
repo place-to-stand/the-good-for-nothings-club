@@ -1,5 +1,5 @@
 /**
- * Facilities — the clubhouse, room by room.
+ * Facilities - the clubhouse, room by room.
  *
  * Plain, version-controlled data (no CMS). Edit directly. `slug` must be
  * URL-safe and unique; it's used for anchors and inquiry subjects.
@@ -20,7 +20,7 @@ export type Facility = {
   name: string
   description: string
   model: 'monthly' | 'hourly'
-  /** Not yet bookable — shown without rates or booking. */
+  /** Not yet bookable - shown without rates or booking. */
   status?: 'planned'
   /** Display rate, e.g. "$400 / mo" or "From $30 / hr". */
   rate?: string
@@ -33,7 +33,7 @@ export type Facility = {
 }
 
 export const facilitiesCopy = {
-  lead: 'The clubhouse, room by room. Desks, band practice, photo studio, mixing room, and consignment shop — rented by the month or by the hour.',
+  lead: 'The clubhouse, room by room. Desks, band practice, photo studio, mixing room, and consignment shop - rented by the month or by the hour.',
   monthlyTitle: 'Monthly rental',
   monthlyLead:
     'Monthly members get keys, 24/7 access to the facilities, and half off hourly rooms.',
@@ -48,7 +48,7 @@ export const storefrontCopy = {
   name: 'Online Store',
   rate: '25% of net',
   description:
-    'An online store for members and associates. You make the work — we handle shipping, returns, customer service, and sales tax for 25% of the net profit on each sale.',
+    'An online store for members and associates. You make the work - we handle shipping, returns, customer service, and sales tax for 25% of the net profit on each sale.',
   note: 'Custom landing page included',
 }
 
@@ -68,7 +68,7 @@ export const facilities: Facility[] = [
     name: 'Permanent desk',
     model: 'monthly',
     description:
-      'An assigned space — bring your own furniture or use ours, set it up how you like, and leave it that way between visits.',
+      'An assigned space - bring your own furniture or use ours, set it up how you like, and leave it that way between visits.',
     quantity: '8 desks total',
     rate: '$400 / mo',
   },
@@ -115,7 +115,7 @@ export const facilities: Facility[] = [
   //   model: 'hourly',
   //   status: 'planned',
   //   description:
-  //     'A black-and-white darkroom for developing and printing — chemicals included.',
+  //     'A black-and-white darkroom for developing and printing - chemicals included.',
   // },
   // {
   //   slug: 'repair-bench',

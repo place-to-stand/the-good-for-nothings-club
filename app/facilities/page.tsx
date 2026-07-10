@@ -24,7 +24,7 @@ export async function generateMetadata(
   return {
     title: 'Facilities',
     description:
-      'The clubhouse, room by room — permanent desks, band practice, photo studio, and recording control room in Austin, TX. Monthly and hourly rental.',
+      'The clubhouse, room by room - permanent desks, band practice, photo studio, and recording control room in Austin, TX. Monthly and hourly rental.',
     alternates: {
       canonical: pathname,
     },

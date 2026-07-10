@@ -7,7 +7,7 @@ type FeatureBandProps = {
 }
 
 /**
- * A tinted band calling out a list of selling points (amenities, perks) —
+ * A tinted band calling out a list of selling points (amenities, perks) -
  * visible without shouting.
  */
 export default function FeatureBand({ label, items }: FeatureBandProps) {

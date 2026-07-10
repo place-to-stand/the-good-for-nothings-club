@@ -34,11 +34,12 @@ export default function Membership() {
       lead={`Join the club, gain a community. ${membershipCopy.lead}`}
     >
       {/* Tiers */}
-      <div className='mt-12 grid grid-cols-1 gap-6 md:mt-16 md:gap-8 lg:grid-cols-3'>
+      <div className='mt-12 grid grid-cols-1 gap-6 md:mt-16 md:gap-8 lg:grid-cols-3 lg:gap-y-0'>
         {membershipTiers.map(tier => (
           <OfferCard
             key={tier.slug}
             id={tier.slug}
+            className='lg:grid lg:row-span-3 lg:grid-rows-subgrid'
             title={tier.name}
             price={tier.price}
             description={tier.tagline}

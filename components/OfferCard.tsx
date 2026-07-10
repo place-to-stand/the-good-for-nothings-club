@@ -1,8 +1,12 @@
 import type { ReactNode } from 'react'
 
+import { cn } from '@/lib/utils'
+
 type OfferCardProps = {
   /** Anchor id for deep links. */
   id?: string
+  /** Extra classes on the article, e.g. subgrid alignment across a row. */
+  className?: string
   title: string
   /** Headline price, set on the title line with a dotted leader. */
   price?: string
@@ -21,6 +25,7 @@ type OfferCardProps = {
  */
 export default function OfferCard({
   id,
+  className,
   title,
   price,
   meta,
@@ -31,10 +36,13 @@ export default function OfferCard({
   return (
     <article
       id={id}
-      className='flex scroll-mt-28 flex-col border-2 border-black p-6 md:p-8'
+      className={cn(
+        'flex scroll-mt-28 flex-col border-2 border-black p-6 md:p-8',
+        className
+      )}
     >
       <div className='flex items-center justify-between gap-2'>
-        <h3 className='text-[24px] leading-none font-black tracking-[-0.03em] md:text-[28px]'>
+        <h3 className='text-[24px] leading-none font-extrabold tracking-[-0.03em] md:text-[28px]'>
           {title}
         </h3>
         {price && (
@@ -47,7 +55,7 @@ export default function OfferCard({
       </div>
 
       {meta && (
-        <p className='mt-1 font-sans text-xs font-semibold tracking-[0.08em] text-black/60 uppercase'>
+        <p className='mt-1.5 font-sans text-xs font-semibold tracking-[0.08em] text-black/60 uppercase'>
           {meta}
         </p>
       )}
@@ -58,7 +66,7 @@ export default function OfferCard({
 
       {children && <div className='mt-6'>{children}</div>}
 
-      {footer && <div className='mt-auto pt-6'>{footer}</div>}
+      {footer && <div className='mt-auto pt-8'>{footer}</div>}
     </article>
   )
 }

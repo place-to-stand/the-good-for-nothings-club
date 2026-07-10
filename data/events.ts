@@ -39,13 +39,13 @@ export const eventsCopy = {
 
 export const events: GFNCEvent[] = [
   {
-    slug: 'accountability-hour',
-    name: 'Accountability Hour',
-    rule: { freq: 'weekly', weekday: 4 },
+    slug: 'works-in-progress',
+    name: 'Works in Progress',
+    rule: { freq: 'monthly', weekday: 4, nth: 2 },
     time: '4 PM',
-    schedule: 'Thursdays · 4 PM',
+    schedule: 'Second Thursday · 4 PM',
     blurb:
-      "Bring whatever you're working on for accountability and honest feedback from the group. We usually head to happy hour right after.",
+      'A show & tell for creatives of any discipline. Bring something unfinished — everyone who attends is expected to give honest critique, and everyone who shows is expected to be open to it.',
   },
   {
     slug: 'off-genre-jam',

@@ -107,8 +107,8 @@ export default async function About() {
               photo, video, music, print, and events.
             </li>
             <li>
-              <Link href='/events'>Regular events</Link>, including the weekly
-              Accountability Hour that started it all.
+              <Link href='/events'>Regular events</Link>, including a monthly
+              show &amp; tell for works in progress.
             </li>
             <li>
               <Link href='/membership'>Membership</Link> at three levels —

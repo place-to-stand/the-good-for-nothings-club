@@ -69,7 +69,7 @@ function offeringConfig(tier: string) {
 }
 
 const selectClassName =
-  'border-input flex h-10 w-full cursor-pointer border-2 bg-transparent px-3 py-2 font-sans text-sm focus-visible:ring-1 focus-visible:outline-none'
+  'bg-input/10 hover:border-input/50 focus-visible:border-input flex h-10 w-full cursor-pointer rounded-none border-2 border-transparent px-3 py-2 font-sans text-sm transition-colors focus-visible:outline-hidden'
 
 /** Quieter than input text so the section labels carry the hierarchy. */
 const fieldLabelClassName = 'text-sm font-semibold'

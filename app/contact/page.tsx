@@ -38,7 +38,7 @@ export default async function Contact() {
           <SectionHeading title='Email' />
           <Link
             href='mailto:hello@thegoodfornothings.club'
-            className='mt-4 inline-block font-sans text-xl font-bold'
+            className='mt-4 inline-block font-sans text-xl font-normal'
           >
             hello@thegoodfornothings.club
           </Link>

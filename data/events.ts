@@ -32,9 +32,11 @@ export type GFNCEvent = {
 
 export const eventsCopy = {
   lead: 'Regular happenings at the clubhouse — members and friends of members welcome.',
-  upcomingTitle: 'Next up',
+  calendarTitle: 'Calendar',
+  recurringTitle: 'Recurring',
   friendNote:
-    "Not a member yet? Join as a friend of the club — it's free — and you'll be invited to everything.",
+    "Events are for members and friends of the club. Acceptance isn't guaranteed, but once you're in, you're invited to everything.",
+  friendCta: 'Apply to join as a friend',
 }
 
 export const events: GFNCEvent[] = [
@@ -53,7 +55,8 @@ export const events: GFNCEvent[] = [
     rule: { freq: 'monthly', weekday: 0, nth: 3 },
     time: '7 PM',
     schedule: 'Third Sunday · 7 PM',
-    blurb: 'Exploring varieties of rock music and other neglected genres of jam.',
+    blurb:
+      'Exploring varieties of rock music and other neglected genres of jam.',
   },
 ]
 

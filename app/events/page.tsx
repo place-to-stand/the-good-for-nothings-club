@@ -2,7 +2,9 @@ import Link from 'next/link'
 import type { Metadata, ResolvingMetadata } from 'next'
 
 import InquiryDialog from '@/components/InquiryDialog'
+import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
+import PriceMenu from '@/components/PriceMenu'
 import SectionHeading from '@/components/SectionHeading'
 import { events, eventsCopy, upcomingOccurrences } from '@/data/events'
 
@@ -30,89 +32,69 @@ export async function generateMetadata(
   }
 }
 
-function formatDay(iso: string) {
-  return new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    timeZone: 'UTC',
-  })
+function occurrenceDate(iso: string) {
+  return new Date(`${iso}T12:00:00Z`)
 }
 
 export default function Events() {
-  const upcoming = upcomingOccurrences(new Date(), 6)
+  const upcoming = upcomingOccurrences(new Date(), 8)
+
+  const calendarLines = upcoming.map(occurrence => {
+    const date = occurrenceDate(occurrence.date)
+    return {
+      group: date.toLocaleDateString('en-US', {
+        month: 'long',
+        timeZone: 'UTC',
+      }),
+      item: `${date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        timeZone: 'UTC',
+      })} ${date.getUTCDate()} · ${occurrence.event.time}`,
+      price: occurrence.event.name,
+    }
+  })
 
   return (
     <PageShell title='Events' lead={`The club, in session. ${eventsCopy.lead}`}>
-      {/* Upcoming schedule */}
-      <SectionHeading title={eventsCopy.upcomingTitle} />
-      <ol className='mt-6 divide-y-2 divide-black border-2 border-black'>
-        {upcoming.map(occurrence => (
-          <li
-            key={`${occurrence.event.slug}-${occurrence.date}`}
-            className='flex flex-wrap items-baseline gap-x-6 gap-y-1 px-4 py-3 font-sans md:px-6'
-          >
-            <span className='w-28 font-black uppercase'>
-              {formatDay(occurrence.date)}
-            </span>
-            <span className='w-16 text-sm font-bold'>
-              {occurrence.event.time}
-            </span>
-            <a
-              href={`#${occurrence.event.slug}`}
-              className='font-bold hover:underline'
-            >
-              {occurrence.event.name}
-            </a>
-          </li>
-        ))}
-      </ol>
+      <div className='grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2'>
+        <div>
+          <SectionHeading title={eventsCopy.calendarTitle} />
+          <div className='mt-6'>
+            <PriceMenu lines={calendarLines} />
+          </div>
+        </div>
 
-      {/* Event details */}
-      <div className='mt-12 flex flex-col gap-6 md:mt-16 md:gap-8'>
-        {events.map(event => (
-          <article
-            key={event.slug}
-            id={event.slug}
-            className='flex scroll-mt-28 flex-col gap-6 border-2 border-black p-6 md:flex-row md:items-start md:justify-between md:p-8'
-          >
-            <div className='flex-1'>
-              <span className='inline-block border-2 border-black px-3 py-1 font-sans text-xs font-black tracking-widest uppercase'>
-                {event.schedule}
-              </span>
-
-              <h2 className='mt-4 text-[28px] leading-none font-black tracking-[-0.03em] md:text-[32px]'>
-                {event.name}
-              </h2>
-
-              <p className='mt-4 font-sans leading-snug'>{event.blurb}</p>
-
-              <p className='mt-3 font-sans text-sm'>
-                <span className='font-black tracking-wide uppercase'>
-                  Where:{' '}
-                </span>
-                {event.location ?? 'The clubhouse, Austin, TX'}
-              </p>
-            </div>
-
-            <div className='md:w-64 md:shrink-0'>
-              <InquiryDialog
-                kind='event'
-                item={event.name}
-                triggerLabel='RSVP'
-                title={`RSVP — ${event.name}`}
-                description={`${event.schedule} at the clubhouse.`}
-                submitLabel='RSVP'
+        <div>
+          <SectionHeading title={eventsCopy.recurringTitle} />
+          <div className='mt-6 flex flex-col gap-6 md:gap-8'>
+            {events.map(event => (
+              <OfferCard
+                key={event.slug}
+                id={event.slug}
+                title={event.name}
+                price={event.schedule}
+                meta={event.location ?? 'GFNC Clubhouse, Austin, TX'}
+                description={event.blurb}
+                footer={
+                  <InquiryDialog
+                    kind='event'
+                    item={event.name}
+                    triggerLabel='RSVP'
+                    title={`RSVP — ${event.name}`}
+                    description={`${event.schedule} at the clubhouse.`}
+                    submitLabel='RSVP'
+                  />
+                }
               />
-            </div>
-          </article>
-        ))}
+            ))}
+          </div>
+        </div>
       </div>
 
       <p className='mt-12 text-center font-sans leading-snug'>
         {eventsCopy.friendNote}{' '}
         <Link href='/membership' className='font-bold underline'>
-          Join as a friend
+          {eventsCopy.friendCta}
         </Link>
       </p>
     </PageShell>

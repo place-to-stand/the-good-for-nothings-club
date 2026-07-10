@@ -20,7 +20,7 @@ export const membershipCopy = {
   lead: 'Three levels, each with its own perks. Apply anytime to join the waitlist — onboarding happens in waves as space opens up.',
   tiersTitle: 'Tiers',
   tiersLead:
-    "If your application is selected when space opens up, we'll reach out with onboarding instructions.",
+    "Since space is limited, acceptance isn't guaranteed. If your application is selected when space opens up, we'll reach out with onboarding instructions.",
   joiningTitle: 'How to join',
   joining: [
     {

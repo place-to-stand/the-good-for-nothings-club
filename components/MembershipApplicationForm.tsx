@@ -10,7 +10,6 @@ import { facilities, storefrontCopy } from '../data/facilities'
 import { membershipTiers } from '../data/membership'
 import { phoneSchema, portfolioSchema } from '../data/schemas'
 import { cn } from '../lib/utils'
-import GroupLabel from './GroupLabel'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
 import {
@@ -72,8 +71,26 @@ function offeringConfig(tier: string) {
 const selectClassName =
   'border-input flex h-10 w-full cursor-pointer border-2 bg-transparent px-3 py-2 font-sans text-sm focus-visible:ring-1 focus-visible:outline-none'
 
-/** Quieter than input text so the group bars carry the hierarchy. */
+/** Quieter than input text so the section labels carry the hierarchy. */
 const fieldLabelClassName = 'text-sm font-semibold'
+
+/** Black title bleeding past the form edge, with a hairline running to the far edge. */
+function SectionLabel({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className={cn('-mx-2 mb-1.5 flex items-center gap-3', className)}>
+      <span className='font-sans text-xs font-extrabold tracking-[0.08em] uppercase'>
+        {children}
+      </span>
+      <span aria-hidden className='h-px flex-1 bg-black/25' />
+    </div>
+  )
+}
 
 type MembershipApplicationFormProps = {
   /** Preselected tier, e.g. from a facilities card. */
@@ -168,9 +185,7 @@ export default function MembershipApplicationForm({
         }
         className='text-left'
       >
-        <GroupLabel className='text-background bg-black/60'>
-          Membership
-        </GroupLabel>
+        <SectionLabel>Membership</SectionLabel>
         <div className={cn('mt-4 grid gap-4', config && 'sm:grid-cols-2')}>
           <FormField
             name='tier'
@@ -228,9 +243,7 @@ export default function MembershipApplicationForm({
           )}
         </div>
 
-        <GroupLabel className='text-background mt-7 bg-black/60'>
-          Contact
-        </GroupLabel>
+        <SectionLabel className='mt-7'>Contact</SectionLabel>
         <div className='mt-4 grid gap-4 sm:grid-cols-2'>
           <FormField
             name='name'
@@ -299,9 +312,7 @@ export default function MembershipApplicationForm({
           />
         </div>
 
-        <GroupLabel className='text-background mt-7 bg-black/60'>
-          Your work
-        </GroupLabel>
+        <SectionLabel className='mt-7'>Your work</SectionLabel>
         <div className='mt-4'>
           <FormLabel className={fieldLabelClassName}>
             Social links (optional)
@@ -345,9 +356,12 @@ export default function MembershipApplicationForm({
             <button
               type='button'
               onClick={() => append({ handle: '' })}
-              className='mt-2 cursor-pointer font-sans text-xs font-extrabold tracking-[0.08em] uppercase underline underline-offset-2'
+              className='mt-2 ml-2 cursor-pointer font-sans text-xs font-bold tracking-[0.08em] uppercase'
             >
-              + Add another
+              +{' '}
+              <span className='underline underline-offset-2 hover:no-underline'>
+                Add another
+              </span>
             </button>
           )}
         </div>

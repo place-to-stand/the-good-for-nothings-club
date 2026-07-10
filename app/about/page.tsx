@@ -102,13 +102,13 @@ export default async function About() {
               workspace under one roof. Today it runs as a members&apos;
               creative space for Austin — monthly members get keys and full
               run of the house, associates book the rooms by the hour, and
-              friends of the club fill out the events. Membership isn&apos;t
-              about who you know — it&apos;s about making things and
-              contributing to the space. We accept applications in waves, so
-              the community grows deliberately around people who actually show
-              up; growing slowly is how the clubhouse keeps its character. The
-              point was never scale — it&apos;s keeping the space sustainable
-              and the
+              friends of the club come out for the events. Membership
+              isn&apos;t about who you know — it&apos;s about making things
+              and contributing to the space. We accept applications in waves,
+              so the community grows deliberately around people who actually
+              show up — and each new wave has time to make the place their
+              own. The point was never scale — it&apos;s keeping the space
+              sustainable and the
               work flowing.
             </p>
           </div>

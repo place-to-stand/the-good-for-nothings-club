@@ -103,10 +103,12 @@ export default async function About() {
               creative space for Austin — monthly members get keys and full
               run of the house, associates book the rooms by the hour, and
               friends of the club fill out the events. Membership isn&apos;t
-              about who you know; it&apos;s about using the space and putting
-              into it. We accept applications in waves, so the community grows
-              deliberately around people who actually show up. The point was
-              never scale — it&apos;s keeping the space sustainable and the
+              about who you know — it&apos;s about making things and
+              contributing to the space. We accept applications in waves, so
+              the community grows deliberately around people who actually show
+              up; growing slowly is how the clubhouse keeps its character. The
+              point was never scale — it&apos;s keeping the space sustainable
+              and the
               work flowing.
             </p>
           </div>

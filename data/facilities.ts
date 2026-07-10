@@ -33,7 +33,7 @@ export type Facility = {
 }
 
 export const facilitiesCopy = {
-  lead: 'The clubhouse, room by room.',
+  lead: 'The clubhouse, room by room. Desks, band practice, a photo studio, and a mixing room — rent by the month or by the hour.',
   monthlyTitle: 'Monthly rental',
   monthlyLead:
     'Monthly members get keys, 24/7 access to the facilities, and half off hourly rooms.',
@@ -49,7 +49,7 @@ export const storefrontCopy = {
   rate: '25% of net',
   description:
     'An online store for members and friends of members. You make the work — we handle shipping, returns, customer service, and sales tax for 25% of the net profit on each sale.',
-  note: 'Custom landing page included.',
+  note: 'Custom landing page included',
 }
 
 export const amenities = [
@@ -88,7 +88,7 @@ export const facilities: Facility[] = [
     description:
       'Photo/video shooting space with backdrops and lighting (grip available). First 15 minutes of setup help are free; an assistant who knows the gear is available by the hour.',
     rate: 'From $30 / hr',
-    rateNote: 'Two-hour minimum.',
+    rateNote: 'Two-hour minimum',
     rateCard: [
       { group: 'Room', item: 'Weekday · 9–5, Mon–Fri', price: '$30 / hr' },
       { group: 'Room', item: 'Evenings & weekends', price: '$40 / hr' },
@@ -102,7 +102,7 @@ export const facilities: Facility[] = [
     description:
       'A control room for mixing with studio monitors, a Mac mini loaded with Pro Tools, and plugins. First 15 minutes of setup help are free; An engineer who knows the room is available by the hour.',
     rate: 'From $30 / hr',
-    rateNote: 'Two-hour minimum.',
+    rateNote: 'Two-hour minimum',
     rateCard: [
       { group: 'Room', item: 'Weekday · 9–5, Mon–Fri', price: '$30 / hr' },
       { group: 'Room', item: 'Evenings & weekends', price: '$40 / hr' },

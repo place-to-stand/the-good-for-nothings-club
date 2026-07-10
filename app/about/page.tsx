@@ -147,6 +147,12 @@ export default async function About() {
               </Link>{' '}
               carries works and merch from members and friends of the club.
             </li>
+            <li>
+              <Link href='/contact' className='font-bold'>
+                Got an idea?
+              </Link>{' '}
+              Reach out and we will help you make it happen.
+            </li>
           </ul>
         </div>
 

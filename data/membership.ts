@@ -25,15 +25,25 @@ export const membershipCopy = {
   joining: [
     {
       label: 'Apply',
-      text: 'Pick your level and tell us about yourself and what you make.',
+      points: [
+        'Pick your level and tell us about yourself and what you make',
+        'Your application claims your spot on the waitlist',
+      ],
     },
     {
       label: 'We reach out',
-      text: "Applications are accepted in waves as space opens up. Associates and members come by for a tour and a conversation first — so both sides can be sure it's a fit. Friends go straight to a Discord invite.",
+      points: [
+        'Applications are accepted in waves as space opens up',
+        "Associates and members come by for a tour and a conversation first — so both sides can be sure it's a fit",
+        'Friends go straight to a Discord invite',
+      ],
     },
     {
       label: 'Get onboarded',
-      text: 'Sign the paperwork for your level, get your access, and jump into the club Discord.',
+      points: [
+        'Sign the paperwork for your level',
+        'Get your access and jump into the club Discord',
+      ],
     },
   ],
   policies: [

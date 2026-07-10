@@ -66,20 +66,26 @@ export default function Membership() {
         className='mt-6 grid scroll-mt-28 grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12'
       >
         <div>
-          <ol className='space-y-4'>
+          <ol className='mt-6 space-y-6'>
             {membershipCopy.joining.map((step, i) => (
-              <li key={step.label} className='flex gap-4 font-sans'>
-                <span className='flex h-8 w-8 shrink-0 items-center justify-center border-2 border-black font-black'>
-                  {i + 1}
-                </span>
-                <div className='leading-snug'>
-                  <span className='font-black uppercase'>{step.label}: </span>
-                  {step.text}
+              <li key={step.label} className='font-sans'>
+                <div className='flex items-center gap-4'>
+                  <span className='flex h-8 w-8 shrink-0 items-center justify-center border-2 border-black font-black'>
+                    {i + 1}
+                  </span>
+                  <h3 className='font-black tracking-wide uppercase'>
+                    {step.label}
+                  </h3>
                 </div>
+                <ul className='mt-2 ml-12 list-disc space-y-1 pl-5 text-sm leading-snug'>
+                  {step.points.map(point => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ol>
-          <div className='mt-6 space-y-7 bg-black/5 px-5 py-7 font-sans text-sm'>
+          <div className='mt-20 space-y-7 bg-black/5 px-5 py-7 font-sans text-sm'>
             {membershipCopy.policies.map(policy => (
               <div key={policy.label} className=''>
                 <h3 className='font-black tracking-wide uppercase'>

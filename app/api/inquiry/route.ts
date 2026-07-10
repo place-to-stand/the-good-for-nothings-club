@@ -37,6 +37,7 @@ export async function POST(request: Request) {
       `Phone: ${inquiry.phone || '—'}`,
       `Socials: ${inquiry.socials?.length ? inquiry.socials.join(', ') : '—'}`,
       `Portfolio: ${inquiry.portfolio || '—'}`,
+      `References available: ${inquiry.references || '—'}`,
       '',
       inquiry.message || '(no message)',
       '',

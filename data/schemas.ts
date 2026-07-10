@@ -51,6 +51,7 @@ export const inquirySchema = z.object({
   phone: phoneSchema,
   socials: z.array(z.string().trim().max(100)).max(5).optional(),
   portfolio: portfolioSchema.optional(),
+  references: z.enum(['Yes', 'No']).optional(),
   message: z.string().max(5000).optional(),
 })
 

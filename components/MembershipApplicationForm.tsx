@@ -35,6 +35,9 @@ const applicationSchema = z.object({
     .array(z.object({ handle: z.string().trim().max(100) }))
     .max(MAX_SOCIALS),
   portfolio: portfolioSchema,
+  references: z.string().refine(value => ['Yes', 'No'].includes(value), {
+    message: 'Select yes or no.',
+  }),
   message: z.string().max(5000).optional(),
 })
 
@@ -88,6 +91,7 @@ export default function MembershipApplicationForm({
       phone: '',
       socials: [{ handle: '' }],
       portfolio: '',
+      references: '',
       message: '',
     },
   })
@@ -124,6 +128,7 @@ export default function MembershipApplicationForm({
           .map(social => social.handle.trim())
           .filter(Boolean),
         portfolio: values.portfolio || undefined,
+        references: values.references,
         message: values.message || undefined,
       }),
     })
@@ -264,7 +269,7 @@ export default function MembershipApplicationForm({
           )}
         />
         <div>
-          <FormLabel>Social handles (optional)</FormLabel>
+          <FormLabel>Social links (optional)</FormLabel>
           <div className='mt-2 space-y-2'>
             {fields.map((socialField, index) => (
               <FormField
@@ -278,14 +283,14 @@ export default function MembershipApplicationForm({
                         <Input
                           type='text'
                           maxLength={100}
-                          placeholder='@handle or link'
-                          aria-label={`Social handle ${index + 1}`}
+                          placeholder='https://'
+                          aria-label={`Social link ${index + 1}`}
                           {...field}
                         />
                         {index > 0 && (
                           <button
                             type='button'
-                            aria-label={`Remove social handle ${index + 1}`}
+                            aria-label={`Remove social link ${index + 1}`}
                             onClick={() => remove(index)}
                             className='cursor-pointer p-1 transition-colors hover:bg-black/10'
                           >
@@ -324,6 +329,38 @@ export default function MembershipApplicationForm({
                   placeholder='https://'
                   {...field}
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name='references'
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                If needed, would you be able to provide references?
+              </FormLabel>
+              <FormControl>
+                <div className='flex gap-6 pt-1'>
+                  {['Yes', 'No'].map(option => (
+                    <label
+                      key={option}
+                      className='flex cursor-pointer items-center gap-2 font-sans text-sm'
+                    >
+                      <input
+                        type='radio'
+                        name={field.name}
+                        value={option}
+                        checked={field.value === option}
+                        onChange={() => field.onChange(option)}
+                        className='h-4 w-4 cursor-pointer accent-black'
+                      />
+                      {option}
+                    </label>
+                  ))}
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

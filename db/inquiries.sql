@@ -12,6 +12,7 @@ create table if not exists inquiries (
   phone text,
   socials text,
   portfolio text,
+  references_available text,
   message text,
   status text not null default 'new',
   created_at timestamptz not null default now()

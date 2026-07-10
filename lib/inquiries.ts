@@ -30,6 +30,7 @@ export async function saveInquiry(inquiry: Inquiry): Promise<boolean> {
       phone: inquiry.phone ?? null,
       socials: inquiry.socials?.length ? inquiry.socials.join(', ') : null,
       portfolio: inquiry.portfolio || null,
+      references_available: inquiry.references ?? null,
       message: inquiry.message ?? null,
     })
 

@@ -190,7 +190,7 @@ export default function MembershipApplicationForm({
         className='text-left'
       >
         <SectionLabel>Membership</SectionLabel>
-        <div className={cn('mt-4 grid gap-4', config && 'sm:grid-cols-2')}>
+        <div className='mt-4 grid gap-4 sm:grid-cols-2'>
           <FormField
             name='tier'
             control={form.control}

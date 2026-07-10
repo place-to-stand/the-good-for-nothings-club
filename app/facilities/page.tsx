@@ -51,11 +51,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
               : 'Apply to book time'
           }
           title={facility.name}
-          description={
-            facility.model === 'monthly'
-              ? "A monthly rental is a full membership. Spots are limited — tell us who you are and we'll reach out about availability."
-              : `${facility.rate}${facility.rateNote ? ` · ${facility.rateNote}.` : ''} Hourly renters join as associates — we'll confirm timing by email.`
-          }
+          description={facility.description}
           defaultTier={facility.model === 'monthly' ? 'Member' : 'Associate'}
           defaultOffering={facility.name}
         />
@@ -131,7 +127,7 @@ export default function Facilities() {
             <MembershipApplicationDialog
               triggerLabel='Apply to sell'
               title={storefrontCopy.name}
-              description="Sellers join as associates. Tell us who you are and what you make, and we'll reach out."
+              description={storefrontCopy.description}
               defaultTier='Associate'
               defaultOffering={storefrontCopy.name}
             />

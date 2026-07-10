@@ -17,8 +17,11 @@ export default function PriceMenu({ lines }: { lines: PriceMenuLine[] }) {
       {groups.map(group => (
         <div key={group ?? 'flat'}>
           {group && (
-            <div className='text-sm font-extrabold tracking-[0.08em] text-black/60 uppercase first:mt-0'>
-              {group}
+            <div className='mb-1.5 flex items-center gap-3'>
+              <span className='text-xs font-extrabold tracking-[0.08em] uppercase'>
+                {group}
+              </span>
+              <span aria-hidden className='h-px flex-1 bg-black/20' />
             </div>
           )}
           {lines

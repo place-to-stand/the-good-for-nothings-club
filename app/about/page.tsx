@@ -151,7 +151,7 @@ export default async function About() {
               <Link href='/contact' className='font-bold'>
                 Got an idea?
               </Link>{' '}
-              Reach out and we will help you make it happen.
+              Reach out to see if we can make it happen.
             </li>
           </ul>
         </div>
@@ -169,14 +169,20 @@ export default async function About() {
 
           {past.length > 0 && (
             <details className='group details-animated mt-10'>
-              <summary className='inline-flex cursor-pointer list-none items-center gap-1 font-sans text-base font-bold text-black/80 uppercase transition-colors hover:text-black [&::-webkit-details-marker]:hidden'>
-                {leadershipCopy.pastTitle}
-                <FaCaretDown
-                  aria-hidden
-                  className='size-4 transition-transform duration-300 group-open:rotate-180'
-                />
+              <summary className='block cursor-pointer list-none font-sans text-sm font-bold text-black/80 uppercase transition-colors hover:text-black [&::-webkit-details-marker]:hidden'>
+                <div className='flex items-center gap-3'>
+                  <span aria-hidden className='h-px flex-1 bg-black/25' />
+                  <span className='inline-flex items-center gap-1'>
+                    {leadershipCopy.pastTitle}
+                    <FaCaretDown
+                      aria-hidden
+                      className='size-4 transition-transform duration-300 group-open:rotate-180'
+                    />
+                  </span>
+                  <span aria-hidden className='h-px flex-1 bg-black/25' />
+                </div>
               </summary>
-              <ul className='mt-4 grid grid-cols-2 gap-6'>
+              <ul className='mt-8 grid grid-cols-2 gap-6'>
                 {past.map(member => (
                   <MemberProfilePicture key={member._id} member={member} />
                 ))}

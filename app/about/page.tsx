@@ -150,25 +150,25 @@ export default async function About() {
               <MemberProfilePicture key={member._id} member={member} />
             ))}
           </ul>
+
+          {past.length > 0 && (
+            <details className='group mt-10'>
+              <summary className='inline-flex cursor-pointer list-none items-center gap-2 font-sans text-xs font-extrabold tracking-[0.08em] text-black/60 uppercase transition-colors hover:text-black [&::-webkit-details-marker]:hidden'>
+                {leadershipCopy.pastTitle}
+                <FaCaretDown
+                  aria-hidden
+                  className='size-3.5 transition-transform duration-300 group-open:rotate-180'
+                />
+              </summary>
+              <ul className='mt-4 grid grid-cols-2 gap-6'>
+                {past.map(member => (
+                  <MemberProfilePicture key={member._id} member={member} />
+                ))}
+              </ul>
+            </details>
+          )}
         </div>
       </div>
-
-      {past.length > 0 && (
-        <details className='group mt-14 md:mt-20'>
-          <summary className='inline-flex cursor-pointer list-none items-center gap-2 font-sans text-xs font-extrabold tracking-[0.08em] text-black/60 uppercase transition-colors hover:text-black [&::-webkit-details-marker]:hidden'>
-            {leadershipCopy.pastTitle}
-            <FaCaretDown
-              aria-hidden
-              className='size-3.5 transition-transform duration-300 group-open:rotate-180'
-            />
-          </summary>
-          <ul className='mt-4 grid max-w-4xl grid-cols-2 gap-6 md:gap-8 lg:grid-cols-4'>
-            {past.map(member => (
-              <MemberProfilePicture key={member._id} member={member} />
-            ))}
-          </ul>
-        </details>
-      )}
     </PageShell>
   )
 }

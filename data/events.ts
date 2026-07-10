@@ -31,12 +31,11 @@ export type GFNCEvent = {
 }
 
 export const eventsCopy = {
-  lead: 'Regular happenings at the clubhouse — members and friends of members welcome.',
+  lead: 'Regular happenings at the clubhouse — members, associates, and friends of the club welcome.',
   calendarTitle: 'Calendar',
   recurringTitle: 'Recurring',
-  friendNote:
-    "Events are for members and friends of the club. Acceptance isn't guaranteed, but once you're in, you're invited to everything.",
-  friendCta: 'Apply to join as a friend',
+  friendNote: 'Events are for members, associates, and friends of the club.',
+  friendCta: 'Apply to join',
 }
 
 export const events: GFNCEvent[] = [

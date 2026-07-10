@@ -33,7 +33,7 @@ export type Facility = {
 }
 
 export const facilitiesCopy = {
-  lead: 'The clubhouse, room by room. Desks, band practice, a photo studio, and a mixing room — rent by the month or by the hour.',
+  lead: 'The clubhouse, room by room. Desks, band practice, photo studio, mixing room, and consignment shop — rented by the month or by the hour.',
   monthlyTitle: 'Monthly rental',
   monthlyLead:
     'Monthly members get keys, 24/7 access to the facilities, and half off hourly rooms.',
@@ -48,7 +48,7 @@ export const storefrontCopy = {
   name: 'Online Store',
   rate: '25% of net',
   description:
-    'An online store for members and friends of members. You make the work — we handle shipping, returns, customer service, and sales tax for 25% of the net profit on each sale.',
+    'An online store for members and associates. You make the work — we handle shipping, returns, customer service, and sales tax for 25% of the net profit on each sale.',
   note: 'Custom landing page included',
 }
 

@@ -46,12 +46,12 @@ export default function Home() {
             {
               href: '/services',
               title: 'Services',
-              body: "Bring the project. We'll make it.",
+              body: 'You bring the project. We make it.',
             },
             {
               href: '/events',
               title: 'Events',
-              body: 'The clubhouse, in session — friends welcome.',
+              body: 'The clubhouse, in session — friends of the club welcome.',
             },
             {
               href: '/membership',

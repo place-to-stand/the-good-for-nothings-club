@@ -10,7 +10,11 @@ export default function SectionHeading({ title, lead }: SectionHeadingProps) {
       <h2 className='mt-14 text-[28px] font-black tracking-[-0.03em] md:mt-20 md:text-[40px]'>
         {title}
       </h2>
-      {lead && <p className='mt-3 max-w-3xl font-sans leading-snug'>{lead}</p>}
+      {lead && (
+        <p className='mt-2 max-w-3xl font-sans leading-snug text-balance'>
+          {lead}
+        </p>
+      )}
     </>
   )
 }

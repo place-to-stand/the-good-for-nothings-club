@@ -9,6 +9,8 @@ import { z } from 'zod'
 import { facilities, storefrontCopy } from '../data/facilities'
 import { membershipTiers } from '../data/membership'
 import { phoneSchema, portfolioSchema } from '../data/schemas'
+import { cn } from '../lib/utils'
+import GroupLabel from './GroupLabel'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
 import {
@@ -69,6 +71,9 @@ function offeringConfig(tier: string) {
 
 const selectClassName =
   'border-input flex h-10 w-full cursor-pointer border-2 bg-transparent px-3 py-2 font-sans text-sm focus-visible:ring-1 focus-visible:outline-none'
+
+/** Quieter than input text so the group bars carry the hierarchy. */
+const fieldLabelClassName = 'text-sm font-semibold'
 
 type MembershipApplicationFormProps = {
   /** Preselected tier, e.g. from a facilities card. */
@@ -161,45 +166,28 @@ export default function MembershipApplicationForm({
             .handleSubmit(onSubmit)(e)
             .catch(() => {})
         }
-        className='space-y-4 text-left'
+        className='text-left'
       >
-        <FormField
-          name='tier'
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor='tier'>Membership level</FormLabel>
-              <FormControl>
-                <select
-                  id='tier'
-                  required
-                  {...field}
-                  className={selectClassName}
-                >
-                  {membershipTiers.map(option => (
-                    <option key={option.slug} value={option.name}>
-                      {option.name}
-                    </option>
-                  ))}
-                </select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {config && (
+        <GroupLabel>Membership</GroupLabel>
+        <div className={cn('mt-4 grid gap-4', config && 'sm:grid-cols-2')}>
           <FormField
-            name='offering'
+            name='tier'
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor='offering'>{config.label}</FormLabel>
+                <FormLabel className={fieldLabelClassName} htmlFor='tier'>
+                  Membership level
+                </FormLabel>
                 <FormControl>
-                  <select id='offering' {...field} className={selectClassName}>
-                    <option value={NOT_SURE}>{NOT_SURE}</option>
-                    {config.options.map(option => (
-                      <option key={option} value={option}>
-                        {option}
+                  <select
+                    id='tier'
+                    required
+                    {...field}
+                    className={selectClassName}
+                  >
+                    {membershipTiers.map(option => (
+                      <option key={option.slug} value={option.name}>
+                        {option.name}
                       </option>
                     ))}
                   </select>
@@ -208,68 +196,110 @@ export default function MembershipApplicationForm({
               </FormItem>
             )}
           />
-        )}
-        <FormField
-          name='name'
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor='name'>Name</FormLabel>
-              <FormControl>
-                <Input
-                  type='text'
-                  id='name'
-                  required
-                  maxLength={256}
-                  autoComplete='name'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+          {config && (
+            <FormField
+              name='offering'
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className={fieldLabelClassName} htmlFor='offering'>
+                    {config.label}
+                  </FormLabel>
+                  <FormControl>
+                    <select
+                      id='offering'
+                      {...field}
+                      className={selectClassName}
+                    >
+                      <option value={NOT_SURE}>{NOT_SURE}</option>
+                      {config.options.map(option => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           )}
-        />
-        <FormField
-          name='email'
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor='email'>Email Address</FormLabel>
-              <FormControl>
-                <Input
-                  type='email'
-                  id='email'
-                  required
-                  maxLength={256}
-                  autoComplete='email'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name='phone'
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor='phone'>Phone Number (optional)</FormLabel>
-              <FormControl>
-                <Input
-                  type='tel'
-                  id='phone'
-                  maxLength={25}
-                  autoComplete='tel'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div>
-          <FormLabel>Social links (optional)</FormLabel>
+        </div>
+
+        <GroupLabel className='mt-7'>Contact</GroupLabel>
+        <div className='mt-4 grid gap-4 sm:grid-cols-2'>
+          <FormField
+            name='name'
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className={fieldLabelClassName} htmlFor='name'>
+                  Name
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type='text'
+                    id='name'
+                    required
+                    maxLength={256}
+                    autoComplete='name'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name='email'
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className={fieldLabelClassName} htmlFor='email'>
+                  Email Address
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type='email'
+                    id='email'
+                    required
+                    maxLength={256}
+                    autoComplete='email'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name='phone'
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className='sm:col-span-2'>
+                <FormLabel className={fieldLabelClassName} htmlFor='phone'>
+                  Phone Number (optional)
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type='tel'
+                    id='phone'
+                    maxLength={25}
+                    autoComplete='tel'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <GroupLabel className='mt-7'>Your work</GroupLabel>
+        <div className='mt-4'>
+          <FormLabel className={fieldLabelClassName}>
+            Social links (optional)
+          </FormLabel>
           <div className='mt-2 space-y-2'>
             {fields.map((socialField, index) => (
               <FormField
@@ -319,8 +349,10 @@ export default function MembershipApplicationForm({
           name='portfolio'
           control={form.control}
           render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor='portfolio'>Portfolio (optional)</FormLabel>
+            <FormItem className='mt-4'>
+              <FormLabel className={fieldLabelClassName} htmlFor='portfolio'>
+                Portfolio (optional)
+              </FormLabel>
               <FormControl>
                 <Input
                   type='url'
@@ -338,9 +370,9 @@ export default function MembershipApplicationForm({
           name='references'
           control={form.control}
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                If needed, would you be able to provide references?
+            <FormItem className='mt-4'>
+              <FormLabel className={fieldLabelClassName}>
+                If requested, are you be able to provide references?
               </FormLabel>
               <FormControl>
                 <div className='flex gap-6 pt-1'>
@@ -370,8 +402,8 @@ export default function MembershipApplicationForm({
           name='message'
           control={form.control}
           render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor='message'>
+            <FormItem className='mt-4'>
+              <FormLabel className={fieldLabelClassName} htmlFor='message'>
                 Tell us about yourself and what you make
               </FormLabel>
               <FormControl>
@@ -382,11 +414,11 @@ export default function MembershipApplicationForm({
           )}
         />
         {errors.root && (
-          <p className='text-destructive font-sans text-sm font-medium'>
+          <p className='text-destructive mt-4 font-sans text-sm font-medium'>
             {errors.root.message}
           </p>
         )}
-        <Button type='submit' disabled={isSubmitting}>
+        <Button type='submit' disabled={isSubmitting} className='mt-7 w-full'>
           {isSubmitting && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
           Apply
         </Button>

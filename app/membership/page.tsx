@@ -70,10 +70,10 @@ export default function Membership() {
             {membershipCopy.joining.map((step, i) => (
               <li key={step.label} className='font-sans'>
                 <div className='flex items-center gap-4'>
-                  <span className='flex h-8 w-8 shrink-0 items-center justify-center border-2 border-black font-black'>
+                  <span className='text-background flex h-8 w-8 shrink-0 items-center justify-center border-2 border-black bg-black font-black'>
                     {i + 1}
                   </span>
-                  <h3 className='font-black tracking-wide uppercase'>
+                  <h3 className='text-xl font-extrabold tracking-wide uppercase'>
                     {step.label}
                   </h3>
                 </div>
@@ -100,7 +100,7 @@ export default function Membership() {
             ))}
           </div>
         </div>
-        <OfferCard title='Apply'>
+        <OfferCard title='Application'>
           <MembershipApplicationForm />
         </OfferCard>
       </div>

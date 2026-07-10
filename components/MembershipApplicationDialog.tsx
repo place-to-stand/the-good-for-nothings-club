@@ -37,7 +37,7 @@ export default function MembershipApplicationDialog({
       <DialogContent className='max-h-[90vh] overflow-y-auto border-2 border-black sm:max-w-xl'>
         <DialogHeader>
           <DialogTitle className='font-sans font-black uppercase'>
-            {title}
+            {title + ' Application'}
           </DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>

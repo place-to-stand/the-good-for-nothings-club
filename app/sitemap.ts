@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 import { cmsFetch } from '../data/client'
-import { leadershipSlugs } from '../data/leadership'
+import { leadershipSlugs, pastMemberSlugs } from '../data/leadership'
 import { GFNC_project, GFNC_member } from '../types'
 
 const defaultPage: MetadataRoute.Sitemap[0] = {
@@ -75,7 +75,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     cmsFetch<GFNC_member[]>({
       query: LISTED_MEMBERS_QUERY,
       tags: ['GFNC_member'],
-      params: { slugs: leadershipSlugs },
+      params: { slugs: [...leadershipSlugs, ...pastMemberSlugs] },
     }),
   ])
 

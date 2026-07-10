@@ -1,7 +1,9 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 
 import InquiryForm from '@/components/InquiryForm'
+import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
+import SectionHeading from '@/components/SectionHeading'
 import { membershipCopy, membershipTiers } from '@/data/membership'
 
 export async function generateMetadata(
@@ -34,26 +36,15 @@ export default function Membership() {
       {/* Tiers */}
       <div className='mt-12 grid grid-cols-1 gap-6 md:mt-16 md:gap-8 lg:grid-cols-3'>
         {membershipTiers.map(tier => (
-          <article
+          <OfferCard
             key={tier.slug}
             id={tier.slug}
-            className='flex scroll-mt-28 flex-col border-2 border-black p-6 md:p-8'
+            title={tier.name}
+            price={tier.price}
+            description={tier.tagline}
           >
-            <div className='flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1'>
-              <h2 className='text-[28px] leading-none font-black tracking-[-0.03em] md:text-[32px]'>
-                {tier.name}
-              </h2>
-              {tier.price && (
-                <span className='font-sans text-sm font-black tracking-tight uppercase'>
-                  {tier.price}
-                </span>
-              )}
-            </div>
-            <p className='mt-3 font-serif text-xl leading-snug'>
-              {tier.tagline}
-            </p>
             {tier.includes && (
-              <p className='mt-4 font-sans text-xs font-semibold tracking-wide uppercase'>
+              <p className='text-xs font-semibold tracking-[0.08em] text-black/60 uppercase'>
                 {tier.includes}
               </p>
             )}
@@ -62,20 +53,18 @@ export default function Membership() {
                 <li key={perk}>{perk}</li>
               ))}
             </ul>
-          </article>
+          </OfferCard>
         ))}
       </div>
 
-      {/* How to join + apply, side by side */}
+      {/* How to join + apply */}
+      <SectionHeading title={membershipCopy.joiningTitle} />
       <div
         id='apply'
-        className='mt-14 grid scroll-mt-28 grid-cols-1 gap-8 md:mt-20 lg:grid-cols-2 lg:gap-12'
+        className='mt-6 grid scroll-mt-28 grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12'
       >
         <div>
-          <h2 className='text-[28px] font-black tracking-[-0.03em] md:text-[40px]'>
-            {membershipCopy.joiningTitle}
-          </h2>
-          <ol className='mt-6 space-y-4'>
+          <ol className='space-y-4'>
             {membershipCopy.joining.map((step, i) => (
               <li key={step.label} className='flex gap-4 font-sans'>
                 <span className='flex h-8 w-8 shrink-0 items-center justify-center border-2 border-black font-black'>
@@ -103,51 +92,39 @@ export default function Membership() {
             ))}
           </div>
         </div>
-        <div className='border-2 border-black p-6 md:p-10'>
-          <h2 className='text-[28px] font-black tracking-[-0.03em] md:text-[40px]'>
-            Apply
-          </h2>
-          <div className='mt-6'>
-            <InquiryForm
-              kind='membership'
-              item={membershipTiers[0].name}
-              itemOptions={membershipTiers.map(tier => tier.name)}
-              itemLabel='Membership level'
-              submitLabel='Apply'
-            />
-          </div>
-        </div>
+        <OfferCard title='Apply'>
+          <InquiryForm
+            kind='membership'
+            item={membershipTiers[0].name}
+            itemOptions={membershipTiers.map(tier => tier.name)}
+            itemLabel='Membership level'
+            submitLabel='Apply'
+          />
+        </OfferCard>
       </div>
 
       {/* More than a room */}
-      <h2 className='mt-14 text-[28px] font-black tracking-[-0.03em] md:mt-20 md:text-[40px]'>
-        {membershipCopy.moreTitle}
-      </h2>
+      <SectionHeading title={membershipCopy.moreTitle} />
       <div className='mt-6 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3'>
         {membershipCopy.moreCards.map(card => (
-          <div key={card.title} className='border-2 border-black p-6'>
-            <h3 className='text-[20px] leading-tight font-black tracking-[-0.02em]'>
-              {card.title}
-            </h3>
-            <p className='mt-3 font-sans text-sm leading-snug'>{card.body}</p>
-          </div>
+          <OfferCard key={card.title} title={card.title} description={card.body} />
         ))}
       </div>
 
       {/* How members earn */}
-      <h2 className='mt-14 text-[28px] font-black tracking-[-0.03em] md:mt-20 md:text-[40px]'>
-        {membershipCopy.earningTitle}
-      </h2>
-      <p className='mt-3 max-w-3xl font-sans leading-snug'>
-        {membershipCopy.earningIntro}
-      </p>
-      <dl className='mt-6 divide-y-2 divide-black border-2 border-black font-sans text-sm'>
+      <SectionHeading
+        title={membershipCopy.earningTitle}
+        lead={membershipCopy.earningIntro}
+      />
+      <dl className='mt-6 divide-y divide-black/20 font-sans text-sm'>
         {membershipCopy.splits.map(split => (
           <div
             key={split.label}
-            className='flex flex-col justify-between gap-1 px-4 py-3 sm:flex-row sm:items-center sm:gap-4'
+            className='flex flex-col justify-between gap-1 py-3 sm:flex-row sm:items-center sm:gap-4'
           >
-            <dt className='font-black uppercase'>{split.label}</dt>
+            <dt className='text-xs font-extrabold tracking-[0.08em] uppercase'>
+              {split.label}
+            </dt>
             <dd>{split.value}</dd>
           </div>
         ))}

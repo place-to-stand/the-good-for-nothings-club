@@ -1,9 +1,11 @@
 import Link from 'next/link'
 
 import ContactUsForm from './ContactUsForm'
-import PageShell from '@/components/PageShell'
-import SocialMediaLinks from '../../components/SocialMediaLinks'
 import Map from '../../components/Map'
+import OfferCard from '@/components/OfferCard'
+import PageShell from '@/components/PageShell'
+import SectionHeading from '@/components/SectionHeading'
+import SocialMediaLinks from '../../components/SocialMediaLinks'
 import type { Metadata, ResolvingMetadata } from 'next'
 
 export async function generateMetadata(
@@ -27,39 +29,34 @@ export async function generateMetadata(
 
 export default async function Contact() {
   return (
-    <PageShell title='Contact'>
-      <div className='mb-10 grid grid-cols-1 gap-24 pt-10 lg:grid-cols-2 lg:gap-12'>
+    <PageShell
+      title='Contact'
+      lead='Say hello, ask a question, or start something.'
+    >
+      <div className='grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12'>
         <div>
-          <h3 className='text-[32px]'>Say Hello</h3>
-          <div className='mt-6'>
-            <ContactUsForm />
+          <SectionHeading title='Email' />
+          <Link
+            href='mailto:hello@thegoodfornothings.club'
+            className='mt-4 inline-block font-sans text-xl font-bold'
+          >
+            hello@thegoodfornothings.club
+          </Link>
+
+          <SectionHeading title='Social' />
+          <div className='mt-4 text-[32px]'>
+            <SocialMediaLinks />
+          </div>
+
+          <SectionHeading title='Location' />
+          <div className='mt-6 aspect-video border-2 border-black'>
+            <Map />
           </div>
         </div>
-        <div className='space-y-12'>
-          <div className='space-y-6'>
-            <h3 className='text-[32px]'>Email</h3>
-            <div>
-              <Link
-                href='mailto:hello@thegoodfornothings.club'
-                className='text-2xl'
-              >
-                hello@thegoodfornothings.club
-              </Link>
-            </div>
-          </div>
-          <div className='space-y-6'>
-            <h3 className='text-[32px]'>Social</h3>
-            <div className='text-[32px]'>
-              <SocialMediaLinks />
-            </div>
-          </div>
-          <div className='space-y-6'>
-            <h3 className='text-[32px]'>Location</h3>
-            <div className='aspect-video'>
-              <Map />
-            </div>
-          </div>
-        </div>
+
+        <OfferCard title='Send a message' className='self-start lg:mt-20'>
+          <ContactUsForm />
+        </OfferCard>
       </div>
     </PageShell>
   )

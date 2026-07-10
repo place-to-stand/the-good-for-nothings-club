@@ -66,18 +66,18 @@ export default function Membership() {
         className='mt-6 grid scroll-mt-28 grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12'
       >
         <div>
-          <ol className='mt-6 space-y-6'>
+          <ol className='mt-6 space-y-10'>
             {membershipCopy.joining.map((step, i) => (
               <li key={step.label} className='font-sans'>
                 <div className='flex items-center gap-4'>
                   <span className='text-background flex h-8 w-8 shrink-0 items-center justify-center border-2 border-black bg-black font-black'>
                     {i + 1}
                   </span>
-                  <h3 className='text-xl font-extrabold tracking-wide uppercase'>
+                  <h3 className='text-2xl font-extrabold tracking-wide uppercase'>
                     {step.label}
                   </h3>
                 </div>
-                <ul className='mt-2 ml-12 list-disc space-y-1 pl-5 text-sm leading-snug'>
+                <ul className='mt-3 ml-12 list-disc space-y-1 pl-5 text-base leading-snug'>
                   {step.points.map(point => (
                     <li key={point}>{point}</li>
                   ))}
@@ -85,7 +85,7 @@ export default function Membership() {
               </li>
             ))}
           </ol>
-          <div className='mt-20 space-y-7 bg-black/5 px-5 py-7 font-sans text-sm'>
+          <div className='mx-16 mt-20 space-y-7 bg-black/5 px-5 py-7 font-sans text-sm'>
             {membershipCopy.policies.map(policy => (
               <div key={policy.label} className=''>
                 <h3 className='font-black tracking-wide uppercase'>
@@ -117,24 +117,6 @@ export default function Membership() {
         ))}
       </div>
 
-      {/* How members earn */}
-      <SectionHeading
-        title={membershipCopy.earningTitle}
-        lead={membershipCopy.earningIntro}
-      />
-      <dl className='mt-6 divide-y divide-black/20 font-sans text-sm'>
-        {membershipCopy.splits.map(split => (
-          <div
-            key={split.label}
-            className='flex flex-col justify-between gap-1 py-3 sm:flex-row sm:items-center sm:gap-4'
-          >
-            <dt className='text-xs font-extrabold tracking-[0.08em] uppercase'>
-              {split.label}
-            </dt>
-            <dd>{split.value}</dd>
-          </div>
-        ))}
-      </dl>
     </PageShell>
   )
 }

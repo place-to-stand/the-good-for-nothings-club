@@ -76,24 +76,6 @@ export const membershipCopy = {
       body: 'An online store for members and friends of members. You make the work — we handle shipping, returns, customer service, and Texas sales tax for 25% of the net profit on each sale. Every seller receives a custom landing page to link to.',
     },
   ],
-  earningTitle: 'How members earn',
-  earningIntro:
-    "When a paid project comes in, it's offered down the membership list by tenure — the longest-standing members get right of first refusal, and if they pass it moves to the next person.",
-  splits: [
-    {
-      label: 'Hourly facilities fees',
-      value: '50% to the club, 50% to the member working',
-    },
-    {
-      label: 'Hourly assistant fees',
-      value: '100% to the member assisting',
-    },
-    {
-      label: 'Service work',
-      value:
-        '75% to the person doing the work · 25% to the club for admin + equipment',
-    },
-  ],
 }
 
 /** Descending: monthly commitment → pay-as-you-go → free connection. */

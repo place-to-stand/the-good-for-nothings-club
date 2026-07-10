@@ -49,7 +49,7 @@ type ApplicationValues = z.infer<typeof applicationSchema>
 function offeringConfig(tier: string) {
   if (tier === 'Member') {
     return {
-      label: 'Which monthly rental?',
+      label: 'Which facility?',
       options: facilities
         .filter(f => f.model === 'monthly' && f.status !== 'planned')
         .map(f => f.name),
@@ -57,7 +57,7 @@ function offeringConfig(tier: string) {
   }
   if (tier === 'Associate') {
     return {
-      label: 'Which hourly rental or shop?',
+      label: 'Which facility?',
       options: [
         ...facilities
           .filter(f => f.model === 'hourly' && f.status !== 'planned')
@@ -168,7 +168,9 @@ export default function MembershipApplicationForm({
         }
         className='text-left'
       >
-        <GroupLabel>Membership</GroupLabel>
+        <GroupLabel className='text-background bg-black/60'>
+          Membership
+        </GroupLabel>
         <div className={cn('mt-4 grid gap-4', config && 'sm:grid-cols-2')}>
           <FormField
             name='tier'
@@ -226,7 +228,9 @@ export default function MembershipApplicationForm({
           )}
         </div>
 
-        <GroupLabel className='mt-7'>Contact</GroupLabel>
+        <GroupLabel className='text-background mt-7 bg-black/60'>
+          Contact
+        </GroupLabel>
         <div className='mt-4 grid gap-4 sm:grid-cols-2'>
           <FormField
             name='name'
@@ -251,10 +255,31 @@ export default function MembershipApplicationForm({
             )}
           />
           <FormField
-            name='email'
+            name='phone'
             control={form.control}
             render={({ field }) => (
               <FormItem>
+                <FormLabel className={fieldLabelClassName} htmlFor='phone'>
+                  Phone Number (optional)
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type='tel'
+                    id='phone'
+                    maxLength={25}
+                    autoComplete='tel'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name='email'
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className='sm:col-span-2'>
                 <FormLabel className={fieldLabelClassName} htmlFor='email'>
                   Email Address
                 </FormLabel>
@@ -272,30 +297,11 @@ export default function MembershipApplicationForm({
               </FormItem>
             )}
           />
-          <FormField
-            name='phone'
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className='sm:col-span-2'>
-                <FormLabel className={fieldLabelClassName} htmlFor='phone'>
-                  Phone Number (optional)
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type='tel'
-                    id='phone'
-                    maxLength={25}
-                    autoComplete='tel'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
 
-        <GroupLabel className='mt-7'>Your work</GroupLabel>
+        <GroupLabel className='text-background mt-7 bg-black/60'>
+          Your work
+        </GroupLabel>
         <div className='mt-4'>
           <FormLabel className={fieldLabelClassName}>
             Social links (optional)
@@ -322,7 +328,7 @@ export default function MembershipApplicationForm({
                             type='button'
                             aria-label={`Remove social link ${index + 1}`}
                             onClick={() => remove(index)}
-                            className='cursor-pointer p-1 transition-colors hover:bg-black/10'
+                            className='hover:bg-black/70/10 transition-colo60 cursor-pointer p-1'
                           >
                             <X className='h-4 w-4' />
                           </button>
@@ -372,7 +378,7 @@ export default function MembershipApplicationForm({
           render={({ field }) => (
             <FormItem className='mt-4'>
               <FormLabel className={fieldLabelClassName}>
-                If requested, are you be able to provide references?
+                If requested, would you be able to provide references?
               </FormLabel>
               <FormControl>
                 <div className='flex gap-6 pt-1'>

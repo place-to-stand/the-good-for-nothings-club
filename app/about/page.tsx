@@ -99,14 +99,15 @@ export default async function About() {
             <p>
               The club started as a weekly accountability meeting between
               friends and grew into a clubhouse: studios, rehearsal rooms, and
-              workspace under one roof. As members, we have always tried to
-              strike a balance between work and pursuing our passions such as
-              film, music, app development, and more. Our growth is deliberate
-              and gradual, focused on keeping the work within our team and close
-              friends. We are not building a business of infinite revenue and
-              scale — that tends to consume all of your time and prevent you
-              from pursuing your creative endeavors. The club exists to keep the
-              space sustainable and the work flowing.
+              workspace under one roof. Today it runs as a members&apos;
+              creative space for Austin — monthly members get keys and full
+              run of the house, associates book the rooms by the hour, and
+              friends of the club fill out the events. Membership isn&apos;t
+              about who you know; it&apos;s about using the space and putting
+              into it. We accept applications in waves, so the community grows
+              deliberately around people who actually show up. The point was
+              never scale — it&apos;s keeping the space sustainable and the
+              work flowing.
             </p>
           </div>
 

@@ -33,7 +33,7 @@ export default async function Contact() {
       title='Contact'
       lead='Say hello, ask a question, or start something.'
     >
-      <div className='grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12'>
+      <div className='grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-20'>
         <div>
           <SectionHeading title='Email' />
           <Link
@@ -54,7 +54,10 @@ export default async function Contact() {
           </div>
         </div>
 
-        <OfferCard title='Send a message' className='self-start lg:mt-20'>
+        <OfferCard
+          title='Send a message'
+          className='self-start border-0 p-0 md:p-0 lg:mt-20'
+        >
           <ContactUsForm />
         </OfferCard>
       </div>

@@ -63,7 +63,7 @@ export default function Membership() {
       <SectionHeading title={membershipCopy.joiningTitle} />
       <div
         id='apply'
-        className='mt-6 grid scroll-mt-28 grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12'
+        className='mt-6 grid scroll-mt-28 grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-20'
       >
         <div>
           <ol className='mt-6 space-y-10'>
@@ -100,7 +100,7 @@ export default function Membership() {
             ))}
           </div>
         </div>
-        <OfferCard title='Application'>
+        <OfferCard title='Application' className='border-0 p-0 md:p-0'>
           <MembershipApplicationForm />
         </OfferCard>
       </div>

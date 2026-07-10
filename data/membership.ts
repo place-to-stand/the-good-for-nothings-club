@@ -18,6 +18,9 @@ export type MembershipTier = {
 
 export const membershipCopy = {
   lead: 'Three levels, each with its own perks. Apply anytime to join the waitlist — onboarding happens in waves as space opens up.',
+  tiersTitle: 'Tiers',
+  tiersLead:
+    "If your application is selected when space opens up, we'll reach out with onboarding instructions.",
   joiningTitle: 'How to join',
   joining: [
     {
@@ -91,7 +94,7 @@ export const membershipTiers: MembershipTier[] = [
     tagline:
       'A monthly rental commitment — a permanent desk or a band practice slot — and full run of the clubhouse.',
     price: 'From $200 / mo',
-    includes: 'Everything in associate and friend, plus:',
+    includes: 'Includes everything in associate, plus:',
     perks: [
       'Keys and 24/7 access to the clubhouse',
       '50% off hourly facility rates',
@@ -104,7 +107,7 @@ export const membershipTiers: MembershipTier[] = [
     tagline:
       'Pay-as-you-go use of the facilities and services, without a monthly commitment.',
     price: 'Pay as you go',
-    includes: 'Everything in friend, plus:',
+    includes: 'Includes everything in friend, plus:',
     perks: [
       'Hourly access to the clubhouse and its facilities',
       'An associates only space in the club Discord',
@@ -115,6 +118,7 @@ export const membershipTiers: MembershipTier[] = [
     name: 'Friend',
     tagline: 'A connection to the club and its community, all for free.',
     price: 'Free',
+    includes: 'Includes:',
     perks: [
       'Invitations to events and open houses',
       'Access to community Discord channels',

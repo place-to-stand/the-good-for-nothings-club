@@ -100,21 +100,19 @@ export default async function About() {
               The club started as a weekly accountability meeting between
               friends and grew into a clubhouse: studios, rehearsal rooms, and
               workspace under one roof. Today it runs as a members&apos;
-              creative space for Austin — monthly members get keys and full
-              run of the house, associates book the rooms by the hour, and
-              friends of the club come out for the events. Membership
-              isn&apos;t about who you know — it&apos;s about making things
-              and contributing to the space. We accept applications in waves,
-              so the community grows deliberately around people who actually
-              show up — and each new wave has time to make the place their
-              own. The point was never scale — it&apos;s keeping the space
-              sustainable and the
-              work flowing.
+              creative space for Austin. Monthly members get keys and full run
+              of the house, associates book the rooms by the hour, and friends
+              of the club come out for the events. Membership isn&apos;t about
+              who you know. It&apos;s about making things and contributing to
+              the space. We accept applications in waves, so the community grows
+              deliberately around people who actually show up, and each new wave
+              has time to make the place their own. The point was never scale.
+              It&apos;s keeping the space sustainable and the work flowing.
             </p>
           </div>
 
           <SectionHeading title='What happens here' />
-          <ul className='mt-4 max-w-3xl list-disc space-y-2 pl-5 font-sans leading-snug'>
+          <ul className='font-base mt-4 max-w-3xl list-disc space-y-2 pl-5 font-sans leading-snug'>
             <li>
               <Link href='/facilities' className='font-bold'>
                 The clubhouse
@@ -126,7 +124,7 @@ export default async function About() {
               <Link href='/services' className='font-bold'>
                 Club members take on client work
               </Link>{' '}
-              — photo, video, music, print, and events.
+              for photo, video, music, print, and events.
             </li>
             <li>
               <Link href='/events' className='font-bold'>
@@ -138,7 +136,7 @@ export default async function About() {
               <Link href='/membership' className='font-bold'>
                 Membership
               </Link>{' '}
-              at three levels — member, associate, and friend.
+              at three levels: member, associate, and friend.
             </li>
             <li>
               <Link

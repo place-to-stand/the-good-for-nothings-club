@@ -119,7 +119,7 @@ export default function Footer() {
               Newsletter
             </h3>
             <p className='mt-2 text-sm leading-snug'>
-              Occasional updates from the clubhouse — events, openings, and new
+              Occasional updates from the clubhouse: events, openings, and new
               work.
             </p>
             <div className='mt-4'>
@@ -131,8 +131,8 @@ export default function Footer() {
               Membership
             </h3>
             <p className='mt-2 text-sm leading-snug'>
-              Join the club, at your level. Apply anytime to join the waitlist —
-              onboarding happens in waves as space opens up.
+              Join the club, at your level. Apply anytime to join the waitlist.
+              Onboarding happens in waves as space opens up.
             </p>
             <Button asChild className='mt-4 hover:no-underline'>
               <ScrollTopLink href='/membership'>Apply to Join</ScrollTopLink>

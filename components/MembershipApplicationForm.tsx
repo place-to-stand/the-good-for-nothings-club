@@ -354,7 +354,13 @@ export default function MembershipApplicationForm({
           {fields.length < MAX_SOCIALS && (
             <button
               type='button'
-              onClick={() => append({ handle: '' })}
+              onClick={() => {
+                // Read the live store: rapid clicks can batch into one
+                // render, letting a stale fields.length exceed the cap.
+                if (form.getValues('socials').length < MAX_SOCIALS) {
+                  append({ handle: '' })
+                }
+              }}
               className='mt-2 ml-2 cursor-pointer font-sans text-xs font-bold tracking-[0.08em] uppercase'
             >
               +{' '}

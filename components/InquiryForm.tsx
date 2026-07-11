@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, Loader2 } from 'lucide-react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -61,12 +62,15 @@ type InquiryFormProps = {
   /** The specific service or event, when launched from its card. */
   defaultItem?: string
   submitLabel?: string
+  /** Fires when the Regarding selection changes, e.g. to retitle a dialog. */
+  onSelectionChange?: (selection: { kind: InquiryKind; item: string }) => void
 }
 
 export default function InquiryForm({
   defaultKind = 'general',
   defaultItem,
   submitLabel = 'Send',
+  onSelectionChange,
 }: InquiryFormProps) {
   const form = useForm<ContactValues>({
     resolver: zodResolver(contactSchema),
@@ -82,7 +86,12 @@ export default function InquiryForm({
     },
   })
 
-  const { kind } = decode(form.watch('regarding'))
+  const regarding = form.watch('regarding')
+  const { kind } = decode(regarding)
+
+  useEffect(() => {
+    onSelectionChange?.(decode(regarding))
+  }, [regarding, onSelectionChange])
 
   // Scope the Regarding menu to the launching surface: service dialogs
   // list services, RSVP dialogs list events, the contact page gets all.

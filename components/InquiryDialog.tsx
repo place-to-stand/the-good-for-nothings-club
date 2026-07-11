@@ -1,5 +1,8 @@
 'use client'
 
+import { useState } from 'react'
+
+import { events } from '../data/events'
 import type { InquiryKind } from '../data/schemas'
 import InquiryForm from './InquiryForm'
 import { Button } from './ui/Button'
@@ -29,6 +32,25 @@ export default function InquiryDialog({
   description,
   submitLabel,
 }: InquiryDialogProps) {
+  const [selection, setSelection] = useState({ kind, item })
+
+  // Keep the header in sync when the Regarding dropdown changes.
+  const displayTitle =
+    selection.kind === 'service'
+      ? selection.item
+      : selection.kind === 'event'
+        ? `RSVP - ${selection.item}`
+        : title
+  const selectedEvent =
+    selection.kind === 'event'
+      ? events.find(event => event.name === selection.item)
+      : undefined
+  const displayDescription = selectedEvent
+    ? `${selectedEvent.schedule} at the clubhouse.`
+    : selection.kind === kind && selection.item === item
+      ? description
+      : undefined
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -38,16 +60,17 @@ export default function InquiryDialog({
         <div className='grid max-h-[calc(90vh-4px)] gap-4 overflow-y-auto p-6'>
           <DialogHeader>
             <DialogTitle className='font-sans font-black uppercase'>
-              {title}
+              {displayTitle}
             </DialogTitle>
-            {description && (
-              <DialogDescription>{description}</DialogDescription>
+            {displayDescription && (
+              <DialogDescription>{displayDescription}</DialogDescription>
             )}
           </DialogHeader>
           <InquiryForm
             defaultKind={kind}
             defaultItem={item}
             submitLabel={submitLabel}
+            onSelectionChange={setSelection}
           />
         </div>
       </DialogContent>

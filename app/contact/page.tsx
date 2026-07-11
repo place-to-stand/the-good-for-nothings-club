@@ -49,7 +49,7 @@ export default async function Contact() {
           </div>
 
           <SectionHeading title='Location' />
-          <div className='mt-6 aspect-video border-2 border-black'>
+          <div className='mt-6 aspect-video overflow-hidden border-2 border-black'>
             <Map />
           </div>
         </div>

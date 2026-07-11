@@ -86,7 +86,9 @@ export function upcomingOccurrences(from: Date, count: number): Occurrence[] {
     Date.UTC(from.getFullYear(), from.getMonth(), from.getDate(), 12)
   )
 
-  for (let day = 0; day < 120 && occurrences.length < count; day++) {
+  // Scan window must be generous enough to satisfy `count` for monthly
+  // events (8 occurrences of 2 monthly events needs ~4 months minimum).
+  for (let day = 0; day < 400 && occurrences.length < count; day++) {
     const iso = isoDay(cursor)
     for (const event of events) {
       const matches =

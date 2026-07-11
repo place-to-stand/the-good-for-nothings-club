@@ -12,7 +12,11 @@ import { phoneSchema, portfolioSchema } from '../data/schemas'
 import { cn } from '../lib/utils'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
-import { fieldLabelClassName, selectClassName } from './ui/fieldStyles'
+import {
+  fieldLabelClassName,
+  radioClassName,
+  selectClassName,
+} from './ui/fieldStyles'
 import {
   Form,
   FormControl,
@@ -22,6 +26,7 @@ import {
   FormMessage,
 } from './ui/Form'
 import { Input } from './ui/Input'
+import { PhoneInput } from './ui/PhoneInput'
 import { Textarea } from './ui/Textarea'
 
 const NOT_SURE = 'Not sure yet'
@@ -276,13 +281,7 @@ export default function MembershipApplicationForm({
                   Phone Number (optional)
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    type='tel'
-                    id='phone'
-                    maxLength={25}
-                    autoComplete='tel'
-                    {...field}
-                  />
+                  <PhoneInput id='phone' maxLength={25} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -407,7 +406,7 @@ export default function MembershipApplicationForm({
                         value={option}
                         checked={field.value === option}
                         onChange={() => field.onChange(option)}
-                        className='h-4 w-4 cursor-pointer accent-black'
+                        className={radioClassName}
                       />
                       {option}
                     </label>
@@ -438,7 +437,7 @@ export default function MembershipApplicationForm({
             {errors.root.message}
           </p>
         )}
-        <Button type='submit' disabled={isSubmitting} className='mt-7 w-full'>
+        <Button type='submit' disabled={isSubmitting} className='mt-7'>
           {isSubmitting && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
           Apply
         </Button>

@@ -21,9 +21,19 @@ import {
   FormMessage,
 } from './ui/Form'
 import { Input } from './ui/Input'
+import { PhoneInput } from './ui/PhoneInput'
 import { Textarea } from './ui/Textarea'
 
 const GENERAL = 'general'
+
+/** Common reasons people write in from the contact page. */
+const GENERAL_SUBJECTS = [
+  'Booking the clubhouse',
+  'Hiring the club for a project',
+  'Membership questions',
+  'Press or partnerships',
+  'Other',
+]
 
 /** Encode kind + item into a single select value. */
 const encode = (kind: InquiryKind, item: string) => `${kind}|${item}`
@@ -94,7 +104,8 @@ export default function InquiryForm({
   }, [regarding, onSelectionChange])
 
   // Scope the Regarding menu to the launching surface: service dialogs
-  // list services, RSVP dialogs list events, the contact page gets all.
+  // list services, RSVP dialogs list events, the contact page gets
+  // general subject lines.
   const serviceOptions = services.map(service => (
     <option key={service.slug} value={encode('service', service.name)}>
       {service.name}
@@ -168,8 +179,14 @@ export default function InquiryForm({
                   {defaultKind === 'general' && (
                     <>
                       <option value={GENERAL}>General</option>
-                      <optgroup label='Services'>{serviceOptions}</optgroup>
-                      <optgroup label='Events'>{eventOptions}</optgroup>
+                      {GENERAL_SUBJECTS.map(subject => (
+                        <option
+                          key={subject}
+                          value={encode('general', subject)}
+                        >
+                          {subject}
+                        </option>
+                      ))}
                     </>
                   )}
                   {defaultKind === 'service' && serviceOptions}
@@ -212,13 +229,7 @@ export default function InquiryForm({
                   Phone Number (optional)
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    type='tel'
-                    id='phone'
-                    maxLength={25}
-                    autoComplete='tel'
-                    {...field}
-                  />
+                  <PhoneInput id='phone' maxLength={25} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

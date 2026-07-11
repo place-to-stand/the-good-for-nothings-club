@@ -1,12 +1,20 @@
-// Wiki: https://docs.google.com/document/d/1m1WTPccEqhUBJ6RKpf0Ug5eLk1iepDCFoobRLyxTE70/edit?pli=1&tab=t.0
+import Link from 'next/link'
+import type { Metadata, ResolvingMetadata } from 'next'
+import { FaCaretDown } from 'react-icons/fa'
 
 import MemberProfilePicture from '@/components/MemberProfilePicture'
+import PageShell from '@/components/PageShell'
+import SectionHeading from '@/components/SectionHeading'
 import { cmsFetch } from '@/data/client'
+import {
+  leadershipCopy,
+  leadershipSlugs,
+  pastMemberSlugs,
+} from '@/data/leadership'
 import { GFNC_member } from '@/types'
-import type { Metadata, ResolvingMetadata } from 'next'
 
-const MEMBERS_QUERY = `
-  *[_type == 'GFNC_member'] | order(startDate) {
+const MEMBERS_BY_SLUGS_QUERY = `
+  *[_type == 'GFNC_member' && slug.current in $slugs] | order(memberNumber) {
     _id,
     fullName,
     slug,
@@ -66,197 +74,129 @@ export async function generateMetadata(
 }
 
 export default async function About() {
-  const [membersData] = await Promise.all([
-    cmsFetch<GFNC_member[]>({
-      query: MEMBERS_QUERY,
-      tags: ['GFNC_member'],
-    }),
-  ])
+  const membersData = await cmsFetch<GFNC_member[]>({
+    query: MEMBERS_BY_SLUGS_QUERY,
+    tags: ['GFNC_member'],
+    params: { slugs: [...leadershipSlugs, ...pastMemberSlugs] },
+  })
+
+  const founding = membersData.filter(member =>
+    leadershipSlugs.includes(member.slug.current)
+  )
+  const past = membersData.filter(member =>
+    pastMemberSlugs.includes(member.slug.current)
+  )
 
   return (
-    <main>
-      <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
-        <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
-          <h1 className='pt-6 text-center text-[32px] leading-none font-black tracking-[-0.04em] md:pt-8 md:text-[48px] lg:text-[96px]'>
-            About
-          </h1>
-          <div className='mt-10 flex flex-col gap-24 border-t-2 border-black pt-12 sm:mt-12 md:mt-20 lg:flex-row lg:gap-12'>
-            <div className='prose prose-lg not-first-of-type:md:prose-xl prose-li:my-1 prose-ol:my-1 mx-auto font-sans leading-snug'>
-              <h2>Overview</h2>
-              <p>
-                The Good for Nothings Club is a creators club based in Austin,
-                TX made up of designers, engineers, filmmakers, musicians, and
-                writers. Club members bring projects and meet weekly to lend
-                expertise, collaborate, and hold each other accountable on
-                progress.
-              </p>
-              <p>
-                As members, we have always tried to strike a balance between
-                work and pursuing our passions such as film, music, app
-                development, and more. In the Good for Nothings Club (GFNC), our
-                objective should be to dedicate half of our time towards
-                generating sufficient income, while allocating the other half to
-                our more ambitious projects that have the potential to yield
-                even greater long term. Our growth should be deliberate and
-                gradual, focusing on retaining most of the work within our team
-                and close friends. It is crucial to avoid building a business
-                solely focused on infinite revenue and scale, as it tends to
-                consume all of our time, preventing us from pursuing our
-                creative endeavors.
-              </p>
-
-              <h3>What Members Can Expect From GFNC</h3>
-
-              <ol>
-                <li>
-                  Meet weekly for ~1 hour – in person, remote, or hybrid
-                  <ol type='a'>
-                    <li>
-                      In person meetings should be prioritized over remote. The
-                      organic conversations that happen after the meeting tend
-                      to be the most impactful.
-                    </li>
-                    <li>
-                      The first half of the meeting (~30 min) should be spent on
-                      meeting agenda topics.
-                    </li>
-                    <li>
-                      The second half of the meeting (~30 min) should be spent
-                      on tasks related to works in progress.
-                    </li>
-                  </ol>
-                </li>
-
-                <li>
-                  Provide and receive help breaking down tasks and identifying
-                  the next one in line
-                </li>
-                <li>
-                  Accountability for completing tasks
-                  <ol type='a'>
-                    <li>
-                      The goal should be to provide pressure but not inflict
-                      burn out or be cruel.
-                    </li>
-                  </ol>
-                </li>
-
-                <li>
-                  Critical feedback on in progress and completed work
-                  <ol type='a'>
-                    <li>
-                      The goal is to push people to get better at their craft
-                      and provide constructive criticism, guidance, or
-                      suggestions, not to be an asshole about it.
-                    </li>
-                  </ol>
-                </li>
-                <li>
-                  We are not managers or delegators.
-                  <ol type='a'>
-                    <li>
-                      Every member is expected to generate their own work
-                      through tasks in their solely owned or co-owned
-                      projects{' '}
-                    </li>
-                    <li>
-                      Optionally, members can volunteer to help with tasks in
-                      other projects that they don’t own.
-                    </li>
-                  </ol>
-                </li>
-              </ol>
-
-              <h3>What GFNC Expects From Members</h3>
-              <ol>
-                <li>
-                  Members should try to attend all weekly meetings, missing no
-                  more than one a month – averaged out over the lifetime of
-                  their membership.
-                </li>
-                <li>
-                  Notify the group ahead of time when you&apos;re not able to
-                  attend a meeting and inquire about possibly rescheduling
-                </li>
-                <li>
-                  Keep your tasks organized and representative of the current
-                  work in progress + future work that has already been
-                  identified
-                </li>
-                <li>
-                  Share demos of your work with the group and be open to
-                  critical feedback
-                </li>
-                <li>
-                  Members should always have at least one project that they are
-                  owning/co-owning, almost like a &quot;hero quest&quot;.
-                  <ol type='a'>
-                    <li>
-                      Members can take on as many side quests as they want, i.e.
-                      pitching in on someone else&apos;s project.
-                    </li>
-                    <li>
-                      There is no cap on total projects that a member can have
-                      in-flight at any given time.{' '}
-                    </li>
-                    <li>
-                      Feedback should be given if a member takes on too many
-                      projects and has too much on their plate.
-                    </li>
-                  </ol>
-                </li>
-                <li>
-                  Identify at least one task to do each week.
-                  <ol type='a'>
-                    <li>
-                      Do not take advantage of this by only doing the bare
-                      minimum for an extended period of time. Other members are
-                      encouraged to flag this behavior and help construct
-                      appropriate tasks to mitigate.
-                    </li>
-                  </ol>
-                </li>
-              </ol>
-
-              <h3>Guidance</h3>
-              <ol>
-                <li>
-                  Do not assign tasks to a person until they are ready to be
-                  completed in the upcoming week or staged for the following
-                  week to keep the My Tasks as minimal as possible
-                </li>
-                <li>
-                  Add milestones as sections to a project once they&apos;re
-                  identified
-                </li>
-                <li>
-                  Keep the number of assigned tasks in a week to a reasonably
-                  completable number so as not to overwhelm
-                </li>
-                <li>
-                  Within a project, only add dates on future tasks that are
-                  required by a specific date, otherwise just keep the tasks
-                  stacked in priority order
-                </li>
-                <li>
-                  Try to assign one small task to complete on weeks where
-                  you&apos;re prohibitively busy or on vacation
-                </li>
-              </ol>
-            </div>
-            <div className='min-w-[300px] xl:min-w-[480px]'>
-              <h2 className='text-[30px] leading-snug font-bold'>Members</h2>
-              <div className='mt-8'>
-                <ul className='grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-x-8 md:gap-y-10 lg:grid-cols-1 xl:grid-cols-2'>
-                  {membersData.map(member => (
-                    <MemberProfilePicture key={member._id} member={member} />
-                  ))}
-                </ul>
-              </div>
-            </div>
+    <PageShell
+      title='About'
+      lead='The Good for Nothings Club is a creators club based in Austin, TX made up of musicians, photographers, writers, filmmakers, and engineers.'
+    >
+      <div className='grid grid-cols-1 gap-x-12 lg:grid-cols-[1fr_minmax(300px,26rem)]'>
+        <div>
+          <SectionHeading title='Overview' />
+          <div className='mt-4 max-w-3xl space-y-4 font-sans text-lg leading-snug'>
+            <p>
+              The club started as a weekly accountability meeting between
+              friends and grew into a clubhouse: studios, rehearsal rooms, and
+              workspace under one roof. Today it runs as a members&apos;
+              creative space for Austin. Monthly members get keys and full run
+              of the house, associates book the rooms by the hour, and friends
+              of the club come out for the events. Membership isn&apos;t about
+              who you know. It&apos;s about making things and contributing to
+              the space. We accept applications in waves, so the community grows
+              deliberately around people who actually show up, and each new wave
+              has time to make the place their own. The point was never scale.
+              It&apos;s keeping the space sustainable and the work flowing.
+            </p>
           </div>
+
+          <SectionHeading title='What happens here' />
+          <ul className='mt-4 max-w-3xl list-disc space-y-2 pl-5 font-sans text-base leading-snug'>
+            <li>
+              <Link href='/facilities' className='font-bold'>
+                The clubhouse
+              </Link>{' '}
+              rents desks, band practice slots, a photo studio, and a mixing
+              control room.
+            </li>
+            <li>
+              <Link href='/services' className='font-bold'>
+                Club members take on client work
+              </Link>{' '}
+              for photo, video, music, print, and events.
+            </li>
+            <li>
+              <Link href='/events' className='font-bold'>
+                Regular events
+              </Link>
+              , including a monthly show &amp; tell for works in progress.
+            </li>
+            <li>
+              <Link href='/membership' className='font-bold'>
+                Membership
+              </Link>{' '}
+              at three levels: member, associate, and friend.
+            </li>
+            <li>
+              <Link
+                href='https://shop.thegoodfornothings.club/'
+                className='font-bold'
+              >
+                The shop
+              </Link>{' '}
+              carries works and merch from members and friends of the club.
+            </li>
+            <li>
+              <Link href='/contact' className='font-bold'>
+                Got an idea?
+              </Link>{' '}
+              Reach out to see if we can make it happen.
+            </li>
+          </ul>
         </div>
-      </section>
-    </main>
+
+        <div>
+          <SectionHeading
+            title={leadershipCopy.title}
+            lead={leadershipCopy.lead}
+          />
+          <ul className='mt-6 grid grid-cols-2 gap-6'>
+            {founding.map(member => (
+              <MemberProfilePicture key={member._id} member={member} />
+            ))}
+          </ul>
+
+          {past.length > 0 && (
+            <details className='group details-animated mt-10'>
+              <summary className='block cursor-pointer list-none font-sans text-sm font-bold text-black/60 uppercase transition-colors hover:text-black [&::-webkit-details-marker]:hidden'>
+                <div className='group/summary flex items-center gap-3'>
+                  <span
+                    aria-hidden
+                    className='h-px flex-1 bg-black/25 transition-colors group-hover/summary:bg-black'
+                  />
+                  <span className='inline-flex items-center gap-1'>
+                    {leadershipCopy.pastTitle}
+                    <FaCaretDown
+                      aria-hidden
+                      className='size-4 transition-transform duration-300 group-open:rotate-180'
+                    />
+                  </span>
+                  <span
+                    aria-hidden
+                    className='h-px flex-1 bg-black/25 transition-colors group-hover/summary:bg-black'
+                  />
+                </div>
+              </summary>
+              <ul className='mt-8 grid grid-cols-2 gap-6'>
+                {past.map(member => (
+                  <MemberProfilePicture key={member._id} member={member} />
+                ))}
+              </ul>
+            </details>
+          )}
+        </div>
+      </div>
+    </PageShell>
   )
 }

@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { cmsFetch } from '../data/client'
+import { leadershipSlugs, pastMemberSlugs } from '../data/leadership'
 import { GFNC_project, GFNC_member } from '../types'
 
 const defaultPage: MetadataRoute.Sitemap[0] = {
@@ -9,8 +10,29 @@ const defaultPage: MetadataRoute.Sitemap[0] = {
   priority: 1,
 }
 
-const projectsPage: MetadataRoute.Sitemap[0] = {
-  url: 'https://www.thegoodfornothings.club/projects',
+const facilitiesPage: MetadataRoute.Sitemap[0] = {
+  url: 'https://www.thegoodfornothings.club/facilities',
+  lastModified: new Date(),
+  changeFrequency: 'weekly',
+  priority: 0.9,
+}
+
+const servicesPage: MetadataRoute.Sitemap[0] = {
+  url: 'https://www.thegoodfornothings.club/services',
+  lastModified: new Date(),
+  changeFrequency: 'weekly',
+  priority: 0.9,
+}
+
+const eventsPage: MetadataRoute.Sitemap[0] = {
+  url: 'https://www.thegoodfornothings.club/events',
+  lastModified: new Date(),
+  changeFrequency: 'weekly',
+  priority: 0.9,
+}
+
+const membershipPage: MetadataRoute.Sitemap[0] = {
+  url: 'https://www.thegoodfornothings.club/membership',
   lastModified: new Date(),
   changeFrequency: 'weekly',
   priority: 0.9,
@@ -37,8 +59,8 @@ const ALL_PROJECTS_QUERY = `
   }
 `
 
-const ALL_MEMBERS_QUERY = `
-  *[_type == 'GFNC_member'] | order(startDate) {
+const LISTED_MEMBERS_QUERY = `
+  *[_type == 'GFNC_member' && slug.current in $slugs] | order(startDate) {
     _updatedAt,
     slug
   }
@@ -51,8 +73,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       tags: ['GFNC_project'],
     }),
     cmsFetch<GFNC_member[]>({
-      query: ALL_MEMBERS_QUERY,
+      query: LISTED_MEMBERS_QUERY,
       tags: ['GFNC_member'],
+      params: { slugs: [...leadershipSlugs, ...pastMemberSlugs] },
     }),
   ])
 
@@ -70,5 +93,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  return [defaultPage, projectsPage, ...projectPages, ...memberPages, aboutPage, contactPage]
+  return [
+    defaultPage,
+    facilitiesPage,
+    servicesPage,
+    eventsPage,
+    membershipPage,
+    ...projectPages,
+    ...memberPages,
+    aboutPage,
+    contactPage,
+  ]
 }

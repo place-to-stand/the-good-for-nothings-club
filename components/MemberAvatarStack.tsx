@@ -1,3 +1,5 @@
+'use client'
+
 import { GFNC_member } from '@/types'
 import { getImageUrl } from '@/data/client'
 import Image from 'next/image'

@@ -61,18 +61,18 @@ export default function MemberProfilePicture({
         placeholder={hoverProfilePicture.asset.metadata.lqip}
         unoptimized
       />
-      <h3 className='relative z-10 mt-3 text-[24px] group-hover:underline'>
+      <h3 className='relative z-10 mt-3 text-[15px] leading-tight font-extrabold tracking-[-0.01em] group-hover:underline'>
         <Link href={`/members/${member.slug.current}`}>{member.fullName}</Link>
       </h3>
-      <p className='mt-1 text-sm leading-tight font-semibold uppercase'>
-        Member #{String(member.memberNumber).padStart(3, '0')} - since{' '}
+      <p className='mt-1 text-[11px] leading-tight font-semibold tracking-[0.08em] text-black/60 uppercase'>
+        #{String(member.memberNumber).padStart(3, '0')} · Since{' '}
         {new Date(member.startDate).toLocaleDateString('en-US', {
           month: 'short',
           year: 'numeric',
           timeZone: 'UTC',
         })}
       </p>
-      <p className='mt-0.5 text-xs leading-tight font-light'>
+      <p className='mt-1 text-xs leading-tight text-black/70'>
         {member.roles.join(', ').toLowerCase()}
       </p>
       <Link

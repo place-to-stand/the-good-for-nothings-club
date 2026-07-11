@@ -4,6 +4,8 @@ import type * as Behold from '@behold/types'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
+import { Button } from './ui/Button'
+
 export default function InstagramFeed({ feedId }: { feedId: string }) {
   const [feed, setFeed] = useState<Behold.Feed | null>(null)
 
@@ -52,8 +54,8 @@ export default function InstagramFeed({ feedId }: { feedId: string }) {
       <Image
         src={post.sizes.medium.mediaUrl}
         alt={post.prunedCaption}
-        width={post.sizes.medium.width}
-        height={post.sizes.medium.height}
+        width={post.sizes.medium.width ?? 640}
+        height={post.sizes.medium.height ?? 640}
         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
         className='h-full w-full object-cover'
       />
@@ -115,14 +117,15 @@ export default function InstagramFeed({ feedId }: { feedId: string }) {
         </div>
       </div>
       <div className='grid grid-cols-2 gap-2 sm:grid-cols-3'>{postEls}</div>
-      <a
-        href={`https://www.instagram.com/${feed.username}`}
-        className='items-center justify-center border-2 border-black bg-transparent p-3 text-center font-sans text-sm font-medium tracking-[1px] whitespace-nowrap text-black uppercase transition-colors hover:bg-black hover:text-white hover:no-underline'
-        target='_blank'
-        rel='noopener noreferrer'
-      >
-        Follow us on Instagram
-      </a>
+      <Button asChild variant='outline' className='h-auto p-3 hover:no-underline'>
+        <a
+          href={`https://www.instagram.com/${feed.username}`}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          Follow us on Instagram
+        </a>
+      </Button>
     </div>
   )
 }

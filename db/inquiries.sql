@@ -4,7 +4,7 @@
 
 create table if not exists inquiries (
   id bigint generated always as identity primary key,
-  kind text not null check (kind in ('facility', 'service', 'membership', 'event')),
+  kind text not null check (kind in ('facility', 'service', 'membership', 'event', 'general')),
   item text not null,
   offering text,
   name text not null,

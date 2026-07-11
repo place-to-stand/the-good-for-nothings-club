@@ -41,7 +41,11 @@ export default function InquiryDialog({
           </DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        <InquiryForm kind={kind} item={item} submitLabel={submitLabel} />
+        <InquiryForm
+          defaultKind={kind}
+          defaultItem={item}
+          submitLabel={submitLabel}
+        />
       </DialogContent>
     </Dialog>
   )

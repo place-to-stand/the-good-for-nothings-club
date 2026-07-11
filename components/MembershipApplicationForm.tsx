@@ -12,6 +12,7 @@ import { phoneSchema, portfolioSchema } from '../data/schemas'
 import { cn } from '../lib/utils'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
+import { fieldLabelClassName, selectClassName } from './ui/fieldStyles'
 import {
   Form,
   FormControl,
@@ -67,12 +68,6 @@ function offeringConfig(tier: string) {
   }
   return null
 }
-
-const selectClassName =
-  'bg-input/10 hover:border-input/50 focus-visible:border-input flex h-10 w-full cursor-pointer rounded-none border-2 border-transparent px-3 py-2 font-sans text-sm transition-colors focus-visible:outline-hidden'
-
-/** Quieter than input text so the section labels carry the hierarchy. */
-const fieldLabelClassName = 'text-sm font-semibold'
 
 /** Black title bleeding past the form edge, with a hairline running to the far edge. */
 function SectionLabel({

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import ContactUsForm from './ContactUsForm'
+import InquiryForm from '@/components/InquiryForm'
 import Map from '../../components/Map'
 import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
@@ -58,7 +58,7 @@ export default async function Contact() {
           title='Send a message'
           className='self-start border-0 p-0 md:p-0 lg:mt-20'
         >
-          <ContactUsForm />
+          <InquiryForm defaultKind='general' />
         </OfferCard>
       </div>
     </PageShell>

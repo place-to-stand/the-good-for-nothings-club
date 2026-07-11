@@ -3,11 +3,14 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import type { z } from 'zod'
+import { z } from 'zod'
 
-import { inquirySchema, type InquiryKind } from '../data/schemas'
+import { events } from '../data/events'
+import { phoneSchema, type InquiryKind } from '../data/schemas'
+import { services } from '../data/services'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
+import { fieldLabelClassName, selectClassName } from './ui/fieldStyles'
 import {
   Form,
   FormControl,
@@ -19,43 +22,59 @@ import {
 import { Input } from './ui/Input'
 import { Textarea } from './ui/Textarea'
 
-const MESSAGE_LABELS: Record<InquiryKind, string> = {
-  facility: 'When do you want to book, and what are you working on?',
-  service: 'Tell us about the project',
-  membership: 'Tell us about yourself and what you make',
-  event: 'Anything we should know? (optional)',
+const GENERAL = 'general'
+
+/** Encode kind + item into a single select value. */
+const encode = (kind: InquiryKind, item: string) => `${kind}|${item}`
+
+function decode(value: string): { kind: InquiryKind; item: string } {
+  if (value === GENERAL) return { kind: 'general', item: 'General' }
+  const [kind, ...rest] = value.split('|')
+  return { kind: kind as InquiryKind, item: rest.join('|') }
 }
 
-const SUCCESS_COPY: Record<InquiryKind, string> = {
-  facility: "Got it - we'll get back to you to confirm timing and details.",
-  service: "Got it - we'll get back to you to talk through the project.",
-  membership:
-    "Application received. We accept in waves as space opens up - we'll be in touch.",
-  event: "You're on the list - see you there.",
+const MESSAGE_LABELS: Partial<Record<InquiryKind, string>> = {
+  service: 'Tell us about the project',
+  event: 'Anything we should know? (optional)',
+  general: 'Your message',
 }
+
+const SUCCESS_COPY: Partial<Record<InquiryKind, string>> = {
+  service: "Got it. We'll get back to you to talk through the project.",
+  event: "You're on the list. See you there.",
+  general: "Got it. We'll get back to you soon.",
+}
+
+const contactSchema = z.object({
+  regarding: z.string().min(1),
+  name: z.string().min(1).max(256),
+  email: z.string().email(),
+  phone: phoneSchema,
+  message: z.string().max(5000).optional(),
+})
+
+type ContactValues = z.infer<typeof contactSchema>
 
 type InquiryFormProps = {
-  kind: InquiryKind
-  /** What this inquiry is about (facility/service/event/tier name). */
-  item: string
-  /** Render a selector instead of a fixed item, e.g. membership tiers. */
-  itemOptions?: string[]
-  itemLabel?: string
+  /** Where the form launched from; drives the Regarding preselection. */
+  defaultKind?: InquiryKind
+  /** The specific service or event, when launched from its card. */
+  defaultItem?: string
   submitLabel?: string
 }
 
 export default function InquiryForm({
-  kind,
-  item,
-  itemOptions,
-  itemLabel,
-  submitLabel = 'Submit',
+  defaultKind = 'general',
+  defaultItem,
+  submitLabel = 'Send',
 }: InquiryFormProps) {
-  const form = useForm<z.infer<typeof inquirySchema>>({
-    resolver: zodResolver(inquirySchema),
+  const form = useForm<ContactValues>({
+    resolver: zodResolver(contactSchema),
     defaultValues: {
-      kind,
-      item,
+      regarding:
+        defaultKind === 'general' || !defaultItem
+          ? GENERAL
+          : encode(defaultKind, defaultItem),
       name: '',
       email: '',
       phone: '',
@@ -63,11 +82,21 @@ export default function InquiryForm({
     },
   })
 
-  async function onSubmit(values: z.infer<typeof inquirySchema>) {
+  const { kind } = decode(form.watch('regarding'))
+
+  async function onSubmit(values: ContactValues) {
+    const { kind, item } = decode(values.regarding)
     const response = await fetch('/api/inquiry', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values),
+      body: JSON.stringify({
+        kind,
+        item,
+        name: values.name,
+        email: values.email,
+        phone: values.phone || undefined,
+        message: values.message || undefined,
+      }),
     })
 
     if (!response.ok) {
@@ -85,7 +114,9 @@ export default function InquiryForm({
     <Alert>
       <Check className='h-4 w-4' />
       <AlertTitle>Success</AlertTitle>
-      <AlertDescription>{SUCCESS_COPY[kind]}</AlertDescription>
+      <AlertDescription>
+        {SUCCESS_COPY[kind] ?? SUCCESS_COPY.general}
+      </AlertDescription>
     </Alert>
   ) : (
     <Form {...form}>
@@ -97,97 +128,123 @@ export default function InquiryForm({
         }
         className='space-y-4 text-left'
       >
-        {itemOptions && (
+        <FormField
+          name='regarding'
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className={fieldLabelClassName} htmlFor='regarding'>
+                Regarding
+              </FormLabel>
+              <FormControl>
+                <select
+                  id='regarding'
+                  required
+                  {...field}
+                  className={selectClassName}
+                >
+                  <option value={GENERAL}>General</option>
+                  <optgroup label='Services'>
+                    {services.map(service => (
+                      <option
+                        key={service.slug}
+                        value={encode('service', service.name)}
+                      >
+                        {service.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label='Events'>
+                    {events.map(event => (
+                      <option
+                        key={event.slug}
+                        value={encode('event', event.name)}
+                      >
+                        RSVP: {event.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className='grid gap-4 sm:grid-cols-2'>
           <FormField
-            name='item'
+            name='name'
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor='item'>{itemLabel ?? 'Level'}</FormLabel>
+                <FormLabel className={fieldLabelClassName} htmlFor='name'>
+                  Name
+                </FormLabel>
                 <FormControl>
-                  <select
-                    id='item'
+                  <Input
+                    type='text'
+                    id='name'
                     required
+                    maxLength={256}
+                    autoComplete='name'
                     {...field}
-                    className='bg-input/10 hover:border-input/50 focus-visible:border-input flex h-10 w-full cursor-pointer rounded-none border-2 border-transparent px-3 py-2 font-sans text-sm transition-colors focus-visible:outline-hidden'
-                  >
-                    {itemOptions.map(option => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-        )}
-        <FormField
-          name='name'
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor='name'>Name</FormLabel>
-              <FormControl>
-                <Input
-                  type='text'
-                  id='name'
-                  required
-                  maxLength={256}
-                  autoComplete='name'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name='email'
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor='email'>Email Address</FormLabel>
-              <FormControl>
-                <Input
-                  type='email'
-                  id='email'
-                  required
-                  maxLength={256}
-                  autoComplete='email'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name='phone'
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor='phone'>Phone Number (optional)</FormLabel>
-              <FormControl>
-                <Input
-                  type='tel'
-                  id='phone'
-                  maxLength={25}
-                  autoComplete='tel'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            name='phone'
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className={fieldLabelClassName} htmlFor='phone'>
+                  Phone Number (optional)
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type='tel'
+                    id='phone'
+                    maxLength={25}
+                    autoComplete='tel'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name='email'
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className='sm:col-span-2'>
+                <FormLabel className={fieldLabelClassName} htmlFor='email'>
+                  Email Address
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type='email'
+                    id='email'
+                    required
+                    maxLength={256}
+                    autoComplete='email'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           name='message'
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor='message'>{MESSAGE_LABELS[kind]}</FormLabel>
+              <FormLabel className={fieldLabelClassName} htmlFor='message'>
+                {MESSAGE_LABELS[kind] ?? MESSAGE_LABELS.general}
+              </FormLabel>
               <FormControl>
                 <Textarea id='message' maxLength={4096} rows={5} {...field} />
               </FormControl>
@@ -200,7 +257,7 @@ export default function InquiryForm({
             {errors.root.message}
           </p>
         )}
-        <Button type='submit' disabled={isSubmitting}>
+        <Button type='submit' disabled={isSubmitting} className='mt-3 w-full'>
           {isSubmitting && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
           {submitLabel}
         </Button>

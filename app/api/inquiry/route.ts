@@ -10,6 +10,7 @@ const SUBJECT_PREFIX: Record<string, string> = {
   service: 'Service inquiry',
   membership: 'Membership application',
   event: 'Event RSVP',
+  general: 'Contact form',
 }
 
 export async function POST(request: Request) {

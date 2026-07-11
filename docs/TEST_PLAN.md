@@ -14,29 +14,30 @@ hello@thegoodfornothings.club with the right subject line.
 - **Inbox check:** after each submission block, confirm arrival at
   hello@thegoodfornothings.club, correct subject line, and that
   Reply-To is the sender's address.
-- **Database note:** until `SUPABASE_URL` / `SUPABASE_SECRET_KEY` are set
-  in Vercel, every email should end with "NOT saved to database - this
-  email is the only record." That's expected. Once Supabase is
-  provisioned, re-run one submission per form and confirm it flips to
-  "Saved to inquiries table."
+- **Database note:** until `NEXT_PUBLIC_CONVEX_URL` is set in Vercel,
+  every email should end with "NOT saved to database - this email is the
+  only record." That's expected. Once Convex is connected, re-run one
+  submission per form and confirm it flips to "Saved to inquiries table"
+  and the row appears in the Convex dashboard's `inquiries` table.
 
 ## Device matrix
 
 Full pass on the first two; spot-check the rest.
 
-| Pass | Device | Size |
-| --- | --- | --- |
-| Full | Desktop Chrome | 1440 wide |
-| Full | iPhone Safari | ~390 wide |
-| Spot | Desktop Safari + Firefox | 1440 |
-| Spot | Android Chrome | ~412 |
-| Spot | Tablet | 768 (hamburger vs full nav boundary) |
+| Pass | Device                   | Size                                 |
+| ---- | ------------------------ | ------------------------------------ |
+| Full | Desktop Chrome           | 1440 wide                            |
+| Full | iPhone Safari            | ~390 wide                            |
+| Spot | Desktop Safari + Firefox | 1440                                 |
+| Spot | Android Chrome           | ~412                                 |
+| Spot | Tablet                   | 768 (hamburger vs full nav boundary) |
 
 ---
 
 ## 1. Global chrome (check once per device)
 
 Header
+
 - [ ] Logo links home; no selected-state on logo when hamburger is showing
 - [ ] Nav: Facilities, Services, Events, Membership, Shop, About, Contact all navigate; current page shows selected state
 - [ ] Shop opens shop.thegoodfornothings.club in a new tab
@@ -45,6 +46,7 @@ Header
 - [ ] Mobile: hamburger opens/closes, all links present, menu closes after navigating
 
 Footer
+
 - [ ] Logo links home; menu links all work (no Projects entry)
 - [ ] Newsletter: valid email → success state
 - [ ] Newsletter: invalid email (`foo@`) → validation error, no submission
@@ -54,39 +56,47 @@ Footer
 ## 2. Page-by-page
 
 Home `/`
+
 - [ ] Hero renders; page-list section links all navigate; descriptions vertically centered
 - [ ] Instagram feed loads (or fails gracefully if the API is down)
 - [ ] No projects/leadership sections present
 
 Facilities `/facilities`
+
 - [ ] Four facility cards with prices; group labels and dotted leaders legible
 - [ ] Consignment Shop section renders (Online Store card)
 - [ ] Amenities band lists items (includes "Creamer")
 - [ ] All five CTAs open the right application dialog (see §3C)
 
 Services `/services`
+
 - [ ] All 8 service cards render with prices and inquiry buttons
 
 Events `/events`
+
 - [ ] Calendar shows 8 upcoming dates grouped by month, weekday format like `Thu 13 · 4 PM`
 - [ ] Both recurring event cards show schedule and RSVP buttons
 - [ ] "Apply to join as a friend" link goes to /membership
 
 Membership `/membership`
+
 - [ ] Three tier cards in order Member / Associate / Friend; "Includes" bars align across the row (desktop)
 - [ ] How to join: 3 numbered steps, policies box, column divider (desktop)
 - [ ] Embedded application form renders (full permutations in §3D)
 
 About `/about`
+
 - [ ] Founding Members grid renders with photos, member #, since date, roles
 - [ ] Past Members accordion: loads closed, opens smoothly, shows Eric Fenny, hairlines darken on hover
 - [ ] "What happens here" bullets incl. Shop and "Got an idea?" → /contact link
 
 Contact `/contact`
+
 - [ ] Email link, social icons, location + map render
 - [ ] Form renders on the right (desktop) / below (mobile)
 
 Legacy routes
+
 - [ ] /projects and /members still render (linked nowhere, but shouldn't 404)
 - [ ] /sitemap.xml includes main pages, excludes /projects
 
@@ -109,6 +119,7 @@ Success copy: "Got it. We'll get back to you soon."
 - [ ] Other → `Contact form: Other`
 
 Validation (once, on this form)
+
 - [ ] Empty name/email → blocked with errors
 - [ ] Bad email (`foo@bar`) → error
 - [ ] Phone `123` (under 7 digits) → "Enter a valid phone number."
@@ -158,6 +169,7 @@ waves as space opens up - we'll be in touch."
 
 Facilities-page dialog prefills (open each, verify tier + facility are
 preselected, then submit one of them):
+
 - [ ] Permanent desk → Member + Permanent desk
 - [ ] Band practice room → Member + Band practice room
 - [ ] Photo studio → Associate + Photo studio
@@ -165,17 +177,20 @@ preselected, then submit one of them):
 - [ ] Online Store (Consignment) → Associate + Online Store
 
 Embedded form on /membership — tier logic:
+
 - [ ] Member → "Which facility?" lists Not sure yet, Permanent desk, Band practice room (with prices)
 - [ ] Associate → lists Not sure yet, Photo studio, Mixing control room, Online Store
 - [ ] Friend → no facility dropdown at all
 - [ ] Switching tier resets an incompatible facility back to "Not sure yet"
 
 Submit one application per tier:
+
 - [ ] Member (+ a facility) → email shows Offering
 - [ ] Associate + Not sure yet → email shows Offering `-`
 - [ ] Friend → no offering in email
 
 Field behaviors:
+
 - [ ] Social links: add up to 5, X removes, "+ Add another" disappears at 5; blank rows dropped from email
 - [ ] Portfolio `not-a-url` → "Enter a valid URL."; empty is fine
 - [ ] References unanswered → "Select yes or no." blocks submit

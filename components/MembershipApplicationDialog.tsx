@@ -32,19 +32,23 @@ export default function MembershipApplicationDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='w-full'>{triggerLabel}</Button>
+        <Button className=''>{triggerLabel}</Button>
       </DialogTrigger>
-      <DialogContent className='max-h-[90vh] overflow-y-auto border-2 border-black sm:max-w-xl'>
-        <DialogHeader>
-          <DialogTitle className='font-sans font-black uppercase'>
-            {title + ' Application'}
-          </DialogTitle>
-          {description && <DialogDescription>{description}</DialogDescription>}
-        </DialogHeader>
-        <MembershipApplicationForm
-          defaultTier={defaultTier}
-          defaultOffering={defaultOffering}
-        />
+      <DialogContent className='max-h-[90vh] overflow-hidden border-2 border-black p-0 sm:max-w-xl'>
+        <div className='grid max-h-[calc(90vh-4px)] gap-4 overflow-y-auto p-6'>
+          <DialogHeader>
+            <DialogTitle className='font-sans font-black uppercase'>
+              {title + ' Application'}
+            </DialogTitle>
+            {description && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
+          </DialogHeader>
+          <MembershipApplicationForm
+            defaultTier={defaultTier}
+            defaultOffering={defaultOffering}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   )

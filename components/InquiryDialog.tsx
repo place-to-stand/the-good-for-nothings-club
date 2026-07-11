@@ -32,20 +32,24 @@ export default function InquiryDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='w-full'>{triggerLabel}</Button>
+        <Button className=''>{triggerLabel}</Button>
       </DialogTrigger>
-      <DialogContent className='max-h-[90vh] overflow-y-auto border-2 border-black'>
-        <DialogHeader>
-          <DialogTitle className='font-sans font-black uppercase'>
-            {title}
-          </DialogTitle>
-          {description && <DialogDescription>{description}</DialogDescription>}
-        </DialogHeader>
-        <InquiryForm
-          defaultKind={kind}
-          defaultItem={item}
-          submitLabel={submitLabel}
-        />
+      <DialogContent className='max-h-[90vh] overflow-hidden border-2 border-black p-0'>
+        <div className='grid max-h-[calc(90vh-4px)] gap-4 overflow-y-auto p-6'>
+          <DialogHeader>
+            <DialogTitle className='font-sans font-black uppercase'>
+              {title}
+            </DialogTitle>
+            {description && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
+          </DialogHeader>
+          <InquiryForm
+            defaultKind={kind}
+            defaultItem={item}
+            submitLabel={submitLabel}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   )

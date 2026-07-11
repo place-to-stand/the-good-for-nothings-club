@@ -1,6 +1,6 @@
 import { ConvexHttpClient } from 'convex/browser'
-import { anyApi } from 'convex/server'
 
+import { api } from '@/convex/_generated/api'
 import type { Inquiry } from '@/data/schemas'
 
 /**
@@ -23,7 +23,7 @@ export async function saveInquiry(inquiry: Inquiry): Promise<boolean> {
     const convex = new ConvexHttpClient(url)
     // Convex rejects explicit undefined values, so optional fields are
     // spread in only when present.
-    await convex.mutation(anyApi.inquiries.submit, {
+    await convex.mutation(api.inquiries.submit, {
       kind: inquiry.kind,
       item: inquiry.item,
       name: inquiry.name,

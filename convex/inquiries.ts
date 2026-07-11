@@ -1,13 +1,11 @@
-import { mutationGeneric as mutation } from 'convex/server'
 import { v } from 'convex/values'
+
+import { mutation } from './_generated/server'
 
 /**
  * Insert one inquiry. Public by design: called server-side from
  * app/api/inquiry/route.ts, which owns validation (zod) and the
  * notification email. Convex re-checks the shape via these validators.
- *
- * Uses the generic mutation builder instead of ./_generated/server so the
- * repo typechecks before `npx convex dev` has run its first codegen.
  */
 export const submit = mutation({
   args: {

@@ -64,7 +64,7 @@ export default function OfferCard({
         <p className='mt-4 font-sans leading-snug'>{description}</p>
       )}
 
-      {children && <div className='mt-6'>{children}</div>}
+      {children && <div className='mt-8'>{children}</div>}
 
       {footer && <div className='mt-auto pt-8'>{footer}</div>}
     </article>

@@ -54,7 +54,7 @@ export const storefrontCopy = {
 
 export const amenities = [
   'Drip coffee',
-  'Milk',
+  'Creamer',
   'Filtered water',
   'Seltzer',
   'Snacks',

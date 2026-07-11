@@ -56,7 +56,7 @@ export default function Events() {
 
   return (
     <PageShell title='Events' lead={`The club, in session. ${eventsCopy.lead}`}>
-      <div className='grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2'>
+      <div className='grid grid-cols-1 gap-6 md:gap-16 lg:grid-cols-2'>
         <div>
           <SectionHeading title={eventsCopy.calendarTitle} />
           <div className='mt-6'>

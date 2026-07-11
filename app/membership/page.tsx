@@ -63,9 +63,9 @@ export default function Membership() {
       <SectionHeading title={membershipCopy.joiningTitle} />
       <div
         id='apply'
-        className='mt-6 grid scroll-mt-28 grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-0 lg:divide-x lg:divide-black/25'
+        className='mt-6 grid scroll-mt-28 grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-0 lg:divide-x lg:divide-black/10'
       >
-        <div className='lg:pr-10'>
+        <div className='lg:pr-12'>
           <ol className='mt-6 space-y-10'>
             {membershipCopy.joining.map((step, i) => (
               <li key={step.label} className='font-sans'>
@@ -102,7 +102,7 @@ export default function Membership() {
         </div>
         <OfferCard
           title='Application'
-          className='mt-7 border-0 p-0 md:p-0 lg:pl-10'
+          className='mt-7 border-0 p-0 md:p-0 lg:pl-12'
         >
           <MembershipApplicationForm />
         </OfferCard>

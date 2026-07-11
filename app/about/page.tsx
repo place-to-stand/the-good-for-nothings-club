@@ -169,9 +169,12 @@ export default async function About() {
 
           {past.length > 0 && (
             <details className='group details-animated mt-10'>
-              <summary className='block cursor-pointer list-none font-sans text-sm font-bold text-black/80 uppercase transition-colors hover:text-black [&::-webkit-details-marker]:hidden'>
-                <div className='flex items-center gap-3'>
-                  <span aria-hidden className='h-px flex-1 bg-black/25' />
+              <summary className='block cursor-pointer list-none font-sans text-sm font-bold text-black/60 uppercase transition-colors hover:text-black [&::-webkit-details-marker]:hidden'>
+                <div className='group/summary flex items-center gap-3'>
+                  <span
+                    aria-hidden
+                    className='h-px flex-1 bg-black/25 transition-colors group-hover/summary:bg-black'
+                  />
                   <span className='inline-flex items-center gap-1'>
                     {leadershipCopy.pastTitle}
                     <FaCaretDown
@@ -179,7 +182,10 @@ export default async function About() {
                       className='size-4 transition-transform duration-300 group-open:rotate-180'
                     />
                   </span>
-                  <span aria-hidden className='h-px flex-1 bg-black/25' />
+                  <span
+                    aria-hidden
+                    className='h-px flex-1 bg-black/25 transition-colors group-hover/summary:bg-black'
+                  />
                 </div>
               </summary>
               <ul className='mt-8 grid grid-cols-2 gap-6'>

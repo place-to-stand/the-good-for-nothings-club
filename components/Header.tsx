@@ -98,7 +98,7 @@ export default function Header() {
         <div className='flex-1 lg:hidden' />
 
         {/* Membership CTA */}
-        <div className='flex items-center px-3 md:px-4 lg:px-2 xl:px-4'>
+        <div className='flex items-center px-3 md:px-4 xl:px-5'>
           <Button
             asChild
             className='py-4 text-[14px] leading-none hover:no-underline'

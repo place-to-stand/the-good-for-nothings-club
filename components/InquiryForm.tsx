@@ -39,7 +39,7 @@ const GENERAL_SUBJECTS = [
 const encode = (kind: InquiryKind, item: string) => `${kind}|${item}`
 
 function decode(value: string): { kind: InquiryKind; item: string } {
-  if (value === GENERAL) return { kind: 'general', item: 'General' }
+  if (value === GENERAL) return { kind: 'general', item: 'General Inquiry' }
   const [kind, ...rest] = value.split('|')
   return { kind: kind as InquiryKind, item: rest.join('|') }
 }
@@ -178,7 +178,7 @@ export default function InquiryForm({
                 >
                   {defaultKind === 'general' && (
                     <>
-                      <option value={GENERAL}>General</option>
+                      <option value={GENERAL}>General Inquiry</option>
                       {GENERAL_SUBJECTS.map(subject => (
                         <option
                           key={subject}

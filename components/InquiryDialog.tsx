@@ -47,9 +47,7 @@ export default function InquiryDialog({
       : undefined
   const displayDescription = selectedEvent
     ? `${selectedEvent.schedule} at the clubhouse.`
-    : selection.kind === kind && selection.item === item
-      ? description
-      : undefined
+    : description
 
   return (
     <Dialog>

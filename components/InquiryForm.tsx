@@ -84,6 +84,19 @@ export default function InquiryForm({
 
   const { kind } = decode(form.watch('regarding'))
 
+  // Scope the Regarding menu to the launching surface: service dialogs
+  // list services, RSVP dialogs list events, the contact page gets all.
+  const serviceOptions = services.map(service => (
+    <option key={service.slug} value={encode('service', service.name)}>
+      {service.name}
+    </option>
+  ))
+  const eventOptions = events.map(event => (
+    <option key={event.slug} value={encode('event', event.name)}>
+      RSVP: {event.name}
+    </option>
+  ))
+
   async function onSubmit(values: ContactValues) {
     const { kind, item } = decode(values.regarding)
     const response = await fetch('/api/inquiry', {
@@ -143,27 +156,15 @@ export default function InquiryForm({
                   {...field}
                   className={selectClassName}
                 >
-                  <option value={GENERAL}>General</option>
-                  <optgroup label='Services'>
-                    {services.map(service => (
-                      <option
-                        key={service.slug}
-                        value={encode('service', service.name)}
-                      >
-                        {service.name}
-                      </option>
-                    ))}
-                  </optgroup>
-                  <optgroup label='Events'>
-                    {events.map(event => (
-                      <option
-                        key={event.slug}
-                        value={encode('event', event.name)}
-                      >
-                        RSVP: {event.name}
-                      </option>
-                    ))}
-                  </optgroup>
+                  {defaultKind === 'general' && (
+                    <>
+                      <option value={GENERAL}>General</option>
+                      <optgroup label='Services'>{serviceOptions}</optgroup>
+                      <optgroup label='Events'>{eventOptions}</optgroup>
+                    </>
+                  )}
+                  {defaultKind === 'service' && serviceOptions}
+                  {defaultKind === 'event' && eventOptions}
                 </select>
               </FormControl>
               <FormMessage />
@@ -257,7 +258,7 @@ export default function InquiryForm({
             {errors.root.message}
           </p>
         )}
-        <Button type='submit' disabled={isSubmitting} className='mt-3 w-full'>
+        <Button type='submit' disabled={isSubmitting} className='mt-3'>
           {isSubmitting && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
           {submitLabel}
         </Button>

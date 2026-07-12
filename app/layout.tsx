@@ -7,7 +7,6 @@ import '../styles/globals.css'
 import Header from '@/components/Header'
 import Footer from '../components/Footer'
 import Script from 'next/script'
-import PromoPopup from '@/components/PromoPopup'
 
 export async function generateMetadata(): Promise<Metadata> {
   const pathname = '/'
@@ -81,7 +80,6 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
-        {/* <PromoPopup /> */}
         <Analytics />
         <Script src='https://www.googletagmanager.com/gtag/js?id=G-RK8DQY3F32' />
         <Script id='google-analytics'>

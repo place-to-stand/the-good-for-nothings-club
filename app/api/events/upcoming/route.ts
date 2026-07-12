@@ -1,68 +1,40 @@
+import { fetchQuery } from 'convex/nextjs'
 import { NextResponse } from 'next/server'
 
-import { cmsFetch } from '@/data/client'
+import { api } from '@/convex/_generated/api'
 
-export const revalidate = 300
-
-const UPCOMING_EVENT_QUERY = `
-  *[_type == "GFNC_project" && type == "Event" && defined(dateCompleted) && dateCompleted >= $today]
-    | order(dateCompleted asc)[0] {
-      "id": _id,
-      title,
-      clientName,
-      "slug": slug.current,
-  mainLink,
-      "date": dateCompleted,
-      "summary": coalesce(pt::text(summary), ""),
-      "image": select(
-        defined(mainMedia[_type == "image"][0]) => {
-          "url": mainMedia[_type == "image"][0].asset->url,
-          "width": mainMedia[_type == "image"][0].asset->metadata.dimensions.width,
-          "height": mainMedia[_type == "image"][0].asset->metadata.dimensions.height,
-          "lqip": mainMedia[_type == "image"][0].asset->metadata.lqip,
-          "caption": mainMedia[_type == "image"][0].caption
-        }
-      )
-    }
-`
-
-type UpcomingEventFromCMS = {
-  id: string
-  title: string
-  clientName: string
-  slug: string
-  mainLink?: string | null
-  date: string
-  summary: string
-  image?: {
-    url: string
-    width: number
-    height: number
-    lqip: string
-    caption: string
-  }
-} | null
+// Convex fetches opt out of Next's static cache; CDN caching comes from the
+// s-maxage=300 Cache-Control header below.
+export const dynamic = 'force-dynamic'
 
 type UpcomingEventResponse = {
   event:
     | null
-    | (NonNullable<UpcomingEventFromCMS> & {
+    | {
+        id: string
+        title: string
+        clientName: string
+        slug: string
+        mainLink?: string | null
+        date: string
+        summary: string
+        image?: {
+          url: string
+          width: number
+          height: number
+          lqip?: string
+          caption?: string
+        }
         projectUrl: string
         ctaUrl: string
-      })
+      }
 }
 
 export async function GET() {
   try {
     const today = new Date().toISOString().slice(0, 10)
 
-    const event = await cmsFetch<UpcomingEventFromCMS>({
-      query: UPCOMING_EVENT_QUERY,
-      tags: ['GFNC_project'],
-      params: {
-        today,
-      },
-    })
+    const event = await fetchQuery(api.projects.upcomingEvent, { today })
 
     const headers = {
       'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',

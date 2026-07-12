@@ -3,6 +3,18 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from '@sentry/nextjs'
+import { initBotId } from 'botid/client/core'
+
+// Invisible bot protection (Vercel BotID) for the public form endpoints.
+// The client attaches classification headers to these requests; the route
+// handlers verify with checkBotId(). Keep this list in sync with the
+// checkBotId() call sites.
+initBotId({
+  protect: [
+    { path: '/api/inquiry', method: 'POST' },
+    { path: '/api/newsletter-sign-up', method: 'POST' },
+  ],
+})
 
 Sentry.init({
   enabled: process.env.NEXT_PUBLIC_VERCEL_ENV !== 'development',

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { getImageUrl } from '../../../../data/client'
 import { GFNC_project } from '../../../../types'
 import Image from 'next/image'
-import { PortableText } from 'next-sanity'
+import { PortableText } from '@portabletext/react'
 import dynamic from 'next/dynamic'
 import { Suspense, memo } from 'react'
 import MemberAvatarStack from '@/components/MemberAvatarStack'
@@ -70,7 +70,6 @@ export default function EventProject({ project }: EventProjectProps) {
                 alt={mainMedia.caption}
                 className={`w-full`}
                 priority
-                unoptimized
                 placeholder={mainMedia.asset.metadata.lqip}
               />
             )}
@@ -169,7 +168,6 @@ export default function EventProject({ project }: EventProjectProps) {
                           height={value.asset.metadata.dimensions.height}
                           alt={value.caption}
                           className={`w-full`}
-                          unoptimized
                           placeholder={value.asset.metadata.lqip}
                         />
                       )

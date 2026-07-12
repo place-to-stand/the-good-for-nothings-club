@@ -1,5 +1,4 @@
 import type { TypedObject } from '@portabletext/types'
-import type { SanityAssetDocument } from 'next-sanity'
 
 export type Image = {
   _type: 'image'
@@ -77,7 +76,7 @@ export type GFNC_project = {
   mainMedia: Array<Image | VideoFile>
   summary: TypedObject[]
   overview: TypedObject[]
-  photoGallery: SanityAssetDocument[]
+  photoGallery: Image[]
   caseStudy: TypedObject[]
   membersInvolved: GFNC_member[]
 }

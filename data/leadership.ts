@@ -3,8 +3,8 @@
  *
  * "Members" now means people with a monthly rental subscription (see
  * /membership); the people listed on the site are the founding team.
- * Profiles still live in Sanity - these allowlists control who appears.
- * Edit directly to add/remove someone.
+ * Profiles live in Convex (members table) - these allowlists control who
+ * appears. Edit directly to add/remove someone.
  */
 
 export const leadershipSlugs = [

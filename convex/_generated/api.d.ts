@@ -8,7 +8,14 @@
  * @module
  */
 
+import type * as admin from "../admin.js";
+import type * as auth from "../auth.js";
+import type * as http from "../http.js";
 import type * as inquiries from "../inquiries.js";
+import type * as legacy from "../legacy.js";
+import type * as members from "../members.js";
+import type * as migration from "../migration.js";
+import type * as projects from "../projects.js";
 
 import type {
   ApiFromModules,
@@ -17,7 +24,14 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  admin: typeof admin;
+  auth: typeof auth;
+  http: typeof http;
   inquiries: typeof inquiries;
+  legacy: typeof legacy;
+  members: typeof members;
+  migration: typeof migration;
+  projects: typeof projects;
 }>;
 
 /**

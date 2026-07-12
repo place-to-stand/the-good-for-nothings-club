@@ -40,3 +40,8 @@ next-env.d.ts
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# sanity->convex migration artifacts (originals archive lives outside git)
+scripts/migrate-sanity/archive/
+scripts/migrate-sanity/optimized/
+scripts/migrate-sanity/report.json

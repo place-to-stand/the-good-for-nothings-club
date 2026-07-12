@@ -2,7 +2,7 @@ import { GFNC_project } from '@/types'
 import Image from 'next/image'
 import { getImageUrl } from '@/data/client'
 import Link from 'next/link'
-import { PortableText } from 'next-sanity'
+import { PortableText } from '@portabletext/react'
 import getProjectDateString from '@/lib/getProjectDateString'
 import MemberAvatarStack from './MemberAvatarStack'
 import { Badge } from './ui/badge'
@@ -37,7 +37,6 @@ export default function ProjectCard({
         alt={mainMedia.caption}
         className='aspect-video object-cover object-top'
         priority={priority}
-        unoptimized
         placeholder={mainMedia.asset.metadata.lqip}
       />
       <div className='grow-1 relative flex flex-col justify-between gap-5 p-4 transition-colors bg-black/5 group-hover:bg-black/10'>

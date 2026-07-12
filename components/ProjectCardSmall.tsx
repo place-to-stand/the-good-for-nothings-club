@@ -1,7 +1,7 @@
 import { GFNC_project, GFNC_projectListItem } from '@/types'
 import Image from 'next/image'
 import { getImageUrl } from '@/data/client'
-import { PortableText } from 'next-sanity'
+import { PortableText } from '@portabletext/react'
 import getProjectDateString from '@/lib/getProjectDateString'
 import Link from 'next/link'
 import MemberAvatarStack from './MemberAvatarStack'

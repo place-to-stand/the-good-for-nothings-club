@@ -1,11 +1,15 @@
+import { fetchQuery } from 'convex/nextjs'
 import Link from 'next/link'
 import { cn } from '../../lib/utils'
-import { cmsFetch } from '../../data/client'
-import type { GFNC_projectListItem } from '../../types'
+import { api } from '../../convex/_generated/api'
+import type { GFNC_projectListItem, GFNC_projectType } from '../../types'
 import type { Metadata, ResolvingMetadata } from 'next'
 import InProgressSection from './InProgressSection'
 import CompletedSection from './CompletedSection'
 import ProjectCardSmall from '@/components/ProjectCardSmall'
+
+// Regenerate hourly — matches the old cmsFetch revalidate window.
+export const revalidate = 3600
 
 const menuItems = [
   {
@@ -35,68 +39,6 @@ type ProjectsProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-const PROJECTION = `
-  _id,
-  title,
-  clientName,
-  slug,
-  type,
-  status,
-  mainLink,
-  dateStarted,
-  dateCompleted,
-  "mainImage": mainMedia[_type == 'image'][0] {
-    ...,
-    asset-> {
-      extension,
-      url,
-      metadata {
-        lqip,
-        dimensions {
-          height,
-          width
-        }
-      }
-    }
-  },
-  "membersCount": count(membersInvolved),
-  membersInvolved[]-> {
-    _id,
-    fullName,
-    slug,
-    profilePicture {
-      asset-> {
-        url,
-        metadata {
-          lqip,
-          dimensions {
-            height,
-            width
-          }
-        }
-      },
-      hotspot {
-        x,
-        y,
-      }
-    }
-  },
-  summary
-`
-
-// Single query to get all projects
-const ALL_PROJECTS_QUERY = `
-  *[_type == 'GFNC_project'] | order(dateStarted desc) | order(dateCompleted desc) {
-    ${PROJECTION}
-  }
-`
-
-const FILTERED_PROJECTS_QUERY = `
-  *[_type == 'GFNC_project' && type == $type] | order(dateStarted desc) | order(dateCompleted desc) {
-    ${PROJECTION}
-  }
-`
-
 export async function generateMetadata(
   _props: unknown,
   parent: ResolvingMetadata
@@ -125,13 +67,10 @@ export default async function ProjectsOptimized(props: ProjectsProps) {
   const type = isDefaultType ? menuItems[0].name : searchParams.type
 
   // Single API call to get all projects
-  const allProjects = await cmsFetch<
-    (GFNC_projectListItem & { status: string })[]
-  >({
-    query: isDefaultType ? ALL_PROJECTS_QUERY : FILTERED_PROJECTS_QUERY,
-    tags: ['GFNC_project'],
-    params: isDefaultType ? {} : { type },
-  })
+  const allProjects = (await fetchQuery(
+    api.projects.list,
+    isDefaultType ? {} : { type: type as GFNC_projectType }
+  )) as unknown as (GFNC_projectListItem & { status: string })[]
 
   // Filter projects by status on the client side
   const inProgressProjectsData = allProjects.filter(

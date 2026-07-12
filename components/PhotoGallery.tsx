@@ -17,12 +17,12 @@ import Lightbox, {
 } from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import Counter from 'yet-another-react-lightbox/plugins/counter'
-import { SanityAssetDocument } from 'next-sanity'
 import { getImageUrl } from '../data/client'
+import type { Image as CMSImage } from '../types'
 import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props'
 
 type PhotoGalleryProps = {
-  photos: SanityAssetDocument[]
+  photos: CMSImage[]
 }
 
 type GalleryPhotoProps = Photo & {
@@ -58,7 +58,6 @@ const LightboxSlide = ({
           objectFit: 'contain',
         }}
         placeholder={photos[currentIndex].asset.metadata.lqip}
-        unoptimized
         // sizes={`${Math.ceil((width / window.innerWidth) * 100)}vw`}
       />
     </div>
@@ -79,7 +78,6 @@ const GalleryPhoto = (
         className={`w-full cursor-pointer transition-all duration-1000 hover:scale-105`}
         onClick={onClick}
         placeholder={photo.placeholder}
-        unoptimized
         // sizes='(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw'
       />
     </div>

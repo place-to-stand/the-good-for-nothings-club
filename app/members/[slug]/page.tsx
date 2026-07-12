@@ -1,122 +1,22 @@
 import Link from 'next/link'
-import { cmsFetch, getImageUrl } from '../../../data/client'
+import { getImageUrl } from '../../../data/client'
 import { GFNC_member, GFNC_project } from '../../../types'
+import { fetchQuery } from 'convex/nextjs'
+import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
 import Image from 'next/image'
 import { Metadata, ResolvingMetadata } from 'next'
 import ProjectCardSmall from '@/components/ProjectCardSmall'
 import { FaCaretLeft } from 'react-icons/fa6'
+
+// Regenerate hourly — matches the old cmsFetch revalidate window.
+export const revalidate = 3600
 
 type MemberProps = {
   params: Promise<{
     slug: string
   }>
 }
-
-const MEMBER_SLUG_QUERY = `
-  *[_type == 'GFNC_member' && slug.current == $slug] {
-    _id,
-    fullName,
-    slug,
-    profilePicture {
-      asset-> {
-        url,
-        metadata {
-          lqip,
-          dimensions {
-            height,
-            width
-          }
-        }
-      },
-      hotspot {
-        x,
-        y,
-      },
-      caption
-    },
-    hoverProfilePicture {
-      asset-> {
-        url,
-        metadata {
-          lqip,
-          dimensions {
-            height,
-            width
-          }
-        }
-      },
-      caption
-    },
-    roles,
-    startDate,
-    memberNumber
-  }
-`
-
-const MEMBER_PROJECTS_QUERY = `
-  *[_type == 'GFNC_project' && references($memberId)] | order(dateCompleted desc, dateStarted desc) {
-    _id,
-    title,
-    clientName,
-    slug,
-    type,
-    dateStarted,
-    dateCompleted,
-    mainMedia[] {
-      ...,
-      _type == 'image' => {
-        ...,
-        asset-> {
-          extension,
-          url,
-          metadata {
-            lqip,
-            dimensions {
-              height,
-              width
-            }
-          }
-        }
-      },
-      _type == 'videoFile' => {
-        ...,
-        asset-> {
-          url,
-          metadata {
-            lqip,
-            dimensions {
-              height,
-              width
-            }
-          }
-        }
-      },
-    },
-    membersInvolved[]-> {
-      _id,
-      fullName,
-      slug,
-      profilePicture {
-        asset-> {
-          url,
-          metadata {
-            lqip,
-            dimensions {
-              height,
-              width
-            }
-          }
-        },
-        hotspot {
-          x,
-          y,
-        },
-        caption
-      }
-    },
-    summary
-  }
-`
 
 export async function generateMetadata(
   props: MemberProps,
@@ -128,13 +28,9 @@ export async function generateMetadata(
   const { openGraph } = await parent
   const pathname = '/members/' + slug
 
-  const memberData = await cmsFetch<GFNC_member[]>({
-    query: MEMBER_SLUG_QUERY,
-    tags: ['GFNC_member'],
-    params: { slug },
-  })
-
-  const member = memberData[0]
+  const member = (await fetchQuery(api.members.bySlug, {
+    slug,
+  })) as unknown as GFNC_member
 
   return {
     title: `${member.fullName} – Good For Nothings Club`,
@@ -155,24 +51,18 @@ export default async function Member(props: MemberProps) {
   const { slug } = params
 
   // First get the member data
-  const memberData = await cmsFetch<GFNC_member[]>({
-    query: MEMBER_SLUG_QUERY,
-    tags: ['GFNC_member'],
-    params: { slug },
-  })
-
-  const member = memberData[0]
+  const member = (await fetchQuery(api.members.bySlug, {
+    slug,
+  })) as unknown as GFNC_member
 
   if (!member) {
     return <div>Member not found</div>
   }
 
   // Then get the projects data using the member ID
-  const projectsData = await cmsFetch<GFNC_project[]>({
-    query: MEMBER_PROJECTS_QUERY,
-    tags: ['GFNC_project'],
-    params: { memberId: member._id },
-  })
+  const projectsData = (await fetchQuery(api.projects.byMemberId, {
+    memberId: member._id as Id<'members'>,
+  })) as unknown as GFNC_project[]
 
   const objectPosition = `${(member.profilePicture.hotspot?.x || 1) * 100}% ${(member.profilePicture.hotspot?.y || 1) * 100}%`
 
@@ -204,7 +94,6 @@ export default async function Member(props: MemberProps) {
                   className='w-full border-2 border-black object-cover'
                   style={{ objectPosition }}
                   priority
-                  unoptimized
                   placeholder='blur'
                   blurDataURL={member.profilePicture.asset.metadata.lqip}
                 />

@@ -45,7 +45,6 @@ export default function MemberProfilePicture({
           objectPosition,
         }}
         priority={true}
-        unoptimized
         placeholder={profilePicture.asset.metadata.lqip}
       />
       <Image
@@ -59,7 +58,6 @@ export default function MemberProfilePicture({
         }}
         priority={true}
         placeholder={hoverProfilePicture.asset.metadata.lqip}
-        unoptimized
       />
       <h3 className='relative z-10 mt-3 text-[15px] leading-tight font-extrabold tracking-[-0.01em] group-hover:underline'>
         <Link href={`/members/${member.slug.current}`}>{member.fullName}</Link>

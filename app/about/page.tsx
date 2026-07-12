@@ -5,7 +5,8 @@ import { FaCaretDown } from 'react-icons/fa'
 import MemberProfilePicture from '@/components/MemberProfilePicture'
 import PageShell from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
-import { cmsFetch } from '@/data/client'
+import { fetchQuery } from 'convex/nextjs'
+import { api } from '@/convex/_generated/api'
 import {
   leadershipCopy,
   leadershipSlugs,
@@ -13,46 +14,8 @@ import {
 } from '@/data/leadership'
 import { GFNC_member } from '@/types'
 
-const MEMBERS_BY_SLUGS_QUERY = `
-  *[_type == 'GFNC_member' && slug.current in $slugs] | order(memberNumber) {
-    _id,
-    fullName,
-    slug,
-    profilePicture {
-      asset-> {
-        url,
-        metadata {
-          lqip,
-          dimensions {
-            height,
-            width
-          }
-        }
-      },
-      hotspot {
-        x,
-        y,
-      },
-      caption
-    },
-    hoverProfilePicture {
-      asset-> {
-        url,
-        metadata {
-          lqip,
-          dimensions {
-            height,
-            width
-          }
-        }
-      },
-      caption
-    },
-    roles,
-    startDate,
-    memberNumber
-  }
-`
+// Regenerate hourly — matches the old cmsFetch revalidate window.
+export const revalidate = 3600
 
 export async function generateMetadata(
   _props: unknown,
@@ -74,11 +37,9 @@ export async function generateMetadata(
 }
 
 export default async function About() {
-  const membersData = await cmsFetch<GFNC_member[]>({
-    query: MEMBERS_BY_SLUGS_QUERY,
-    tags: ['GFNC_member'],
-    params: { slugs: [...leadershipSlugs, ...pastMemberSlugs] },
-  })
+  const membersData = (await fetchQuery(api.members.bySlugs, {
+    slugs: [...leadershipSlugs, ...pastMemberSlugs],
+  })) as unknown as GFNC_member[]
 
   const founding = membersData.filter(member =>
     leadershipSlugs.includes(member.slug.current)

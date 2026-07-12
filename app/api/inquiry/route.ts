@@ -1,3 +1,4 @@
+import { checkBotId } from 'botid/server'
 import { Resend } from 'resend'
 
 import { inquirySchema } from '@/data/schemas'
@@ -14,6 +15,11 @@ const SUBJECT_PREFIX: Record<string, string> = {
 }
 
 export async function POST(request: Request) {
+  const verification = await checkBotId()
+  if (verification.isBot) {
+    return Response.json({ error: 'Access denied' }, { status: 403 })
+  }
+
   const body = await request.json()
 
   const parsed = inquirySchema.safeParse(body)

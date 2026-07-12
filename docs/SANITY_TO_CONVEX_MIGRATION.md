@@ -138,3 +138,28 @@ local-typed-data direction.
 - 2026-07-11 — GFNC-only scope (other properties deferred).
 - 2026-07-11 — Optimization pass baked into Phase 2; originals archived locally.
 - Default: skip 50 orphaned assets; migrate published docs only (no drafts token).
+
+## Admin accounts (post-migration reference)
+
+Account creation has no UI. To add an admin:
+
+1. Add their email to `ADMIN_ALLOWED_EMAILS` on the Convex deployment
+   (comma-separated): `npx convex env set [--prod] ADMIN_ALLOWED_EMAILS a@x,b@y`
+2. Seed the account with a throwaway password (discard it):
+
+   ```bash
+   node --input-type=module -e "
+   import { ConvexHttpClient } from 'convex/browser'
+   import { randomBytes } from 'node:crypto'
+   const c = new ConvexHttpClient('<deployment url>')
+   await c.action('auth:signIn', { provider: 'password', params: {
+     email: '<email>', password: randomBytes(24).toString('base64url'), flow: 'signUp' } })
+   console.log('seeded')"
+   ```
+
+3. They set their real password via "Forgot password" on /admin/login
+   (8-digit code emailed via Resend — RESEND_API_KEY must be set on the
+   Convex deployment).
+
+To remove an admin: delete their rows in `users` + `authAccounts` +
+`authSessions` in the Convex dashboard and drop them from the allowlist.

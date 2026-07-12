@@ -64,6 +64,28 @@ function isoDay(date: Date) {
   return date.toISOString().slice(0, 10)
 }
 
+/** "Thu, Aug 13" for a YYYY-MM-DD occurrence date. */
+export function formatOccurrenceDate(iso: string) {
+  return new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  })
+}
+
+/** "Thu, Aug 13, 2026 · 4 PM" — the full RSVP subject for one occurrence. */
+export function formatOccurrenceLong(iso: string, time: string) {
+  const date = new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+  return `${date} · ${time}`
+}
+
 function matchesRule(date: Date, rule: EventRule) {
   if (date.getUTCDay() !== rule.weekday) return false
   if (rule.freq === 'weekly') return true

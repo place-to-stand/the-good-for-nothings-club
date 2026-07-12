@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 
-import { events } from '../data/events'
+import { events, formatOccurrenceLong } from '../data/events'
 import type { InquiryKind } from '../data/schemas'
-import InquiryForm from './InquiryForm'
-import { Button } from './ui/Button'
+import InquiryForm, { type InquirySelection } from './InquiryForm'
+import { Button, type ButtonProps } from './ui/Button'
 import {
   Dialog,
   DialogContent,
@@ -18,7 +18,12 @@ import {
 type InquiryDialogProps = {
   kind: InquiryKind
   item: string
+  /** For event RSVPs: preselect this occurrence (YYYY-MM-DD). */
+  occurrenceDate?: string
   triggerLabel: string
+  triggerVariant?: ButtonProps['variant']
+  triggerSize?: ButtonProps['size']
+  triggerClassName?: string
   title: string
   description?: string
   submitLabel?: string
@@ -27,12 +32,20 @@ type InquiryDialogProps = {
 export default function InquiryDialog({
   kind,
   item,
+  occurrenceDate,
   triggerLabel,
+  triggerVariant,
+  triggerSize,
+  triggerClassName,
   title,
   description,
   submitLabel,
 }: InquiryDialogProps) {
-  const [selection, setSelection] = useState({ kind, item })
+  const [selection, setSelection] = useState<InquirySelection>({
+    kind,
+    item,
+    occurrenceDate,
+  })
 
   // Keep the header in sync when the Regarding dropdown changes.
   const displayTitle =
@@ -45,14 +58,23 @@ export default function InquiryDialog({
     selection.kind === 'event'
       ? events.find(event => event.name === selection.item)
       : undefined
-  const displayDescription = selectedEvent
-    ? `${selectedEvent.schedule} at the clubhouse.`
-    : description
+  const displayDescription =
+    selectedEvent && selection.occurrenceDate
+      ? `${formatOccurrenceLong(selection.occurrenceDate, selectedEvent.time)} at the clubhouse.`
+      : selectedEvent
+        ? `${selectedEvent.schedule} at the clubhouse.`
+        : description
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className=''>{triggerLabel}</Button>
+        <Button
+          variant={triggerVariant}
+          size={triggerSize}
+          className={triggerClassName}
+        >
+          {triggerLabel}
+        </Button>
       </DialogTrigger>
       <DialogContent className='max-h-[90vh] overflow-hidden border-2 border-black p-0'>
         <div className='grid max-h-[calc(90vh-4px)] gap-4 overflow-y-auto p-6'>
@@ -67,6 +89,7 @@ export default function InquiryDialog({
           <InquiryForm
             defaultKind={kind}
             defaultItem={item}
+            defaultOccurrenceDate={occurrenceDate}
             submitLabel={submitLabel}
             onSelectionChange={setSelection}
           />

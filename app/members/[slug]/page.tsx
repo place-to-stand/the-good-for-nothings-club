@@ -94,7 +94,6 @@ export default async function Member(props: MemberProps) {
                   className='w-full border-2 border-black object-cover'
                   style={{ objectPosition }}
                   priority
-                  unoptimized
                   placeholder='blur'
                   blurDataURL={member.profilePicture.asset.metadata.lqip}
                 />

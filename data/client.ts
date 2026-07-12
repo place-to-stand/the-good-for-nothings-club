@@ -1,15 +1,13 @@
 /**
- * Image URL builder for CMS images (stored in Convex file storage).
+ * Image URL access for CMS images (stored in Convex file storage).
  *
  * Keeps the chainable `getImageUrl(img).width(n).quality(q).url()` contract
- * the components were written against when images lived on Sanity's CDN.
- * Resizing now goes through Next's image optimizer (/_next/image), which
- * caches transformed variants on the Vercel CDN. Every width/quality used in
- * code must be allowlisted in next.config.mjs (images.deviceSizes /
- * images.qualities) or the optimizer rejects the request.
- *
- * Calling url() without width() returns the stored file untouched — used for
- * GIFs (the optimizer would flatten animation) and full-size media.
+ * from the Sanity days, but resizing is now handled by next/image itself
+ * (the components render <Image> with the raw storage URL and Next's
+ * optimizer produces sized variants, cached on the Vercel CDN). width() and
+ * quality() are accepted for API compatibility and ignored — url() always
+ * returns the stored file's URL. The optimizer automatically passes
+ * animated GIFs through untouched.
  */
 
 type ImageSource = {
@@ -20,33 +18,21 @@ type ImageSource = {
 
 class ImageUrlBuilder {
   private source: ImageSource
-  private targetWidth?: number
-  private targetQuality?: number
 
   constructor(source: ImageSource) {
     this.source = source
   }
 
-  width(width: number) {
-    this.targetWidth = width
+  width(_width: number) {
     return this
   }
 
-  quality(quality: number) {
-    this.targetQuality = quality
+  quality(_quality: number) {
     return this
   }
 
   url() {
-    if (!this.targetWidth) {
-      return this.source.asset.url
-    }
-    const params = new URLSearchParams({
-      url: this.source.asset.url,
-      w: String(this.targetWidth),
-      q: String(this.targetQuality ?? 75),
-    })
-    return `/_next/image?${params.toString()}`
+    return this.source.asset.url
   }
 }
 

@@ -3,13 +3,6 @@ import { withSentryConfig } from '@sentry/nextjs'
 
 const nextConfig = {
   images: {
-    // Every width used via getImageUrl(...).width(n) must appear here, and
-    // every quality(q) in images.qualities — Next rejects others.
-    deviceSizes: [
-      400, 640, 750, 800, 828, 1080, 1200, 1400, 1600, 1920, 2000, 2048, 2400,
-      3840,
-    ],
-    qualities: [75, 90],
     remotePatterns: [
       {
         protocol: 'https',

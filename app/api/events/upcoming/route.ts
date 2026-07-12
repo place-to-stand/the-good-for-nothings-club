@@ -3,7 +3,9 @@ import { NextResponse } from 'next/server'
 
 import { api } from '@/convex/_generated/api'
 
-export const revalidate = 300
+// Convex fetches opt out of Next's static cache; CDN caching comes from the
+// s-maxage=300 Cache-Control header below.
+export const dynamic = 'force-dynamic'
 
 type UpcomingEventResponse = {
   event:

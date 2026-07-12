@@ -59,7 +59,6 @@ export default function AudioProject({ project }: AudioProjectProps) {
                 alt={mainMedia.caption}
                 className={`w-full`}
                 priority
-                unoptimized
                 placeholder={mainMedia.asset.metadata.lqip}
               />
             )}
@@ -154,7 +153,6 @@ export default function AudioProject({ project }: AudioProjectProps) {
                           height={value.asset.metadata.dimensions.height}
                           alt={value.caption}
                           className={`w-full`}
-                          unoptimized
                           placeholder={value.asset.metadata.lqip}
                         />
                       )

@@ -109,7 +109,7 @@ export default defineSchema({
    * storage; untouched originals live in the offline migration archive).
    */
   media: defineTable({
-    /** Sanity asset _id (e.g. image-<hash>-<dims>-<ext>) — idempotency key. */
+    /** Sanity asset _id (e.g. image-<hash>-<dims>-<ext>) — provenance. */
     sanityAssetId: v.string(),
     storageId: v.id('_storage'),
     /** Serving URL from ctx.storage.getUrl, denormalized into documents. */
@@ -126,7 +126,7 @@ export default defineSchema({
     width: v.optional(v.number()),
     height: v.optional(v.number()),
     lqip: v.optional(v.string()),
-  }).index('by_sanity_asset_id', ['sanityAssetId']),
+  }),
 
   /** GFNC_project from Sanity — see schemaTypes/GFNC/project.ts in general-data. */
   projects: defineTable({
@@ -152,8 +152,7 @@ export default defineSchema({
     caseStudy: v.optional(portableTextValidator),
   })
     .index('by_slug', ['slug'])
-    .index('by_type', ['type'])
-    .index('by_sanity_id', ['sanityId']),
+    .index('by_type', ['type']),
 
   /** GFNC_member from Sanity — see schemaTypes/GFNC/member.ts in general-data. */
   members: defineTable({
@@ -170,6 +169,5 @@ export default defineSchema({
     memberNumber: v.number(),
   })
     .index('by_slug', ['slug'])
-    .index('by_sanity_id', ['sanityId'])
     .index('by_member_number', ['memberNumber']),
 })

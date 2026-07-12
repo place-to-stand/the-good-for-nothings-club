@@ -6,7 +6,12 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { events } from '../data/events'
+import {
+  events,
+  formatOccurrenceDate,
+  formatOccurrenceLong,
+  upcomingOccurrences,
+} from '../data/events'
 import { phoneSchema, type InquiryKind } from '../data/schemas'
 import { services } from '../data/services'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
@@ -35,12 +40,27 @@ const GENERAL_SUBJECTS = [
   'Other',
 ]
 
-/** Encode kind + item into a single select value. */
-const encode = (kind: InquiryKind, item: string) => `${kind}|${item}`
+/**
+ * Encode kind + item into a single select value. Event RSVPs carry a third
+ * segment — the occurrence date (YYYY-MM-DD) — so every RSVP names one
+ * specific date.
+ */
+const encode = (kind: InquiryKind, item: string, occurrenceDate?: string) =>
+  occurrenceDate ? `${kind}|${item}|${occurrenceDate}` : `${kind}|${item}`
 
-function decode(value: string): { kind: InquiryKind; item: string } {
+export type InquirySelection = {
+  kind: InquiryKind
+  item: string
+  /** YYYY-MM-DD; present for event RSVPs. */
+  occurrenceDate?: string
+}
+
+function decode(value: string): InquirySelection {
   if (value === GENERAL) return { kind: 'general', item: 'General Inquiry' }
   const [kind, ...rest] = value.split('|')
+  if (kind === 'event' && rest.length === 2) {
+    return { kind, item: rest[0], occurrenceDate: rest[1] }
+  }
   return { kind: kind as InquiryKind, item: rest.join('|') }
 }
 
@@ -71,24 +91,43 @@ type InquiryFormProps = {
   defaultKind?: InquiryKind
   /** The specific service or event, when launched from its card. */
   defaultItem?: string
+  /** For event RSVPs: the occurrence date (YYYY-MM-DD) being RSVP'd to. */
+  defaultOccurrenceDate?: string
   submitLabel?: string
   /** Fires when the Regarding selection changes, e.g. to retitle a dialog. */
-  onSelectionChange?: (selection: { kind: InquiryKind; item: string }) => void
+  onSelectionChange?: (selection: InquirySelection) => void
 }
 
 export default function InquiryForm({
   defaultKind = 'general',
   defaultItem,
+  defaultOccurrenceDate,
   submitLabel = 'Send',
   onSelectionChange,
 }: InquiryFormProps) {
+  // Every RSVP targets one concrete date. The Regarding menu lists the next
+  // occurrences of all events, so people can also RSVP further out.
+  const occurrences =
+    defaultKind === 'event' ? upcomingOccurrences(new Date(), 8) : []
+
+  const defaultRegarding = () => {
+    if (defaultKind === 'general' || !defaultItem) return GENERAL
+    if (defaultKind === 'event') {
+      const occurrence =
+        occurrences.find(
+          o => o.event.name === defaultItem && o.date === defaultOccurrenceDate
+        ) ?? occurrences.find(o => o.event.name === defaultItem)
+      if (occurrence) {
+        return encode('event', occurrence.event.name, occurrence.date)
+      }
+    }
+    return encode(defaultKind, defaultItem)
+  }
+
   const form = useForm<ContactValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      regarding:
-        defaultKind === 'general' || !defaultItem
-          ? GENERAL
-          : encode(defaultKind, defaultItem),
+      regarding: defaultRegarding(),
       name: '',
       email: '',
       phone: '',
@@ -111,20 +150,32 @@ export default function InquiryForm({
       {service.name}
     </option>
   ))
-  const eventOptions = events.map(event => (
-    <option key={event.slug} value={encode('event', event.name)}>
-      RSVP: {event.name}
+  const eventOptions = occurrences.map(occurrence => (
+    <option
+      key={`${occurrence.event.slug}-${occurrence.date}`}
+      value={encode('event', occurrence.event.name, occurrence.date)}
+    >
+      {occurrence.event.name} — {formatOccurrenceDate(occurrence.date)} ·{' '}
+      {occurrence.event.time}
     </option>
   ))
 
   async function onSubmit(values: ContactValues) {
-    const { kind, item } = decode(values.regarding)
+    const { kind, item, occurrenceDate } = decode(values.regarding)
+    const event = occurrenceDate
+      ? events.find(e => e.name === item)
+      : undefined
     const response = await fetch('/api/inquiry', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         kind,
         item,
+        // The specific date being RSVP'd to, e.g. "Thu, Aug 13, 2026 · 4 PM".
+        offering:
+          occurrenceDate && event
+            ? formatOccurrenceLong(occurrenceDate, event.time)
+            : undefined,
         name: values.name,
         email: values.email,
         phone: values.phone || undefined,

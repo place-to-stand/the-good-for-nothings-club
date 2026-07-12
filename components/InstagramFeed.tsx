@@ -70,6 +70,9 @@ export default function InstagramFeed({ feedId }: { feedId: string }) {
           muted={true}
           autoPlay={true}
           loop={true}
+          // Without playsInline, iOS Safari throws autoplaying videos into
+          // the native fullscreen player.
+          playsInline={true}
           className='h-full w-full object-cover'
         />
       )

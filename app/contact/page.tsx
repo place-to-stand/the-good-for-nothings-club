@@ -17,6 +17,8 @@ export async function generateMetadata(
 
   return {
     title: 'Contact',
+    description:
+      'Say hello, ask a question, or start something - email hello@thegoodfornothings.club, find the club on socials, or send a message and come by the clubhouse in Austin, TX.',
     alternates: {
       canonical: pathname,
     },

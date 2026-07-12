@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
       default: 'Creators club from ATX | The Good for Nothings Club',
     },
     description:
-      'The Good for Nothings Club is a creators club in Austin, TX made up of musicians, photographers, writers, filmmakers, and engineers. Our clubhouse puts studios, rehearsal rooms, and workspace under one roof. Good for nothings. Making everything.',
+      'The Good for Nothings Club is a creators club based in Austin, TX made up of musicians, photographers, writers, filmmakers, and engineers. Our clubhouse puts studios, rehearsal rooms, and workspace under one roof. Good for nothings. Making everything.',
     referrer: 'origin-when-cross-origin',
     keywords: [
       'creator',

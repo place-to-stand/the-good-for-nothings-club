@@ -21,7 +21,7 @@ export async function generateMetadata(
   return {
     title: 'Events',
     description:
-      'The club, in session - regular happenings at the clubhouse in Austin, TX. Members and friends of members welcome.',
+      'The club, in session - regular happenings at the clubhouse in Austin, TX, including Works in Progress and the Off Genre Jam. Members, associates, and friends of the club welcome.',
     alternates: {
       canonical: pathname,
     },

@@ -33,8 +33,9 @@ export async function generateMetadata(
   })) as unknown as GFNC_member
 
   return {
-    title: `${member.fullName} – Good For Nothings Club`,
-    description: `${member.fullName} is a member of The Good For Nothings Club. ${member.roles.join(', ')}.`,
+    // The layout title template appends "| The Good for Nothings Club".
+    title: member.fullName,
+    description: `${member.fullName} is a member of The Good for Nothings Club. ${member.roles.join(', ')}.`,
     alternates: {
       canonical: pathname,
     },

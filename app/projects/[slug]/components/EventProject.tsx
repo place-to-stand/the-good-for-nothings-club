@@ -4,7 +4,7 @@ import { GFNC_project } from '../../../../types'
 import Image from 'next/image'
 import { PortableText } from '@portabletext/react'
 import dynamic from 'next/dynamic'
-import { Suspense, memo } from 'react'
+import { Suspense } from 'react'
 import MemberAvatarStack from '@/components/MemberAvatarStack'
 import { Badge } from '@/components/ui/badge'
 import { getProjectStatusColor } from '@/lib/utils'
@@ -194,7 +194,7 @@ export default function EventProject({ project }: EventProjectProps) {
                         </div>
                       )
                     },
-                    embedCode: memo(function CaseStudyEmbedCode({ value }) {
+                    embedCode: function CaseStudyEmbedCode({ value }) {
                       return (
                         <Suspense>
                           <div
@@ -205,7 +205,7 @@ export default function EventProject({ project }: EventProjectProps) {
                           />
                         </Suspense>
                       )
-                    }),
+                    },
                   },
                 }}
               />

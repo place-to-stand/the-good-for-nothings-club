@@ -66,54 +66,6 @@ export const byMemberId = query({
   },
 })
 
-/** Homepage upcoming-event banner — UPCOMING_EVENT_QUERY. */
-export const upcomingEvent = query({
-  args: { today: v.string() },
-  handler: async (ctx, args) => {
-    const events = (
-      await ctx.db
-        .query('projects')
-        .withIndex('by_type', q => q.eq('type', 'Event'))
-        .collect()
-    )
-      .filter(project => project.dateCompleted && project.dateCompleted >= args.today)
-      .sort((a, b) => a.dateCompleted!.localeCompare(b.dateCompleted!))
-    const event = events[0]
-    if (!event) return null
-
-    const imageItem = event.mainMedia.find(item => item.kind === 'image')
-    const summaryText = event.summary
-      .filter(block => block._type === 'block')
-      .map(block =>
-        (block.children ?? [])
-          .map((child: { text?: string }) => child.text ?? '')
-          .join('')
-      )
-      .join('\n\n')
-
-    return {
-      id: event._id,
-      title: event.title,
-      clientName: event.clientName,
-      slug: event.slug,
-      mainLink: event.mainLink ?? null,
-      date: event.dateCompleted!,
-      summary: summaryText,
-      ...(imageItem && imageItem.kind === 'image'
-        ? {
-            image: {
-              url: imageItem.image.url,
-              width: imageItem.image.width,
-              height: imageItem.image.height,
-              lqip: imageItem.image.lqip,
-              caption: imageItem.image.caption,
-            },
-          }
-        : {}),
-    }
-  },
-})
-
 /** Sitemap. */
 export const forSitemap = query({
   args: {},

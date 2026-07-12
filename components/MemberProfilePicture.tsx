@@ -64,7 +64,7 @@ export default function MemberProfilePicture({
       <h3 className='relative z-10 mt-3 text-[15px] leading-tight font-extrabold tracking-[-0.01em] group-hover:underline'>
         <Link href={`/members/${member.slug.current}`}>{member.fullName}</Link>
       </h3>
-      <p className='mt-1 text-[11px] leading-tight font-semibold tracking-[0.08em] text-black/60 uppercase'>
+      <p className='mt-1 text-[11px] leading-tight font-semibold text-black/60 uppercase'>
         #{String(member.memberNumber).padStart(3, '0')} · Since{' '}
         {new Date(member.startDate).toLocaleDateString('en-US', {
           month: 'short',

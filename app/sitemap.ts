@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
-import { cmsFetch } from '../data/client'
+import { fetchQuery } from 'convex/nextjs'
+import { api } from '../convex/_generated/api'
 import { leadershipSlugs, pastMemberSlugs } from '../data/leadership'
-import { GFNC_project, GFNC_member } from '../types'
 
 const defaultPage: MetadataRoute.Sitemap[0] = {
   url: 'https://www.thegoodfornothings.club',
@@ -52,30 +52,11 @@ const contactPage: MetadataRoute.Sitemap[0] = {
   priority: 0.9,
 }
 
-const ALL_PROJECTS_QUERY = `
-  *[_type == 'GFNC_project'] | order(dateCompleted desc) {
-    _updatedAt,
-    slug
-  }
-`
-
-const LISTED_MEMBERS_QUERY = `
-  *[_type == 'GFNC_member' && slug.current in $slugs] | order(startDate) {
-    _updatedAt,
-    slug
-  }
-`
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [projectsData, membersData] = await Promise.all([
-    cmsFetch<GFNC_project[]>({
-      query: ALL_PROJECTS_QUERY,
-      tags: ['GFNC_project'],
-    }),
-    cmsFetch<GFNC_member[]>({
-      query: LISTED_MEMBERS_QUERY,
-      tags: ['GFNC_member'],
-      params: { slugs: [...leadershipSlugs, ...pastMemberSlugs] },
+    fetchQuery(api.projects.forSitemap, {}),
+    fetchQuery(api.members.forSitemap, {
+      slugs: [...leadershipSlugs, ...pastMemberSlugs],
     }),
   ])
 

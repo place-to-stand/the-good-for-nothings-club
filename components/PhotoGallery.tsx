@@ -17,12 +17,12 @@ import Lightbox, {
 } from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import Counter from 'yet-another-react-lightbox/plugins/counter'
-import { SanityAssetDocument } from 'next-sanity'
 import { getImageUrl } from '../data/client'
+import type { Image as CMSImage } from '../types'
 import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props'
 
 type PhotoGalleryProps = {
-  photos: SanityAssetDocument[]
+  photos: CMSImage[]
 }
 
 type GalleryPhotoProps = Photo & {

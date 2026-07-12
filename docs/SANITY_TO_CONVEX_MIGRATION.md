@@ -102,6 +102,28 @@ heterogeneous by design and `@portabletext/react` renders it unchanged.
 - Downgrade the Sanity plan / remove paid seats. **Do not cancel the project** —
   DIMR/IIHD/NINE/RSID still live there.
 
+## Production cutover checklist (manual, before/at merge)
+
+The branch runs entirely against the **dev** deployment (quirky-dalmatian-453).
+Production (resolute-badger-392) needs the same setup before this branch ships:
+
+1. `npx convex deploy` — push schema + functions to prod.
+2. Set prod env vars (`npx convex env set --prod` or dashboard):
+   `MIGRATION_SECRET` (temporary), `ADMIN_ALLOWED_EMAILS`, `SITE_URL`
+   (https://www.thegoodfornothings.club), `JWT_PRIVATE_KEY` + `JWKS`
+   (generate a fresh pair — don't reuse dev's).
+3. Run the migration against prod:
+   `MIGRATION_SECRET=<prod secret> node scripts/migrate-sanity/migrate.mjs --convex-url https://resolute-badger-392.convex.cloud`
+   (re-runnable; verify step must report zero problems).
+4. Merge the PR / deploy the site.
+5. Sign in at /admin once (first sign-in sets your password) and spot-check.
+6. Unset `MIGRATION_SECRET` on prod and dev — migration endpoints go dead.
+7. Remove `NEXT_PUBLIC_SANITY_*` + `SANITY_REVALIDATE_SECRET` from Vercel env.
+8. Copy `scripts/migrate-sanity/archive/` (684 MB of originals) somewhere
+   durable (external drive / cloud storage).
+9. Downgrade the Sanity plan / remove paid seats. **Keep the project** —
+   DIMR/IIHD/NINE/RSID still read from it.
+
 ## Sequencing & rollback
 
 Phase 1 → 2 land first (data copied, Sanity untouched — full rollback is "do

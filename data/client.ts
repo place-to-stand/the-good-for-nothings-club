@@ -1,39 +1,55 @@
-import { createClient, type QueryParams } from 'next-sanity'
-import imageUrlBuilder from '@sanity/image-url'
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+/**
+ * Image URL builder for CMS images (stored in Convex file storage).
+ *
+ * Keeps the chainable `getImageUrl(img).width(n).quality(q).url()` contract
+ * the components were written against when images lived on Sanity's CDN.
+ * Resizing now goes through Next's image optimizer (/_next/image), which
+ * caches transformed variants on the Vercel CDN. Every width/quality used in
+ * code must be allowlisted in next.config.mjs (images.deviceSizes /
+ * images.qualities) or the optimizer rejects the request.
+ *
+ * Calling url() without width() returns the stored file untouched — used for
+ * GIFs (the optimizer would flatten animation) and full-size media.
+ */
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
-const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION
-
-const client = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: true,
-})
-
-const builder = imageUrlBuilder(client)
-
-type SanityFetchParams = {
-  query: string
-  params?: QueryParams
-  tags?: string[]
+type ImageSource = {
+  asset: {
+    url: string
+  }
 }
 
-export async function cmsFetch<QueryResponse>({
-  query,
-  params = {},
-  tags,
-}: SanityFetchParams) {
-  return client.fetch<QueryResponse>(query, params, {
-    next: {
-      tags,
-      revalidate: 3600, // Revalidate every hour
-    },
-  })
+class ImageUrlBuilder {
+  private source: ImageSource
+  private targetWidth?: number
+  private targetQuality?: number
+
+  constructor(source: ImageSource) {
+    this.source = source
+  }
+
+  width(width: number) {
+    this.targetWidth = width
+    return this
+  }
+
+  quality(quality: number) {
+    this.targetQuality = quality
+    return this
+  }
+
+  url() {
+    if (!this.targetWidth) {
+      return this.source.asset.url
+    }
+    const params = new URLSearchParams({
+      url: this.source.asset.url,
+      w: String(this.targetWidth),
+      q: String(this.targetQuality ?? 75),
+    })
+    return `/_next/image?${params.toString()}`
+  }
 }
 
-export function getImageUrl(source: SanityImageSource) {
-  return builder.image(source)
+export function getImageUrl(source: ImageSource) {
+  return new ImageUrlBuilder(source)
 }

@@ -1,8 +1,9 @@
-import { cmsFetch, getImageUrl } from '../../../data/client'
-import { GFNC_project } from '../../../types'
+import { getImageUrl } from '../../../data/client'
+import { GFNC_project, Image } from '../../../types'
 import { toPlainText } from '@portabletext/toolkit'
+import { fetchQuery } from 'convex/nextjs'
 import { Metadata, ResolvingMetadata } from 'next'
-import { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import { api } from '../../../convex/_generated/api'
 import {
   WebProject,
   VideoProject,
@@ -12,124 +13,14 @@ import {
   BuildProject,
 } from './components'
 
+// Regenerate hourly — matches the old cmsFetch revalidate window.
+export const revalidate = 3600
+
 type ProjectProps = {
   params: Promise<{
     slug: string
   }>
 }
-
-const PROJECT_SLUG_QUERY = `
-  *[_type == 'GFNC_project' && slug.current == $slug] {
-    _id,
-    title,
-    clientName,
-    slug,
-    type,
-    status,
-    mainLink,
-    dateStarted,
-    dateCompleted,
-    mainMedia[] {
-      ...,
-      _type == 'image' => {
-        ...,
-        asset-> {
-          extension,
-          url,
-          metadata {
-            lqip,
-            dimensions {
-              height,
-              width
-            }
-          }
-        }
-      },
-      _type == 'videoFile' => {
-        ...,
-        asset-> {
-          url,
-          metadata {
-            lqip,
-            dimensions {
-              height,
-              width
-            }
-          }
-        }
-      },
-    },
-    membersInvolved[]-> {
-      _id,
-      fullName,
-      slug,
-      profilePicture {
-        asset-> {
-          url,
-          metadata {
-            lqip,
-            dimensions {
-              height,
-              width
-            }
-          }
-        },
-        hotspot {
-          x,
-          y,
-        },
-        caption
-      }
-    },
-    summary,
-    overview,
-    photoGallery[] {
-      ...,
-      _type == 'image' => {
-        ...,
-        asset-> {
-          url,
-          metadata {
-            lqip,
-            dimensions {
-              height,
-              width
-            }
-          }
-        }
-      },
-    },
-    caseStudy[] {
-      ...,
-      _type == 'image' => {
-        ...,
-        asset-> {
-          url,
-          metadata {
-            lqip,
-            dimensions {
-              height,
-              width
-            }
-          }
-        }
-      },
-      _type == 'videoFile' => {
-        ...,
-        asset-> {
-          url,
-          metadata {
-            lqip,
-            dimensions {
-              height,
-              width
-            }
-          }
-        }
-      },
-    }
-  }
-`
 
 export async function generateMetadata(
   props: ProjectProps,
@@ -142,18 +33,13 @@ export async function generateMetadata(
   const { openGraph } = await parent
   const pathname = '/projects/' + slug
 
-  const [projectData] = await Promise.all([
-    cmsFetch<GFNC_project[]>({
-      query: PROJECT_SLUG_QUERY,
-      tags: ['GFNC_project'],
-      params: { slug },
-    }),
-  ])
+  const project = (await fetchQuery(api.projects.bySlug, {
+    slug,
+  })) as unknown as GFNC_project
 
-  const project = projectData[0]
   const mainImage = project.mainMedia.find(
     mainMedia => mainMedia._type === 'image'
-  ) as SanityImageSource
+  ) as Image
 
   return {
     title: `${project.title} – ${project.clientName}`,
@@ -173,15 +59,9 @@ export default async function Project(props: ProjectProps) {
   const params = await props.params
   const { slug } = params
 
-  const [projectData] = await Promise.all([
-    cmsFetch<GFNC_project[]>({
-      query: PROJECT_SLUG_QUERY,
-      tags: ['GFNC_project'],
-      params: { slug },
-    }),
-  ])
-
-  const project = projectData[0]
+  const project = (await fetchQuery(api.projects.bySlug, {
+    slug,
+  })) as unknown as GFNC_project
 
   // Route to the appropriate component based on project type
   switch (project.type) {

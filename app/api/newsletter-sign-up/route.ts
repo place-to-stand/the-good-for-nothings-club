@@ -1,9 +1,16 @@
-import { newsletterSignUpSchema } from '@/data/schemas'
+import { checkBotId } from 'botid/server'
 import { Resend } from 'resend'
+
+import { newsletterSignUpSchema } from '@/data/schemas'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: Request) {
+  const verification = await checkBotId()
+  if (verification.isBot) {
+    return Response.json({ error: 'Access denied' }, { status: 403 })
+  }
+
   const body = await request.json()
 
   try {

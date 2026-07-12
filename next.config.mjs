@@ -1,4 +1,5 @@
 import { withSentryConfig } from '@sentry/nextjs'
+import { withBotId } from 'botid/next/config'
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
@@ -131,7 +132,8 @@ const nextConfig = {
   },
 }
 
-export default withSentryConfig(nextConfig, {
+export default withBotId(
+  withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
@@ -161,4 +163,5 @@ export default withSentryConfig(nextConfig, {
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
-})
+  })
+)

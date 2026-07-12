@@ -24,6 +24,7 @@
     "@types/lodash.debounce": "^4.0.9",
     "@vercel/analytics": "^1.6.1",
     "@vis.gl/react-google-maps": "^1.8.3",
+    "botid": "^1.5.11",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "convex": "^1.42.1",

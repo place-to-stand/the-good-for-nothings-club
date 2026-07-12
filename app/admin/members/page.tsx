@@ -1,6 +1,7 @@
 'use client'
 
 import { Authenticated, useQuery } from 'convex/react'
+import Image from 'next/image'
 
 import { api } from '@/convex/_generated/api'
 
@@ -15,10 +16,11 @@ function Members() {
     <ul className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
       {members.map(member => (
         <li key={member._id} className='flex gap-4 border-2 border-black p-4'>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={member.profilePicture.url}
             alt={member.profilePicture.caption ?? member.fullName}
+            width={160}
+            height={160}
             className='h-20 w-20 shrink-0 border border-black/20 object-cover'
           />
           <div className='font-sans text-sm'>

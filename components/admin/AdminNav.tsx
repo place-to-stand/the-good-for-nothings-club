@@ -15,6 +15,7 @@ const links = [
   { href: '/admin/media', label: 'Media' },
 ]
 
+/** Same pill-menu pattern as the projects type filter. */
 export default function AdminNav() {
   const pathname = usePathname()
   const router = useRouter()
@@ -22,30 +23,35 @@ export default function AdminNav() {
 
   return (
     <Authenticated>
-      <nav className='flex flex-wrap items-center gap-x-6 gap-y-2 border-b-2 border-black pb-4'>
-        {links.map(link => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={cn(
-              'font-sans text-sm uppercase tracking-[1px] hover:underline',
-              pathname === link.href && 'font-bold underline'
-            )}
-          >
-            {link.label}
-          </Link>
-        ))}
+      <div className='flex flex-wrap items-center justify-between gap-x-6 gap-y-4 pt-4'>
+        <ul className='flex max-w-full overflow-x-auto rounded-full border-2 border-black'>
+          {links.map(link => (
+            <li key={link.href}>
+              <Link
+                className={cn(
+                  'block px-4 py-2.5 font-sans text-sm leading-tight font-black uppercase transition-colors hover:no-underline sm:px-6',
+                  pathname === link.href
+                    ? 'bg-black text-white hover:bg-black'
+                    : 'text-black hover:bg-black/10 active:bg-black/20'
+                )}
+                href={link.href}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
         <button
           type='button'
           onClick={async () => {
             await signOut()
             router.push('/admin/login')
           }}
-          className='ml-auto font-sans text-sm uppercase tracking-[1px] text-black/60 hover:text-black hover:underline'
+          className='font-sans text-sm font-bold uppercase underline-offset-2 hover:underline'
         >
           Sign out
         </button>
-      </nav>
+      </div>
     </Authenticated>
   )
 }

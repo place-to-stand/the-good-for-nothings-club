@@ -1,6 +1,7 @@
 'use client'
 
 import { Authenticated, useQuery } from 'convex/react'
+import Image from 'next/image'
 
 import { api } from '@/convex/_generated/api'
 
@@ -29,10 +30,11 @@ function Projects() {
               <td className='py-3 pr-4'>
                 <div className='flex items-center gap-3'>
                   {project.thumbnail && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
                       src={project.thumbnail.url}
                       alt={project.thumbnail.caption ?? project.title}
+                      width={96}
+                      height={96}
                       className='h-12 w-12 shrink-0 border border-black/20 object-cover'
                     />
                   )}

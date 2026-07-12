@@ -1,6 +1,7 @@
 'use client'
 
 import { Authenticated, useQuery } from 'convex/react'
+import Image from 'next/image'
 
 import { api } from '@/convex/_generated/api'
 
@@ -23,14 +24,16 @@ function Media() {
         {media.map(item => (
           <li key={item._id} className='border border-black/20'>
             <a href={item.url} target='_blank' rel='noreferrer'>
-              {item.kind === 'image' ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={item.url}
-                  alt={item.sanityAssetId}
-                  loading='lazy'
-                  className='aspect-square w-full object-cover'
-                />
+              {item.kind === 'image' && item.width && item.height ? (
+                <div className='relative aspect-square w-full'>
+                  <Image
+                    src={item.url}
+                    alt={item.sanityAssetId}
+                    fill
+                    sizes='(min-width: 1024px) 16vw, (min-width: 768px) 25vw, 50vw'
+                    className='object-cover'
+                  />
+                </div>
               ) : (
                 <div className='flex aspect-square w-full items-center justify-center bg-black font-sans text-xs uppercase tracking-[1px] text-white'>
                   {item.extension}

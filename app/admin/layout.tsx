@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 
 import AdminNav from '@/components/admin/AdminNav'
 import AdminProviders from '@/components/admin/AdminProviders'
+import PageShell from '@/components/PageShell'
 
 export const metadata: Metadata = {
   title: 'Admin',
@@ -14,13 +15,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <ConvexAuthNextjsServerProvider>
       <AdminProviders>
-        <main className='mx-auto w-full max-w-6xl px-4 py-10 md:px-8'>
-          <h1 className='mb-6 font-sans text-2xl font-bold uppercase tracking-[2px]'>
-            GFNC Admin
-          </h1>
+        <PageShell title='Admin'>
           <AdminNav />
-          <div className='py-8'>{children}</div>
-        </main>
+          <div className='pt-8 pb-6 md:pb-8'>{children}</div>
+        </PageShell>
       </AdminProviders>
     </ConvexAuthNextjsServerProvider>
   )

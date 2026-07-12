@@ -22,7 +22,10 @@ export default function AdminLoginPage() {
   const [submitting, setSubmitting] = useState(false)
 
   return (
-    <div className='mx-auto max-w-sm'>
+    <div className='mx-auto max-w-sm py-8 md:py-12'>
+      <h2 className='mb-6 text-center text-[28px] font-black tracking-[-0.03em]'>
+        Sign in
+      </h2>
       <form
         onSubmit={async event => {
           event.preventDefault()

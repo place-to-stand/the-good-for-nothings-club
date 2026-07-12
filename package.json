@@ -10,6 +10,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@auth/core": "^0.41.2",
+    "@convex-dev/auth": "^0.0.94",
     "@hookform/resolvers": "^5.4.0",
     "@portabletext/react": "^4.0.3",
     "@portabletext/toolkit": "^3.0.3",

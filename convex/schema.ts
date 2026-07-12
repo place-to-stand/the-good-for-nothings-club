@@ -1,3 +1,4 @@
+import { authTables } from '@convex-dev/auth/server'
 import { defineSchema, defineTable } from 'convex/server'
 import { v } from 'convex/values'
 
@@ -78,6 +79,9 @@ export const projectStatusValidator = v.union(
 )
 
 export default defineSchema({
+  /** Users/sessions/accounts for the /admin sign-in — see convex/auth.ts. */
+  ...authTables,
+
   /** Mirrors inquirySchema in data/schemas.ts, which validates at the API edge. */
   inquiries: defineTable({
     kind: v.union(

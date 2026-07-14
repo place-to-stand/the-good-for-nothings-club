@@ -10,6 +10,7 @@
 
 import type * as ResendOTPPasswordReset from "../ResendOTPPasswordReset.js";
 import type * as admin from "../admin.js";
+import type * as aggregates from "../aggregates.js";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as inquiries from "../inquiries.js";
@@ -26,6 +27,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   ResendOTPPasswordReset: typeof ResendOTPPasswordReset;
   admin: typeof admin;
+  aggregates: typeof aggregates;
   auth: typeof auth;
   http: typeof http;
   inquiries: typeof inquiries;
@@ -60,4 +62,9 @@ export declare const internal: FilterApi<
   FunctionReference<any, "internal">
 >;
 
-export declare const components: {};
+export declare const components: {
+  aggregateInquiries: import("@convex-dev/aggregate/_generated/component.js").ComponentApi<"aggregateInquiries">;
+  aggregateProjects: import("@convex-dev/aggregate/_generated/component.js").ComponentApi<"aggregateProjects">;
+  aggregateMembers: import("@convex-dev/aggregate/_generated/component.js").ComponentApi<"aggregateMembers">;
+  aggregateMedia: import("@convex-dev/aggregate/_generated/component.js").ComponentApi<"aggregateMedia">;
+};

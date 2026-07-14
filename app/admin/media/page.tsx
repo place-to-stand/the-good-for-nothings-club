@@ -1,6 +1,6 @@
 'use client'
 
-import { Authenticated, usePaginatedQuery } from 'convex/react'
+import { Authenticated, useQuery, usePaginatedQuery } from 'convex/react'
 import Image from 'next/image'
 
 import LoadMore from '@/components/admin/LoadMore'
@@ -15,6 +15,7 @@ function Media() {
     {},
     { initialNumItems: PAGE_SIZE }
   )
+  const totals = useQuery(api.admin.mediaTotals)
 
   if (status === 'LoadingFirstPage') {
     return <p className='font-sans text-sm text-black/60'>Loading…</p>
@@ -23,9 +24,10 @@ function Media() {
   return (
     <div>
       <p className='mb-6 font-sans text-sm text-black/60'>
-        {results.length} asset{results.length === 1 ? '' : 's'} loaded ·{' '}
-        {mb(results.reduce((sum, m) => sum + m.size, 0))}
-        {status === 'Exhausted' ? '' : ' (largest first)'}
+        {totals
+          ? `${results.length} of ${totals.count} assets · ${mb(totals.bytes)} stored`
+          : `${results.length} asset${results.length === 1 ? '' : 's'} loaded`}
+        {status === 'Exhausted' ? '' : ' · largest first'}
       </p>
       <ul className='grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6'>
         {results.map(item => (

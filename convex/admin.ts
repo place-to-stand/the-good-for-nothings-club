@@ -2,6 +2,7 @@ import { getAuthUserId } from '@convex-dev/auth/server'
 import { paginationOptsValidator } from 'convex/server'
 import { v } from 'convex/values'
 
+import { inquiriesCount, mediaStats, membersCount, projectsCount } from './aggregates'
 import type { QueryCtx } from './_generated/server'
 import { query } from './_generated/server'
 
@@ -22,19 +23,25 @@ export const counts = query({
   args: {},
   handler: async ctx => {
     await requireUser(ctx)
-    const [inquiries, projects, members, media] = await Promise.all([
-      ctx.db.query('inquiries').collect(),
-      ctx.db.query('projects').collect(),
-      ctx.db.query('members').collect(),
-      ctx.db.query('media').collect(),
+    // O(log n) reads from the aggregates — no table scans. See convex/aggregates.ts.
+    const [inquiries, projects, members, media, mediaBytes] = await Promise.all([
+      inquiriesCount.count(ctx),
+      projectsCount.count(ctx),
+      membersCount.count(ctx),
+      mediaStats.count(ctx),
+      mediaStats.sum(ctx),
     ])
-    return {
-      inquiries: inquiries.length,
-      projects: projects.length,
-      members: members.length,
-      media: media.length,
-      mediaBytes: media.reduce((sum, m) => sum + m.size, 0),
-    }
+    return { inquiries, projects, members, media, mediaBytes }
+  },
+})
+
+/** Cheap grand totals for the media page header (avoids scanning the table). */
+export const mediaTotals = query({
+  args: {},
+  handler: async ctx => {
+    await requireUser(ctx)
+    const [count, bytes] = await Promise.all([mediaStats.count(ctx), mediaStats.sum(ctx)])
+    return { count, bytes }
   },
 })
 

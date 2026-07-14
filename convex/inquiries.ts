@@ -1,6 +1,7 @@
 import { v } from 'convex/values'
 
-import { mutation } from './_generated/server'
+// Trigger-aware builder so each insert bumps the inquiries count aggregate.
+import { mutation } from './aggregates'
 
 /**
  * Insert one inquiry. Public by design: called server-side from

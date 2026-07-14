@@ -22,10 +22,13 @@ const NAV_ITEMS = [
   { href: '/services', text: 'Services' },
   { href: '/events', text: 'Events' },
   { href: '/membership', text: 'Membership' },
-  { href: 'https://shop.thegoodfornothings.club/', text: 'Shop' },
+  { href: 'https://shop.thegoodfornothings.club/', text: 'Shop', external: true },
   { href: '/about', text: 'About' },
   { href: '/contact', text: 'Contact' },
 ]
+
+const externalLinkProps = (item: { external?: boolean }) =>
+  item.external ? { target: '_blank', rel: 'noopener noreferrer' } : undefined
 
 const SHEET_ITEMS = [{ href: '/', text: 'Home' }, ...NAV_ITEMS]
 
@@ -51,6 +54,7 @@ export default function Header() {
                       href={item.href}
                       className='block'
                       aria-current={pathname === item.href ? 'page' : undefined}
+                      {...externalLinkProps(item)}
                     >
                       {item.text}
                     </ScrollTopLink>
@@ -84,6 +88,7 @@ export default function Header() {
                 key={item.href}
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
+                {...externalLinkProps(item)}
                 className={cn(
                   'px-2 py-3 text-sm font-extrabold tracking-[0.06em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 xl:px-3 xl:text-[15px]',
                   isActive && 'bg-black/10'

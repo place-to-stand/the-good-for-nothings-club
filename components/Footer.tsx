@@ -85,7 +85,7 @@ const FOOTER_LINKS = [
   { href: '/services', text: 'Services' },
   { href: '/events', text: 'Events' },
   { href: '/membership', text: 'Membership' },
-  { href: 'https://shop.thegoodfornothings.club/', text: 'Shop' },
+  { href: 'https://shop.thegoodfornothings.club/', text: 'Shop', external: true },
   { href: '/about', text: 'About' },
   { href: '/contact', text: 'Contact' },
 ]
@@ -108,6 +108,9 @@ export default function Footer() {
                   key={link.href}
                   href={link.href}
                   className='text-[15px] font-extrabold tracking-[0.06em] uppercase'
+                  {...(link.external
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : undefined)}
                 >
                   {link.text}
                 </ScrollTopLink>

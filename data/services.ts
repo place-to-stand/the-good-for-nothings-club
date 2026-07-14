@@ -140,9 +140,8 @@ export const services: Service[] = [
     name: 'Sound system + operator',
     category: 'av',
     blurb:
-      'A PA sized to your room and an engineer to run it, so the show sounds right and you never touch a knob.',
+      'A PA sized to your room and an engineer to run it, so the show sounds right and you never touch a knob. Includes setup, operation, and teardown.',
     price: 'From $400',
-    detail: 'Includes setup, operation, and teardown.',
   },
   {
     slug: 'event-planning',

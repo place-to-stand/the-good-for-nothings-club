@@ -109,6 +109,8 @@ export default function InstagramFeed({ feedId }: { feedId: string }) {
         <div className='flex flex-col items-start justify-center gap-1'>
           <a
             href={`https://www.instagram.com/${feed.username}`}
+            target='_blank'
+            rel='noopener noreferrer'
             className='font-bold'
           >
             @{feed.username}

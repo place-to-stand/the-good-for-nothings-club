@@ -102,6 +102,8 @@ export default async function About() {
             <li>
               <Link
                 href='https://shop.thegoodfornothings.club/'
+                target='_blank'
+                rel='noopener noreferrer'
                 className='font-bold'
               >
                 The shop

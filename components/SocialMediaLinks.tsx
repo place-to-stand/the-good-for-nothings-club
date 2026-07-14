@@ -43,6 +43,7 @@ export default function SocialMediaLinks() {
           key={href}
           href={href}
           target='_blank'
+          rel='noopener noreferrer'
           aria-label={label}
           className='transition-transform duration-200 ease-out hover:-translate-y-1 hover:scale-125 active:translate-y-0 active:scale-95 odd:hover:-rotate-12 even:hover:rotate-12'
         >

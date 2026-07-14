@@ -126,7 +126,7 @@ export default defineSchema({
     width: v.optional(v.number()),
     height: v.optional(v.number()),
     lqip: v.optional(v.string()),
-  }),
+  }).index('by_size', ['size']),
 
   /** GFNC_project from Sanity — see schemaTypes/GFNC/project.ts in general-data. */
   projects: defineTable({

@@ -1,4 +1,5 @@
 import { getAuthUserId } from '@convex-dev/auth/server'
+import { paginationOptsValidator } from 'convex/server'
 import { v } from 'convex/values'
 
 import type { QueryCtx } from './_generated/server'
@@ -39,6 +40,7 @@ export const counts = query({
 
 export const listInquiries = query({
   args: {
+    paginationOpts: paginationOptsValidator,
     kind: v.optional(
       v.union(
         v.literal('facility'),
@@ -51,14 +53,10 @@ export const listInquiries = query({
   },
   handler: async (ctx, args) => {
     await requireUser(ctx)
-    const inquiries = args.kind
-      ? await ctx.db
-          .query('inquiries')
-          .withIndex('by_kind', q => q.eq('kind', args.kind!))
-          .order('desc')
-          .collect()
-      : await ctx.db.query('inquiries').order('desc').collect()
-    return inquiries
+    const base = args.kind
+      ? ctx.db.query('inquiries').withIndex('by_kind', q => q.eq('kind', args.kind!))
+      : ctx.db.query('inquiries')
+    return await base.order('desc').paginate(args.paginationOpts)
   },
 })
 
@@ -102,10 +100,14 @@ export const listMembers = query({
 })
 
 export const listMedia = query({
-  args: {},
-  handler: async ctx => {
+  args: { paginationOpts: paginationOptsValidator },
+  handler: async (ctx, args) => {
     await requireUser(ctx)
-    const media = await ctx.db.query('media').collect()
-    return media.sort((a, b) => b.size - a.size)
+    // Largest assets first (by_size index) so the storage hogs surface on page one.
+    return await ctx.db
+      .query('media')
+      .withIndex('by_size')
+      .order('desc')
+      .paginate(args.paginationOpts)
   },
 })

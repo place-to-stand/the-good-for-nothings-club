@@ -1,17 +1,25 @@
 'use client'
 
-import { Authenticated, useQuery } from 'convex/react'
+import { Authenticated, usePaginatedQuery } from 'convex/react'
 import { useState } from 'react'
 
+import LoadMore from '@/components/admin/LoadMore'
 import { selectClassName } from '@/components/ui/fieldStyles'
 import { api } from '@/convex/_generated/api'
 
 const kinds = ['facility', 'service', 'membership', 'event', 'general'] as const
 type Kind = (typeof kinds)[number]
+const PAGE_SIZE = 20
 
 function Inquiries() {
   const [kind, setKind] = useState<Kind | ''>('')
-  const inquiries = useQuery(api.admin.listInquiries, kind ? { kind } : {})
+  const {
+    results: inquiries,
+    status,
+    loadMore,
+  } = usePaginatedQuery(api.admin.listInquiries, kind ? { kind } : {}, {
+    initialNumItems: PAGE_SIZE,
+  })
 
   return (
     <div>
@@ -30,7 +38,7 @@ function Inquiries() {
           ))}
         </select>
       </div>
-      {inquiries === undefined ? (
+      {status === 'LoadingFirstPage' ? (
         <p className='font-sans text-sm text-black/60'>Loading…</p>
       ) : inquiries.length === 0 ? (
         <p className='font-sans text-sm text-black/60'>No inquiries yet.</p>
@@ -70,6 +78,7 @@ function Inquiries() {
           ))}
         </ul>
       )}
+      <LoadMore status={status} onClick={() => loadMore(PAGE_SIZE)} />
     </div>
   )
 }

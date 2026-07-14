@@ -1,27 +1,34 @@
 'use client'
 
-import { Authenticated, useQuery } from 'convex/react'
+import { Authenticated, usePaginatedQuery } from 'convex/react'
 import Image from 'next/image'
 
+import LoadMore from '@/components/admin/LoadMore'
 import { api } from '@/convex/_generated/api'
 
 const mb = (bytes: number) => `${(bytes / 1e6).toFixed(1)} MB`
+const PAGE_SIZE = 24
 
 function Media() {
-  const media = useQuery(api.admin.listMedia)
+  const { results, status, loadMore } = usePaginatedQuery(
+    api.admin.listMedia,
+    {},
+    { initialNumItems: PAGE_SIZE }
+  )
 
-  if (media === undefined) {
+  if (status === 'LoadingFirstPage') {
     return <p className='font-sans text-sm text-black/60'>Loading…</p>
   }
 
   return (
     <div>
       <p className='mb-6 font-sans text-sm text-black/60'>
-        {media.length} assets · {mb(media.reduce((sum, m) => sum + m.size, 0))} stored (
-        {mb(media.reduce((sum, m) => sum + m.originalSize, 0))} original)
+        {results.length} asset{results.length === 1 ? '' : 's'} loaded ·{' '}
+        {mb(results.reduce((sum, m) => sum + m.size, 0))}
+        {status === 'Exhausted' ? '' : ' (largest first)'}
       </p>
       <ul className='grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6'>
-        {media.map(item => (
+        {results.map(item => (
           <li key={item._id} className='border border-black/20'>
             <a href={item.url} target='_blank' rel='noreferrer'>
               {item.kind === 'image' && item.width && item.height ? (
@@ -49,6 +56,7 @@ function Media() {
           </li>
         ))}
       </ul>
+      <LoadMore status={status} onClick={() => loadMore(PAGE_SIZE)} />
     </div>
   )
 }

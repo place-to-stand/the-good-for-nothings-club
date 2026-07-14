@@ -62,11 +62,15 @@ export default function Home() {
               href: 'https://shop.thegoodfornothings.club/',
               title: 'Shop',
               body: 'Works and merch from members and friends of the club.',
+              external: true,
             },
           ].map(card => (
             <Link
               key={card.href}
               href={card.href}
+              {...(card.external
+                ? { target: '_blank', rel: 'noopener noreferrer' }
+                : {})}
               className='group flex flex-col justify-between gap-2 border-black p-6 transition-colors not-first:border-t-2 hover:bg-black/10 hover:no-underline active:bg-black/20 md:flex-row md:items-center md:gap-8 md:px-12 md:py-10'
             >
               <span className='flex items-center gap-0.5 font-sans text-[32px] font-black tracking-[-0.04em] uppercase md:text-[40px]'>

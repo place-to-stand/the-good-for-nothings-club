@@ -162,6 +162,7 @@ export default function WebProject({ project }: WebProjectProps) {
                         <div className='flex aspect-video justify-center'>
                           <MediaPlayer
                             url={value.asset.url}
+                            clickToPlay={true}
                             playing={value.playing}
                             controls={value.controls}
                             loop={value.loop}

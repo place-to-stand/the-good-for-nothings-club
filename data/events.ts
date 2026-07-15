@@ -43,17 +43,17 @@ export const events: GFNCEvent[] = [
     slug: 'works-in-progress',
     name: 'Works in Progress',
     rule: { freq: 'monthly', weekday: 4, nth: 2 },
-    time: '4 PM',
-    schedule: 'Second Thursday · 4 PM',
+    time: '7 PM',
+    schedule: 'Second Thursday · 7 PM',
     blurb:
       'A show & tell for creatives of any discipline. Bring something unfinished - everyone who attends is expected to give honest critique, and everyone who shows is expected to be open to it.',
   },
   {
     slug: 'off-genre-jam',
     name: 'Off Genre Jam',
-    rule: { freq: 'monthly', weekday: 0, nth: 3 },
+    rule: { freq: 'monthly', weekday: 4, nth: 3 },
     time: '7 PM',
-    schedule: 'Third Sunday · 7 PM',
+    schedule: 'Third Thursday · 7 PM',
     blurb:
       'Exploring varieties of rock music and other neglected genres of jam.',
   },

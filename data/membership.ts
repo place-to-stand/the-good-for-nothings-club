@@ -82,7 +82,7 @@ export const membershipTiers: MembershipTier[] = [
     name: 'Member',
     tagline:
       'A monthly rental commitment - a permanent desk or a band practice slot - and full run of the clubhouse.',
-    price: 'From $200 / mo',
+    price: 'From $250 / mo',
     includes: 'Includes everything in associate, plus:',
     perks: [
       'Keys and 24/7 access to the clubhouse',

@@ -22,7 +22,7 @@ export type Facility = {
   model: 'monthly' | 'hourly'
   /** Not yet bookable - shown without rates or booking. */
   status?: 'planned'
-  /** Display rate, e.g. "$400 / mo" or "From $30 / hr". */
+  /** Display rate, e.g. "$450 / mo" or "From $30 / hr". */
   rate?: string
   rateNote?: string
   /** e.g. "8 desks total" */
@@ -70,7 +70,7 @@ export const facilities: Facility[] = [
     description:
       'An assigned space - bring your own furniture or use ours, set it up how you like, and leave it that way between visits.',
     quantity: '8 desks total',
-    rate: '$400 / mo',
+    rate: '$450 / mo',
   },
   {
     slug: 'band-room',
@@ -79,7 +79,7 @@ export const facilities: Facility[] = [
     description:
       'One practice room, shared by four bands on a calendar. Drum kit (minus breakables), PA, mics, and mic stands provided.',
     quantity: '4 bands total',
-    rate: '$200 / mo',
+    rate: '$250 / mo',
   },
   {
     slug: 'photo-studio',

@@ -28,8 +28,10 @@ export type Facility = {
   /** e.g. "8 desks total" */
   quantity?: string
   rateCard?: RateLine[]
-  /** Image path under /public or full URL. Placeholder shown when omitted. */
+  /** Image path under /public or full URL. Card renders without a photo when omitted. */
   image?: string
+  /** Alt text for the image. */
+  imageAlt?: string
 }
 
 export const facilitiesCopy = {
@@ -71,6 +73,9 @@ export const facilities: Facility[] = [
       'An assigned space - bring your own furniture or use ours, set it up how you like, and leave it that way between visits.',
     quantity: '8 desks total',
     rate: '$450 / mo',
+    image: '/facilities/permanent-desk.jpg',
+    imageAlt:
+      'Desks with monitors and task chairs in the shared workspace at the clubhouse',
   },
   {
     slug: 'band-room',
@@ -80,6 +85,9 @@ export const facilities: Facility[] = [
       'One practice room, shared by four bands on a calendar. Drum kit (minus breakables), PA, mics, and mic stands provided.',
     quantity: '4 bands total',
     rate: '$250 / mo',
+    image: '/facilities/band-room.jpg',
+    imageAlt:
+      'Band practice room with drum kit, mics, guitars on the wall, and a Fender bass rig',
   },
   {
     slug: 'photo-studio',
@@ -94,6 +102,9 @@ export const facilities: Facility[] = [
       { group: 'Room', item: 'Evenings & weekends', price: '$40 / hr' },
       { group: 'Staff', item: 'Assistant (optional)', price: '$50 / hr' },
     ],
+    image: '/facilities/photo-studio.jpg',
+    imageAlt:
+      'Photo studio with seamless paper backdrops, a softbox light, and apple boxes',
   },
   {
     slug: 'recording-studio',
@@ -108,6 +119,9 @@ export const facilities: Facility[] = [
       { group: 'Room', item: 'Evenings & weekends', price: '$40 / hr' },
       { group: 'Staff', item: 'Engineer (optional)', price: '$50 / hr' },
     ],
+    image: '/facilities/recording-studio.jpg',
+    imageAlt:
+      'Mixing control room with studio monitors, a Pro Tools session on screen, and outboard gear',
   },
   // {
   //   slug: 'darkroom',

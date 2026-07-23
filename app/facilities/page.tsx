@@ -39,6 +39,11 @@ function FacilityCard({ facility }: { facility: Facility }) {
   return (
     <OfferCard
       id={facility.slug}
+      image={
+        facility.image
+          ? { src: facility.image, alt: facility.imageAlt ?? facility.name }
+          : undefined
+      }
       title={facility.name}
       price={facility.rate}
       meta={[facility.quantity, facility.rateNote].filter(Boolean).join(' · ')}

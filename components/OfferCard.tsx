@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import Image from 'next/image'
 
 import { cn } from '@/lib/utils'
 
@@ -7,6 +8,8 @@ type OfferCardProps = {
   id?: string
   /** Extra classes on the article, e.g. subgrid alignment across a row. */
   className?: string
+  /** Full-bleed photo above the card interior. */
+  image?: { src: string; alt: string }
   title: string
   /** Headline price, set on the title line with a dotted leader. */
   price?: string
@@ -26,6 +29,7 @@ type OfferCardProps = {
 export default function OfferCard({
   id,
   className,
+  image,
   title,
   price,
   meta,
@@ -37,36 +41,50 @@ export default function OfferCard({
     <article
       id={id}
       className={cn(
-        'flex scroll-mt-28 flex-col border-2 border-black p-6 md:p-8',
+        'flex scroll-mt-28 flex-col border-2 border-black',
         className
       )}
     >
-      <div className='flex items-center justify-between gap-2'>
-        <h3 className='text-[24px] leading-none font-extrabold tracking-[-0.03em] md:text-[28px]'>
-          {title}
-        </h3>
-        {price && (
-          <>
-            <span className='font-sans text-base font-bold tracking-tight whitespace-nowrap uppercase'>
-              {price}
-            </span>
-          </>
+      {image && (
+        <div className='relative aspect-[3/2] border-b-2 border-black'>
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill
+            className='object-cover'
+            sizes='(min-width: 1024px) 50vw, 100vw'
+          />
+        </div>
+      )}
+
+      <div className='flex flex-1 flex-col p-6 md:p-8'>
+        <div className='flex items-center justify-between gap-2'>
+          <h3 className='text-[24px] leading-none font-extrabold tracking-[-0.03em] md:text-[28px]'>
+            {title}
+          </h3>
+          {price && (
+            <>
+              <span className='font-sans text-base font-bold tracking-tight whitespace-nowrap uppercase'>
+                {price}
+              </span>
+            </>
+          )}
+        </div>
+
+        {meta && (
+          <p className='mt-1.5 font-sans text-xs font-semibold tracking-[0.08em] text-black/60 uppercase'>
+            {meta}
+          </p>
         )}
+
+        {description && (
+          <p className='mt-4 font-sans leading-snug'>{description}</p>
+        )}
+
+        {children && <div className='mt-8'>{children}</div>}
+
+        {footer && <div className='mt-auto pt-8'>{footer}</div>}
       </div>
-
-      {meta && (
-        <p className='mt-1.5 font-sans text-xs font-semibold tracking-[0.08em] text-black/60 uppercase'>
-          {meta}
-        </p>
-      )}
-
-      {description && (
-        <p className='mt-4 font-sans leading-snug'>{description}</p>
-      )}
-
-      {children && <div className='mt-8'>{children}</div>}
-
-      {footer && <div className='mt-auto pt-8'>{footer}</div>}
     </article>
   )
 }

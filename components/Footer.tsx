@@ -30,14 +30,18 @@ function NewsletterSignUpForm() {
       body: JSON.stringify({ ...values }),
     })
 
-    if (response.ok) {
-      captureEvent('newsletter_signed_up')
-    } else {
-      console.error('Failed to subscribe')
+    if (!response.ok) {
+      form.setError('root', {
+        message:
+          'Something went wrong. Email us at hello@thegoodfornothings.club.',
+      })
+      throw new Error('Newsletter sign-up failed')
     }
+
+    captureEvent('newsletter_signed_up')
   }
 
-  const { isSubmitting, isSubmitSuccessful } = form.formState
+  const { isSubmitting, isSubmitSuccessful, errors } = form.formState
 
   return isSubmitSuccessful ? (
     <Alert>
@@ -49,7 +53,14 @@ function NewsletterSignUpForm() {
     </Alert>
   ) : (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='flex w-full'>
+      <form
+        onSubmit={e =>
+          form
+            .handleSubmit(onSubmit)(e)
+            .catch(() => {})
+        }
+        className='flex w-full flex-wrap'
+      >
         <FormField
           name='email'
           control={form.control}
@@ -74,6 +85,11 @@ function NewsletterSignUpForm() {
           {isSubmitting && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
           Subscribe
         </Button>
+        {errors.root && (
+          <p className='text-destructive mt-2 w-full font-sans text-sm font-medium'>
+            {errors.root.message}
+          </p>
+        )}
       </form>
     </Form>
   )

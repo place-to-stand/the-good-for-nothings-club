@@ -3,6 +3,10 @@ import { withBotId } from 'botid/next/config'
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+  // PostHog's ingestion endpoints use trailing slashes (e.g. /e/); Next's
+  // default trailing-slash redirect would 308 them and break capture.
+  skipTrailingSlashRedirect: true,
+
   images: {
     remotePatterns: [
       {
@@ -24,6 +28,27 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
+  },
+
+  // Reverse proxy for PostHog so analytics requests are first-party and
+  // survive ad blockers (same idea as Sentry's tunnelRoute below). The
+  // path is deliberately not "/analytics"-ish — blockers target those.
+  // Keep in sync with api_host in instrumentation-client.ts.
+  async rewrites() {
+    return [
+      {
+        source: '/nothings/static/:path*',
+        destination: 'https://us-assets.i.posthog.com/static/:path*',
+      },
+      {
+        source: '/nothings/array/:path*',
+        destination: 'https://us-assets.i.posthog.com/array/:path*',
+      },
+      {
+        source: '/nothings/:path*',
+        destination: 'https://us.i.posthog.com/:path*',
+      },
+    ]
   },
 
   // https://nextjs.org/docs/app/api-reference/next-config-js/redirects

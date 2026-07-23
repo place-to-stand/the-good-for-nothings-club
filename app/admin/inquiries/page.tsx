@@ -1,15 +1,61 @@
 'use client'
 
-import { Authenticated, usePaginatedQuery } from 'convex/react'
+import { Authenticated, useMutation, usePaginatedQuery } from 'convex/react'
 import { useState } from 'react'
 
 import LoadMore from '@/components/admin/LoadMore'
 import { selectClassName } from '@/components/ui/fieldStyles'
 import { api } from '@/convex/_generated/api'
+import type { Id } from '@/convex/_generated/dataModel'
+import { INQUIRY_STATUSES, type InquiryStatus } from '@/data/schemas'
+import { cn } from '@/lib/utils'
 
 const kinds = ['facility', 'service', 'membership', 'event', 'general'] as const
 type Kind = (typeof kinds)[number]
 const PAGE_SIZE = 20
+
+/** Rows predating the status field are 'new'. */
+function StatusSelect({
+  id,
+  status,
+}: {
+  id: Id<'inquiries'>
+  status?: InquiryStatus
+}) {
+  const setStatus = useMutation(api.admin.setInquiryStatus)
+
+  return (
+    <select
+      value={status ?? 'new'}
+      onChange={event =>
+        setStatus({ id, status: event.target.value as InquiryStatus })
+      }
+      className={cn(selectClassName, 'h-8 w-auto px-2 text-xs uppercase')}
+      aria-label='Inquiry status'
+    >
+      {INQUIRY_STATUSES.map(option => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  )
+}
+
+/** "utm_source / utm_medium / utm_campaign", else the referrer, else direct. */
+function sourceLabel(attribution: {
+  referrer?: string
+  utmSource?: string
+  utmMedium?: string
+  utmCampaign?: string
+}) {
+  if (attribution.utmSource) {
+    return [attribution.utmSource, attribution.utmMedium, attribution.utmCampaign]
+      .filter(Boolean)
+      .join(' / ')
+  }
+  return attribution.referrer || 'direct'
+}
 
 function Inquiries() {
   const [kind, setKind] = useState<Kind | ''>('')
@@ -57,9 +103,12 @@ function Inquiries() {
                   {inquiry.kind} · {new Date(inquiry._creationTime).toLocaleString()}
                 </span>
               </div>
-              <div className='mt-2 font-sans text-sm'>
-                <span className='font-semibold'>{inquiry.item}</span>
-                {inquiry.offering && <span> — {inquiry.offering}</span>}
+              <div className='mt-2 flex flex-wrap items-center justify-between gap-2 font-sans text-sm'>
+                <div>
+                  <span className='font-semibold'>{inquiry.item}</span>
+                  {inquiry.offering && <span> — {inquiry.offering}</span>}
+                </div>
+                <StatusSelect id={inquiry._id} status={inquiry.status} />
               </div>
               <dl className='mt-2 grid gap-x-8 gap-y-1 font-sans text-sm text-black/80 md:grid-cols-2'>
                 {inquiry.phone && <Row label='Phone' value={inquiry.phone} />}
@@ -68,6 +117,12 @@ function Inquiries() {
                   <Row label='Socials' value={inquiry.socials.join(', ')} />
                 )}
                 {inquiry.references && <Row label='References' value={inquiry.references} />}
+                {inquiry.attribution && (
+                  <Row label='Source' value={sourceLabel(inquiry.attribution)} />
+                )}
+                {inquiry.attribution?.landingPage && (
+                  <Row label='Landed on' value={inquiry.attribution.landingPage} />
+                )}
               </dl>
               {inquiry.message && (
                 <p className='mt-2 whitespace-pre-wrap border-l-2 border-black/20 pl-3 font-sans text-sm'>

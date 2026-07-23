@@ -78,6 +78,24 @@ export const projectStatusValidator = v.union(
   v.literal('Canceled')
 )
 
+/** Mirrors attributionSchema in data/schemas.ts. */
+export const inquiryAttributionValidator = v.object({
+  referrer: v.optional(v.string()),
+  utmSource: v.optional(v.string()),
+  utmMedium: v.optional(v.string()),
+  utmCampaign: v.optional(v.string()),
+  landingPage: v.optional(v.string()),
+})
+
+/** Mirrors INQUIRY_STATUSES in data/schemas.ts. */
+export const inquiryStatusValidator = v.union(
+  v.literal('new'),
+  v.literal('replied'),
+  v.literal('toured'),
+  v.literal('won'),
+  v.literal('lost')
+)
+
 export default defineSchema({
   /** Users/sessions/accounts for the /admin sign-in — see convex/auth.ts. */
   ...authTables,
@@ -102,6 +120,12 @@ export default defineSchema({
     portfolio: v.optional(v.string()),
     references: v.optional(v.union(v.literal('Yes'), v.literal('No'))),
     message: v.optional(v.string()),
+    /** First-touch source captured client-side; absent on older rows. */
+    attribution: v.optional(inquiryAttributionValidator),
+    /** Lifecycle managed from /admin; absent means 'new'. */
+    status: v.optional(inquiryStatusValidator),
+    /** Ms epoch when status first left 'new' - time-to-first-reply metric. */
+    repliedAt: v.optional(v.number()),
   }).index('by_kind', ['kind']),
 
   /**

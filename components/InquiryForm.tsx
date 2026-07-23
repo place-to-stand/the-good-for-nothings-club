@@ -14,6 +14,7 @@ import {
 } from '../data/events'
 import { phoneSchema, type InquiryKind } from '../data/schemas'
 import { services } from '../data/services'
+import { getAttribution } from '../lib/attribution'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
 import { fieldLabelClassName, selectClassName } from './ui/fieldStyles'
@@ -180,6 +181,7 @@ export default function InquiryForm({
         email: values.email,
         phone: values.phone || undefined,
         message: values.message || undefined,
+        attribution: getAttribution(),
       }),
     })
 

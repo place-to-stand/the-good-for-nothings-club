@@ -2,16 +2,19 @@ import { getAuthUserId } from '@convex-dev/auth/server'
 import { paginationOptsValidator } from 'convex/server'
 import { v } from 'convex/values'
 
-import { inquiriesCount, mediaStats, membersCount, projectsCount } from './aggregates'
-import type { QueryCtx } from './_generated/server'
+// Trigger-aware builder: writes to inquiries must keep its aggregate in sync.
+import { inquiriesCount, mediaStats, membersCount, mutation, projectsCount } from './aggregates'
+import type { MutationCtx, QueryCtx } from './_generated/server'
 import { query } from './_generated/server'
+import { inquiryStatusValidator } from './schema'
 
 /**
- * Read-only queries for the /admin pages. Every query requires a signed-in
- * user (accounts are allowlist-only — see convex/auth.ts). No mutations are
- * exposed here by design: the admin is a viewer, not an editor.
+ * Queries for the /admin pages, plus the one mutation the admin can make:
+ * advancing an inquiry's status. Every function requires a signed-in user
+ * (accounts are allowlist-only — see convex/auth.ts). CMS content stays
+ * read-only by design: the admin is a viewer, not an editor.
  */
-async function requireUser(ctx: QueryCtx) {
+async function requireUser(ctx: QueryCtx | MutationCtx) {
   const userId = await getAuthUserId(ctx)
   if (userId === null) {
     throw new Error('Not authenticated')
@@ -64,6 +67,26 @@ export const listInquiries = query({
       ? ctx.db.query('inquiries').withIndex('by_kind', q => q.eq('kind', args.kind!))
       : ctx.db.query('inquiries')
     return await base.order('desc').paginate(args.paginationOpts)
+  },
+})
+
+export const setInquiryStatus = mutation({
+  args: {
+    id: v.id('inquiries'),
+    status: inquiryStatusValidator,
+  },
+  handler: async (ctx, { id, status }) => {
+    await requireUser(ctx)
+    const inquiry = await ctx.db.get(id)
+    if (!inquiry) {
+      throw new Error('Inquiry not found')
+    }
+    const patch: { status: typeof status; repliedAt?: number } = { status }
+    // Stamp first contact once, so time-to-first-reply survives later moves.
+    if (status !== 'new' && inquiry.repliedAt === undefined) {
+      patch.repliedAt = Date.now()
+    }
+    await ctx.db.patch(id, patch)
   },
 })
 

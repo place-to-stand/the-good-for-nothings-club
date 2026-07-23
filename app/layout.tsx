@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { Analytics } from '@vercel/analytics/react'
 
 import '../styles/globals.css'
+import AttributionCapture from '@/components/AttributionCapture'
 import Header from '@/components/Header'
 import Footer from '../components/Footer'
 import Script from 'next/script'
@@ -77,6 +78,7 @@ export default function RootLayout({
       className={cn(alegreya.variable, rubik.variable, rubikGlitch.variable)}
     >
       <body>
+        <AttributionCapture />
         <Header />
         {children}
         <Footer />

@@ -2,6 +2,7 @@ import { v } from 'convex/values'
 
 // Trigger-aware builder so each insert bumps the inquiries count aggregate.
 import { mutation } from './aggregates'
+import { inquiryAttributionValidator } from './schema'
 
 /**
  * Insert one inquiry. Public by design: called server-side from
@@ -26,6 +27,7 @@ export const submit = mutation({
     portfolio: v.optional(v.string()),
     references: v.optional(v.union(v.literal('Yes'), v.literal('No'))),
     message: v.optional(v.string()),
+    attribution: v.optional(inquiryAttributionValidator),
   },
   handler: async (ctx, args) => {
     await ctx.db.insert('inquiries', args)

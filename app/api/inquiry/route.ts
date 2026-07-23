@@ -30,6 +30,14 @@ export async function POST(request: Request) {
   const inquiry = parsed.data
   const persisted = await saveInquiry(inquiry)
 
+  // "utm_source / utm_medium / utm_campaign", else the referrer, else direct.
+  const attribution = inquiry.attribution
+  const source = attribution?.utmSource
+    ? [attribution.utmSource, attribution.utmMedium, attribution.utmCampaign]
+        .filter(Boolean)
+        .join(' / ')
+    : attribution?.referrer || 'direct'
+
   const { error } = await resend.emails.send({
     from: 'GFNC Website <no-reply@updates.thegoodfornothings.club>',
     to: ['hello@thegoodfornothings.club'],
@@ -45,6 +53,8 @@ export async function POST(request: Request) {
       `Socials: ${inquiry.socials?.length ? inquiry.socials.join(', ') : '-'}`,
       `Portfolio: ${inquiry.portfolio || '-'}`,
       `References available: ${inquiry.references || '-'}`,
+      `Source: ${source}`,
+      `Landing page: ${attribution?.landingPage || '-'}`,
       '',
       inquiry.message || '(no message)',
       '',

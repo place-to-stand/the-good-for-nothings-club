@@ -9,6 +9,7 @@ import { z } from 'zod'
 import { facilities, storefrontCopy } from '../data/facilities'
 import { membershipTiers } from '../data/membership'
 import { phoneSchema, portfolioSchema } from '../data/schemas'
+import { getAttribution } from '../lib/attribution'
 import { cn } from '../lib/utils'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
@@ -156,6 +157,7 @@ export default function MembershipApplicationForm({
         portfolio: values.portfolio || undefined,
         references: values.references,
         message: values.message || undefined,
+        attribution: getAttribution(),
       }),
     })
 

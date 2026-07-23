@@ -34,6 +34,7 @@ export async function saveInquiry(inquiry: Inquiry): Promise<boolean> {
       ...(inquiry.portfolio ? { portfolio: inquiry.portfolio } : {}),
       ...(inquiry.references ? { references: inquiry.references } : {}),
       ...(inquiry.message ? { message: inquiry.message } : {}),
+      ...(inquiry.attribution ? { attribution: inquiry.attribution } : {}),
     })
     return true
   } catch (error) {

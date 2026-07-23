@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import { events, formatOccurrenceLong } from '../data/events'
 import type { InquiryKind } from '../data/schemas'
+import { captureEvent } from '../lib/analytics'
 import InquiryForm, { type InquirySelection } from './InquiryForm'
 import { Button, type ButtonProps } from './ui/Button'
 import {
@@ -66,7 +67,17 @@ export default function InquiryDialog({
         : description
 
   return (
-    <Dialog>
+    <Dialog
+      onOpenChange={open => {
+        if (open) {
+          captureEvent('inquiry_form_opened', {
+            kind,
+            item,
+            occurrence_date: occurrenceDate,
+          })
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <Button
           variant={triggerVariant}

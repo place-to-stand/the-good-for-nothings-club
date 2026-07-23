@@ -7,6 +7,7 @@ import SocialMediaLinks from './SocialMediaLinks'
 import ScrollTopLink from './ScrollTopLink'
 import { useForm } from 'react-hook-form'
 import { newsletterSignUpSchema } from '../data/schemas'
+import { captureEvent } from '../lib/analytics'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/Form'
@@ -30,7 +31,7 @@ function NewsletterSignUpForm() {
     })
 
     if (response.ok) {
-      console.log('Success!')
+      captureEvent('newsletter_signed_up')
     } else {
       console.error('Failed to subscribe')
     }

@@ -1,5 +1,6 @@
 'use client'
 
+import { captureEvent } from '../lib/analytics'
 import MembershipApplicationForm from './MembershipApplicationForm'
 import { Button } from './ui/Button'
 import {
@@ -30,7 +31,16 @@ export default function MembershipApplicationDialog({
   defaultOffering,
 }: MembershipApplicationDialogProps) {
   return (
-    <Dialog>
+    <Dialog
+      onOpenChange={open => {
+        if (open) {
+          captureEvent('membership_application_opened', {
+            tier: defaultTier,
+            offering: defaultOffering,
+          })
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <Button className=''>{triggerLabel}</Button>
       </DialogTrigger>

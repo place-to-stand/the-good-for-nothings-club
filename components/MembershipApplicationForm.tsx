@@ -9,6 +9,7 @@ import { z } from 'zod'
 import { facilities, storefrontCopy } from '../data/facilities'
 import { membershipTiers } from '../data/membership'
 import { phoneSchema, portfolioSchema } from '../data/schemas'
+import { captureEvent } from '../lib/analytics'
 import { getAttribution } from '../lib/attribution'
 import { cn } from '../lib/utils'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
@@ -140,14 +141,15 @@ export default function MembershipApplicationForm({
   }, [config, offering, form])
 
   async function onSubmit(values: ApplicationValues) {
+    const selectedOffering =
+      config && values.offering !== NOT_SURE ? values.offering : undefined
     const response = await fetch('/api/inquiry', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         kind: 'membership',
         item: values.tier,
-        offering:
-          config && values.offering !== NOT_SURE ? values.offering : undefined,
+        offering: selectedOffering,
         name: values.name,
         email: values.email,
         phone: values.phone || undefined,
@@ -168,6 +170,11 @@ export default function MembershipApplicationForm({
       })
       throw new Error('Application submission failed')
     }
+
+    captureEvent('membership_application_submitted', {
+      tier: values.tier,
+      offering: selectedOffering,
+    })
   }
 
   const { isSubmitting, isSubmitSuccessful, errors } = form.formState

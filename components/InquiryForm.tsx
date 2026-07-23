@@ -14,6 +14,7 @@ import {
 } from '../data/events'
 import { phoneSchema, type InquiryKind } from '../data/schemas'
 import { services } from '../data/services'
+import { captureEvent } from '../lib/analytics'
 import { getAttribution } from '../lib/attribution'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
@@ -192,6 +193,12 @@ export default function InquiryForm({
       })
       throw new Error('Inquiry submission failed')
     }
+
+    captureEvent('inquiry_submitted', {
+      kind,
+      item,
+      occurrence_date: occurrenceDate,
+    })
   }
 
   const { isSubmitting, isSubmitSuccessful, errors } = form.formState

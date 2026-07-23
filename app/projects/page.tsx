@@ -48,6 +48,8 @@ export async function generateMetadata(
 
   return {
     title: 'Projects',
+    description:
+      'Selected work from club members - audio, video, photo, web, builds, and events. Browse what The Good for Nothings Club is making now and what it has shipped.',
     alternates: {
       canonical: pathname,
     },

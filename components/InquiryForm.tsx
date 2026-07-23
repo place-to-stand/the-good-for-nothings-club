@@ -12,7 +12,11 @@ import {
   formatOccurrenceLong,
   upcomingOccurrences,
 } from '../data/events'
-import { phoneSchema, type InquiryKind } from '../data/schemas'
+import {
+  phoneSchema,
+  REFERRAL_SOURCES,
+  type InquiryKind,
+} from '../data/schemas'
 import { services } from '../data/services'
 import { captureEvent } from '../lib/analytics'
 import { getAttribution } from '../lib/attribution'
@@ -83,6 +87,8 @@ const contactSchema = z.object({
   name: z.string().min(1).max(256),
   email: z.string().email(),
   phone: phoneSchema,
+  // '' = unanswered; mapped to undefined before submit.
+  referralSource: z.string(),
   message: z.string().max(5000).optional(),
 })
 
@@ -133,6 +139,7 @@ export default function InquiryForm({
       name: '',
       email: '',
       phone: '',
+      referralSource: '',
       message: '',
     },
   })
@@ -182,6 +189,7 @@ export default function InquiryForm({
         email: values.email,
         phone: values.phone || undefined,
         message: values.message || undefined,
+        referralSource: values.referralSource || undefined,
         attribution: getAttribution(),
       }),
     })
@@ -198,6 +206,7 @@ export default function InquiryForm({
       kind,
       item,
       occurrence_date: occurrenceDate,
+      referral_source: values.referralSource || undefined,
     })
   }
 
@@ -318,6 +327,35 @@ export default function InquiryForm({
             )}
           />
         </div>
+        <FormField
+          name='referralSource'
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel
+                className={fieldLabelClassName}
+                htmlFor='referralSource'
+              >
+                How&apos;d you hear about us? (optional)
+              </FormLabel>
+              <FormControl>
+                <select
+                  id='referralSource'
+                  {...field}
+                  className={selectClassName}
+                >
+                  <option value=''>Select one</option>
+                  {REFERRAL_SOURCES.map(source => (
+                    <option key={source} value={source}>
+                      {source}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           name='message'
           control={form.control}

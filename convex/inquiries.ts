@@ -27,6 +27,9 @@ export const submit = mutation({
     portfolio: v.optional(v.string()),
     references: v.optional(v.union(v.literal('Yes'), v.literal('No'))),
     message: v.optional(v.string()),
+    // Plain string (not a literal union) so option copy can evolve
+    // without invalidating stored rows. Bounded by zod at the API edge.
+    referralSource: v.optional(v.string()),
     attribution: v.optional(inquiryAttributionValidator),
   },
   handler: async (ctx, args) => {

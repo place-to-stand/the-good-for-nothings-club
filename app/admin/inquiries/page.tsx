@@ -117,6 +117,9 @@ function Inquiries() {
                   <Row label='Socials' value={inquiry.socials.join(', ')} />
                 )}
                 {inquiry.references && <Row label='References' value={inquiry.references} />}
+                {inquiry.referralSource && (
+                  <Row label='Heard via' value={inquiry.referralSource} />
+                )}
                 {inquiry.attribution && (
                   <Row label='Source' value={sourceLabel(inquiry.attribution)} />
                 )}

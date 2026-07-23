@@ -8,7 +8,11 @@ import { z } from 'zod'
 
 import { facilities, storefrontCopy } from '../data/facilities'
 import { membershipTiers } from '../data/membership'
-import { phoneSchema, portfolioSchema } from '../data/schemas'
+import {
+  phoneSchema,
+  portfolioSchema,
+  REFERRAL_SOURCES,
+} from '../data/schemas'
 import { captureEvent } from '../lib/analytics'
 import { getAttribution } from '../lib/attribution'
 import { cn } from '../lib/utils'
@@ -47,6 +51,8 @@ const applicationSchema = z.object({
   references: z.string().refine(value => ['Yes', 'No'].includes(value), {
     message: 'Select yes or no.',
   }),
+  // '' = unanswered; mapped to undefined before submit.
+  referralSource: z.string(),
   message: z.string().max(5000).optional(),
 })
 
@@ -116,6 +122,7 @@ export default function MembershipApplicationForm({
       socials: [{ handle: '' }],
       portfolio: '',
       references: '',
+      referralSource: '',
       message: '',
     },
   })
@@ -159,6 +166,7 @@ export default function MembershipApplicationForm({
         portfolio: values.portfolio || undefined,
         references: values.references,
         message: values.message || undefined,
+        referralSource: values.referralSource || undefined,
         attribution: getAttribution(),
       }),
     })
@@ -174,6 +182,7 @@ export default function MembershipApplicationForm({
     captureEvent('membership_application_submitted', {
       tier: values.tier,
       offering: selectedOffering,
+      referral_source: values.referralSource || undefined,
     })
   }
 
@@ -313,6 +322,35 @@ export default function MembershipApplicationForm({
                     autoComplete='email'
                     {...field}
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name='referralSource'
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className='sm:col-span-2'>
+                <FormLabel
+                  className={fieldLabelClassName}
+                  htmlFor='referralSource'
+                >
+                  How&apos;d you hear about us? (optional)
+                </FormLabel>
+                <FormControl>
+                  <select
+                    id='referralSource'
+                    {...field}
+                    className={selectClassName}
+                  >
+                    <option value=''>Select one</option>
+                    {REFERRAL_SOURCES.map(source => (
+                      <option key={source} value={source}>
+                        {source}
+                      </option>
+                    ))}
+                  </select>
                 </FormControl>
                 <FormMessage />
               </FormItem>

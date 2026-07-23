@@ -24,6 +24,20 @@ export const INQUIRY_STATUSES = [
 ] as const
 
 /**
+ * Self-reported answer to "How'd you hear about us?" — complements the
+ * silent first-touch attribution below, which often disagrees with it.
+ */
+export const REFERRAL_SOURCES = [
+  'Friend or word of mouth',
+  'Instagram',
+  'Google or search',
+  'Event at the club',
+  'Walked or drove by',
+  'Press or article',
+  'Other',
+] as const
+
+/**
  * How the visitor found the site, captured once per session on first page
  * view (lib/attribution.ts) and attached to every inquiry they submit.
  */
@@ -68,10 +82,13 @@ export const inquirySchema = z.object({
   portfolio: portfolioSchema.optional(),
   references: z.enum(['Yes', 'No']).optional(),
   message: z.string().max(5000).optional(),
+  /** Self-reported "How'd you hear about us?" answer. */
+  referralSource: z.enum(REFERRAL_SOURCES).optional(),
   attribution: attributionSchema.optional(),
 })
 
 export type InquiryKind = (typeof INQUIRY_KINDS)[number]
 export type InquiryStatus = (typeof INQUIRY_STATUSES)[number]
+export type ReferralSource = (typeof REFERRAL_SOURCES)[number]
 export type InquiryAttribution = z.infer<typeof attributionSchema>
 export type Inquiry = z.infer<typeof inquirySchema>

@@ -120,6 +120,12 @@ export default defineSchema({
     portfolio: v.optional(v.string()),
     references: v.optional(v.union(v.literal('Yes'), v.literal('No'))),
     message: v.optional(v.string()),
+    /**
+     * Self-reported "How'd you hear about us?" answer. Plain string (not a
+     * literal union) so option copy can evolve without invalidating rows;
+     * bounded to REFERRAL_SOURCES by zod at the API edge.
+     */
+    referralSource: v.optional(v.string()),
     /** First-touch source captured client-side; absent on older rows. */
     attribution: v.optional(inquiryAttributionValidator),
     /** Lifecycle managed from /admin; absent means 'new'. */

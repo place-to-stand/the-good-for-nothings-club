@@ -53,6 +53,7 @@ export async function POST(request: Request) {
       `Socials: ${inquiry.socials?.length ? inquiry.socials.join(', ') : '-'}`,
       `Portfolio: ${inquiry.portfolio || '-'}`,
       `References available: ${inquiry.references || '-'}`,
+      `Heard about us via: ${inquiry.referralSource || '-'}`,
       `Source: ${source}`,
       `Landing page: ${attribution?.landingPage || '-'}`,
       '',

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { alegreya, rubik, rubikGlitch } from '../styles/fonts'
+import { clubhouse } from '@/data/location'
 import { cn } from '@/lib/utils'
 import { Analytics } from '@vercel/analytics/react'
 
@@ -67,6 +68,29 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+// LocalBusiness structured data, matching the Google Business Profile so
+// search engines connect the site, the listing, and the address.
+const localBusinessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'The Good for Nothings Club',
+  url: 'https://www.thegoodfornothings.club',
+  email: 'hello@thegoodfornothings.club',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: clubhouse.street,
+    addressLocality: clubhouse.city,
+    addressRegion: clubhouse.state,
+    postalCode: clubhouse.zip,
+    addressCountry: 'US',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: clubhouse.geo.lat,
+    longitude: clubhouse.geo.lng,
+  },
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -78,6 +102,12 @@ export default function RootLayout({
       className={cn(alegreya.variable, rubik.variable, rubikGlitch.variable)}
     >
       <body>
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessJsonLd),
+          }}
+        />
         <AttributionCapture />
         <Header />
         {children}

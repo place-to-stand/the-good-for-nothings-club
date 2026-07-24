@@ -6,6 +6,7 @@ import { Button } from './ui/Button'
 import SocialMediaLinks from './SocialMediaLinks'
 import ScrollTopLink from './ScrollTopLink'
 import { useForm } from 'react-hook-form'
+import { clubhouse, clubhouseMapsUrl } from '../data/location'
 import { newsletterSignUpSchema } from '../data/schemas'
 import { captureEvent } from '../lib/analytics'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -133,6 +134,16 @@ export default function Footer() {
                 </ScrollTopLink>
               ))}
             </nav>
+            <a
+              href={clubhouseMapsUrl}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='mt-10 block text-sm leading-snug'
+            >
+              {clubhouse.street}
+              <br />
+              {clubhouse.city}, {clubhouse.state} {clubhouse.zip}
+            </a>
           </div>
           <div>
             <h3 className='text-[20px] font-black tracking-[0.06em] uppercase'>

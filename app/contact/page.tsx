@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import InquiryForm from '@/components/InquiryForm'
+import { clubhouseAddressLine, clubhouseMapsUrl } from '@/data/location'
 import Map from '../../components/Map'
 import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
@@ -49,6 +50,14 @@ export default async function Contact() {
           </div>
 
           <SectionHeading title='Location' />
+          <Link
+            href={clubhouseMapsUrl}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='mt-4 inline-block font-sans text-xl font-normal'
+          >
+            {clubhouseAddressLine}
+          </Link>
           <div className='mt-6 aspect-video overflow-hidden border-2 border-black'>
             <Map />
           </div>

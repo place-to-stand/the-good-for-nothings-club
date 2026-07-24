@@ -5,6 +5,7 @@ import { inquirySchema } from '@/data/schemas'
 import { inquiryEmail } from '@/lib/emailTemplates'
 import { saveInquiry } from '@/lib/inquiries'
 import { addToMailingList } from '@/lib/newsletter'
+import { captureServerException } from '@/lib/posthog-server'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -36,9 +37,13 @@ export async function POST(request: Request) {
   if (inquiry.mailingList) {
     try {
       const { error } = await addToMailingList(inquiry.email)
-      if (error) console.error('Mailing list opt-in failed:', error)
+      if (error) {
+        console.error('Mailing list opt-in failed:', error)
+        await captureServerException(new Error(`Mailing list opt-in failed: ${error.message}`), { context: 'inquiry mailingList' })
+      }
     } catch (error) {
       console.error('Mailing list opt-in failed:', error)
+      await captureServerException(error, { context: 'inquiry mailingList' })
     }
   }
 

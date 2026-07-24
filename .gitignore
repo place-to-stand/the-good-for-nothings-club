@@ -35,12 +35,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Sentry Config File
-.sentryclirc
-
-# Sentry Config File
-.env.sentry-build-plugin
-
 # local archive of original Sanity assets from the 2026-07 Convex migration
 # (migration code removed; copy this folder somewhere durable, then delete)
 scripts/migrate-sanity/

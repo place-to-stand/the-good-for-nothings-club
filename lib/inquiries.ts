@@ -2,6 +2,7 @@ import { ConvexHttpClient } from 'convex/browser'
 
 import { api } from '@/convex/_generated/api'
 import type { Inquiry } from '@/data/schemas'
+import { captureServerException } from '@/lib/posthog-server'
 
 /**
  * Persist an inquiry to Convex (schema in convex/schema.ts).
@@ -44,7 +45,10 @@ export async function saveInquiry(inquiry: Inquiry): Promise<boolean> {
     })
     return true
   } catch (error) {
+    // Alert loudly: this firing usually means the deployed Convex schema
+    // is behind the frontend (the July 2026 lost-application failure).
     console.error('Failed to persist inquiry:', error)
+    await captureServerException(error, { context: 'saveInquiry' })
     return false
   }
 }

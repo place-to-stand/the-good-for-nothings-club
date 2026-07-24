@@ -1,13 +1,19 @@
-import * as Sentry from '@sentry/nextjs'
+import type { Instrumentation } from 'next'
 
-export async function register() {
+/**
+ * Uncaught errors in server code (RSC renders, route handlers, server
+ * actions) flow to PostHog Error Tracking. Deliberate catches that need
+ * reporting call captureServerException directly.
+ */
+export const onRequestError: Instrumentation.onRequestError = async (
+  error,
+  request
+) => {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await import('./sentry.server.config')
-  }
-
-  if (process.env.NEXT_RUNTIME === 'edge') {
-    await import('./sentry.edge.config')
+    const { captureServerException } = await import('./lib/posthog-server')
+    await captureServerException(error, {
+      path: request.path,
+      method: request.method,
+    })
   }
 }
-
-export const onRequestError = Sentry.captureRequestError

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { alegreya, rubik, rubikGlitch } from '../styles/fonts'
-import { clubhouse } from '@/data/location'
 import { cn } from '@/lib/utils'
+import { localBusinessJsonLd } from '@/lib/structuredData'
 import { Analytics } from '@vercel/analytics/react'
 
 import '../styles/globals.css'
@@ -66,29 +66,6 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: 'en_US',
     },
   }
-}
-
-// LocalBusiness structured data, matching the Google Business Profile so
-// search engines connect the site, the listing, and the address.
-const localBusinessJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name: 'The Good for Nothings Club',
-  url: 'https://www.thegoodfornothings.club',
-  email: 'hello@thegoodfornothings.club',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: clubhouse.street,
-    addressLocality: clubhouse.city,
-    addressRegion: clubhouse.state,
-    postalCode: clubhouse.zip,
-    addressCountry: 'US',
-  },
-  geo: {
-    '@type': 'GeoCoordinates',
-    latitude: clubhouse.geo.lat,
-    longitude: clubhouse.geo.lng,
-  },
 }
 
 export default function RootLayout({

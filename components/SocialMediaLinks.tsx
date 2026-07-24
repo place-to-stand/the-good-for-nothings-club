@@ -7,7 +7,8 @@ import {
   FaThreads,
 } from 'react-icons/fa6'
 
-const SOCIAL_LINKS = [
+/** Canonical club profiles; also the sameAs list in lib/structuredData.ts. */
+export const SOCIAL_LINKS = [
   {
     href: 'https://www.instagram.com/thegfnc/',
     label: 'Instagram',

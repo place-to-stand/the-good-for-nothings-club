@@ -12,6 +12,7 @@ import {
   formatOccurrenceDate,
   upcomingOccurrences,
 } from '@/data/events'
+import { eventsJsonLd } from '@/lib/structuredData'
 
 // Recompute the upcoming schedule daily.
 export const revalidate = 86400
@@ -56,6 +57,12 @@ export default function Events() {
 
   return (
     <PageShell title='Events' lead={`The club, in session. ${eventsCopy.lead}`}>
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(eventsJsonLd(upcoming)),
+        }}
+      />
       <div className='grid grid-cols-1 gap-6 md:gap-16 lg:grid-cols-2'>
         <div>
           <SectionHeading title={eventsCopy.calendarTitle} />

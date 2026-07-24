@@ -2,6 +2,7 @@ import { checkBotId } from 'botid/server'
 import { Resend } from 'resend'
 
 import { inquirySchema } from '@/data/schemas'
+import { inquiryEmail } from '@/lib/emailTemplates'
 import { saveInquiry } from '@/lib/inquiries'
 import { addToMailingList } from '@/lib/newsletter'
 
@@ -41,40 +42,15 @@ export async function POST(request: Request) {
     }
   }
 
-  // "utm_source / utm_medium / utm_campaign", else the referrer, else direct.
-  const attribution = inquiry.attribution
-  const source = attribution?.utmSource
-    ? [attribution.utmSource, attribution.utmMedium, attribution.utmCampaign]
-        .filter(Boolean)
-        .join(' / ')
-    : attribution?.referrer || 'direct'
+  const { html, text } = inquiryEmail(inquiry, persisted)
 
   const { error } = await resend.emails.send({
     from: 'GFNC Website <no-reply@updates.thegoodfornothings.club>',
     to: ['hello@thegoodfornothings.club'],
     replyTo: inquiry.email,
     subject: `${SUBJECT_PREFIX[inquiry.kind]}: ${inquiry.item}`,
-    text: [
-      `Kind: ${inquiry.kind}`,
-      `Item: ${inquiry.item}`,
-      `Offering: ${inquiry.offering || '-'}`,
-      `Name: ${inquiry.name}`,
-      `Email: ${inquiry.email}`,
-      `Phone: ${inquiry.phone || '-'}`,
-      `Socials: ${inquiry.socials?.length ? inquiry.socials.join(', ') : '-'}`,
-      `Portfolio: ${inquiry.portfolio || '-'}`,
-      `References available: ${inquiry.references || '-'}`,
-      `Heard about us via: ${inquiry.referralSource || '-'}`,
-      `Mailing list: ${inquiry.mailingList ? 'opted in' : '-'}`,
-      `Source: ${source}`,
-      `Landing page: ${attribution?.landingPage || '-'}`,
-      '',
-      inquiry.message || '(no message)',
-      '',
-      persisted
-        ? 'Saved to inquiries table.'
-        : 'NOT saved to database - this email is the only record.',
-    ].join('\n'),
+    html,
+    text,
   })
 
   if (error) {

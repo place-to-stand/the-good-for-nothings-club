@@ -2,6 +2,7 @@ import { checkBotId } from 'botid/server'
 import { Resend } from 'resend'
 
 import { newsletterSignUpSchema } from '@/data/schemas'
+import { newsletterEmail } from '@/lib/emailTemplates'
 import { addToMailingList } from '@/lib/newsletter'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -36,11 +37,14 @@ export async function POST(request: Request) {
     )
   }
 
+  const { html, text } = newsletterEmail(body.email)
+
   resend.emails.send({
     from: `GFNC Newsletter Sign Up Form <no-reply@updates.thegoodfornothings.club>`,
     to: ['hello@thegoodfornothings.club'],
     subject: 'Newsletter Sign up @ https://www.thegoodfornothings.club/',
-    text: `You just got a new mailing list sign up!\n\nEmail: ${body.email}`,
+    html,
+    text,
   })
 
   return Response.json({ success: true })

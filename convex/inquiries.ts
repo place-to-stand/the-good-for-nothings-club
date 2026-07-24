@@ -1,7 +1,7 @@
 import { v } from 'convex/values'
 
-// Trigger-aware builder so each insert bumps the inquiries count aggregate.
-import { mutation } from './aggregates'
+// Trigger-aware builders so inserts/deletes keep the count aggregate in sync.
+import { internalMutation, mutation } from './aggregates'
 import { inquiryAttributionValidator } from './schema'
 
 /**
@@ -35,5 +35,18 @@ export const submit = mutation({
   },
   handler: async (ctx, args) => {
     await ctx.db.insert('inquiries', args)
+  },
+})
+
+/**
+ * CLI-only cleanup for test submissions (no UI path deletes inquiries):
+ *   npx convex run inquiries:remove '{"id":"<_id>"}' [--prod]
+ * Trigger-aware, so the admin count aggregate stays in sync — never
+ * delete rows from the dashboard.
+ */
+export const remove = internalMutation({
+  args: { id: v.id('inquiries') },
+  handler: async (ctx, { id }) => {
+    await ctx.db.delete(id)
   },
 })

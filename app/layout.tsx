@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: {
       template: '%s | The Good for Nothings Club',
-      default: 'Creators club from ATX | The Good for Nothings Club',
+      default: 'Creators club in ATX | The Good for Nothings Club',
     },
     description:
       'The Good for Nothings Club is a creators club in Austin, TX made up of musicians, photographers, writers, filmmakers, and engineers. Our clubhouse puts studios, rehearsal rooms, and workspace under one roof. Good for nothings. Making everything.',

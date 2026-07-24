@@ -3,6 +3,7 @@ import { Resend } from 'resend'
 
 import { inquirySchema } from '@/data/schemas'
 import { saveInquiry } from '@/lib/inquiries'
+import { addToMailingList } from '@/lib/newsletter'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -30,6 +31,16 @@ export async function POST(request: Request) {
   const inquiry = parsed.data
   const persisted = await saveInquiry(inquiry)
 
+  // Opt-in only; a subscription failure must never fail the inquiry.
+  if (inquiry.mailingList) {
+    try {
+      const { error } = await addToMailingList(inquiry.email)
+      if (error) console.error('Mailing list opt-in failed:', error)
+    } catch (error) {
+      console.error('Mailing list opt-in failed:', error)
+    }
+  }
+
   // "utm_source / utm_medium / utm_campaign", else the referrer, else direct.
   const attribution = inquiry.attribution
   const source = attribution?.utmSource
@@ -54,6 +65,7 @@ export async function POST(request: Request) {
       `Portfolio: ${inquiry.portfolio || '-'}`,
       `References available: ${inquiry.references || '-'}`,
       `Heard about us via: ${inquiry.referralSource || '-'}`,
+      `Mailing list: ${inquiry.mailingList ? 'opted in' : '-'}`,
       `Source: ${source}`,
       `Landing page: ${attribution?.landingPage || '-'}`,
       '',

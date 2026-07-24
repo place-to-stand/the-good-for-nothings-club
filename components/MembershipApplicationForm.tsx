@@ -19,6 +19,7 @@ import { cn } from '../lib/utils'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
 import {
+  checkboxClassName,
   fieldLabelClassName,
   radioClassName,
   selectClassName,
@@ -54,6 +55,7 @@ const applicationSchema = z.object({
   // '' = unanswered; mapped to undefined before submit.
   referralSource: z.string(),
   message: z.string().max(5000).optional(),
+  mailingList: z.boolean(),
 })
 
 type ApplicationValues = z.infer<typeof applicationSchema>
@@ -124,6 +126,7 @@ export default function MembershipApplicationForm({
       references: '',
       referralSource: '',
       message: '',
+      mailingList: false,
     },
   })
 
@@ -168,6 +171,7 @@ export default function MembershipApplicationForm({
         message: values.message || undefined,
         referralSource: values.referralSource || undefined,
         attribution: getAttribution(),
+        mailingList: values.mailingList || undefined,
       }),
     })
 
@@ -183,6 +187,7 @@ export default function MembershipApplicationForm({
       tier: values.tier,
       offering: selectedOffering,
       referral_source: values.referralSource || undefined,
+      mailing_list_opt_in: values.mailingList,
     })
   }
 
@@ -480,6 +485,27 @@ export default function MembershipApplicationForm({
               </FormLabel>
               <FormControl>
                 <Textarea id='message' maxLength={4096} rows={5} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name='mailingList'
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className='mt-4'>
+              <FormControl>
+                <label className='flex cursor-pointer items-center gap-2 pt-1 font-sans text-sm'>
+                  <input
+                    type='checkbox'
+                    name={field.name}
+                    checked={field.value}
+                    onChange={event => field.onChange(event.target.checked)}
+                    className={checkboxClassName}
+                  />
+                  Sign me up for the mailing list
+                </label>
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -128,6 +128,8 @@ export default defineSchema({
     referralSource: v.optional(v.string()),
     /** First-touch source captured client-side; absent on older rows. */
     attribution: v.optional(inquiryAttributionValidator),
+    /** Mailing-list opt-in; only ever stored as true, absent otherwise. */
+    mailingList: v.optional(v.boolean()),
     /** Lifecycle managed from /admin; absent means 'new'. */
     status: v.optional(inquiryStatusValidator),
     /** Ms epoch when status first left 'new' - time-to-first-reply metric. */

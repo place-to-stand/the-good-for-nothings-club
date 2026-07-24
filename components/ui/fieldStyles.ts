@@ -15,3 +15,7 @@ export const fieldLabelClassName = 'text-sm font-semibold'
  */
 export const radioClassName =
   'bg-input/10 hover:border-input/30 focus-visible:border-input h-4 w-4 shrink-0 cursor-pointer appearance-none rounded-full border-2 border-transparent transition-colors focus-visible:outline-hidden checked:border-black checked:bg-black checked:shadow-[inset_0_0_0_3px_var(--background)] checked:hover:border-black'
+
+/** The radio ladder squared off; checked is a black square behind an inset ring. */
+export const checkboxClassName =
+  'bg-input/10 hover:border-input/30 focus-visible:border-input h-4 w-4 shrink-0 cursor-pointer appearance-none rounded-none border-2 border-transparent transition-colors focus-visible:outline-hidden checked:border-black checked:bg-black checked:shadow-[inset_0_0_0_3px_var(--background)] checked:hover:border-black'

@@ -129,6 +129,10 @@ Validation (once, on this form)
 - [ ] `+44 20 7946 0958` → left as typed, submits fine
 - [ ] Phone/message empty → still submits (both optional)
 - [ ] Email body shows the phone in its masked format
+- [ ] Mailing-list box unchecked → email shows `Mailing list: -`
+- [ ] Mailing-list box checked → email shows `Mailing list: opted in`,
+      contact appears in the Resend newsletter audience, and the admin
+      inquiry row shows `Mailing list: Yes`
 
 ### B. Service inquiry dialogs (8 launch points)
 

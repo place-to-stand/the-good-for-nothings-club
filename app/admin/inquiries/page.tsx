@@ -120,6 +120,7 @@ function Inquiries() {
                 {inquiry.referralSource && (
                   <Row label='Heard via' value={inquiry.referralSource} />
                 )}
+                {inquiry.mailingList && <Row label='Mailing list' value='Yes' />}
                 {inquiry.attribution && (
                   <Row label='Source' value={sourceLabel(inquiry.attribution)} />
                 )}

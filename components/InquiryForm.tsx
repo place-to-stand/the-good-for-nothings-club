@@ -22,7 +22,11 @@ import { captureEvent } from '../lib/analytics'
 import { getAttribution } from '../lib/attribution'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
-import { fieldLabelClassName, selectClassName } from './ui/fieldStyles'
+import {
+  checkboxClassName,
+  fieldLabelClassName,
+  selectClassName,
+} from './ui/fieldStyles'
 import {
   Form,
   FormControl,
@@ -90,6 +94,7 @@ const contactSchema = z.object({
   // '' = unanswered; mapped to undefined before submit.
   referralSource: z.string(),
   message: z.string().max(5000).optional(),
+  mailingList: z.boolean(),
 })
 
 type ContactValues = z.infer<typeof contactSchema>
@@ -141,6 +146,7 @@ export default function InquiryForm({
       phone: '',
       referralSource: '',
       message: '',
+      mailingList: false,
     },
   })
 
@@ -191,6 +197,7 @@ export default function InquiryForm({
         message: values.message || undefined,
         referralSource: values.referralSource || undefined,
         attribution: getAttribution(),
+        mailingList: values.mailingList || undefined,
       }),
     })
 
@@ -207,6 +214,7 @@ export default function InquiryForm({
       item,
       occurrence_date: occurrenceDate,
       referral_source: values.referralSource || undefined,
+      mailing_list_opt_in: values.mailingList,
     })
   }
 
@@ -366,6 +374,27 @@ export default function InquiryForm({
               </FormLabel>
               <FormControl>
                 <Textarea id='message' maxLength={4096} rows={5} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name='mailingList'
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <label className='flex cursor-pointer items-center gap-2 pt-1 font-sans text-sm'>
+                  <input
+                    type='checkbox'
+                    name={field.name}
+                    checked={field.value}
+                    onChange={event => field.onChange(event.target.checked)}
+                    className={checkboxClassName}
+                  />
+                  Sign me up for the mailing list
+                </label>
               </FormControl>
               <FormMessage />
             </FormItem>

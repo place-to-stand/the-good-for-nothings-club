@@ -85,6 +85,8 @@ export const inquirySchema = z.object({
   /** Self-reported "How'd you hear about us?" answer. */
   referralSource: z.enum(REFERRAL_SOURCES).optional(),
   attribution: attributionSchema.optional(),
+  /** Opted into the mailing list; also subscribes them to the Resend audience. */
+  mailingList: z.boolean().optional(),
 })
 
 export type InquiryKind = (typeof INQUIRY_KINDS)[number]

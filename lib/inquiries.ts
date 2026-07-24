@@ -38,6 +38,9 @@ export async function saveInquiry(inquiry: Inquiry): Promise<boolean> {
         ? { referralSource: inquiry.referralSource }
         : {}),
       ...(inquiry.attribution ? { attribution: inquiry.attribution } : {}),
+      // Sent only when true: a false would be rejected by a Convex
+      // deployment that predates the field, and absent already means no.
+      ...(inquiry.mailingList ? { mailingList: true } : {}),
     })
     return true
   } catch (error) {

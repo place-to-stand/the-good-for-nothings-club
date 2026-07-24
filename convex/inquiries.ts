@@ -31,6 +31,7 @@ export const submit = mutation({
     // without invalidating stored rows. Bounded by zod at the API edge.
     referralSource: v.optional(v.string()),
     attribution: v.optional(inquiryAttributionValidator),
+    mailingList: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     await ctx.db.insert('inquiries', args)

@@ -2,6 +2,7 @@ import { checkBotId } from 'botid/server'
 import { Resend } from 'resend'
 
 import { newsletterSignUpSchema } from '@/data/schemas'
+import { addToMailingList } from '@/lib/newsletter'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -24,11 +25,7 @@ export async function POST(request: Request) {
     )
   }
 
-  const { error } = await resend.contacts.create({
-    email: body.email,
-    unsubscribed: false,
-    audienceId: '0e260e13-cbce-463c-963e-258ca972c31b',
-  })
+  const { error } = await addToMailingList(body.email)
 
   if (error) {
     return Response.json(

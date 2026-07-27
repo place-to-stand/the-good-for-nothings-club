@@ -9,7 +9,7 @@ import { SOCIAL_LINKS } from '@/components/SocialMediaLinks'
  * eligible for Google's event rich results.
  */
 
-const SITE_URL = 'https://www.thegoodfornothings.club'
+const SITE_URL = 'https://thegoodfornothings.club'
 
 const postalAddress = {
   '@type': 'PostalAddress',

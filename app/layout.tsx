@@ -56,7 +56,7 @@ export async function generateMetadata(): Promise<Metadata> {
       'songs',
     ],
     creator: 'The Good for Nothings Club',
-    metadataBase: new URL('https://www.thegoodfornothings.club'),
+    metadataBase: new URL('https://thegoodfornothings.club'),
     alternates: {
       canonical: pathname,
     },

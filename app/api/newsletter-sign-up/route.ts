@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   resend.emails.send({
     from: `GFNC Newsletter Sign Up Form <no-reply@updates.thegoodfornothings.club>`,
     to: ['hello@thegoodfornothings.club'],
-    subject: 'Newsletter Sign up @ https://www.thegoodfornothings.club/',
+    subject: 'Newsletter Sign up @ https://thegoodfornothings.club/',
     html,
     text,
   })

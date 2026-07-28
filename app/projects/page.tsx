@@ -48,6 +48,8 @@ export async function generateMetadata(
 
   return {
     title: 'Projects',
+    description:
+      'Web, video, photo, audio, event, and build projects made by the members of The Good for Nothings Club — the portfolio of an Austin, TX creators club.',
     alternates: {
       canonical: pathname,
     },

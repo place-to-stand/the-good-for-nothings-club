@@ -88,6 +88,7 @@ export function legacyProject(
     title: project.title,
     clientName: project.clientName,
     slug: { current: project.slug },
+    seoDescription: project.seoDescription ?? null,
     type: project.type,
     status: project.status,
     mainLink: project.mainLink ?? null,

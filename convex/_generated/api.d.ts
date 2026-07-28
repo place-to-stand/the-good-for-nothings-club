@@ -15,6 +15,7 @@ import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as inquiries from "../inquiries.js";
 import type * as legacy from "../legacy.js";
+import type * as maintenance from "../maintenance.js";
 import type * as members from "../members.js";
 import type * as projects from "../projects.js";
 
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   inquiries: typeof inquiries;
   legacy: typeof legacy;
+  maintenance: typeof maintenance;
   members: typeof members;
   projects: typeof projects;
 }>;

@@ -26,6 +26,8 @@ export async function generateMetadata(
 
   return {
     title: 'About',
+    description:
+      'Who we are, what happens at the clubhouse, and the founding members behind The Good for Nothings Club — a creators club making everything in Austin, TX.',
     alternates: {
       canonical: pathname,
     },

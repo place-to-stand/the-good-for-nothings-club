@@ -41,9 +41,21 @@ export async function generateMetadata(
     mainMedia => mainMedia._type === 'image'
   ) as Image
 
+  // The root layout template appends "| The Good for Nothings Club", so club
+  // projects use the bare title (avoids the brand twice) and client projects
+  // drop the template when the combined title would blow past ~60 chars.
+  const isClubProject = project.clientName === 'The Good for Nothings Club'
+  const baseTitle = isClubProject
+    ? project.title.trim()
+    : `${project.title.trim()} – ${project.clientName}`
+  const title =
+    baseTitle.length + ' | The Good for Nothings Club'.length <= 60
+      ? baseTitle
+      : { absolute: baseTitle }
+
   return {
-    title: `${project.title} – ${project.clientName}`,
-    description: toPlainText(project.summary),
+    title,
+    description: project.seoDescription ?? toPlainText(project.summary),
     alternates: {
       canonical: pathname,
     },

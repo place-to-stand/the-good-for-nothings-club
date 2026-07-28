@@ -7,6 +7,7 @@ import { Id } from '../../../convex/_generated/dataModel'
 import Image from 'next/image'
 import { Metadata, ResolvingMetadata } from 'next'
 import ProjectCardSmall from '@/components/ProjectCardSmall'
+import { pastMemberSlugs } from '@/data/leadership'
 import { FaCaretLeft } from 'react-icons/fa6'
 
 // Regenerate hourly — matches the old cmsFetch revalidate window.
@@ -32,9 +33,22 @@ export async function generateMetadata(
     slug,
   })) as unknown as GFNC_member
 
+  const memberKind = pastMemberSlugs.includes(slug)
+    ? 'a past member'
+    : 'a founding member'
+  const roleList =
+    member.roles.length > 1
+      ? `${member.roles.slice(0, -1).join(', ')} and ${member.roles.at(-1)}`
+      : member.roles[0]
+  const memberSince = new Date(member.startDate).toLocaleDateString('en-US', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+
   return {
-    title: `${member.fullName} – Good For Nothings Club`,
-    description: `${member.fullName} is a member of The Good For Nothings Club. ${member.roles.join(', ')}.`,
+    title: member.fullName,
+    description: `${member.fullName} is ${memberKind} of The Good for Nothings Club in Austin, TX — ${roleList}. Member #${String(member.memberNumber).padStart(3, '0')} since ${memberSince}.`,
     alternates: {
       canonical: pathname,
     },
@@ -91,6 +105,7 @@ export default async function Member(props: MemberProps) {
                   width={member.profilePicture.asset.metadata.dimensions.width}
                   height={member.profilePicture.asset.metadata.dimensions.height}
                   alt={member.profilePicture.caption}
+                  sizes='(min-width: 1024px) 33vw, 100vw'
                   className='w-full border-2 border-black object-cover'
                   style={{ objectPosition }}
                   priority

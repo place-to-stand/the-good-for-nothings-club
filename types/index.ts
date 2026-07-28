@@ -68,6 +68,7 @@ export type GFNC_project = {
   slug: {
     current: string
   }
+  seoDescription?: string | null
   type: GFNC_projectType
   status: GFNC_projectStatus
   mainLink?: string | null

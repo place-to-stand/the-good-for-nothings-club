@@ -7,6 +7,10 @@ const nextConfig = {
   skipTrailingSlashRedirect: true,
 
   images: {
+    // Page content maxes out at --page-max-width (1440px), so nothing ever
+    // renders wider than 1440 CSS px. Dropping the default 2048/3840 rungs
+    // keeps the optimizer from serving multi-MB variants nothing can use.
+    deviceSizes: [640, 750, 828, 1080, 1200, 1440, 1920],
     remotePatterns: [
       {
         protocol: 'https',

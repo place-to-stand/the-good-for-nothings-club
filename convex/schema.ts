@@ -168,6 +168,8 @@ export default defineSchema({
     title: v.string(),
     clientName: v.string(),
     slug: v.string(),
+    /** Hand-written meta description (~150-160 chars) for the project page. */
+    seoDescription: v.optional(v.string()),
     type: projectTypeValidator,
     status: projectStatusValidator,
     mainLink: v.optional(v.string()),

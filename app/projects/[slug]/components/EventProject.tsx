@@ -69,6 +69,7 @@ export default function EventProject({ project }: EventProjectProps) {
                 height={mainMedia.asset.metadata.dimensions.height}
                 alt={mainMedia.caption}
                 className={`w-full`}
+                sizes='(min-width: 1440px) 1440px, 100vw'
                 priority
                 placeholder={mainMedia.asset.metadata.lqip}
               />
@@ -168,6 +169,7 @@ export default function EventProject({ project }: EventProjectProps) {
                           height={value.asset.metadata.dimensions.height}
                           alt={value.caption}
                           className={`w-full`}
+                          sizes='(min-width: 1440px) 1440px, 100vw'
                           placeholder={value.asset.metadata.lqip}
                         />
                       )

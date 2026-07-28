@@ -18,6 +18,8 @@ export async function generateMetadata(
 
   return {
     title: 'Contact',
+    description:
+      'Get in touch with The Good for Nothings Club — email, social links, and the clubhouse location in Austin, TX. Send a message about projects or membership.',
     alternates: {
       canonical: pathname,
     },

@@ -7,6 +7,12 @@
       "runtimeArgs": ["run", "dev"],
       "port": 3001,
       "autoPort": true
+    },
+    {
+      "name": "prod-utc",
+      "runtimeExecutable": "env",
+      "runtimeArgs": ["TZ=UTC", "npm", "run", "start", "--", "--port", "3005"],
+      "port": 3005
     }
   ]
 }

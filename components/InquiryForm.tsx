@@ -20,6 +20,7 @@ import {
 import { services } from '../data/services'
 import { captureEvent } from '../lib/analytics'
 import { getAttribution } from '../lib/attribution'
+import { useFormTracking } from '../lib/form-tracking'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
 import {
@@ -152,6 +153,19 @@ export default function InquiryForm({
 
   const regarding = form.watch('regarding')
   const { kind } = decode(regarding)
+
+  // Enumerated choices only - free-text fields stay out of analytics.
+  useFormTracking('inquiry', form, () => {
+    const values = form.getValues()
+    const { kind, item, occurrenceDate } = decode(values.regarding)
+    return {
+      kind,
+      item,
+      occurrence_date: occurrenceDate,
+      referral_source: values.referralSource || undefined,
+      mailing_list_opt_in: values.mailingList,
+    }
+  })
 
   useEffect(() => {
     onSelectionChange?.(decode(regarding))

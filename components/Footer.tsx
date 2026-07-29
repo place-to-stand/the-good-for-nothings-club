@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form'
 import { clubhouse, clubhouseMapsUrl } from '../data/location'
 import { newsletterSignUpSchema } from '../data/schemas'
 import { captureEvent } from '../lib/analytics'
+import { useFormTracking } from '../lib/form-tracking'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/Form'
@@ -21,6 +22,8 @@ function NewsletterSignUpForm() {
       email: '',
     },
   })
+
+  useFormTracking('newsletter_sign_up', form)
 
   async function onSubmit(values: z.infer<typeof newsletterSignUpSchema>) {
     const response = await fetch('/api/newsletter-sign-up', {

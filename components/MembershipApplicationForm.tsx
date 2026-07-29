@@ -15,6 +15,7 @@ import {
 } from '../data/schemas'
 import { captureEvent } from '../lib/analytics'
 import { getAttribution } from '../lib/attribution'
+import { useFormTracking } from '../lib/form-tracking'
 import { cn } from '../lib/utils'
 import { Alert, AlertDescription, AlertTitle } from './ui/Alert'
 import { Button } from './ui/Button'
@@ -138,6 +139,21 @@ export default function MembershipApplicationForm({
   const tier = form.watch('tier')
   const offering = form.watch('offering')
   const config = offeringConfig(tier)
+
+  // Enumerated choices only - free-text fields stay out of analytics.
+  useFormTracking('membership_application', form, () => {
+    const values = form.getValues()
+    return {
+      tier: values.tier,
+      offering:
+        offeringConfig(values.tier) && values.offering !== NOT_SURE
+          ? values.offering
+          : undefined,
+      references: values.references || undefined,
+      referral_source: values.referralSource || undefined,
+      mailing_list_opt_in: values.mailingList,
+    }
+  })
 
   // Keep the offering valid for the selected tier.
   useEffect(() => {

@@ -63,13 +63,13 @@ function NewsletterSignUpForm() {
             .handleSubmit(onSubmit)(e)
             .catch(() => {})
         }
-        className='flex w-full flex-wrap'
+        className='flex w-full flex-col gap-2 @sm:flex-row @sm:flex-wrap @sm:gap-0'
       >
         <FormField
           name='email'
           control={form.control}
           render={({ field }) => (
-            <FormItem className='grow'>
+            <FormItem className='@sm:min-w-0 @sm:flex-1'>
               <FormControl>
                 <Input
                   type='email'
@@ -85,7 +85,7 @@ function NewsletterSignUpForm() {
             </FormItem>
           )}
         />
-        <Button type='submit' disabled={isSubmitting}>
+        <Button type='submit' disabled={isSubmitting} className='w-full @sm:w-auto'>
           {isSubmitting && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
           Subscribe
         </Button>
@@ -137,16 +137,6 @@ export default function Footer() {
                 </ScrollTopLink>
               ))}
             </nav>
-            <a
-              href={clubhouseMapsUrl}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='mt-10 block text-sm leading-snug'
-            >
-              {clubhouse.street}
-              <br />
-              {clubhouse.city}, {clubhouse.state} {clubhouse.zip}
-            </a>
           </div>
           <div>
             <h3 className='text-[20px] font-black tracking-[0.06em] uppercase'>
@@ -156,7 +146,7 @@ export default function Footer() {
               Occasional updates from the clubhouse: events, openings, and new
               work.
             </p>
-            <div className='mt-4'>
+            <div className='mt-4 @container'>
               <NewsletterSignUpForm />
             </div>
           </div>
@@ -172,6 +162,15 @@ export default function Footer() {
               <ScrollTopLink href='/membership'>Apply to Join</ScrollTopLink>
             </Button>
           </div>
+          <a
+            href={clubhouseMapsUrl}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-sm leading-snug lg:col-span-3'
+          >
+            {clubhouse.street}, {clubhouse.city}, {clubhouse.state}{' '}
+            {clubhouse.zip}
+          </a>
         </div>
         <div className='flex flex-col-reverse items-center justify-between gap-4 border-t-2 border-black px-4 py-5 md:flex-row md:px-12'>
           <div className='text-center text-sm'>

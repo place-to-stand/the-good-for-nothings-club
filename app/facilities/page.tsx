@@ -124,6 +124,7 @@ export default function Facilities() {
       <div className='mt-6 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2'>
         <OfferCard
           id='online-store'
+          image={{ src: storefrontCopy.image, alt: storefrontCopy.imageAlt }}
           title={storefrontCopy.name}
           price={storefrontCopy.rate}
           meta={storefrontCopy.note}

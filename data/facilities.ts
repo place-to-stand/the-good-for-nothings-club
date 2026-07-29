@@ -52,6 +52,9 @@ export const storefrontCopy = {
   description:
     'An online store for members and associates. You make the work - we handle shipping, returns, customer service, and sales tax for 25% of the net profit on each sale.',
   note: 'Custom landing page included',
+  image: '/facilities/online-store.jpg',
+  imageAlt:
+    'GFNC hats, club t-shirts, LIMO magazines, and member-made merch laid out on a table',
 }
 
 export const amenities = [

@@ -2,7 +2,7 @@ import { checkBotId } from 'botid/server'
 import { Resend } from 'resend'
 
 import { inquirySchema } from '@/data/schemas'
-import { inquiryEmail } from '@/lib/emailTemplates'
+import { confirmationEmail, inquiryEmail } from '@/lib/emailTemplates'
 import { saveInquiry } from '@/lib/inquiries'
 import { addToMailingList } from '@/lib/newsletter'
 import { captureServerException } from '@/lib/posthog-server'
@@ -64,6 +64,29 @@ export async function POST(request: Request) {
       return Response.json({ error }, { status: 500 })
     }
     console.error('Inquiry email failed (record persisted):', error)
+  }
+
+  // Receipt to the submitter; a failure here must never fail the inquiry.
+  try {
+    const confirmation = confirmationEmail(inquiry)
+    const { error: confirmationError } = await resend.emails.send({
+      from: 'The Good For Nothings Club <no-reply@updates.thegoodfornothings.club>',
+      to: [inquiry.email],
+      replyTo: 'hello@thegoodfornothings.club',
+      subject: confirmation.subject,
+      html: confirmation.html,
+      text: confirmation.text,
+    })
+    if (confirmationError) {
+      console.error('Confirmation email failed:', confirmationError)
+      await captureServerException(
+        new Error(`Confirmation email failed: ${confirmationError.message}`),
+        { context: 'inquiry confirmation' }
+      )
+    }
+  } catch (error) {
+    console.error('Confirmation email failed:', error)
+    await captureServerException(error, { context: 'inquiry confirmation' })
   }
 
   return Response.json({ success: true })

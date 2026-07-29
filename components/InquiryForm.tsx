@@ -83,7 +83,7 @@ const MESSAGE_LABELS: Partial<Record<InquiryKind, string>> = {
 
 const SUCCESS_COPY: Partial<Record<InquiryKind, string>> = {
   service: "Got it. We'll get back to you to talk through the project.",
-  event: "You're on the list. See you there.",
+  event: "Got your RSVP. We'll be in touch with the details.",
   general: "Got it. We'll get back to you soon.",
 }
 

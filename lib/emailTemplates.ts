@@ -154,6 +154,114 @@ export function inquiryEmail(
   return { html, text }
 }
 
+/**
+ * Per-kind copy for the submitter-facing confirmation. Every variant is a
+ * receipt only — "we'll be in touch" — and must never read as an acceptance,
+ * booking confirmation, or guaranteed spot.
+ */
+const CONFIRMATION_COPY: Record<
+  Inquiry['kind'],
+  { subject: string; noun: string; body: string }
+> = {
+  facility: {
+    subject: 'We got your booking inquiry',
+    noun: 'booking inquiry',
+    body: "Thanks for reaching out about booking with the club. We've received your inquiry and we'll be in touch soon to talk details and availability.",
+  },
+  service: {
+    subject: 'We got your inquiry',
+    noun: 'service inquiry',
+    body: "Thanks for reaching out. We've received your inquiry and we'll be in touch soon to talk it through.",
+  },
+  membership: {
+    subject: 'We got your membership application',
+    noun: 'membership application',
+    body: "Thanks for your interest in the Good For Nothings Club. We've received your application and we'll be in touch soon.",
+  },
+  event: {
+    subject: 'We got your RSVP',
+    noun: 'RSVP',
+    body: "Thanks for the RSVP. We've received it and we'll be in touch with more details.",
+  },
+  general: {
+    subject: 'We got your message',
+    noun: 'message',
+    body: "Thanks for reaching out. We've received your message and we'll be in touch soon.",
+  },
+}
+
+/** Confirmation receipt sent to the submitter, not to the club. */
+export function confirmationEmail(inquiry: Inquiry): {
+  subject: string
+  html: string
+  text: string
+} {
+  const copy = CONFIRMATION_COPY[inquiry.kind]
+  const firstName = inquiry.name.trim().split(/\s+/)[0]
+
+  const body = `
+    <div style="font-family:${SANS};font-size:22px;font-weight:900;color:#000;">Got it, ${escapeHtml(firstName)}.</div>
+    <div style="font-family:${SANS};font-size:14px;line-height:1.6;color:#000;padding-top:10px;">${copy.body}</div>
+    <div style="border-top:2px solid #000;margin:16px 0;"></div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      ${fieldRow('Received', escapeHtml(copy.noun))}
+      ${fieldRow('Regarding', escapeHtml(inquiry.item))}
+      ${inquiry.offering ? fieldRow('Details', escapeHtml(inquiry.offering)) : ''}
+    </table>`
+
+  const html = shell(
+    'Received',
+    body,
+    'Questions in the meantime? Just reply to this email. If you didn&#39;t submit this, you can ignore it.'
+  )
+
+  const text = [
+    `Got it, ${firstName}.`,
+    '',
+    copy.body,
+    '',
+    `Received: ${copy.noun}`,
+    `Regarding: ${inquiry.item}`,
+    inquiry.offering ? `Details: ${inquiry.offering}` : null,
+    '',
+    "Questions in the meantime? Just reply to this email. If you didn't submit this, you can ignore it.",
+  ]
+    .filter(line => line !== null)
+    .join('\n')
+
+  return { subject: copy.subject, html, text }
+}
+
+/** Confirmation receipt sent to a new mailing list subscriber. */
+export function newsletterConfirmationEmail(): {
+  subject: string
+  html: string
+  text: string
+} {
+  const bodyCopy =
+    "Thanks for signing up for the Good For Nothings Club mailing list. You'll hear from us when there's something worth sharing."
+
+  const body = `
+    <div style="font-family:${SANS};font-size:22px;font-weight:900;color:#000;">You&#39;re on the list.</div>
+    <div style="font-family:${SANS};font-size:14px;line-height:1.6;color:#000;padding-top:10px;">${bodyCopy}</div>`
+
+  const html = shell(
+    'Newsletter',
+    body,
+    'Didn&#39;t sign up? Reply to this email and we&#39;ll take you off the list.'
+  )
+
+  const text = [
+    "You're on the list.",
+    '',
+    bodyCopy,
+    '',
+    "Didn't sign up? Reply to this email and we'll take you off the list.",
+  ].join('\n')
+
+  return { subject: "You're on the GFNC mailing list", html, text }
+}
+
 export function newsletterEmail(email: string): { html: string; text: string } {
   const body = `
     <div style="font-family:${SANS};font-size:22px;font-weight:900;color:#000;">New mailing list sign-up</div>

@@ -58,7 +58,7 @@ export default function OfferCard({
       )}
 
       <div className='flex flex-1 flex-col p-6 md:p-8'>
-        <div className='flex items-center justify-between gap-2'>
+        <div className='flex flex-wrap items-center justify-between gap-x-2 gap-y-1'>
           <h3 className='text-[24px] leading-none font-extrabold tracking-[-0.03em] md:text-[28px]'>
             {title}
           </h3>

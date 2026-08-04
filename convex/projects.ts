@@ -85,30 +85,6 @@ export const listPage = query({
   },
 })
 
-/** Transitional: the deployed site still calls `list` until the listPage
- * consumer ships. Remove once the Vercel deploy that uses listPage is live. */
-export const list = query({
-  args: { type: v.optional(projectTypeValidator) },
-  handler: async (ctx, args) => {
-    const projects = args.type
-      ? await ctx.db
-          .query('projects')
-          .withIndex('by_type', q => q.eq('type', args.type!))
-          .collect()
-      : await ctx.db.query('projects').collect()
-    projects.sort(byProjectDates)
-    const members = await membersById(ctx, projects)
-    return projects.map(project => {
-      const legacy = legacyProject(project, members)
-      return {
-        ...legacy,
-        mainImage: legacy.mainMedia.find(media => media._type === 'image'),
-        membersCount: project.membersInvolved.length,
-      }
-    })
-  },
-})
-
 /** Project detail page — PROJECT_SLUG_QUERY. */
 export const bySlug = query({
   args: { slug: v.string() },

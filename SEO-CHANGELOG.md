@@ -34,3 +34,20 @@ MAIN property (thegoodfornothings.club). SHOP tasks are documented in
   new entry (ffmpeg commands documented in `data/gifVideos.ts`).
 - Verify: after deploy, load `/projects` — network panel must show
   `/gif-videos/*.mp4` requests and no `image/gif` response over 500 KB.
+
+## T10 — Indexable page not in sitemap (MAIN portion)
+
+- Files: none (verification only)
+- URLs: `/`, `/projects/limo-zine-volume-1`, `/projects/hijk-studios-chip`,
+  `/members/jason-desiderio`
+- Finding: working as intended. `app/sitemap.ts` already enumerates the
+  homepage, every `/projects/*` (from Convex `projects.forSitemap`), every
+  allowlisted `/members/*`, and the static routes; `app/robots.ts` references
+  `https://thegoodfornothings.club/sitemap.xml`. All four flagged URLs return
+  200 and are present in the live sitemap today — the 03-08 crawl appears to
+  predate the current sitemap contents. Cross-links to SHOP already exist
+  (`/projects/limo-zine-volume-1` → `SHOP/collections/limo-zine`,
+  `/projects/hijk-studios-chip` → `SHOP/products/chip-baby-photo-t-shirt`).
+- Verify: `curl -s https://thegoodfornothings.club/sitemap.xml` contains all
+  four URLs; each returns 200. SHOP sitemap items are in
+  `SEO-TODO-OTHER-PROPERTY.md`.

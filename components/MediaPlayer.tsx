@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import ReactPlayer from 'react-player'
 
 type MediaPlayerProps = {
@@ -33,6 +33,15 @@ export default function MediaPlayer({
   clickToPlay = false,
 }: MediaPlayerProps) {
   const [started, setStarted] = useState(false)
+
+  // react-player v3 SSRs its players as web components with declarative
+  // shadow DOM (<youtube-video> etc). Hydrating that markup is timing-
+  // sensitive - slow clients (render bots especially) hit React #418 and the
+  // whole tree gets client-regenerated anyway - so skip SSR entirely and
+  // mount the player after hydration. The wrapper div keeps the box.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  if (!mounted) return <div className={className} />
 
   if (clickToPlay && !started) {
     return (

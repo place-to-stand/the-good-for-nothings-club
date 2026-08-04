@@ -85,3 +85,28 @@ MAIN property (thegoodfornothings.club). SHOP tasks are documented in
   whose HTML payload is ~700 KB — a pre-existing RSC-payload issue outside
   the audit's flagged items, spun off as a separate follow-up task.
   Production will pass the image checks once this branch deploys.
+
+## Follow-up — /projects HTML payload under 500 KB
+
+- Files: `convex/projects.ts` (`list` query), `app/projects/page.tsx`
+- URLs: `/projects` (704 KB → 486 KB locally; production lands lower still,
+  since dev-mode module paths inflate the local RSC payload)
+- What changed, two parts:
+  1. `projects.list` now returns only what `ProjectCardSmall` renders. The
+     old shape shipped `overview`, `caseStudy`, `photoGallery`, a duplicated
+     `mainMedia`/`mainImage`, and full member objects (hover pictures,
+     roles, lqips) per project. The card image drops unused
+     hotspot/crop/aspectRatio; avatar `profilePicture` keeps only
+     `asset.url` (the stack renders at 28 px and never blurs).
+  2. `page.tsx` swaps each project's member copies for shared instances, so
+     React Flight serializes each member once by reference instead of ~90×.
+- Backward/forward compatible both ways: the deployed site code only reads
+  retained fields, and the new page code works against the old fat query —
+  so the Convex deploy and Vercel deploy can land in either order.
+- ⚠️ Deploy note: this touches `convex/` — run `npx convex deploy` when this
+  branch ships (see the standing runbook rule).
+- Verify: `node scripts/seo-check.mjs --base http://localhost:3001` — the
+  `/projects` "page HTML > 500 KB" failure is gone (all 17 URLs pass).
+  Rendered output confirmed unchanged: tag/class skeleton and text content
+  of `<main>` are identical to the pre-change production capture (sole diff
+  is T8's intentional img→video swap).

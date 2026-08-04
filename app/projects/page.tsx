@@ -74,6 +74,20 @@ export default async function ProjectsOptimized(props: ProjectsProps) {
     isDefaultType ? {} : { type: type as GFNC_projectType }
   )) as unknown as (GFNC_projectListItem & { status: string })[]
 
+  // The query returns a fresh copy of each member per project. Swap them for
+  // shared instances so React Flight serializes each member once (by
+  // reference) instead of ~90 times — this keeps the page HTML under the
+  // 500 KB budget enforced by scripts/seo-check.mjs.
+  const memberCache = new Map<string, GFNC_projectListItem['membersInvolved'][0]>()
+  for (const project of allProjects) {
+    project.membersInvolved = project.membersInvolved.map(member => {
+      const cached = memberCache.get(member._id)
+      if (cached) return cached
+      memberCache.set(member._id, member)
+      return member
+    })
+  }
+
   // Filter projects by status on the client side
   const inProgressProjectsData = allProjects.filter(
     p => p.status === 'In Progress'

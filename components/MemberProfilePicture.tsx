@@ -3,6 +3,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { getImageUrl } from '../data/client'
+import { getGifVideo } from '../data/gifVideos'
+import GifVideo from './GifVideo'
 import { GFNC_member } from '../types'
 import { useState } from 'react'
 
@@ -29,36 +31,61 @@ export default function MemberProfilePicture({
 
   const objectPosition = `${(profilePicture.hotspot?.x || 1) * 100}% ${(profilePicture.hotspot?.y || 1) * 100}%`
 
+  const profileGifVideo = getGifVideo(profilePicture.asset.url)
+  const hoverGifVideo = getGifVideo(hoverProfilePicture.asset.url)
+
   return (
     <li
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       className='group relative'
     >
-      <Image
-        src={profilePictureUrl}
-        width={profilePicture.asset.metadata.dimensions.width}
-        height={profilePicture.asset.metadata.dimensions.height}
-        alt={profilePicture.caption}
-        className={`aspect-square border-1 border-black object-cover transition-colors group-hover:border-gray-600 md:h-auto lg:aspect-auto ${isHovering ? 'hidden' : 'block'}`}
-        style={{
-          objectPosition,
-        }}
-        priority={true}
-        placeholder={profilePicture.asset.metadata.lqip}
-      />
-      <Image
-        src={hoverProfilePictureUrl}
-        width={hoverProfilePicture.asset.metadata.dimensions.width}
-        height={hoverProfilePicture.asset.metadata.dimensions.height}
-        alt={hoverProfilePicture.caption}
-        className={`aspect-square border-1 border-black object-cover transition-colors group-hover:border-gray-600 md:h-auto lg:aspect-auto ${isHovering ? 'block' : 'hidden'}`}
-        style={{
-          objectPosition,
-        }}
-        priority={true}
-        placeholder={hoverProfilePicture.asset.metadata.lqip}
-      />
+      {profileGifVideo ? (
+        <GifVideo
+          video={profileGifVideo}
+          alt={profilePicture.caption}
+          className={`aspect-square border-1 border-black object-cover transition-colors group-hover:border-gray-600 md:h-auto lg:aspect-auto ${isHovering ? 'hidden' : 'block'}`}
+          style={{
+            objectPosition,
+          }}
+        />
+      ) : (
+        <Image
+          src={profilePictureUrl}
+          width={profilePicture.asset.metadata.dimensions.width}
+          height={profilePicture.asset.metadata.dimensions.height}
+          alt={profilePicture.caption}
+          className={`aspect-square border-1 border-black object-cover transition-colors group-hover:border-gray-600 md:h-auto lg:aspect-auto ${isHovering ? 'hidden' : 'block'}`}
+          style={{
+            objectPosition,
+          }}
+          priority={true}
+          placeholder={profilePicture.asset.metadata.lqip}
+        />
+      )}
+      {hoverGifVideo ? (
+        <GifVideo
+          video={hoverGifVideo}
+          alt={hoverProfilePicture.caption}
+          className={`aspect-square border-1 border-black object-cover transition-colors group-hover:border-gray-600 md:h-auto lg:aspect-auto ${isHovering ? 'block' : 'hidden'}`}
+          style={{
+            objectPosition,
+          }}
+        />
+      ) : (
+        <Image
+          src={hoverProfilePictureUrl}
+          width={hoverProfilePicture.asset.metadata.dimensions.width}
+          height={hoverProfilePicture.asset.metadata.dimensions.height}
+          alt={hoverProfilePicture.caption}
+          className={`aspect-square border-1 border-black object-cover transition-colors group-hover:border-gray-600 md:h-auto lg:aspect-auto ${isHovering ? 'block' : 'hidden'}`}
+          style={{
+            objectPosition,
+          }}
+          priority={true}
+          placeholder={hoverProfilePicture.asset.metadata.lqip}
+        />
+      )}
       <h3 className='relative z-10 mt-3 text-[15px] leading-tight font-extrabold tracking-[-0.01em] group-hover:underline'>
         <Link href={`/members/${member.slug.current}`}>{member.fullName}</Link>
       </h3>

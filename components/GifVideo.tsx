@@ -4,6 +4,7 @@ type GifVideoProps = {
   video: GifVideoAsset
   alt: string
   className?: string
+  style?: React.CSSProperties
 }
 
 /**
@@ -11,7 +12,7 @@ type GifVideoProps = {
  * Behaves like a GIF — autoplays muted, loops, no controls — while the
  * poster frame reserves layout the same way <Image> width/height do.
  */
-export default function GifVideo({ video, alt, className }: GifVideoProps) {
+export default function GifVideo({ video, alt, className, style }: GifVideoProps) {
   return (
     <video
       src={video.src}
@@ -25,6 +26,7 @@ export default function GifVideo({ video, alt, className }: GifVideoProps) {
       preload='metadata'
       aria-label={alt}
       className={className}
+      style={style}
     />
   )
 }

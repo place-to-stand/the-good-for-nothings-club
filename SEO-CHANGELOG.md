@@ -29,9 +29,12 @@ MAIN property (thegoodfornothings.club). SHOP tasks are documented in
   `data/gifVideos.ts`. Components render `<video autoplay muted loop
   playsinline poster>` when a mapping exists; unmapped GIFs fall back to the
   old `<Image>` path. Poster + width/height prevent layout shift.
-- Note: keys cover the six prod storage IDs plus the one matching asset that
-  exists on the dev deployment. GIFs uploaded to Convex in the future need a
-  new entry (ffmpeg commands documented in `data/gifVideos.ts`).
+- Follow-up in the same task: five of the six GIFs turned out to be the
+  member hover profile pictures on `/about` (rendered by
+  `components/MemberProfilePicture.tsx`, now also mapped), not project
+  cards; `data/gifVideos.ts` keys each asset under both its prod and dev
+  deployment storage IDs. GIFs uploaded to Convex in the future need a new
+  entry (ffmpeg commands documented in `data/gifVideos.ts`).
 - Verify: after deploy, load `/projects` — network panel must show
   `/gif-videos/*.mp4` requests and no `image/gif` response over 500 KB.
 

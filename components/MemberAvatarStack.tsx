@@ -1,6 +1,6 @@
 'use client'
 
-import { GFNC_member } from '@/types'
+import { GFNC_memberCard } from '@/types'
 import { getImageUrl } from '@/data/client'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -12,7 +12,9 @@ import {
 } from '@/components/ui/tooltip'
 
 type MemberAvatarStackProps = {
-  members: GFNC_member[]
+  // Slim card shape — full GFNC_member objects satisfy it structurally.
+  // projects.listPage omits lqip, so avatars must not assume it exists.
+  members: GFNC_memberCard[]
   size?: 'sm' | 'md' | 'lg'
 }
 

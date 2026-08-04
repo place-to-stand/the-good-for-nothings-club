@@ -38,10 +38,12 @@ export async function generateMetadata(
     : 'a founding member'
   const roleList =
     member.roles.length > 1
-      ? `${member.roles.slice(0, -1).join(', ')} and ${member.roles.at(-1)}`
+      ? `${member.roles.slice(0, -1).join(', ')} & ${member.roles.at(-1)}`
       : member.roles[0]
+  // Short month keeps the longest description (Jason's) under the 158-char
+  // SERP truncation budget.
   const memberSince = new Date(member.startDate).toLocaleDateString('en-US', {
-    month: 'long',
+    month: 'short',
     year: 'numeric',
     timeZone: 'UTC',
   })

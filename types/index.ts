@@ -21,7 +21,7 @@ export type Image = {
   caption: string
 }
 
-type VideoFile = {
+export type VideoFile = {
   _type: 'videoFile'
   asset: {
     url: string
@@ -82,7 +82,33 @@ export type GFNC_project = {
   membersInvolved: GFNC_member[]
 }
 
-// Optimized type for projects list page
+/**
+ * Slim member shape returned by projects.listPage — exactly what
+ * MemberAvatarStack renders. GFNC_member is structurally assignable to it,
+ * so components typed with this accept full members too.
+ */
+export type GFNC_memberCard = {
+  _id: string
+  fullName: string
+  slug: {
+    current: string
+  }
+  profilePicture: {
+    asset: {
+      url: string
+      metadata: {
+        lqip?: `data:image/${string}`
+      }
+    }
+  }
+}
+
+/**
+ * Optimized type for the projects list page. Mirrors what
+ * convex/projects.ts `listPage` actually returns (after the page resolves
+ * memberIds to shared GFNC_memberCard instances) — do not add fields here
+ * without adding them to the projection.
+ */
 export type GFNC_projectListItem = {
   _id: string
   title: string
@@ -91,12 +117,25 @@ export type GFNC_projectListItem = {
     current: string
   }
   type: GFNC_projectType
-  mainLink?: string | null
+  status: string
   dateStarted?: string
   dateCompleted?: string
-  mainImage?: Image
-  mainMedia?: Array<Image | VideoFile> // Fallback for existing components
-  membersCount?: number
-  membersInvolved: GFNC_member[]
+  mainImage?: {
+    _type: 'image'
+    caption: string
+    asset: {
+      extension: string
+      url: string
+      metadata: {
+        lqip?: `data:image/${string}`
+        dimensions: {
+          width: number
+          height: number
+        }
+      }
+    }
+  }
+  mainMedia?: Array<Image | VideoFile> // never returned by listPage; only so cards can accept GFNC_project too
+  membersInvolved: GFNC_memberCard[]
   summary: TypedObject[]
 }

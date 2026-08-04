@@ -70,3 +70,18 @@ MAIN property (thegoodfornothings.club). SHOP tasks are documented in
   protection cache-buster; harmless for images. Left as is per the brief
   ("do not disable skew protection"). Optional static pre-optimization of
   `/facilities/*.jpg` deliberately skipped as lowest priority.
+
+## Global verification — scripts/seo-check.mjs
+
+- Files: `scripts/seo-check.mjs`, `package.json` (`npm run seo:check`),
+  `.github/workflows/seo-check.yml` (weekly + manual run against production)
+- Checks per URL: exactly one non-empty `<h1>`; `<title>` ≤ 60 chars; meta
+  description present and ≤ 158 chars; `og:image` present; every `<img>` has
+  `alt`; no page/media response over 500 KB; no internal link resolving to a
+  3XX. Seeded with the MAIN URL list (default) and the SHOP list
+  (`--property shop|all`); `--base http://localhost:3001` targets a local
+  server.
+- Results on this branch (local): every MAIN URL passes except `/projects`,
+  whose HTML payload is ~700 KB — a pre-existing RSC-payload issue outside
+  the audit's flagged items, spun off as a separate follow-up task.
+  Production will pass the image checks once this branch deploys.

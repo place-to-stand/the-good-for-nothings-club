@@ -1,0 +1,20 @@
+# Weekly SEO regression check against production (see scripts/seo-check.mjs
+# and SEO-CHANGELOG.md). Runs after the Ahrefs-audit remediation to catch
+# regressions: missing/oversized meta descriptions, missing h1/og:image/alt,
+# responses over 500 KB, and internal links that 3XX.
+name: SEO check
+
+on:
+  schedule:
+    - cron: '0 12 * * 1' # Mondays 12:00 UTC
+  workflow_dispatch:
+
+jobs:
+  seo-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/seo-check.mjs

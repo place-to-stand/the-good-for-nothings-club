@@ -51,3 +51,19 @@ MAIN property (thegoodfornothings.club). SHOP tasks are documented in
 - Verify: `curl -s https://thegoodfornothings.club/sitemap.xml` contains all
   four URLs; each returns 200. SHOP sitemap items are in
   `SEO-TODO-OTHER-PROPERTY.md`.
+
+## T11 — Small cleanups
+
+- **11a Redirect chain** — not actionable from this repo. The extra hop is
+  Vercel's automatic edge TLS redirect (`http://www` → 308 → `https://www`),
+  which runs before any vercel.json/next.config rule and is not
+  configurable; the `www` → apex hop is already a single 308 at the domain
+  level. Non-www apex remains canonical. No change made.
+- **11b External 4XX** — both targets verified in a real browser on
+  2026-08-04: `https://www.icecreamfactorystudio.com/` and
+  `https://dandysounds.com/` load normally (titles render, content present).
+  The 403/406 are bot-blocking, not dead links. Links left in place.
+- **11c `dpl` param on facilities images** — notice-level Vercel skew
+  protection cache-buster; harmless for images. Left as is per the brief
+  ("do not disable skew protection"). Optional static pre-optimization of
+  `/facilities/*.jpg` deliberately skipped as lowest priority.

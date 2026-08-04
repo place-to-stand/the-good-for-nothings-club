@@ -1,7 +1,9 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useState, useSyncExternalStore } from 'react'
 import ReactPlayer from 'react-player'
+
+const emptySubscribe = () => () => {}
 
 type MediaPlayerProps = {
   url: string
@@ -39,8 +41,11 @@ export default function MediaPlayer({
   // sensitive - slow clients (render bots especially) hit React #418 and the
   // whole tree gets client-regenerated anyway - so skip SSR entirely and
   // mount the player after hydration. The wrapper div keeps the box.
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  )
   if (!mounted) return <div className={className} />
 
   if (clickToPlay && !started) {

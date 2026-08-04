@@ -110,3 +110,42 @@ MAIN property (thegoodfornothings.club). SHOP tasks are documented in
   Rendered output confirmed unchanged: tag/class skeleton and text content
   of `<main>` are identical to the pre-change production capture (sole diff
   is T8's intentional img→video swap).
+
+## Code-review fixes (PR #50)
+
+Eight review findings addressed:
+
+1. **Hover videos never autoplayed from display:none** — GifVideo now takes
+   `autoPlay`/`preload`/`videoRef` props; MemberProfilePicture starts the
+   hover loop from onMouseEnter via ref (`play()`/`pause()`), and hover
+   instances use `preload='none'`, so the five hover MP4s (~1.8 MB) no
+   longer download eagerly on /about.
+2. **seo-check silent passes** — request errors, media 4XX/5XX, and broken
+   (4XX+) internal links now fail; when HEAD has no content-length a
+   streaming GET measures up to the 500 KB budget and aborts (verified: it
+   flags the 6.7 MB prod GIF after reading ~517 KB).
+3. **Type lie behind `as unknown as`** — GFNC_projectListItem/GFNC_memberCard
+   now mirror the real listPage projection; MemberAvatarStack accepts the
+   slim member type (full GFNC_member still satisfies it structurally).
+4. **Hardcoded URL list** — MAIN targets now come from `${base}/sitemap.xml`
+   (~60 URLs incl. every project/member), so new pages are covered
+   automatically; unreachable sitemap is a hard exit-2 failure.
+5. **Flight-dedup fragility** — `projects.listPage` returns normalized
+   `{members, projects(memberIds)}`; the page resolves ids to shared
+   instances, so member dedup is structural, not an accident of serializer
+   internals. The transitional `list` query keeps the deployed site working
+   until the Vercel deploy lands (remove it afterwards).
+6. **Six duplicated media blocks** — extracted
+   `app/projects/[slug]/components/ProjectMainMedia.tsx`; the six detail
+   templates render it in one line.
+7. **Fragile CLI args** — seo-check accepts `--flag=value`, rejects unknown
+   flags/values, and exits 2 instead of green when there is nothing to check.
+8. **GIF map staleness** — documented in data/gifVideos.ts: no durable key
+   survives a re-upload, so staleness is caught loudly by the
+   sitemap-driven size/404 checks; convert-at-upload is the durable fix if
+   a seventh entry lands.
+
+Verified: tsc/lint/build clean; `node scripts/seo-check.mjs
+--base=http://localhost:3001` passes all ~60 sitemap URLs; /projects HTML
+485,925 bytes; rendered /projects DOM/text still identical to the prod
+baseline except the intentional img→video swap.

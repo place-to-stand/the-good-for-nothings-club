@@ -14,6 +14,15 @@
  * prod (resolute-badger-392) and dev (quirky-dalmatian-453) deployments
  * under different storage IDs, so each asset is keyed by both.
  *
+ * Staleness: no durable key survives a re-upload (a new upload mints a new
+ * storage file AND a new media doc, so mediaId is no better than the
+ * storage ID). If an asset here is re-uploaded, getGifVideo misses and the
+ * page falls back to the raw GIF — scripts/seo-check.mjs catches that
+ * loudly (it crawls every sitemap URL and fails on any media response over
+ * 500 KB, and on 4XX for a renamed /gif-videos file). The durable fix is
+ * converting GIFs at upload time in the admin; do that if a seventh entry
+ * ever lands here.
+ *
  * Regenerate with ffmpeg if a source GIF changes:
  *   ffmpeg -i in.gif -vf "scale=1080:-2" -c:v libx264 -crf 28 \
  *     -preset veryslow -pix_fmt yuv420p -movflags +faststart -an out.mp4

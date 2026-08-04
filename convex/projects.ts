@@ -16,11 +16,77 @@ async function membersById(ctx: QueryCtx, projects: Doc<'projects'>[]) {
   ) as Map<Id<'members'>, Doc<'members'>>
 }
 
-/** Projects list page — ALL_PROJECTS_QUERY / FILTERED_PROJECTS_QUERY.
+/** Projects list page — normalized card projection.
  *
- * Returns only what ProjectCardSmall renders. The full legacyProject shape
- * (overview, caseStudy, photoGallery, full member objects) tripled the
- * /projects RSC payload past 500 KB — keep this projection card-sized. */
+ * Returns only what ProjectCardSmall renders, with members deduplicated
+ * into a top-level array (projects carry memberIds). The full legacyProject
+ * shape (overview, caseStudy, photoGallery, full member objects repeated
+ * per project) tripled the /projects RSC payload past 500 KB — keep this
+ * projection card-sized, and keep members normalized so the payload can't
+ * silently re-inflate. Mirrored by GFNC_projectListItem/GFNC_memberCard in
+ * types/index.ts. */
+export const listPage = query({
+  args: { type: v.optional(projectTypeValidator) },
+  handler: async (ctx, args) => {
+    const projects = args.type
+      ? await ctx.db
+          .query('projects')
+          .withIndex('by_type', q => q.eq('type', args.type!))
+          .collect()
+      : await ctx.db.query('projects').collect()
+    projects.sort(byProjectDates)
+    const membersMap = await membersById(ctx, projects)
+    const members = [...membersMap.values()].map(member => ({
+      _id: member._id,
+      fullName: member.fullName,
+      slug: { current: member.slug },
+      // The avatar stack only reads asset.url (it renders at a fixed 28px
+      // and never blurs), so skip lqip/dimensions.
+      profilePicture: { asset: { url: member.profilePicture.url, metadata: {} } },
+    }))
+    return {
+      members,
+      projects: projects.map(project => {
+        const image = project.mainMedia.find(item => item.kind === 'image')
+        return {
+          _id: project._id,
+          title: project.title,
+          clientName: project.clientName,
+          slug: { current: project.slug },
+          type: project.type,
+          status: project.status,
+          dateStarted: project.dateStarted,
+          dateCompleted: project.dateCompleted,
+          summary: legacyBlocks(project.summary) ?? [],
+          // Like legacyImage but without hotspot/crop/aspectRatio — the
+          // card never reads them.
+          mainImage:
+            image && image.kind === 'image'
+              ? {
+                  _type: 'image' as const,
+                  caption: image.image.caption ?? '',
+                  asset: {
+                    extension: image.image.extension,
+                    url: image.image.url,
+                    metadata: {
+                      lqip: image.image.lqip,
+                      dimensions: {
+                        width: image.image.width,
+                        height: image.image.height,
+                      },
+                    },
+                  },
+                }
+              : undefined,
+          memberIds: project.membersInvolved,
+        }
+      }),
+    }
+  },
+})
+
+/** Transitional: the deployed site still calls `list` until the listPage
+ * consumer ships. Remove once the Vercel deploy that uses listPage is live. */
 export const list = query({
   args: { type: v.optional(projectTypeValidator) },
   handler: async (ctx, args) => {
@@ -33,52 +99,11 @@ export const list = query({
     projects.sort(byProjectDates)
     const members = await membersById(ctx, projects)
     return projects.map(project => {
-      const image = project.mainMedia.find(item => item.kind === 'image')
+      const legacy = legacyProject(project, members)
       return {
-        _id: project._id,
-        title: project.title,
-        clientName: project.clientName,
-        slug: { current: project.slug },
-        type: project.type,
-        status: project.status,
-        dateStarted: project.dateStarted,
-        dateCompleted: project.dateCompleted,
-        summary: legacyBlocks(project.summary) ?? [],
-        // Like legacyImage but without hotspot/crop/aspectRatio — the card
-        // never reads them.
-        mainImage:
-          image && image.kind === 'image'
-            ? {
-                _type: 'image' as const,
-                caption: image.image.caption ?? '',
-                asset: {
-                  extension: image.image.extension,
-                  url: image.image.url,
-                  metadata: {
-                    lqip: image.image.lqip,
-                    dimensions: {
-                      width: image.image.width,
-                      height: image.image.height,
-                    },
-                  },
-                },
-              }
-            : undefined,
-        membersInvolved: project.membersInvolved.flatMap(id => {
-          const member = members.get(id)
-          return member
-            ? [
-                {
-                  _id: member._id,
-                  fullName: member.fullName,
-                  slug: { current: member.slug },
-                  // The avatar stack only reads asset.url (it renders at a
-                  // fixed 28px and never blurs), so skip lqip/dimensions.
-                  profilePicture: { asset: { url: member.profilePicture.url, metadata: {} } },
-                },
-              ]
-            : []
-        }),
+        ...legacy,
+        mainImage: legacy.mainMedia.find(media => media._type === 'image'),
+        membersCount: project.membersInvolved.length,
       }
     })
   },

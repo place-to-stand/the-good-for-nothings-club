@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { getImageUrl } from '../../../../data/client'
-import GifVideo from '@/components/GifVideo'
-import { getGifVideo } from '@/data/gifVideos'
+import ProjectMainMedia from './ProjectMainMedia'
 import { GFNC_project } from '../../../../types'
 import Image from 'next/image'
 import { PortableText } from '@portabletext/react'
@@ -23,9 +22,6 @@ export default function WebProject({ project }: WebProjectProps) {
     project.mainMedia.find(mainMedia => mainMedia._type === 'videoFile') ||
     project.mainMedia.find(mainMedia => mainMedia._type === 'image')
 
-  const gifVideo =
-    mainMedia?._type === 'image' ? getGifVideo(mainMedia.asset.url) : undefined
-
   if (!mainMedia) return null
 
   return (
@@ -41,39 +37,7 @@ export default function WebProject({ project }: WebProjectProps) {
             </h2>
           </div>
           <div className='flex items-center justify-center border-y-2 border-black'>
-            {mainMedia._type === 'videoFile' ? (
-              <MediaPlayer
-                url={mainMedia.asset.url}
-                playing={mainMedia.playing}
-                controls={mainMedia.controls}
-                loop={mainMedia.loop}
-                playsinline={true}
-                volume={0}
-                muted={true}
-                className={`pointer-events-none aspect-video w-full`}
-              />
-            ) : gifVideo ? (
-              <GifVideo
-                video={gifVideo}
-                alt={mainMedia.caption}
-                className='w-full'
-              />
-            ) : (
-              <Image
-                src={
-                  mainMedia.asset.extension === 'gif'
-                    ? getImageUrl(mainMedia).url()
-                    : getImageUrl(mainMedia).width(1600).quality(90).url()
-                }
-                width={mainMedia.asset.metadata.dimensions.width}
-                height={mainMedia.asset.metadata.dimensions.height}
-                alt={mainMedia.caption}
-                className={`w-full`}
-                sizes='(min-width: 1440px) 1440px, 100vw'
-                priority
-                placeholder={mainMedia.asset.metadata.lqip}
-              />
-            )}
+            <ProjectMainMedia mainMedia={mainMedia} />
           </div>
           <div className='mx-4 my-6 flex flex-col justify-between gap-6 md:mx-12 md:my-12 md:gap-16 lg:flex-row'>
             <div className='space-y-2 md:space-y-6'>

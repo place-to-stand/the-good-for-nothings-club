@@ -6,7 +6,7 @@ import { getImageUrl } from '../data/client'
 import { getGifVideo } from '../data/gifVideos'
 import GifVideo from './GifVideo'
 import { GFNC_member } from '../types'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 type MemberProfilePictureProps = {
   member: GFNC_member
@@ -16,6 +16,7 @@ export default function MemberProfilePicture({
   member,
 }: MemberProfilePictureProps) {
   const [isHovering, setIsHovering] = useState(false)
+  const hoverVideoRef = useRef<HTMLVideoElement>(null)
 
   const { profilePicture, hoverProfilePicture } = member
 
@@ -36,8 +37,16 @@ export default function MemberProfilePicture({
 
   return (
     <li
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      onMouseEnter={() => {
+        setIsHovering(true)
+        // Autoplay never fires for a display:none video, so start (and
+        // lazily load, via preload='none') the hover loop explicitly.
+        hoverVideoRef.current?.play().catch(() => {})
+      }}
+      onMouseLeave={() => {
+        setIsHovering(false)
+        hoverVideoRef.current?.pause()
+      }}
       className='group relative'
     >
       {profileGifVideo ? (
@@ -67,6 +76,8 @@ export default function MemberProfilePicture({
         <GifVideo
           video={hoverGifVideo}
           alt={hoverProfilePicture.caption}
+          autoPlay={false}
+          videoRef={hoverVideoRef}
           className={`aspect-square border-1 border-black object-cover transition-colors group-hover:border-gray-600 md:h-auto lg:aspect-auto ${isHovering ? 'block' : 'hidden'}`}
           style={{
             objectPosition,

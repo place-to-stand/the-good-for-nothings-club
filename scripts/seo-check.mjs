@@ -8,8 +8,14 @@
  *   - meta description present and ≤ 158 chars
  *   - og:image present
  *   - every <img> has an alt attribute
- *   - no fetched response over 500 KB (page HTML + <img>/<video>/<source>)
- *   - no internal link resolves to a 3XX
+ *   - no fetched response over 500 KB (page HTML + <img>/<video>/<source>,
+ *     with a streaming-GET fallback when HEAD has no content-length)
+ *   - no media request that errors or returns 4XX/5XX
+ *   - no internal link that redirects (3XX), is broken (4XX/5XX), or errors
+ *
+ * MAIN URLs are discovered from /sitemap.xml so newly published projects and
+ * members are covered automatically; the SHOP list is hardcoded (that
+ * property lives outside this repo).
  *
  * Usage:
  *   node scripts/seo-check.mjs                  # MAIN urls against production
@@ -17,31 +23,12 @@
  *   node scripts/seo-check.mjs --property shop  # shopify storefront urls
  *   node scripts/seo-check.mjs --property all
  *
- * Exits 1 if any check fails.
+ * Exits 1 on failed checks, 2 on usage/setup errors (bad flags, unreachable
+ * sitemap, nothing to check).
  */
 
 const MAIN = 'https://thegoodfornothings.club'
 const SHOP = 'https://shop.thegoodfornothings.club'
-
-const MAIN_PATHS = [
-  '/',
-  '/about',
-  '/contact',
-  '/events',
-  '/facilities',
-  '/membership',
-  '/projects',
-  '/projects/limo-zine-volume-1',
-  '/projects/hijk-studios-chip',
-  '/projects/16-channel-switcher',
-  '/projects/is-weed-legal-here-global-cannabis-legality-tracker',
-  '/services',
-  '/members/jason-desiderio',
-  '/members/chris-donahue',
-  '/members/max-marschark',
-  '/members/matt-schaefer',
-  '/members/eric-fenny',
-]
 
 const SHOP_PATHS = [
   '/',
@@ -70,64 +57,140 @@ const SHOP_PATHS = [
 const MAX_RESPONSE_BYTES = 500 * 1024
 const UA = 'gfnc-seo-check/1.0 (+https://thegoodfornothings.club)'
 
-const args = process.argv.slice(2)
-const argOf = flag => {
-  const i = args.indexOf(flag)
-  return i === -1 ? undefined : args[i + 1]
+function usageError(message) {
+  console.error(`seo-check: ${message}`)
+  process.exit(2)
 }
-const property = argOf('--property') ?? 'main'
-const baseOverride = argOf('--base')
+
+// Supports "--flag value" and "--flag=value"; rejects unknown flags so a
+// typo can't silently run the wrong checks against the wrong host.
+function parseArgs(argv) {
+  const known = new Set(['--base', '--property'])
+  const out = {}
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i]
+    const eq = arg.indexOf('=')
+    const flag = eq === -1 ? arg : arg.slice(0, eq)
+    if (!known.has(flag)) usageError(`unknown argument "${arg}"`)
+    const value = eq === -1 ? argv[++i] : arg.slice(eq + 1)
+    if (value === undefined) usageError(`missing value for "${flag}"`)
+    out[flag.slice(2)] = value
+  }
+  return out
+}
+
+const { base: baseOverride, property = 'main' } = parseArgs(process.argv.slice(2))
+if (!['main', 'shop', 'all'].includes(property)) {
+  usageError(`--property must be main, shop, or all (got "${property}")`)
+}
+
+/** MAIN paths come from the live sitemap so new pages are covered. */
+async function mainPathsFromSitemap(base) {
+  let xml
+  try {
+    const res = await fetch(`${base}/sitemap.xml`, { headers: { 'user-agent': UA } })
+    if (!res.ok) usageError(`GET ${base}/sitemap.xml returned ${res.status}`)
+    xml = await res.text()
+  } catch (err) {
+    usageError(`could not fetch ${base}/sitemap.xml: ${err}`)
+  }
+  const paths = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => {
+    const url = new URL(decode(m[1].trim()))
+    return url.pathname
+  })
+  if (paths.length === 0) usageError(`${base}/sitemap.xml contains no <loc> entries`)
+  return [...new Set(paths)]
+}
 
 const targets = []
 if (property === 'main' || property === 'all') {
   const base = baseOverride ?? MAIN
-  targets.push(...MAIN_PATHS.map(p => ({ url: base + p, origin: base })))
+  const paths = await mainPathsFromSitemap(base)
+  targets.push(...paths.map(p => ({ url: base + p, origin: base })))
 }
 if (property === 'shop' || property === 'all') {
   targets.push(...SHOP_PATHS.map(p => ({ url: SHOP + p, origin: SHOP })))
 }
+if (targets.length === 0) usageError('no URLs to check')
 
-const decode = s =>
-  s
+function decode(s) {
+  return s
     .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
+}
 
 const stripTags = s => s.replace(/<[^>]*>/g, '').trim()
 
 const attr = (tag, name) => {
-  const m = tag.match(new RegExp(`${name}\\s*=\\s*("([^"]*)"|'([^']*)')`, 'i'))
+  const m = tag.match(
+    new RegExp(`(?:^|[\\s"'])${name}\\s*=\\s*("([^"]*)"|'([^']*)')`, 'i')
+  )
   return m ? decode(m[2] ?? m[3]) : undefined
 }
 
-// Cache cross-page checks (headers/sizes) so shared assets and nav links are
-// only fetched once per run.
+// Cache cross-page requests (headers/sizes) so shared assets and nav links
+// are only fetched once per run. Results: { status?, size?, error? } — an
+// entry with `error` set means the request itself failed and callers MUST
+// report it, never treat it as a pass.
 const headCache = new Map()
-async function headInfo(url) {
-  if (headCache.has(url)) return headCache.get(url)
-  const promise = (async () => {
-    try {
-      let res = await fetch(url, {
-        method: 'HEAD',
-        redirect: 'manual',
-        headers: { 'user-agent': UA },
-      })
-      // Some servers reject HEAD; fall back to GET for status/size.
-      if (res.status === 405 || res.status === 501) {
-        res = await fetch(url, { redirect: 'manual', headers: { 'user-agent': UA } })
-        const buf = await res.arrayBuffer()
-        return { status: res.status, size: buf.byteLength }
+function headInfo(url) {
+  let promise = headCache.get(url)
+  if (!promise) {
+    promise = (async () => {
+      try {
+        const res = await fetch(url, {
+          method: 'HEAD',
+          redirect: 'manual',
+          headers: { 'user-agent': UA },
+        })
+        // Some servers reject HEAD; retry as a size-measuring GET.
+        if (res.status === 405 || res.status === 501) return measuredGet(url)
+        const len = res.headers.get('content-length')
+        const size = len ? Number(len.split(',')[0]) : undefined
+        return {
+          status: res.status,
+          size: Number.isFinite(size) ? size : undefined,
+        }
+      } catch (err) {
+        return { error: String(err) }
       }
-      const len = res.headers.get('content-length')
-      return { status: res.status, size: len ? Number(len) : undefined }
-    } catch (err) {
-      return { error: String(err) }
-    }
-  })()
-  headCache.set(url, promise)
+    })()
+    headCache.set(url, promise)
+  }
   return promise
+}
+
+// Streaming GET that stops reading once the size budget is exceeded — used
+// when HEAD gives no content-length, so a chunked 6 MB GIF can't slip past
+// the size check unmeasured.
+async function measuredGet(url) {
+  try {
+    const controller = new AbortController()
+    const res = await fetch(url, {
+      redirect: 'manual',
+      headers: { 'user-agent': UA },
+      signal: controller.signal,
+    })
+    if (res.status >= 300 || !res.body) return { status: res.status }
+    let size = 0
+    try {
+      for await (const chunk of res.body) {
+        size += chunk.length
+        if (size > MAX_RESPONSE_BYTES) {
+          controller.abort()
+          break
+        }
+      }
+    } catch (err) {
+      if (err?.name !== 'AbortError') throw err
+    }
+    return { status: res.status, size }
+  } catch (err) {
+    return { error: String(err) }
+  }
 }
 
 async function checkPage({ url, origin }) {
@@ -185,20 +248,14 @@ async function checkPage({ url, origin }) {
     failures.push(`${missingAlt.length} <img> tag(s) missing alt`)
   }
 
-  // media responses ≤ 500 KB
+  // media must respond OK and stay ≤ 500 KB
   const mediaUrls = new Set()
   for (const t of [...imgs, ...[...bodyHtml.matchAll(/<(?:video|source)\s[^>]*>/gi)].map(m => m[0])]) {
     const src = attr(t, 'src')
     if (src && !src.startsWith('data:')) mediaUrls.add(new URL(src, url).href)
   }
-  for (const mediaUrl of mediaUrls) {
-    const info = await headInfo(mediaUrl)
-    if (info.size !== undefined && info.size > MAX_RESPONSE_BYTES) {
-      failures.push(`media over 500 KB (${info.size} bytes): ${mediaUrl}`)
-    }
-  }
 
-  // no internal link resolves to a 3XX
+  // internal links must resolve without redirecting or breaking
   const links = new Set()
   for (const t of [...bodyHtml.matchAll(/<a\s[^>]*>/gi)].map(m => m[0])) {
     const href = attr(t, 'href')
@@ -207,12 +264,31 @@ async function checkPage({ url, origin }) {
     abs.hash = ''
     if (abs.origin === new URL(origin).origin) links.add(abs.href)
   }
-  for (const link of links) {
-    const info = await headInfo(link)
-    if (info.status >= 300 && info.status < 400) {
-      failures.push(`internal link 3XX (${info.status}): ${link}`)
+
+  const mediaChecks = [...mediaUrls].map(async mediaUrl => {
+    let info = await headInfo(mediaUrl)
+    if (!info.error && info.status < 300 && info.size === undefined) {
+      info = await measuredGet(mediaUrl)
     }
-  }
+    if (info.error) return `media request failed: ${mediaUrl} (${info.error})`
+    if (info.status >= 400) return `media ${info.status}: ${mediaUrl}`
+    if (info.size !== undefined && info.size > MAX_RESPONSE_BYTES) {
+      return `media over 500 KB (${info.size} bytes): ${mediaUrl}`
+    }
+    return null
+  })
+  const linkChecks = [...links].map(async link => {
+    const info = await headInfo(link)
+    if (info.error) return `internal link failed: ${link} (${info.error})`
+    if (info.status >= 300 && info.status < 400) {
+      return `internal link 3XX (${info.status}): ${link}`
+    }
+    if (info.status >= 400) return `internal link broken (${info.status}): ${link}`
+    return null
+  })
+  failures.push(
+    ...(await Promise.all([...mediaChecks, ...linkChecks])).filter(Boolean)
+  )
 
   return failures
 }

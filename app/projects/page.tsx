@@ -2,7 +2,11 @@ import { fetchQuery } from 'convex/nextjs'
 import Link from 'next/link'
 import { cn } from '../../lib/utils'
 import { api } from '../../convex/_generated/api'
-import type { GFNC_projectListItem, GFNC_projectType } from '../../types'
+import type {
+  GFNC_memberCard,
+  GFNC_projectListItem,
+  GFNC_projectType,
+} from '../../types'
 import type { Metadata, ResolvingMetadata } from 'next'
 import InProgressSection from './InProgressSection'
 import CompletedSection from './CompletedSection'
@@ -68,25 +72,30 @@ export default async function ProjectsOptimized(props: ProjectsProps) {
 
   const type = isDefaultType ? menuItems[0].name : searchParams.type
 
-  // Single API call to get all projects
-  const allProjects = (await fetchQuery(
-    api.projects.list,
+  // Single API call: projects carry memberIds; members come deduplicated in
+  // a top-level array. (The cast covers Convex's loose portable-text typing;
+  // the shape itself mirrors the listPage projection — see types/index.ts.)
+  const data = (await fetchQuery(
+    api.projects.listPage,
     isDefaultType ? {} : { type: type as GFNC_projectType }
-  )) as unknown as (GFNC_projectListItem & { status: string })[]
-
-  // The query returns a fresh copy of each member per project. Swap them for
-  // shared instances so React Flight serializes each member once (by
-  // reference) instead of ~90 times — this keeps the page HTML under the
-  // 500 KB budget enforced by scripts/seo-check.mjs.
-  const memberCache = new Map<string, GFNC_projectListItem['membersInvolved'][0]>()
-  for (const project of allProjects) {
-    project.membersInvolved = project.membersInvolved.map(member => {
-      const cached = memberCache.get(member._id)
-      if (cached) return cached
-      memberCache.set(member._id, member)
-      return member
-    })
+  )) as unknown as {
+    members: GFNC_memberCard[]
+    projects: (Omit<GFNC_projectListItem, 'membersInvolved'> & {
+      memberIds: string[]
+    })[]
   }
+
+  // Resolve ids to the shared member instances. Every card referencing a
+  // member gets the same object, so React Flight serializes each member
+  // once by reference — this keeps the page HTML under the 500 KB budget
+  // enforced by scripts/seo-check.mjs.
+  const memberById = new Map(data.members.map(member => [member._id, member]))
+  const allProjects: GFNC_projectListItem[] = data.projects.map(
+    ({ memberIds, ...project }) => ({
+      ...project,
+      membersInvolved: memberIds.flatMap(id => memberById.get(id) ?? []),
+    })
+  )
 
   // Filter projects by status on the client side
   const inProgressProjectsData = allProjects.filter(

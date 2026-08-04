@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { getImageUrl } from '../../../../data/client'
+import GifVideo from '@/components/GifVideo'
+import { getGifVideo } from '@/data/gifVideos'
 import { GFNC_project } from '../../../../types'
 import Image from 'next/image'
 import { PortableText } from '@portabletext/react'
@@ -20,6 +22,9 @@ export default function BuildProject({ project }: BuildProjectProps) {
   const mainMedia =
     project.mainMedia.find(mainMedia => mainMedia._type === 'videoFile') ||
     project.mainMedia.find(mainMedia => mainMedia._type === 'image')
+
+  const gifVideo =
+    mainMedia?._type === 'image' ? getGifVideo(mainMedia.asset.url) : undefined
 
   if (!mainMedia) return null
 
@@ -46,6 +51,12 @@ export default function BuildProject({ project }: BuildProjectProps) {
                 volume={0}
                 muted={true}
                 className={`pointer-events-none aspect-video w-full`}
+              />
+            ) : gifVideo ? (
+              <GifVideo
+                video={gifVideo}
+                alt={mainMedia.caption}
+                className='w-full'
               />
             ) : (
               <Image

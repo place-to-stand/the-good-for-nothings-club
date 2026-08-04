@@ -1,6 +1,8 @@
 import { GFNC_project } from '@/types'
 import Image from 'next/image'
 import { getImageUrl } from '@/data/client'
+import { getGifVideo } from '@/data/gifVideos'
+import GifVideo from './GifVideo'
 import Link from 'next/link'
 import { PortableText } from '@portabletext/react'
 import getProjectDateString from '@/lib/getProjectDateString'
@@ -22,23 +24,32 @@ export default function ProjectCard({
 
   if (!mainMedia) return null
 
+  const gifVideo = getGifVideo(mainMedia.asset.url)
   const date = getProjectDateString(project)
 
   return (
     <div key={project._id} className="relative h-full flex flex-col group border-1 border-black/15 transition-colors hover:border-black">
-      <Image
-        src={
-          mainMedia.asset.extension === 'gif'
-            ? getImageUrl(mainMedia).url()
-            : getImageUrl(mainMedia).width(1600).quality(90).url()
-        }
-        width={mainMedia.asset.metadata.dimensions.width}
-        height={mainMedia.asset.metadata.dimensions.height}
-        alt={mainMedia.caption}
-        className='aspect-video object-cover object-top'
-        priority={priority}
-        placeholder={mainMedia.asset.metadata.lqip}
-      />
+      {gifVideo ? (
+        <GifVideo
+          video={gifVideo}
+          alt={mainMedia.caption}
+          className='aspect-video object-cover object-top'
+        />
+      ) : (
+        <Image
+          src={
+            mainMedia.asset.extension === 'gif'
+              ? getImageUrl(mainMedia).url()
+              : getImageUrl(mainMedia).width(1600).quality(90).url()
+          }
+          width={mainMedia.asset.metadata.dimensions.width}
+          height={mainMedia.asset.metadata.dimensions.height}
+          alt={mainMedia.caption}
+          className='aspect-video object-cover object-top'
+          priority={priority}
+          placeholder={mainMedia.asset.metadata.lqip}
+        />
+      )}
       <div className='grow-1 relative flex flex-col justify-between gap-5 p-4 transition-colors bg-black/5 group-hover:bg-black/10'>
         <div className='flex items-start gap-3'>
           <div className='space-y-1'>

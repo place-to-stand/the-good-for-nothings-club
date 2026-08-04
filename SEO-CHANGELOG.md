@@ -14,3 +14,23 @@ MAIN property (thegoodfornothings.club). SHOP tasks are documented in
   grep -o '<meta name="description"[^>]*>'` and count chars — must be ≤ 158.
   The SHOP portion of T4 (25 product descriptions) is in
   `SEO-TODO-OTHER-PROPERTY.md`.
+
+## T8 — Image file size too large (6 animated GIFs, the audit's 6 errors)
+
+- Files: `public/gif-videos/*` (6 MP4s + 6 JPEG posters), `data/gifVideos.ts`,
+  `components/GifVideo.tsx`, `components/ProjectCard.tsx`,
+  `components/ProjectCardSmall.tsx`,
+  `app/projects/[slug]/components/{Photo,Audio,Event,Video,Web,Build}Project.tsx`
+- URLs: `/projects` and the project pages embedding the six Convex GIFs
+  (worst: 6.7 MB → 290 KB; all six now 290–390 KB MP4 + ≤106 KB poster).
+- What changed: next/image passes animated GIFs through unoptimized, so the
+  full originals shipped. Each GIF now has a pre-compressed H.264 MP4 +
+  poster committed to `/public/gif-videos`, keyed by Convex storage ID in
+  `data/gifVideos.ts`. Components render `<video autoplay muted loop
+  playsinline poster>` when a mapping exists; unmapped GIFs fall back to the
+  old `<Image>` path. Poster + width/height prevent layout shift.
+- Note: keys cover the six prod storage IDs plus the one matching asset that
+  exists on the dev deployment. GIFs uploaded to Convex in the future need a
+  new entry (ffmpeg commands documented in `data/gifVideos.ts`).
+- Verify: after deploy, load `/projects` — network panel must show
+  `/gif-videos/*.mp4` requests and no `image/gif` response over 500 KB.

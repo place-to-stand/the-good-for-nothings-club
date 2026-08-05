@@ -11,10 +11,10 @@ import {
 } from './_generated/server'
 
 /**
- * O(log n) running totals for the /admin dashboard, so `admin.counts` reads a
- * few B-tree nodes instead of scanning whole tables (which was chewing through
- * Convex egress on every dashboard load). Each is count-only (`sortKey` → null);
- * media additionally sums `size` for the stored-bytes figure.
+ * O(log n) running totals for /admin (today only `admin.mediaTotals` reads
+ * them), so headline numbers cost a few B-tree nodes instead of table scans
+ * (which was chewing through Convex egress). Each is count-only
+ * (`sortKey` → null); media additionally sums `size` for the bytes figure.
  *
  * These are kept in sync by triggers (below) plus a one-time `backfill`.
  */

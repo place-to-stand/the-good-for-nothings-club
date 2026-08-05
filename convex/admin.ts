@@ -3,7 +3,7 @@ import { paginationOptsValidator } from 'convex/server'
 import { v } from 'convex/values'
 
 // Trigger-aware builder: writes to inquiries must keep its aggregate in sync.
-import { inquiriesCount, mediaStats, membersCount, mutation, projectsCount } from './aggregates'
+import { mediaStats, mutation } from './aggregates'
 import type { Id } from './_generated/dataModel'
 import type { MutationCtx, QueryCtx } from './_generated/server'
 import { query } from './_generated/server'
@@ -22,22 +22,6 @@ async function requireUser(ctx: QueryCtx | MutationCtx) {
   }
   return userId
 }
-
-export const counts = query({
-  args: {},
-  handler: async ctx => {
-    await requireUser(ctx)
-    // O(log n) reads from the aggregates — no table scans. See convex/aggregates.ts.
-    const [inquiries, projects, members, media, mediaBytes] = await Promise.all([
-      inquiriesCount.count(ctx),
-      projectsCount.count(ctx),
-      membersCount.count(ctx),
-      mediaStats.count(ctx),
-      mediaStats.sum(ctx),
-    ])
-    return { inquiries, projects, members, media, mediaBytes }
-  },
-})
 
 /** Cheap grand totals for the media page header (avoids scanning the table). */
 export const mediaTotals = query({
@@ -70,28 +54,8 @@ const pipelineValidator = v.union(
   v.literal('inbox')
 )
 
-/** Retired spelling → current, for reading rows the migration hasn't touched. */
-const LEGACY_TO_CURRENT: Partial<Record<string, string>> = {
-  met: 'toured',
-  interested: 'toured',
-  won: 'joined',
-  lost: 'declined',
-}
-
-/** Current status → retired spellings that should match it in filters. */
-const LEGACY_ALIASES: Partial<Record<string, string[]>> = {
-  toured: ['met', 'interested'],
-  joined: ['won'],
-  declined: ['lost'],
-}
-
 /** Mirrors CLOSED_INQUIRY_STATUSES in data/schemas.ts. */
 const CLOSED_STATUSES = ['joined', 'declined', 'not_a_fit', 'closed']
-
-function currentStatus(status?: string) {
-  if (!status) return 'new'
-  return LEGACY_TO_CURRENT[status] ?? status
-}
 
 export const listInquiries = query({
   args: {
@@ -106,8 +70,7 @@ export const listInquiries = query({
     const kinds = args.pipeline ? PIPELINE_KINDS[args.pipeline] : undefined
     const statuses = args.statuses
     // Post-scan filters are fine at this table's size. 'new' also matches
-    // rows predating the status field; current statuses match their retired
-    // spellings until maintenance:migrateInquiryStatuses runs.
+    // rows predating the status field.
     const filtered = ctx.db.query('inquiries').filter(q => {
       const conditions = []
       if (kinds) {
@@ -120,9 +83,6 @@ export const listInquiries = query({
               const matches = [q.eq(q.field('status'), status)]
               if (status === 'new') {
                 matches.push(q.eq(q.field('status'), undefined))
-              }
-              for (const alias of LEGACY_ALIASES[status] ?? []) {
-                matches.push(q.eq(q.field('status'), alias))
               }
               return matches
             })
@@ -220,7 +180,7 @@ export const pipelineSummary = query({
       const pipeline = (
         Object.keys(PIPELINE_KINDS) as (keyof typeof PIPELINE_KINDS)[]
       ).find(p => (PIPELINE_KINDS[p] as readonly string[]).includes(inquiry.kind))!
-      const status = currentStatus(inquiry.status)
+      const status = inquiry.status ?? 'new'
       const board = boards[pipeline]
       board[status] = (board[status] ?? 0) + 1
       board.total++

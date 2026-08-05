@@ -1,11 +1,15 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 /**
- * Controlled-dialog open state that also opens itself on load when the URL
- * has ?inquire=<autoOpenId>. Lets us hand out deep links that land with a
- * specific form already open, e.g. /services?inquire=photo-booth.
+ * Controlled-dialog open state synced with a ?inquire=<autoOpenId> URL param
+ * in both directions:
+ *
+ * - Landing with the param opens the dialog on load, so deep links like
+ *   /services?inquire=photo-booth go straight to a form.
+ * - Opening the dialog writes the param into the address bar (and closing
+ *   removes it), so copying the URL with a form open IS the deep link.
  *
  * Scrolls the matching card (element with id === autoOpenId) into view so
  * the page is in the right place when the dialog closes.
@@ -34,5 +38,24 @@ export function useAutoOpenDialog(
     onAutoOpenRef.current()
   }, [autoOpenId])
 
-  return [open, setOpen] as const
+  // replaceState (not pushState) keeps the back button leaving the page
+  // instead of replaying modal opens; Next's router syncs with it natively.
+  const setOpenAndSyncUrl = useCallback(
+    (nextOpen: boolean) => {
+      setOpen(nextOpen)
+      if (!autoOpenId) return
+      const url = new URL(window.location.href)
+      if (nextOpen) {
+        url.searchParams.set('inquire', autoOpenId)
+      } else if (url.searchParams.get('inquire') === autoOpenId) {
+        url.searchParams.delete('inquire')
+      } else {
+        return
+      }
+      window.history.replaceState(window.history.state, '', url)
+    },
+    [autoOpenId]
+  )
+
+  return [open, setOpenAndSyncUrl] as const
 }

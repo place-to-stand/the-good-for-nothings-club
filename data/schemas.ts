@@ -35,24 +35,9 @@ export const INQUIRY_STATUSES = [
   'closed',
 ] as const
 
-/**
- * Retired status spellings that may still be on stored rows until
- * maintenance:migrateInquiryStatuses runs. UI code should render through
- * normalizeInquiryStatus so these never leak into a <select>.
- */
-export const LEGACY_INQUIRY_STATUS_MAP = {
-  met: 'toured',
-  interested: 'toured',
-  won: 'joined',
-  lost: 'declined',
-} as const satisfies Record<string, InquiryStatus>
-
+/** Stored rows predating the status field read as 'new'. */
 export function normalizeInquiryStatus(status?: string): InquiryStatus {
-  if (!status) return 'new'
-  if (status in LEGACY_INQUIRY_STATUS_MAP) {
-    return LEGACY_INQUIRY_STATUS_MAP[status as keyof typeof LEGACY_INQUIRY_STATUS_MAP]
-  }
-  return status as InquiryStatus
+  return status ? (status as InquiryStatus) : 'new'
 }
 
 /**

@@ -99,14 +99,7 @@ export const inquiryStatusValidator = v.union(
   v.literal('joined'),
   v.literal('declined'),
   v.literal('not_a_fit'),
-  v.literal('closed'),
-  // Retired spellings still on stored rows. Remove after
-  // `npx convex run maintenance:migrateInquiryStatuses --prod` has run
-  // (prod has won/lost; met/interested only ever existed on dev).
-  v.literal('met'),
-  v.literal('interested'),
-  v.literal('won'),
-  v.literal('lost')
+  v.literal('closed')
 )
 
 /** Mirrors MEMBER_ROLES in data/schemas.ts. */

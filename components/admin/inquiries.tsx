@@ -79,6 +79,15 @@ function formatDay(ms: number) {
   })
 }
 
+/** Whole-day gap between two stage changes, for the history rail. */
+function stageGap(from: number, to: number) {
+  const days = Math.round((to - from) / DAY)
+  if (days <= 0) return 'same day'
+  if (days === 1) return '1 day'
+  if (days < 60) return `${days} days`
+  return `${Math.round(days / 30)} months`
+}
+
 function timeAgo(ms: number) {
   const days = Math.floor((Date.now() - ms) / DAY)
   if (days <= 0) return 'today'
@@ -342,43 +351,52 @@ function InquirySheetBody({ id }: { id: Id<'inquiries'> }) {
 
       <NotesEditor id={inquiry._id} notes={inquiry.notes} />
 
-      {inquiry.message && (
-        <p className='whitespace-pre-wrap border-l-2 border-black/20 pl-3 font-sans text-sm'>
-          {inquiry.message}
-        </p>
-      )}
-
       {inquiry.statusHistory && inquiry.statusHistory.length > 0 && (
         <div className='border-t-2 border-black/10 pt-4'>
-          <h3 className='mb-1 font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
+          <h3 className='mb-2 font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
             History
           </h3>
-          <ol className='flex flex-col gap-0.5 font-sans text-sm text-black/80'>
-            <li>
-              new —{' '}
-              {new Date(inquiry._creationTime).toLocaleDateString(undefined, {
-                month: 'short',
-                day: 'numeric',
-              })}
-            </li>
-            {inquiry.statusHistory.map((entry, index) => (
+          <ol className='flex flex-col'>
+            {[
+              { status: 'new', at: inquiry._creationTime },
+              ...inquiry.statusHistory,
+            ].map((entry, index, trail) => (
               <li key={index}>
-                {statusLabel(
-                  normalizeInquiryStatus(entry.status),
-                  pipeline
-                )}{' '}
-                —{' '}
-                {new Date(entry.at).toLocaleDateString(undefined, {
-                  month: 'short',
-                  day: 'numeric',
-                })}
+                {index > 0 && (
+                  <div
+                    aria-hidden
+                    className='ml-[3px] flex items-center gap-2.5 border-l-2 border-black/15 py-1 pl-4'
+                  >
+                    <span className='font-sans text-[10px] uppercase tracking-[1px] text-black/40'>
+                      {stageGap(trail[index - 1].at, entry.at)}
+                    </span>
+                  </div>
+                )}
+                <div className='flex items-baseline gap-2.5'>
+                  <span className='h-2 w-2 shrink-0 self-center bg-black' />
+                  <span className='font-sans text-xs font-bold uppercase tracking-[1px]'>
+                    {statusLabel(normalizeInquiryStatus(entry.status), pipeline)}
+                  </span>
+                  <span className='ml-auto font-sans text-xs text-black/50'>
+                    {formatDay(entry.at)}
+                  </span>
+                </div>
               </li>
             ))}
           </ol>
         </div>
       )}
 
-      <dl className='flex flex-col gap-1 border-t-2 border-black/10 pt-4'>
+      <div className='border-t-2 border-black/10 pt-4'>
+        <h3 className='mb-2 font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
+          From the inquiry
+        </h3>
+        {inquiry.message && (
+          <p className='mb-3 whitespace-pre-wrap border-l-2 border-black/20 pl-3 font-sans text-sm'>
+            {inquiry.message}
+          </p>
+        )}
+        <dl className='flex flex-col gap-1'>
         <DetailRow
           label='Email'
           value={
@@ -419,11 +437,12 @@ function InquirySheetBody({ id }: { id: Id<'inquiries'> }) {
         {inquiry.attribution?.landingPage && (
           <DetailRow label='Landed on' value={inquiry.attribution.landingPage} />
         )}
-        <DetailRow
-          label='Received'
-          value={new Date(inquiry._creationTime).toLocaleString()}
-        />
-      </dl>
+          <DetailRow
+            label='Received'
+            value={new Date(inquiry._creationTime).toLocaleString()}
+          />
+        </dl>
+      </div>
     </div>
   )
 }

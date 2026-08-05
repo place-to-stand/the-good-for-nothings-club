@@ -263,38 +263,6 @@ export const seedMockInquiries = internalMutation({
   },
 })
 
-/**
- * Status spellings retired when the boards were rebuilt 2026-08-06:
- * met/interested → toured (prod never had them), won → joined,
- * lost → declined. 'toured' itself is canonical again. Run on dev and
- * prod, then drop the retired literals from inquiryStatusValidator:
- *   npx convex run maintenance:migrateInquiryStatuses --prod
- */
-export const migrateInquiryStatuses = internalMutation({
-  args: {},
-  handler: async ctx => {
-    const REMAP = {
-      met: 'toured',
-      interested: 'toured',
-      won: 'joined',
-      lost: 'declined',
-    } as const
-    const inquiries = await ctx.db.query('inquiries').collect()
-    let patched = 0
-    for (const inquiry of inquiries) {
-      const next =
-        inquiry.status && inquiry.status in REMAP
-          ? REMAP[inquiry.status as keyof typeof REMAP]
-          : undefined
-      if (next) {
-        await ctx.db.patch(inquiry._id, { status: next })
-        patched++
-      }
-    }
-    return { patched }
-  },
-})
-
 export const fixProjectLinks = internalMutation({
   args: {},
   handler: async ctx => {

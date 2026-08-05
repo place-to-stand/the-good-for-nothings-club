@@ -91,9 +91,29 @@ export const inquiryAttributionValidator = v.object({
 export const inquiryStatusValidator = v.union(
   v.literal('new'),
   v.literal('replied'),
+  v.literal('tour_booked'),
   v.literal('toured'),
+  v.literal('waitlisted'),
+  v.literal('future'),
+  v.literal('vetted'),
+  v.literal('joined'),
+  v.literal('declined'),
+  v.literal('not_a_fit'),
+  v.literal('closed'),
+  // Retired spellings still on stored rows. Remove after
+  // `npx convex run maintenance:migrateInquiryStatuses --prod` has run
+  // (prod has won/lost; met/interested only ever existed on dev).
+  v.literal('met'),
+  v.literal('interested'),
   v.literal('won'),
   v.literal('lost')
+)
+
+/** Mirrors MEMBER_ROLES in data/schemas.ts. */
+export const memberRoleValidator = v.union(
+  v.literal('member'),
+  v.literal('associate'),
+  v.literal('friend')
 )
 
 export default defineSchema({
@@ -134,7 +154,34 @@ export default defineSchema({
     status: v.optional(inquiryStatusValidator),
     /** Ms epoch when status first left 'new' - time-to-first-reply metric. */
     repliedAt: v.optional(v.number()),
-  }).index('by_kind', ['kind']),
+    /** Free-form notes, edited from /admin. */
+    notes: v.optional(v.string()),
+    /** Ms epoch of the scheduled tour (status 'tour_booked'). */
+    tourAt: v.optional(v.number()),
+    /** Ms epoch the tour happened; stamped on 'toured', editable after. */
+    touredAt: v.optional(v.number()),
+    /** Ms epoch when they joined; stamped on 'joined', editable after. */
+    joinedAt: v.optional(v.number()),
+    /** Ms epoch of the next planned touch — powers the follow-ups view. */
+    followUpAt: v.optional(v.number()),
+    /** Position in the approved-members queue; 1 = first call. */
+    waitlistRank: v.optional(v.number()),
+    /** Role assigned when a membership inquiry reaches 'joined'. */
+    memberRole: v.optional(memberRoleValidator),
+    /** True for rows entered by hand in /admin rather than a website form. */
+    manual: v.optional(v.boolean()),
+    /**
+     * Every admin status change, in order, for funnel analysis. Plain-string
+     * statuses so renames/retirements never invalidate old rows. The 'new'
+     * entry point isn't logged — that's _creationTime.
+     */
+    statusHistory: v.optional(
+      v.array(v.object({ status: v.string(), at: v.number() }))
+    ),
+  })
+    .index('by_kind', ['kind'])
+    .index('by_follow_up', ['followUpAt'])
+    .index('by_tour_at', ['tourAt']),
 
   /**
    * One row per asset migrated from Sanity (optimized copy in Convex file

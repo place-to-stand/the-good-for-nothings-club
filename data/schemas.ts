@@ -14,14 +14,97 @@ export const INQUIRY_KINDS = [
   'general',
 ] as const
 
-/** Inquiry lifecycle, managed from /admin. Stored rows without one are 'new'. */
+/**
+ * Inquiry lifecycle, managed from /admin. Stored rows without one are 'new'.
+ * This is the superset across the three admin boards; each board offers only
+ * its own ladder — see PIPELINE_STATUSES. Two kinds of no: 'declined' (they
+ * passed on us) vs 'not_a_fit' (we passed on them). 'waitlisted' is approved
+ * + ranked, waiting for capacity; 'future' is "right person, wrong time".
+ */
 export const INQUIRY_STATUSES = [
   'new',
   'replied',
+  'tour_booked',
   'toured',
-  'won',
-  'lost',
+  'waitlisted',
+  'future',
+  'vetted',
+  'joined',
+  'declined',
+  'not_a_fit',
+  'closed',
 ] as const
+
+/**
+ * Retired status spellings that may still be on stored rows until
+ * maintenance:migrateInquiryStatuses runs. UI code should render through
+ * normalizeInquiryStatus so these never leak into a <select>.
+ */
+export const LEGACY_INQUIRY_STATUS_MAP = {
+  met: 'toured',
+  interested: 'toured',
+  won: 'joined',
+  lost: 'declined',
+} as const satisfies Record<string, InquiryStatus>
+
+export function normalizeInquiryStatus(status?: string): InquiryStatus {
+  if (!status) return 'new'
+  if (status in LEGACY_INQUIRY_STATUS_MAP) {
+    return LEGACY_INQUIRY_STATUS_MAP[status as keyof typeof LEGACY_INQUIRY_STATUS_MAP]
+  }
+  return status as InquiryStatus
+}
+
+/**
+ * The three admin boards. Every website inquiry kind funnels into exactly
+ * one: facilities require membership (tour + approval), services just need
+ * vetting, and events/general are a triage inbox.
+ */
+export const PIPELINES = ['membership', 'services', 'inbox'] as const
+export type Pipeline = (typeof PIPELINES)[number]
+
+export const PIPELINE_FOR_KIND = {
+  membership: 'membership',
+  facility: 'membership',
+  service: 'services',
+  event: 'inbox',
+  general: 'inbox',
+} as const satisfies Record<InquiryKind, Pipeline>
+
+/** Stage ladder per board, in display order. */
+export const PIPELINE_STATUSES: Record<Pipeline, readonly InquiryStatus[]> = {
+  membership: [
+    'new',
+    'replied',
+    'tour_booked',
+    'toured',
+    'waitlisted',
+    'future',
+    'joined',
+    'declined',
+    'not_a_fit',
+  ],
+  services: ['new', 'replied', 'vetted', 'future', 'joined', 'declined', 'not_a_fit'],
+  inbox: ['new', 'replied', 'closed'],
+}
+
+/** Terminal stages — reaching one clears any pending follow-up/rank. */
+export const CLOSED_INQUIRY_STATUSES: readonly InquiryStatus[] = [
+  'joined',
+  'declined',
+  'not_a_fit',
+  'closed',
+]
+
+/** Roles a joined member can hold. */
+export const MEMBER_ROLES = ['member', 'associate', 'friend'] as const
+export type MemberRole = (typeof MEMBER_ROLES)[number]
+
+export const MEMBER_ROLE_LABELS: Record<MemberRole, string> = {
+  member: 'Member', // rents monthly
+  associate: 'Associate', // rents hourly once in the system
+  friend: 'Friend', // Discord link, no rental access
+}
 
 /**
  * Self-reported answer to "How'd you hear about us?" — complements the

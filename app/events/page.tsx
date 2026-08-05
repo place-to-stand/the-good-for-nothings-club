@@ -165,7 +165,8 @@ export default function Events() {
                   .map(entry => (
                     <div
                       key={entry.key}
-                      className='flex items-center gap-2 py-1'
+                      id={entry.key}
+                      className='flex scroll-mt-28 items-center gap-2 py-1'
                     >
                       <span className='whitespace-nowrap'>
                         {formatOccurrenceDate(entry.date)}
@@ -195,6 +196,7 @@ export default function Events() {
                           kind='event'
                           item={entry.name}
                           occurrenceDate={entry.date}
+                          autoOpenId={entry.key}
                           triggerLabel='RSVP'
                           triggerVariant='outline'
                           triggerClassName='h-8 px-3 text-xs shrink-0'
@@ -224,6 +226,7 @@ export default function Events() {
                   <InquiryDialog
                     kind='event'
                     item={event.name}
+                    autoOpenId={event.slug}
                     triggerLabel='RSVP to the next one'
                     title={`RSVP - ${event.name}`}
                     submitLabel='RSVP'

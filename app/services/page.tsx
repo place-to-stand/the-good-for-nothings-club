@@ -40,6 +40,7 @@ function ServiceCard({ service }: { service: Service }) {
         <InquiryDialog
           kind='service'
           item={service.name}
+          autoOpenId={service.slug}
           triggerLabel={service.cta ?? 'Start a project'}
           title={service.name}
           description="Tell us what you have in mind and we'll get back to you with a quote."

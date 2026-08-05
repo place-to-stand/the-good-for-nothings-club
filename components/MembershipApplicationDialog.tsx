@@ -1,6 +1,7 @@
 'use client'
 
 import { captureEvent } from '../lib/analytics'
+import { useAutoOpenDialog } from '../lib/useAutoOpenDialog'
 import MembershipApplicationForm from './MembershipApplicationForm'
 import { Button } from './ui/Button'
 import {
@@ -20,6 +21,8 @@ type MembershipApplicationDialogProps = {
   defaultTier?: string
   /** Preselected offering; should belong to the tier's options. */
   defaultOffering?: string
+  /** Opens this dialog on load when the URL has ?inquire=<autoOpenId>. */
+  autoOpenId?: string
 }
 
 /** The membership application in a popup, prefilled from the launching offer. */
@@ -29,11 +32,22 @@ export default function MembershipApplicationDialog({
   description,
   defaultTier,
   defaultOffering,
+  autoOpenId,
 }: MembershipApplicationDialogProps) {
+  const [open, setOpen] = useAutoOpenDialog(autoOpenId, () =>
+    captureEvent('membership_application_opened', {
+      tier: defaultTier,
+      offering: defaultOffering,
+      source: 'url',
+    })
+  )
+
   return (
     <Dialog
-      onOpenChange={open => {
-        if (open) {
+      open={open}
+      onOpenChange={nextOpen => {
+        setOpen(nextOpen)
+        if (nextOpen) {
           captureEvent('membership_application_opened', {
             tier: defaultTier,
             offering: defaultOffering,

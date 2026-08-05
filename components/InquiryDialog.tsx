@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { events, formatOccurrenceLong } from '../data/events'
 import type { InquiryKind } from '../data/schemas'
 import { captureEvent } from '../lib/analytics'
+import { useAutoOpenDialog } from '../lib/useAutoOpenDialog'
 import InquiryForm, { type InquirySelection } from './InquiryForm'
 import { Button, type ButtonProps } from './ui/Button'
 import {
@@ -21,6 +22,8 @@ type InquiryDialogProps = {
   item: string
   /** For event RSVPs: preselect this occurrence (YYYY-MM-DD). */
   occurrenceDate?: string
+  /** Opens this dialog on load when the URL has ?inquire=<autoOpenId>. */
+  autoOpenId?: string
   triggerLabel: string
   triggerVariant?: ButtonProps['variant']
   triggerSize?: ButtonProps['size']
@@ -34,6 +37,7 @@ export default function InquiryDialog({
   kind,
   item,
   occurrenceDate,
+  autoOpenId,
   triggerLabel,
   triggerVariant,
   triggerSize,
@@ -42,6 +46,14 @@ export default function InquiryDialog({
   description,
   submitLabel,
 }: InquiryDialogProps) {
+  const [open, setOpen] = useAutoOpenDialog(autoOpenId, () =>
+    captureEvent('inquiry_form_opened', {
+      kind,
+      item,
+      occurrence_date: occurrenceDate,
+      source: 'url',
+    })
+  )
   const [selection, setSelection] = useState<InquirySelection>({
     kind,
     item,
@@ -68,8 +80,10 @@ export default function InquiryDialog({
 
   return (
     <Dialog
-      onOpenChange={open => {
-        if (open) {
+      open={open}
+      onOpenChange={nextOpen => {
+        setOpen(nextOpen)
+        if (nextOpen) {
           captureEvent('inquiry_form_opened', {
             kind,
             item,

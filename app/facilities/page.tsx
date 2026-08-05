@@ -59,6 +59,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
           description={facility.description}
           defaultTier={facility.model === 'monthly' ? 'Member' : 'Associate'}
           defaultOffering={facility.name}
+          autoOpenId={facility.slug}
         />
       }
     >
@@ -136,6 +137,7 @@ export default function Facilities() {
               description={storefrontCopy.description}
               defaultTier='Associate'
               defaultOffering={storefrontCopy.name}
+              autoOpenId='online-store'
             />
           }
         />

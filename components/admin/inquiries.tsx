@@ -321,13 +321,13 @@ function InquirySheetBody({ id }: { id: Id<'inquiries'> }) {
               id={inquiry._id}
               field='tourAt'
               value={inquiry.tourAt}
-              label='Tour booked'
+              label='Tour booked for'
             />
             <DateField
               id={inquiry._id}
               field='touredAt'
               value={inquiry.touredAt}
-              label='Toured'
+              label='Toured on'
             />
           </>
         )}
@@ -335,13 +335,13 @@ function InquirySheetBody({ id }: { id: Id<'inquiries'> }) {
           id={inquiry._id}
           field='followUpAt'
           value={inquiry.followUpAt}
-          label='Follow up'
+          label='Follow up on'
         />
         <DateField
           id={inquiry._id}
           field='joinedAt'
           value={inquiry.joinedAt}
-          label={pipeline === 'services' ? 'Won' : 'Joined'}
+          label={pipeline === 'services' ? 'Won on' : 'Joined on'}
         />
         {pipeline === 'membership' &&
           (status === 'joined' || inquiry.memberRole) && (
@@ -564,7 +564,7 @@ function AddInquirySheetBody({
       {pipeline === 'membership' && (
         <label className='flex items-center justify-between gap-2'>
           <span className='font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
-            Tour booked
+            Tour booked for
           </span>
           <input
             type='date'
@@ -577,7 +577,7 @@ function AddInquirySheetBody({
       )}
       <label className='flex items-center justify-between gap-2'>
         <span className='font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
-          Follow up
+          Follow up on
         </span>
         <input
           type='date'

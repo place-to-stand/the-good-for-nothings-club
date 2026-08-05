@@ -15,10 +15,10 @@ const inquiryLinks: { href: string; label: string; board: Pipeline }[] = [
   { href: '/admin/inquiries/inbox', label: 'Inbox', board: 'inbox' },
 ]
 
-const cmsLinks = [
-  { href: '/admin/projects', label: 'Projects' },
-  { href: '/admin/members', label: 'Members' },
-  { href: '/admin/media', label: 'Media' },
+const contentLinks = [
+  { href: '/admin/content/projects', label: 'Projects' },
+  { href: '/admin/content/members', label: 'Members' },
+  { href: '/admin/content/media', label: 'Media' },
 ]
 
 /**
@@ -99,8 +99,8 @@ export default function AdminNav() {
               )
             })}
           </NavGroup>
-          <NavGroup label='CMS'>
-            {cmsLinks.map(link => (
+          <NavGroup label='Content'>
+            {contentLinks.map(link => (
               <Link
                 key={link.href}
                 className={linkClassName(pathname === link.href)}

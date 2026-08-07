@@ -41,8 +41,9 @@ export async function POST(request: Request) {
   const { html, text } = newsletterEmail(body.email)
 
   resend.emails.send({
-    from: `GFNC Newsletter Sign Up Form <no-reply@updates.thegoodfornothings.club>`,
+    from: `GFNC Newsletter Sign Up Form <hello@send.thegoodfornothings.club>`,
     to: ['hello@thegoodfornothings.club'],
+    replyTo: body.email,
     subject: 'Newsletter Sign up @ https://thegoodfornothings.club/',
     html,
     text,
@@ -52,7 +53,7 @@ export async function POST(request: Request) {
   try {
     const confirmation = newsletterConfirmationEmail()
     const { error: confirmationError } = await resend.emails.send({
-      from: 'The Good For Nothings Club <no-reply@updates.thegoodfornothings.club>',
+      from: 'The Good For Nothings Club <hello@send.thegoodfornothings.club>',
       to: [body.email],
       replyTo: 'hello@thegoodfornothings.club',
       subject: confirmation.subject,

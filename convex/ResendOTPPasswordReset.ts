@@ -18,8 +18,9 @@ export const ResendOTPPasswordReset = Resend({
   async sendVerificationRequest({ identifier: email, provider, token }) {
     const resend = new ResendAPI(provider.apiKey)
     const { error } = await resend.emails.send({
-      from: 'GFNC Admin <no-reply@updates.thegoodfornothings.club>',
+      from: 'GFNC Admin <hello@send.thegoodfornothings.club>',
       to: [email],
+      replyTo: 'hello@thegoodfornothings.club',
       subject: 'Reset your GFNC admin password',
       text: [
         `Your password reset code is: ${token}`,

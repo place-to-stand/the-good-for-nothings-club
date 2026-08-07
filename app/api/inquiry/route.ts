@@ -50,7 +50,7 @@ export async function POST(request: Request) {
   const { html, text } = inquiryEmail(inquiry, persisted)
 
   const { error } = await resend.emails.send({
-    from: 'GFNC Website <no-reply@updates.thegoodfornothings.club>',
+    from: 'GFNC Website <hello@send.thegoodfornothings.club>',
     to: ['hello@thegoodfornothings.club'],
     replyTo: inquiry.email,
     subject: `${SUBJECT_PREFIX[inquiry.kind]}: ${inquiry.item}`,
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
   try {
     const confirmation = confirmationEmail(inquiry)
     const { error: confirmationError } = await resend.emails.send({
-      from: 'The Good For Nothings Club <no-reply@updates.thegoodfornothings.club>',
+      from: 'The Good For Nothings Club <hello@send.thegoodfornothings.club>',
       to: [inquiry.email],
       replyTo: 'hello@thegoodfornothings.club',
       subject: confirmation.subject,

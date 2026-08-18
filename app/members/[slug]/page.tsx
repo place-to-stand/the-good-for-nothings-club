@@ -6,6 +6,7 @@ import { api } from '../../../convex/_generated/api'
 import { Id } from '../../../convex/_generated/dataModel'
 import Image from 'next/image'
 import { Metadata, ResolvingMetadata } from 'next'
+import { notFound } from 'next/navigation'
 import ProjectCardSmall from '@/components/ProjectCardSmall'
 import { pastMemberSlugs } from '@/data/leadership'
 import { FaCaretLeft } from 'react-icons/fa6'
@@ -31,7 +32,9 @@ export async function generateMetadata(
 
   const member = (await fetchQuery(api.members.bySlug, {
     slug,
-  })) as unknown as GFNC_member
+  })) as unknown as GFNC_member | null
+
+  if (!member) notFound()
 
   const memberKind = pastMemberSlugs.includes(slug)
     ? 'a past member'
@@ -69,11 +72,9 @@ export default async function Member(props: MemberProps) {
   // First get the member data
   const member = (await fetchQuery(api.members.bySlug, {
     slug,
-  })) as unknown as GFNC_member
+  })) as unknown as GFNC_member | null
 
-  if (!member) {
-    return <div>Member not found</div>
-  }
+  if (!member) notFound()
 
   // Then get the projects data using the member ID
   const projectsData = (await fetchQuery(api.projects.byMemberId, {

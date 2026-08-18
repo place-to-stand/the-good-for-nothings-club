@@ -3,6 +3,7 @@ import { GFNC_project, Image } from '../../../types'
 import { toPlainText } from '@portabletext/toolkit'
 import { fetchQuery } from 'convex/nextjs'
 import { Metadata, ResolvingMetadata } from 'next'
+import { notFound } from 'next/navigation'
 import { api } from '../../../convex/_generated/api'
 import {
   WebProject,
@@ -35,7 +36,9 @@ export async function generateMetadata(
 
   const project = (await fetchQuery(api.projects.bySlug, {
     slug,
-  })) as unknown as GFNC_project
+  })) as unknown as GFNC_project | null
+
+  if (!project) notFound()
 
   const mainImage = project.mainMedia.find(
     mainMedia => mainMedia._type === 'image'
@@ -73,7 +76,9 @@ export default async function Project(props: ProjectProps) {
 
   const project = (await fetchQuery(api.projects.bySlug, {
     slug,
-  })) as unknown as GFNC_project
+  })) as unknown as GFNC_project | null
+
+  if (!project) notFound()
 
   // Route to the appropriate component based on project type
   switch (project.type) {

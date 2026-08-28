@@ -154,6 +154,12 @@ export const specialEvents: SpecialEvent[] = [
     date: '2026-07-01',
     venue: 'GFNC Clubhouse',
   },
+  {
+    slug: 'off-genre-jam-aug-2026',
+    name: 'Off Genre Jam',
+    date: '2026-08-20',
+    venue: 'GFNC Clubhouse',
+  },
 ]
 
 /** YYYY-MM-DD in UTC for a date constructed at UTC noon. */

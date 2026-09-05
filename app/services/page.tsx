@@ -1,11 +1,10 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 
 import InquiryDialog from '@/components/InquiryDialog'
-import OfferCard from '@/components/OfferCard'
+import { MenuBoard, MenuBoardRow } from '@/components/MenuBoard'
 import PageShell from '@/components/PageShell'
-import PriceMenu from '@/components/PriceMenu'
 import SectionHeading from '@/components/SectionHeading'
-import { services, servicesCopy, type Service } from '@/data/services'
+import { services, servicesCopy } from '@/data/services'
 
 export async function generateMetadata(
   _props: unknown,
@@ -28,39 +27,6 @@ export async function generateMetadata(
   }
 }
 
-function ServiceCard({ service }: { service: Service }) {
-  return (
-    <OfferCard
-      id={service.slug}
-      title={service.name}
-      price={service.price}
-      meta={service.detail}
-      description={service.blurb}
-      footer={
-        <InquiryDialog
-          kind='service'
-          item={service.name}
-          autoOpenId={service.slug}
-          triggerLabel={service.cta ?? 'Start a project'}
-          title={service.name}
-          description="Tell us what you have in mind and we'll get back to you with a quote."
-          submitLabel='Send'
-        />
-      }
-    >
-      {service.items && (
-        <PriceMenu
-          lines={service.items.map(({ group, label, price }) => ({
-            group,
-            item: label,
-            price,
-          }))}
-        />
-      )}
-    </OfferCard>
-  )
-}
-
 export default function Services() {
   return (
     <PageShell
@@ -76,11 +42,30 @@ export default function Services() {
         return (
           <div key={category.key} id={category.key} className='scroll-mt-28'>
             <SectionHeading title={category.title} lead={category.lead} />
-            <div className='mt-6 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2'>
+            <MenuBoard className='mt-5'>
               {categoryServices.map(service => (
-                <ServiceCard key={service.slug} service={service} />
+                <MenuBoardRow
+                  key={service.slug}
+                  id={service.slug}
+                  title={service.name}
+                  description={service.blurb}
+                  items={service.items}
+                  cta={
+                    <InquiryDialog
+                      kind='service'
+                      item={service.name}
+                      autoOpenId={service.slug}
+                      triggerLabel={service.cta ?? 'Start a project'}
+                      triggerVariant='outline'
+                      triggerSize='sm'
+                      title={service.name}
+                      description="Tell us what you have in mind and we'll get back to you with a quote."
+                      submitLabel='Send'
+                    />
+                  }
+                />
               ))}
-            </div>
+            </MenuBoard>
           </div>
         )
       })}

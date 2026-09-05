@@ -85,7 +85,11 @@ function NewsletterSignUpForm() {
             </FormItem>
           )}
         />
-        <Button type='submit' disabled={isSubmitting} className='w-full @sm:w-auto'>
+        <Button
+          type='submit'
+          disabled={isSubmitting}
+          className='w-full @sm:w-auto'
+        >
           {isSubmitting && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
           Subscribe
         </Button>
@@ -106,7 +110,11 @@ const FOOTER_LINKS = [
   { href: '/services', text: 'Services' },
   { href: '/events', text: 'Events' },
   { href: '/membership', text: 'Membership' },
-  { href: 'https://shop.thegoodfornothings.club/', text: 'Shop', external: true },
+  {
+    href: 'https://shop.thegoodfornothings.club/',
+    text: 'Shop',
+    external: true,
+  },
   { href: '/about', text: 'About' },
   { href: '/contact', text: 'Contact' },
 ]
@@ -140,18 +148,6 @@ export default function Footer() {
           </div>
           <div>
             <h3 className='text-[20px] font-black tracking-[0.06em] uppercase'>
-              Newsletter
-            </h3>
-            <p className='mt-2 text-sm leading-snug'>
-              Occasional updates from the clubhouse: events, openings, and new
-              work.
-            </p>
-            <div className='mt-4 @container'>
-              <NewsletterSignUpForm />
-            </div>
-          </div>
-          <div>
-            <h3 className='text-[20px] font-black tracking-[0.06em] uppercase'>
               Membership
             </h3>
             <p className='mt-2 text-sm leading-snug'>
@@ -161,6 +157,18 @@ export default function Footer() {
             <Button asChild className='mt-4 hover:no-underline'>
               <ScrollTopLink href='/membership'>Apply to Join</ScrollTopLink>
             </Button>
+          </div>
+          <div>
+            <h3 className='text-[20px] font-black tracking-[0.06em] uppercase'>
+              Newsletter
+            </h3>
+            <p className='mt-2 text-sm leading-snug'>
+              Occasional updates from the clubhouse: events, openings, and new
+              work.
+            </p>
+            <div className='@container mt-4'>
+              <NewsletterSignUpForm />
+            </div>
           </div>
           <a
             href={clubhouseMapsUrl}

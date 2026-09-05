@@ -7,24 +7,16 @@
 
 export type ServiceCategoryKey = 'visual' | 'audio' | 'print' | 'av'
 
-export type ServiceItem = {
-  /** e.g. "At the clubhouse" / "On-site" - omit when there's no grouping. */
-  group?: string
-  label: string
-  price: string
-}
-
 export type Service = {
   /** URL-safe unique id. Used for anchor links + inquiry subject. */
   slug: string
   name: string
   blurb: string
-  price: string
   category: ServiceCategoryKey
   /** Inquiry button label; defaults to "Start a project". */
   cta?: string
-  detail?: string
-  items?: ServiceItem[]
+  /** What the service covers, listed under the blurb. */
+  items?: string[]
 }
 
 export const servicesCopy = {
@@ -61,18 +53,7 @@ export const services: Service[] = [
     category: 'visual',
     blurb:
       'From headshots and lookbooks at the studio to your event covered end to end. We can shoot digital or film, with vintage gear on hand when needed.',
-    price: 'From $250',
-    items: [
-      { group: 'At the clubhouse', label: 'Portrait', price: 'From $250' },
-      {
-        group: 'At the clubhouse',
-        label: 'Product / promo',
-        price: 'From $300',
-      },
-      { group: 'On-site', label: 'Event coverage', price: 'From $250' },
-      { group: 'On-site', label: 'Portrait', price: 'From $300' },
-      { group: 'On-site', label: 'Product / promo', price: 'From $350' },
-    ],
+    items: ['Portrait', 'Product / promo', 'Event coverage'],
   },
   {
     slug: 'video',
@@ -81,17 +62,7 @@ export const services: Service[] = [
     category: 'visual',
     blurb:
       'Music videos, promos, and event recaps - shot on modern or vintage gear, filmed and cut into something you can use immediately.',
-    price: 'From $400',
-    items: [
-      {
-        group: 'At the clubhouse',
-        label: 'Product / promo',
-        price: 'From $400',
-      },
-      { group: 'On-site', label: 'Event coverage', price: 'From $400' },
-      { group: 'On-site', label: 'Product / promo', price: 'From $450' },
-      { group: 'On-site', label: 'Music video', price: 'From $1000' },
-    ],
+    items: ['Product / promo', 'Event coverage', 'Music video'],
   },
   {
     slug: 'music',
@@ -100,12 +71,7 @@ export const services: Service[] = [
     category: 'audio',
     blurb:
       'Mixing, production, and writing with people who live in the studio.',
-    price: 'From $300',
-    items: [
-      { label: 'Mixing', price: '$300 / song' },
-      { label: 'Production', price: 'By quote' },
-      { label: 'Composition', price: 'By quote' },
-    ],
+    items: ['Mixing', 'Production', 'Composition'],
   },
   {
     slug: 'zines',
@@ -114,7 +80,6 @@ export const services: Service[] = [
     category: 'print',
     blurb:
       "We publish LIMO, our own quarterly art zine, and we'll do the same for your company end to end - concept, design, layout, and the printed run.",
-    price: 'From $1,000',
   },
   {
     slug: 'photo-booth',
@@ -123,7 +88,6 @@ export const services: Service[] = [
     category: 'av',
     blurb:
       'A real photographer with a DSLR behind pro lighting with instant prints - not a vending-machine booth.',
-    price: 'From $150 / hr',
   },
   {
     slug: 'cinema',
@@ -132,16 +96,14 @@ export const services: Service[] = [
     category: 'av',
     blurb:
       'Projector, big screen, and sound, set up and run wherever you want it - backyard, rooftop, or indoors. Movie night without the hassle.',
-    price: 'From $400',
   },
   {
     slug: 'sound-system',
     cta: 'Book sound',
-    name: 'Sound system + operator',
+    name: 'Sound system',
     category: 'av',
     blurb:
       'A PA sized to your room and an engineer to run it, so the show sounds right and you never touch a knob. Includes setup, operation, and teardown.',
-    price: 'From $400',
   },
   {
     slug: 'event-planning',
@@ -150,6 +112,5 @@ export const services: Service[] = [
     category: 'av',
     blurb:
       "We've thrown indoor and outdoor parties with live music and vendors, plus outdoor movie nights - and we'll plan and run yours end to end, from space and gear to staffing. Tell us what you have in mind and we'll quote it.",
-    price: 'From $1,000',
   },
 ]

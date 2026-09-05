@@ -5,14 +5,8 @@
  * URL-safe and unique; it's used for anchors and inquiry subjects.
  *
  * `model: 'monthly'` facilities rent by the month; `'hourly'` by the hour.
- * `status: 'planned'` facilities render without rates or booking buttons.
+ * `status: 'planned'` facilities render without booking buttons.
  */
-
-export type RateLine = {
-  group: 'Room' | 'Staff'
-  item: string
-  price: string
-}
 
 export type Facility = {
   /** URL-safe unique id. Used for anchor links + inquiry subject. */
@@ -20,14 +14,12 @@ export type Facility = {
   name: string
   description: string
   model: 'monthly' | 'hourly'
-  /** Not yet bookable - shown without rates or booking. */
+  /** Not yet bookable - shown without booking. */
   status?: 'planned'
-  /** Display rate, e.g. "$450 / mo" or "From $30 / hr". */
-  rate?: string
-  rateNote?: string
-  /** e.g. "8 desks total" */
+  /** Booking terms, e.g. "Two-hour minimum". */
+  note?: string
+  /** e.g. "4 desks total" */
   quantity?: string
-  rateCard?: RateLine[]
   /** Image path under /public or full URL. Card renders without a photo when omitted. */
   image?: string
   /** Alt text for the image. */
@@ -48,9 +40,8 @@ export const facilitiesCopy = {
 export const storefrontCopy = {
   title: 'Consignment Shop',
   name: 'Online Store',
-  rate: '25% of net',
   description:
-    'An online store for members and associates. You make the work - we handle shipping, returns, customer service, and sales tax for 25% of the net profit on each sale.',
+    'An online store for members and associates. You make the work - we handle shipping, returns, customer service, and sales tax for a percentage of each sale.',
   note: 'Custom landing page included',
   image: '/facilities/online-store.jpg',
   imageAlt:
@@ -74,8 +65,7 @@ export const facilities: Facility[] = [
     model: 'monthly',
     description:
       'An assigned space - bring your own furniture or use ours, set it up how you like, and leave it that way between visits.',
-    quantity: '8 desks total',
-    rate: '$450 / mo',
+    quantity: '4 desks total',
     image: '/facilities/permanent-desk.jpg',
     imageAlt:
       'Desks with monitors and task chairs in the shared workspace at the clubhouse',
@@ -87,7 +77,6 @@ export const facilities: Facility[] = [
     description:
       'One practice room, shared by four bands on a calendar. Drum kit (minus breakables), PA, mics, and mic stands provided.',
     quantity: '4 bands total',
-    rate: '$250 / mo',
     image: '/facilities/band-room.jpg',
     imageAlt:
       'Band practice room with drum kit, mics, guitars on the wall, and a Fender bass rig',
@@ -98,13 +87,7 @@ export const facilities: Facility[] = [
     model: 'hourly',
     description:
       'Photo/video shooting space with backdrops and lighting (grip available). First 15 minutes of setup help are free; an assistant who knows the gear is available by the hour.',
-    rate: 'From $30 / hr',
-    rateNote: 'Two-hour minimum',
-    rateCard: [
-      { group: 'Room', item: 'Weekday · 9–5, Mon–Fri', price: '$30 / hr' },
-      { group: 'Room', item: 'Evenings & weekends', price: '$40 / hr' },
-      { group: 'Staff', item: 'Assistant (optional)', price: '$50 / hr' },
-    ],
+    note: 'Two-hour minimum',
     image: '/facilities/photo-studio.jpg',
     imageAlt:
       'Photo studio with seamless paper backdrops, a softbox light, and apple boxes',
@@ -115,13 +98,7 @@ export const facilities: Facility[] = [
     model: 'hourly',
     description:
       'A control room for mixing with studio monitors, a Mac mini loaded with Pro Tools, and plugins. First 15 minutes of setup help are free; An engineer who knows the room is available by the hour.',
-    rate: 'From $30 / hr',
-    rateNote: 'Two-hour minimum',
-    rateCard: [
-      { group: 'Room', item: 'Weekday · 9–5, Mon–Fri', price: '$30 / hr' },
-      { group: 'Room', item: 'Evenings & weekends', price: '$40 / hr' },
-      { group: 'Staff', item: 'Engineer (optional)', price: '$50 / hr' },
-    ],
+    note: 'Two-hour minimum',
     image: '/facilities/recording-studio.jpg',
     imageAlt:
       'Mixing control room with studio monitors, a Pro Tools session on screen, and outboard gear',

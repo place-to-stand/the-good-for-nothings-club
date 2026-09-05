@@ -12,7 +12,7 @@ export type MembershipTier = {
   /** e.g. "Everything in associate and friend, plus:" */
   includes?: string
   perks: string[]
-  /** Display price line, e.g. "Free". Omit when pricing is the rental itself. */
+  /** Commitment line on the tier card, e.g. "Monthly" or "Free" - never a dollar amount. */
   price?: string
 }
 
@@ -82,7 +82,7 @@ export const membershipTiers: MembershipTier[] = [
     name: 'Member',
     tagline:
       'A monthly rental commitment - a permanent desk or a band practice slot - and full run of the clubhouse.',
-    price: 'From $250 / mo',
+    price: 'Monthly',
     includes: 'Includes everything in associate, plus:',
     perks: [
       'Keys and 24/7 access to the clubhouse',

@@ -22,7 +22,11 @@ const NAV_ITEMS = [
   { href: '/services', text: 'Services' },
   { href: '/events', text: 'Events' },
   { href: '/membership', text: 'Membership' },
-  { href: 'https://shop.thegoodfornothings.club/', text: 'Shop', external: true },
+  {
+    href: 'https://shop.thegoodfornothings.club/',
+    text: 'Shop',
+    external: true,
+  },
   { href: '/about', text: 'About' },
   { href: '/contact', text: 'Contact' },
 ]
@@ -46,7 +50,7 @@ export default function Header() {
             <SheetHeader>
               <SheetTitle className='font-normal'>Menu</SheetTitle>
             </SheetHeader>
-            <ul className='flex flex-col gap-4 py-12 font-sans text-3xl font-black uppercase'>
+            <ul className='flex flex-col gap-4 py-12 font-sans text-3xl font-semibold uppercase'>
               {SHEET_ITEMS.map(item => (
                 <li key={item.href}>
                   <SheetClose asChild>

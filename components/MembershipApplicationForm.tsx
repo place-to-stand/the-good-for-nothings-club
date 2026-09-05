@@ -8,11 +8,7 @@ import { z } from 'zod'
 
 import { facilities, storefrontCopy } from '../data/facilities'
 import { membershipTiers } from '../data/membership'
-import {
-  phoneSchema,
-  portfolioSchema,
-  REFERRAL_SOURCES,
-} from '../data/schemas'
+import { phoneSchema, portfolioSchema, REFERRAL_SOURCES } from '../data/schemas'
 import { captureEvent } from '../lib/analytics'
 import { getAttribution } from '../lib/attribution'
 import { useFormTracking } from '../lib/form-tracking'
@@ -68,7 +64,7 @@ function offeringConfig(tier: string) {
       label: 'Which facility?',
       options: facilities
         .filter(f => f.model === 'monthly' && f.status !== 'planned')
-        .map(f => ({ value: f.name, price: f.rate })),
+        .map(f => f.name),
     }
   }
   if (tier === 'Associate') {
@@ -77,8 +73,8 @@ function offeringConfig(tier: string) {
       options: [
         ...facilities
           .filter(f => f.model === 'hourly' && f.status !== 'planned')
-          .map(f => ({ value: f.name, price: f.rate })),
-        { value: storefrontCopy.name, price: storefrontCopy.rate },
+          .map(f => f.name),
+        storefrontCopy.name,
       ],
     }
   }
@@ -157,11 +153,7 @@ export default function MembershipApplicationForm({
 
   // Keep the offering valid for the selected tier.
   useEffect(() => {
-    if (
-      config &&
-      offering !== NOT_SURE &&
-      !config.options.some(option => option.value === offering)
-    ) {
+    if (config && offering !== NOT_SURE && !config.options.includes(offering)) {
       form.setValue('offering', NOT_SURE)
     }
   }, [config, offering, form])
@@ -273,9 +265,8 @@ export default function MembershipApplicationForm({
                     >
                       <option value={NOT_SURE}>{NOT_SURE}</option>
                       {config.options.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.value}
-                          {option.price ? ` - ${option.price}` : ''}
+                        <option key={option} value={option}>
+                          {option}
                         </option>
                       ))}
                     </select>

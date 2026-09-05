@@ -13,10 +13,10 @@ type OfferCardProps = {
   title: string
   /** Headline price, set on the title line with a dotted leader. */
   price?: string
-  /** Small-caps line under the title, e.g. "8 desks total" or "Two-hour minimum." */
+  /** Small-caps line under the title, e.g. "4 desks total" or "Two-hour minimum." */
   meta?: string
   description?: string
-  /** Extra content, e.g. a PriceMenu. */
+  /** Extra content, e.g. a perk list. */
   children?: ReactNode
   /** CTA area, pinned to the bottom of the card. */
   footer?: ReactNode

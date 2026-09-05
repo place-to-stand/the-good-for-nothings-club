@@ -4,7 +4,6 @@ import FeatureBand from '@/components/FeatureBand'
 import MembershipApplicationDialog from '@/components/MembershipApplicationDialog'
 import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
-import PriceMenu from '@/components/PriceMenu'
 import SectionHeading from '@/components/SectionHeading'
 import {
   amenities,
@@ -45,8 +44,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
           : undefined
       }
       title={facility.name}
-      price={facility.rate}
-      meta={[facility.quantity, facility.rateNote].filter(Boolean).join(' · ')}
+      meta={[facility.quantity, facility.note].filter(Boolean).join(' · ')}
       description={facility.description}
       footer={
         <MembershipApplicationDialog
@@ -62,9 +60,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
           autoOpenId={facility.slug}
         />
       }
-    >
-      {facility.rateCard && <PriceMenu lines={facility.rateCard} />}
-    </OfferCard>
+    />
   )
 }
 
@@ -127,7 +123,6 @@ export default function Facilities() {
           id='online-store'
           image={{ src: storefrontCopy.image, alt: storefrontCopy.imageAlt }}
           title={storefrontCopy.name}
-          price={storefrontCopy.rate}
           meta={storefrontCopy.note}
           description={storefrontCopy.description}
           footer={

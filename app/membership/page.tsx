@@ -1,7 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 
-import GroupLabel from '@/components/GroupLabel'
 import MembershipApplicationForm from '@/components/MembershipApplicationForm'
+import { MenuBoard, MenuBoardRow } from '@/components/MenuBoard'
 import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
@@ -39,25 +39,20 @@ export default function Membership() {
         title={membershipCopy.tiersTitle}
         lead={membershipCopy.tiersLead}
       />
-      <div className='mt-6 grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3 lg:gap-y-0'>
+      <MenuBoard className='mt-5'>
         {membershipTiers.map(tier => (
-          <OfferCard
+          <MenuBoardRow
             key={tier.slug}
             id={tier.slug}
-            className='lg:row-span-3 lg:grid lg:grid-rows-subgrid'
             title={tier.name}
-            price={tier.price}
+            meta={tier.price}
             description={tier.tagline}
-          >
-            {tier.includes && <GroupLabel>{tier.includes}</GroupLabel>}
-            <ul className='mt-2 list-disc space-y-1 pl-5 font-sans text-sm'>
-              {tier.perks.map(perk => (
-                <li key={perk}>{perk}</li>
-              ))}
-            </ul>
-          </OfferCard>
+            itemsLabel={tier.includes}
+            items={tier.perks}
+            itemsWidth='wide'
+          />
         ))}
-      </div>
+      </MenuBoard>
 
       {/* How to join + apply */}
       <SectionHeading title={membershipCopy.joiningTitle} />

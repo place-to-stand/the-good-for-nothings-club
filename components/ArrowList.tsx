@@ -6,7 +6,7 @@ function ArrowIcon() {
     <svg
       viewBox='0 0 16 16'
       aria-hidden
-      className='size-3.5 shrink-0'
+      className='mt-[2px] size-3.5 shrink-0'
       fill='none'
       stroke='currentColor'
       strokeWidth={2.25}
@@ -34,7 +34,7 @@ export default function ArrowList({
       )}
     >
       {items.map(item => (
-        <li key={item} className='flex items-center gap-2 leading-tight'>
+        <li key={item} className='flex items-start gap-2 leading-tight'>
           <ArrowIcon />
           <span>{item}</span>
         </li>

@@ -4,6 +4,7 @@ import type * as Behold from '@behold/types'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
+import LazyVideo from './LazyVideo'
 import { Button } from './ui/Button'
 
 export default function InstagramFeed({ feedId }: { feedId: string }) {
@@ -64,15 +65,9 @@ export default function InstagramFeed({ feedId }: { feedId: string }) {
     // VIDEO
     if (post.mediaType === 'VIDEO') {
       mediaEl = (
-        <video
+        <LazyVideo
           poster={post.sizes.medium.mediaUrl}
           src={post.mediaUrl}
-          muted={true}
-          autoPlay={true}
-          loop={true}
-          // Without playsInline, iOS Safari throws autoplaying videos into
-          // the native fullscreen player.
-          playsInline={true}
           className='h-full w-full object-cover'
         />
       )

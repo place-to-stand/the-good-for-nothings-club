@@ -4,6 +4,7 @@ import type * as Behold from '@behold/types'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
+import LazyVideo from './LazyVideo'
 import { Button } from './ui/Button'
 
 export default function InstagramFeed({ feedId }: { feedId: string }) {
@@ -61,18 +62,21 @@ export default function InstagramFeed({ feedId }: { feedId: string }) {
       />
     )
 
-    // VIDEO
-    if (post.mediaType === 'VIDEO') {
+    // VIDEO, or a CAROUSEL_ALBUM whose first slide is a video. Behold's
+    // sizes.medium for either is the video's thumbnail, so it doubles as
+    // the poster that shows until the tile scrolls into view.
+    const video =
+      post.mediaType === 'VIDEO'
+        ? post
+        : post.children?.[0]?.mediaType === 'VIDEO'
+          ? post.children[0]
+          : null
+
+    if (video) {
       mediaEl = (
-        <video
+        <LazyVideo
           poster={post.sizes.medium.mediaUrl}
-          src={post.mediaUrl}
-          muted={true}
-          autoPlay={true}
-          loop={true}
-          // Without playsInline, iOS Safari throws autoplaying videos into
-          // the native fullscreen player.
-          playsInline={true}
+          src={video.mediaUrl}
           className='h-full w-full object-cover'
         />
       )

@@ -1,6 +1,6 @@
 import type { Occurrence } from '@/data/events'
 import { clubhouse } from '@/data/location'
-import { SOCIAL_LINKS } from '@/components/SocialMediaLinks'
+import { SOCIAL_PROFILES } from '@/data/social'
 
 /**
  * schema.org JSON-LD builders. LocalBusiness renders on every page
@@ -9,7 +9,7 @@ import { SOCIAL_LINKS } from '@/components/SocialMediaLinks'
  * eligible for Google's event rich results.
  */
 
-const SITE_URL = 'https://thegoodfornothings.club'
+import { CONTACT_EMAIL, SITE_URL } from '@/data/site'
 
 const postalAddress = {
   '@type': 'PostalAddress',
@@ -29,10 +29,20 @@ export const localBusinessJsonLd = {
   description:
     'A creators club in Austin, TX made up of musicians, photographers, writers, filmmakers, and engineers. The clubhouse puts studios, rehearsal rooms, and workspace under one roof.',
   url: SITE_URL,
-  email: 'hello@thegoodfornothings.club',
+  email: CONTACT_EMAIL,
+  // contactPoint + address together let assistants answer "how do I reach
+  // them" and check the business is real before recommending it.
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer service',
+    email: CONTACT_EMAIL,
+    url: `${SITE_URL}/contact`,
+    availableLanguage: 'English',
+    areaServed: 'US',
+  },
   logo: `${SITE_URL}/icon.png`,
   image: `${SITE_URL}/opengraph-image.png`,
-  sameAs: SOCIAL_LINKS.map(link => link.href),
+  sameAs: SOCIAL_PROFILES.map(profile => profile.href),
   address: postalAddress,
   geo: {
     '@type': 'GeoCoordinates',

@@ -103,8 +103,8 @@ function NewsletterSignUpForm() {
   )
 }
 
-// Site map, two columns. The wordmark covers Home. (/projects is still
-// live, just unlinked.)
+// Site map, two columns of four. The wordmark covers Home. (/projects is
+// still live, just unlinked.)
 const FOOTER_LINKS = [
   { href: '/facilities', text: 'Facilities' },
   { href: '/services', text: 'Services' },
@@ -117,6 +117,7 @@ const FOOTER_LINKS = [
   },
   { href: '/about', text: 'About' },
   { href: '/contact', text: 'Contact' },
+  { href: '/privacy', text: 'Privacy' },
 ]
 
 export default function Footer() {

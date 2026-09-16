@@ -8,18 +8,17 @@ import PageShell from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
 import SocialMediaLinks from '../../components/SocialMediaLinks'
 import type { Metadata, ResolvingMetadata } from 'next'
+import { PAGE_META } from '@/data/site'
 
 export async function generateMetadata(
   _props: unknown,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { openGraph } = await parent
-  const pathname = '/contact'
+  const pathname = '/contact' as const
 
   return {
-    title: 'Contact',
-    description:
-      'Get in touch with The Good for Nothings Club — email, social links, and the clubhouse location in Austin, TX. Send a message about projects or membership.',
+    ...PAGE_META[pathname],
     alternates: {
       canonical: pathname,
     },

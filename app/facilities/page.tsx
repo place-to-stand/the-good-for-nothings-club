@@ -12,18 +12,17 @@ import {
   storefrontCopy,
   type Facility,
 } from '@/data/facilities'
+import { PAGE_META } from '@/data/site'
 
 export async function generateMetadata(
   _props: unknown,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { openGraph } = await parent
-  const pathname = '/facilities'
+  const pathname = '/facilities' as const
 
   return {
-    title: 'Facilities',
-    description:
-      'The clubhouse, room by room - permanent desks, band practice, photo studio, and recording control room in Austin, TX. Monthly and hourly rental.',
+    ...PAGE_META[pathname],
     alternates: {
       canonical: pathname,
     },

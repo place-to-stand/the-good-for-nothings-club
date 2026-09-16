@@ -13,6 +13,7 @@ import {
   pastMemberSlugs,
 } from '@/data/leadership'
 import { GFNC_member } from '@/types'
+import { PAGE_META } from '@/data/site'
 
 // Regenerate hourly — matches the old cmsFetch revalidate window.
 export const revalidate = 3600
@@ -22,12 +23,10 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { openGraph } = await parent
-  const pathname = '/about'
+  const pathname = '/about' as const
 
   return {
-    title: 'About',
-    description:
-      'Who we are, what happens at the clubhouse, and the founding members behind The Good for Nothings Club — a creators club making everything in Austin, TX.',
+    ...PAGE_META[pathname],
     alternates: {
       canonical: pathname,
     },

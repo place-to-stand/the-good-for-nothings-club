@@ -59,6 +59,13 @@ const contactPage: MetadataRoute.Sitemap[0] = {
   priority: 0.9,
 }
 
+const privacyPage: MetadataRoute.Sitemap[0] = {
+  url: 'https://thegoodfornothings.club/privacy',
+  lastModified: new Date(),
+  changeFrequency: 'yearly',
+  priority: 0.5,
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [projectsData, membersData] = await Promise.all([
     fetchQuery(api.projects.forSitemap, {}),
@@ -92,5 +99,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...memberPages,
     aboutPage,
     contactPage,
+    privacyPage,
   ]
 }

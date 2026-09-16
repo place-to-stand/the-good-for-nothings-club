@@ -15,6 +15,7 @@ import {
   upcomingOccurrences,
 } from '@/data/events'
 import { eventsJsonLd } from '@/lib/structuredData'
+import { PAGE_META } from '@/data/site'
 
 // Recompute the upcoming schedule daily. This is also what rolls one-off
 // events from the calendar into Past Events without any edits.
@@ -25,12 +26,10 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { openGraph } = await parent
-  const pathname = '/events'
+  const pathname = '/events' as const
 
   return {
-    title: 'Events',
-    description:
-      'The club, in session - regular happenings at the clubhouse in Austin, TX. Members and friends of members welcome.',
+    ...PAGE_META[pathname],
     alternates: {
       canonical: pathname,
     },

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { alegreya, rubik, rubikGlitch } from '../styles/fonts'
 import { cn } from '@/lib/utils'
 import { localBusinessJsonLd } from '@/lib/structuredData'
+import { PAGE_META } from '@/data/site'
 import { Analytics } from '@vercel/analytics/react'
 
 import '../styles/globals.css'
@@ -16,10 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: {
       template: '%s | The Good for Nothings Club',
-      default: 'Creators club in ATX | The Good for Nothings Club',
+      default: PAGE_META['/'].title,
     },
-    description:
-      'A creators club in Austin, TX — musicians, photographers, writers, filmmakers, and engineers with studios, rehearsal rooms, and workspace under one roof.',
+    description: PAGE_META['/'].description,
     referrer: 'origin-when-cross-origin',
     keywords: [
       'creator',

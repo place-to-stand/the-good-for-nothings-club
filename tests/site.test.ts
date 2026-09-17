@@ -7,7 +7,6 @@ import {
 } from '@/lib/markdown/site'
 import { localBusinessJsonLd } from '@/lib/structuredData'
 import { PAGE_META } from '@/data/site'
-import { privacySections } from '@/data/privacy'
 
 describe('llms.txt', () => {
   const txt = llmsTxt()
@@ -60,7 +59,7 @@ describe('404 markdown', () => {
   })
 
   it('knows the static paths', () => {
-    expect(KNOWN_STATIC_PATHS.has('/privacy')).toBe(true)
+    expect(KNOWN_STATIC_PATHS.has('/contact')).toBe(true)
     expect(KNOWN_STATIC_PATHS.has('/nope')).toBe(false)
   })
 })
@@ -93,24 +92,5 @@ describe('Organization JSON-LD', () => {
     })
     expect(localBusinessJsonLd.sameAs.length).toBeGreaterThanOrEqual(5)
     expect(JSON.stringify(localBusinessJsonLd)).not.toContain('undefined')
-  })
-})
-
-describe('privacy copy', () => {
-  it('is a real policy: 500+ characters, contact email, and the processors named', () => {
-    const text = privacySections
-      .flatMap(s => [...s.paragraphs, ...(s.points ?? [])])
-      .join(' ')
-    expect(text.length).toBeGreaterThan(500)
-    expect(text).toContain('hello@thegoodfornothings.club')
-    for (const processor of [
-      'Vercel',
-      'Convex',
-      'Resend',
-      'PostHog',
-      'Google Analytics',
-    ]) {
-      expect(text).toContain(processor)
-    }
   })
 })

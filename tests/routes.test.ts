@@ -34,10 +34,6 @@ describe('markdown route', () => {
       true
     )
     expect(fetchQuery).not.toHaveBeenCalled()
-
-    const privacy = await call(['privacy'])
-    expect(privacy.status).toBe(200)
-    expect((await privacy.text()).startsWith('# Privacy')).toBe(true)
   })
 
   it('returns a markdown 404 for unknown paths without touching Convex', async () => {
@@ -102,6 +98,6 @@ describe('llms routes', () => {
     const body = await full.text()
     expect(body).toContain('## When to use this site')
     expect(body).toContain('# Facilities')
-    expect(body).toContain('# Privacy')
+    expect(body).toContain('# Contact')
   })
 })

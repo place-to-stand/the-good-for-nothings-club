@@ -12,7 +12,7 @@
  *   - HTML responses carry Vary: Accept and a Link rel="alternate" header
  *   - /llms.txt is llmstxt.org-shaped and has a "When to use" section
  *   - the home page's LocalBusiness JSON-LD has contactPoint + address
- *   - /privacy, /about, /contact each have ≥ 500 chars of text
+ *   - /about and /contact each have ≥ 500 chars of text
  *   - the home page has ≥ 500 chars of text; its text-to-HTML ratio is
  *     reported (5% is the audit target) but does not fail the run, since
  *     reaching it needs more visible homepage copy, a product decision
@@ -35,7 +35,6 @@ const STATIC_PATHS = [
   '/projects',
   '/about',
   '/contact',
-  '/privacy',
 ]
 
 function usageError(message) {
@@ -145,7 +144,6 @@ let paths = [...STATIC_PATHS]
   const locs = [...sitemap.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
     m => new URL(decode(m[1].trim())).pathname
   )
-  check('sitemap lists /privacy', locs.includes('/privacy'))
   const dynamicPaths = locs.filter(
     p => p.startsWith('/projects/') || p.startsWith('/members/')
   )
@@ -277,7 +275,7 @@ for (const path of paths) {
     (home.body.match(/<h1[\s>]/g) ?? []).length === 1
   )
 
-  for (const path of ['/about', '/contact', '/privacy']) {
+  for (const path of ['/about', '/contact']) {
     const page = await get(path)
     const len = visibleText(page.body).length
     check(

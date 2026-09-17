@@ -5,7 +5,6 @@ import {
   contactMarkdown,
   eventsMarkdown,
   homeMarkdown,
-  privacyMarkdown,
 } from '@/lib/markdown/pages'
 import {
   memberMarkdown,
@@ -29,7 +28,6 @@ describe('static page markdown', () => {
         '/events',
         '/facilities',
         '/membership',
-        '/privacy',
         '/services',
       ].sort()
     )
@@ -87,12 +85,6 @@ describe('static page markdown', () => {
     )
     expect(md).toContain('## Past Members')
     expect(aboutMarkdown()).not.toContain('## Past Members')
-  })
-
-  it('privacy has substantial content and the update date', () => {
-    const md = privacyMarkdown()
-    expect(md).toContain('Last updated 2026-09-16')
-    expect(md.replace(/[#>*\-\n]/g, '').length).toBeGreaterThan(2000)
   })
 })
 

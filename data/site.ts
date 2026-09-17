@@ -51,11 +51,6 @@ export const PAGE_META = {
     description:
       'Get in touch with The Good for Nothings Club — email, social links, and the clubhouse location in Austin, TX. Send a message about projects or membership.',
   },
-  '/privacy': {
-    title: 'Privacy',
-    description:
-      'What thegoodfornothings.club collects when you browse or send a form, which services handle it, and how to ask us to see or delete your data.',
-  },
 } as const satisfies Record<string, { title: string; description: string }>
 
 export type StaticPath = keyof typeof PAGE_META

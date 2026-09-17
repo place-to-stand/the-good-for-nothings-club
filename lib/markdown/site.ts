@@ -28,7 +28,6 @@ export const SITE_PAGES = (
     '/projects',
     '/about',
     '/contact',
-    '/privacy',
   ] as const
 ).map(path => ({
   path,

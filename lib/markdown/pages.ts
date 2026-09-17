@@ -15,7 +15,6 @@ import {
 } from '@/data/events'
 import { leadershipCopy } from '@/data/leadership'
 import { clubhouseAddressLine, clubhouseMapsUrl } from '@/data/location'
-import { privacyCopy, privacySections } from '@/data/privacy'
 import {
   CONTACT_EMAIL,
   PAGE_META,
@@ -365,22 +364,6 @@ export function contactMarkdown() {
   ].join('\n')
 }
 
-export function privacyMarkdown() {
-  const lines = [
-    ...heading(privacyCopy.title, privacyCopy.lead),
-    `*Last updated ${privacyCopy.updated}. Operator: ${privacyCopy.operator}.*`,
-    '',
-  ]
-  for (const section of privacySections) {
-    lines.push(`## ${section.title}`, '')
-    for (const paragraph of section.paragraphs) lines.push(paragraph, '')
-    if (section.points?.length)
-      lines.push(...section.points.map(p => `- ${p}`), '')
-  }
-  lines.push(pageFooter('/privacy'))
-  return lines.join('\n')
-}
-
 /** Static pages that need no data fetching, keyed by path. */
 export const STATIC_MARKDOWN: Record<string, () => string> = {
   '/': homeMarkdown,
@@ -389,5 +372,4 @@ export const STATIC_MARKDOWN: Record<string, () => string> = {
   '/events': () => eventsMarkdown(),
   '/membership': membershipMarkdown,
   '/contact': contactMarkdown,
-  '/privacy': privacyMarkdown,
 }

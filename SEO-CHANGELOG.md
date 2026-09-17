@@ -225,23 +225,21 @@ Convex; `node scripts/agent-check.mjs` re-checks production weekly.
 
 ### 6. Trust anchor pages
 
-- Files: `app/privacy/page.tsx`, `data/privacy.ts`, `app/sitemap.ts`,
-  `components/Footer.tsx`
-- What changed: `/privacy` (≈4,000 chars) describes exactly what the code
-  does: the four form kinds and the fields they collect, first-touch
-  attribution, Vercel BotID, the Resend newsletter list, PostHog / Google
-  Analytics / Vercel Analytics, third-party embeds, the processors, and
-  how to ask for access or deletion. Linked from the footer (8 links now
-  fill the 4-row grid) and the sitemap. The same copy renders at
-  `/privacy.md`. ⚠️ Have someone with legal responsibility read it before
-  relying on it.
+- Not done, by decision. The audit wants a `/privacy` page with 500+
+  characters beside `/about` and `/contact`. A draft was written and then
+  pulled from this branch: the club would rather take the score hit than
+  publish a policy nobody has reviewed. When one is wanted, the page needs
+  an entry in `PAGE_META` (data/site.ts), a markdown renderer in
+  lib/markdown/pages.ts, a sitemap entry, and a footer link; the audit
+  checker in scripts/agent-check.mjs then needs `/privacy` added to its
+  trust-page list.
 
 ### Tests and checks
 
 - `npm test` — vitest (`tests/*.test.ts`): Accept parsing and q-values,
   Portable Text → markdown, every static page's markdown, project/member
   markdown from fixtures, llms.txt shape, 404 body, JSON-LD contactPoint +
-  address, description length budget, privacy copy, the markdown route
+  address, description length budget, the markdown route
   (200/404/503) and llms routes.
 - `npm run agent:check [-- --base http://localhost:3005]` — live checks
   listed at the top of `scripts/agent-check.mjs`; runs weekly after

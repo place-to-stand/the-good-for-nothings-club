@@ -17,7 +17,6 @@ export function GET() {
     '/membership',
     '/about',
     '/contact',
-    '/privacy',
   ]
   const sections = order.map(path =>
     path === '/about' ? aboutMarkdown() : STATIC_MARKDOWN[path]()

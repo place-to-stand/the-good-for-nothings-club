@@ -15,10 +15,12 @@ export const metadata: Metadata = {
 
 /**
  * HTML 404 (Next sends a real 404 status). Big number, one line, two
- * buttons, and a grid of doors: every section as a tile whose description
- * fades in on hover. Copy comes from data/site.ts; the tiles read
- * SITE_PAGES (PAGE_META) plus the shop card from the homepage, so the
- * markdown 404 in lib/markdown/site.ts lists the same places.
+ * buttons, and a grid of doors: every section as a tile whose
+ * description opens under the title on hover or keyboard focus (always
+ * open on touch screens, which cannot hover). Copy comes from
+ * data/site.ts; the tiles read SITE_PAGES (PAGE_META) plus the shop card
+ * from the homepage, so the markdown 404 in lib/markdown/site.ts lists
+ * the same places.
  */
 const shop = homeOffering.find(card => card.href === SHOP_URL)
 
@@ -42,23 +44,27 @@ const tiles = [
 ]
 
 const card = 'bg-background border-2 border-black'
+// md:min-h-48 fits the longest description at the narrowest tile, so a
+// tile opening never pushes the rows around.
 const tile =
-  'group flex h-full min-h-28 flex-col justify-center gap-1.5 px-5 py-4 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:px-7'
+  'group flex h-full min-h-28 flex-col justify-center px-5 py-4 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:min-h-48 md:px-7'
+// Collapsed row (0fr) keeps the title centered; it opens to the text's
+// own height without a fixed size.
+const reveal =
+  'hidden grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-300 group-hover:grid-rows-[1fr] group-hover:opacity-100 group-focus-visible:grid-rows-[1fr] group-focus-visible:opacity-100 motion-reduce:transition-none md:grid [@media(hover:none)]:grid-rows-[1fr] [@media(hover:none)]:opacity-100'
 
 export default function NotFound() {
   return (
     <main>
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
-        <div className='mx-auto grid max-w-(--page-max-width) grid-cols-1 gap-8 lg:grid-cols-2'>
+        <div className='mx-auto grid max-w-(--page-max-width) grid-cols-1 gap-8 xl:grid-cols-2'>
           <div
-            className={`${card} flex flex-col gap-8 border-x-0 px-4 py-6 md:border-x-2 md:px-12 md:py-10`}
+            className={`${card} flex flex-col gap-8 border-x-0 px-4 py-6 md:border-x-2 md:px-12 md:py-10 lg:max-xl:flex-row lg:max-xl:items-end lg:max-xl:gap-16 xl:sticky xl:top-8 xl:self-start`}
           >
-            <div>
-              <h1 className='font-sans-glitch overflow-hidden text-[112px] leading-[0.85] tracking-[-0.03em] md:text-[200px]'>
-                {notFoundCopy.title}
-              </h1>
-            </div>
-            <div className='flex flex-col gap-6'>
+            <h1 className='shrink-0 text-[112px] leading-[0.8] font-black tracking-[-0.04em] md:text-[200px]'>
+              {notFoundCopy.title}
+            </h1>
+            <div className='flex min-w-0 flex-col gap-6'>
               <p className='max-w-xl font-serif text-[22px] leading-tight md:text-[30px]'>
                 {notFoundCopy.lead}
               </p>
@@ -81,7 +87,7 @@ export default function NotFound() {
             <h2 className='border-b-2 border-black px-4 py-4 font-serif text-xl font-normal italic md:px-8 md:py-5 md:text-2xl'>
               {notFoundCopy.nextTitle}
             </h2>
-            <ul className='grid flex-1 grid-cols-2 font-sans'>
+            <ul className='grid flex-1 auto-rows-fr grid-cols-2 font-sans'>
               {tiles.map((entry, index) => (
                 <li
                   key={entry.href}
@@ -106,8 +112,12 @@ export default function NotFound() {
                         <FaCaretRight className='size-4 transition-transform duration-300 group-hover:translate-x-1 md:size-5' />
                       )}
                     </span>
-                    <span className='hidden font-sans text-sm leading-snug font-normal tracking-normal normal-case opacity-0 transition-opacity duration-200 group-hover:opacity-100 md:block'>
-                      {entry.description}
+                    <span className={reveal}>
+                      <span className='overflow-hidden text-sm leading-snug'>
+                        <span className='block pt-1.5'>
+                          {entry.description}
+                        </span>
+                      </span>
                     </span>
                   </Link>
                 </li>

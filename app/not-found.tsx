@@ -43,10 +43,6 @@ const tiles = [
     : []),
 ]
 
-// A faint resting underline; hover or focus draws a solid one over it
-// from the left.
-const robotLink =
-  'relative pb-1 hover:no-underline before:absolute before:inset-x-0 before:bottom-0 before:h-0.5 before:bg-black/25 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 motion-reduce:after:transition-none'
 const card = 'bg-background border-2 border-black'
 // md:min-h-48 fits the longest description at the narrowest tile, so a
 // tile opening never pushes the rows around.
@@ -130,12 +126,8 @@ export default function NotFound() {
             <div className='flex items-center justify-between gap-4 border-t-2 border-black px-4 py-3.5 font-sans text-xs font-semibold tracking-[0.06em] uppercase md:px-8 md:text-[13px]'>
               <span className='text-black/60'>{notFoundCopy.robotsLabel}</span>
               <span className='flex gap-4'>
-                <a href='/llms.txt' className={robotLink}>
-                  llms.txt
-                </a>
-                <a href='/sitemap.xml' className={robotLink}>
-                  sitemap.xml
-                </a>
+                <a href='/llms.txt'>llms.txt</a>
+                <a href='/sitemap.xml'>sitemap.xml</a>
               </span>
             </div>
           </div>

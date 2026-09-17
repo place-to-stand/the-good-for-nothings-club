@@ -15,6 +15,7 @@ import {
   upcomingOccurrences,
 } from '@/data/events'
 import { eventsJsonLd } from '@/lib/structuredData'
+import { PAGE_META } from '@/data/site'
 
 // Recompute the upcoming schedule daily. This is also what rolls one-off
 // events from the calendar into Past Events without any edits.
@@ -25,12 +26,10 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { openGraph } = await parent
-  const pathname = '/events'
+  const pathname = '/events' as const
 
   return {
-    title: 'Events',
-    description:
-      'The club, in session - regular happenings at the clubhouse in Austin, TX. Members and friends of members welcome.',
+    ...PAGE_META[pathname],
     alternates: {
       canonical: pathname,
     },
@@ -124,7 +123,7 @@ export default function Events() {
                           href={event.url}
                           target='_blank'
                           rel='noopener noreferrer'
-                          className='whitespace-nowrap font-bold underline'
+                          className='font-bold whitespace-nowrap underline'
                         >
                           Invite ↗
                         </a>
@@ -140,11 +139,7 @@ export default function Events() {
   )
 
   return (
-    <PageShell
-      title='Events'
-      lead={`The club, in session. ${eventsCopy.lead}`}
-      after={pastSection}
-    >
+    <PageShell title='Events' lead={eventsCopy.lead} after={pastSection}>
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{

@@ -11,6 +11,7 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import InProgressSection from './InProgressSection'
 import CompletedSection from './CompletedSection'
 import ProjectCardSmall from '@/components/ProjectCardSmall'
+import { PAGE_META } from '@/data/site'
 
 // Regenerate hourly — matches the old cmsFetch revalidate window.
 export const revalidate = 3600
@@ -48,12 +49,10 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { openGraph } = await parent
-  const pathname = '/projects'
+  const pathname = '/projects' as const
 
   return {
-    title: 'Projects',
-    description:
-      'Web, video, photo, audio, event, and build projects made by the members of The Good for Nothings Club — the portfolio of an Austin, TX creators club.',
+    ...PAGE_META[pathname],
     alternates: {
       canonical: pathname,
     },

@@ -1,7 +1,9 @@
-# Weekly SEO regression check against production (see scripts/seo-check.mjs
-# and SEO-CHANGELOG.md). Runs after the Ahrefs-audit remediation to catch
-# regressions: missing/oversized meta descriptions, missing h1/og:image/alt,
-# responses over 500 KB, and internal links that 3XX.
+# Weekly SEO + agent-readiness regression check against production (see
+# scripts/seo-check.mjs, scripts/agent-check.mjs, and SEO-CHANGELOG.md).
+# Catches regressions: missing/oversized meta descriptions, missing
+# h1/og:image/alt, responses over 500 KB, internal links that 3XX, lost
+# markdown negotiation / Vary: Accept, a 404 that stops being a 404, and a
+# missing llms.txt or contactPoint.
 name: SEO check
 
 on:
@@ -18,3 +20,5 @@ jobs:
         with:
           node-version: 24
       - run: node scripts/seo-check.mjs
+      - run: node scripts/agent-check.mjs
+        if: always()

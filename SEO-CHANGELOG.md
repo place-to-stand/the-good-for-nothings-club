@@ -149,3 +149,112 @@ Verified: tsc/lint/build clean; `node scripts/seo-check.mjs
 --base=http://localhost:3001` passes all ~60 sitemap URLs; /projects HTML
 485,925 bytes; rendered /projects DOM/text still identical to the prod
 baseline except the intentional img→video swap.
+
+## Agent readiness — Is Agentic / Ora audit (score 76/100)
+
+Six items, in the audit's priority order. Verified locally against a
+production build served with `scripts/convex-stub.mjs` standing in for
+Convex; `node scripts/agent-check.mjs` re-checks production weekly.
+
+### 1. Agent-friendly 404s
+
+- Files: `app/not-found.tsx`, `lib/markdown/site.ts` (`notFoundMarkdown`),
+  `app/markdown/[[...path]]/route.ts`
+- What changed: unknown paths already returned a real 404; now the HTML
+  404 is a site page: the number set big in Rubik Glitch, one serif line,
+  "Back to the clubhouse" and "Email us" buttons, and a grid of section
+  tiles (from `SITE_PAGES` plus the shop card) whose descriptions open on
+  hover or keyboard focus (always open on touch screens), with `/llms.txt` and `/sitemap.xml` in a "For robots" strip. With `Accept: text/markdown` (or a `.md` URL) the
+  404 body is markdown with the same links. Unknown project/member slugs
+  behave the same.
+- Verify: `curl -s -o /dev/null -w "%{http_code}" https://thegoodfornothings.club/some-path-that-does-not-exist`
+  prints 404; add `-H 'Accept: text/markdown'` and the body starts `# 404`.
+
+### 2. Content without JavaScript (text-to-HTML ratio)
+
+- Files: `components/HeroBanner.tsx`, `public/hero/*.svg`
+- What changed: the animated wordmark inlined ~29 KB of SVG paths into
+  every home page response. The static letters now live in
+  `/hero/base.svg` and the five glitch frames in `/hero/frame-N.svg`,
+  rendered as stacked `<img>` overlays (all fetched up front; the interval
+  only toggles visibility), so the animation and no-JS first frame look
+  the same. Home HTML: 85 KB → 56 KB locally; text share 1.3% → 1.9%
+  (4.1% excluding the RSC payload scripts).
+- Not done: the audit's 5% target needs more visible homepage copy
+  (~1,300 chars of body text at the current markup weight). That is a
+  product/copy decision; `agent-check` reports the ratio without failing.
+
+### 3. Markdown content negotiation (acceptmarkdown.com)
+
+- Files: `proxy.ts` (was `middleware.ts`; Next 16 name), `lib/markdown/*`,
+  `app/markdown/[[...path]]/route.ts`, `data/site.ts`, `next.config.mjs`
+- What changed: every public page has a markdown twin built from the same
+  data files (`data/*.ts`) or Convex queries the HTML uses. `Accept:
+  text/markdown` (weighed by q-value against text/html) or the `.md`
+  alternate URL (`/about.md`, `/index.md`, `/projects/<slug>.md`) is
+  rewritten to the markdown route, which answers `text/markdown;
+  charset=utf-8` with `Vary: Accept` and `Content-Location`. HTML
+  responses carry `Link: <…md>; rel="alternate"; type="text/markdown"`.
+  `Vary: Accept` on HTML is attempted through `next.config.mjs` headers,
+  but it only lands on static files and `/sitemap.xml`: Next writes its
+  own `Vary` on every page it renders and Vercel keeps that one (checked
+  on the preview, 2026-09-17). `proxy.ts` picks the variant before
+  Vercel's cache, so HTML and markdown are never served crossed; the gap
+  only matters to a shared cache between Vercel and the client. Page titles/descriptions moved to `data/site.ts`
+  (`PAGE_META`) so HTML metadata, markdown, and llms.txt share one source.
+- Verify: `curl -sI -H 'Accept: text/markdown' https://thegoodfornothings.club/about`
+  shows `content-type: text/markdown` and `vary: Accept`. Without the
+  header the HTML `vary` lists only Next's router headers; `agent-check`
+  prints that as `info` and does not fail on it.
+
+### 4. Agent instructions (llms.txt)
+
+- Files: `app/llms.txt/route.ts`, `app/llms-full.txt/route.ts`,
+  `lib/markdown/site.ts` (`llmsTxt`)
+- What changed: `/llms.txt` in llmstxt.org form (H1, blockquote summary,
+  H2 link lists) with a "When to use this site" section naming the jobs
+  the club is right for (workspace in Austin, hiring creatives, joining,
+  events, portfolio) and what it is not for, plus "How to call this site"
+  (markdown negotiation, `.md` URLs, email instead of the bot-checked
+  forms). `/llms-full.txt` appends the full text of the static pages.
+
+### 5. Organization schema completeness
+
+- Files: `lib/structuredData.ts`, `data/social.ts`
+- What changed: the LocalBusiness JSON-LD on every page now has a
+  `contactPoint` (ContactPoint: customer service, email, /contact URL,
+  language, area served) beside the existing PostalAddress and geo.
+  Social profile URLs moved to `data/social.ts` so the JSON-LD and the
+  footer icons read one list.
+
+### 6. Trust anchor pages
+
+- Not done, by decision. The audit wants a `/privacy` page with 500+
+  characters beside `/about` and `/contact`. A draft was written and then
+  pulled from this branch: the club would rather take the score hit than
+  publish a policy nobody has reviewed. When one is wanted, the page needs
+  an entry in `PAGE_META` (data/site.ts), a markdown renderer in
+  lib/markdown/pages.ts, a sitemap entry, and a footer link; the audit
+  checker in scripts/agent-check.mjs then needs `/privacy` added to its
+  trust-page list.
+
+### Tests and checks
+
+- `npm test` — vitest (`tests/*.test.ts`): Accept parsing and q-values,
+  Portable Text → markdown, every static page's markdown, project/member
+  markdown from fixtures, llms.txt shape, 404 body, JSON-LD contactPoint +
+  address, description length budget, the markdown route
+  (200/404/503) and llms routes.
+- Copy lives in `data/*.ts` only: `data/home.ts`, `data/about.ts`,
+  `data/contact.ts`, and the existing facilities/services/membership/events
+  copy objects feed both the HTML pages and the markdown twins.
+  `tests/copySource.test.ts` fails if a page file carries prose of its own
+  (a JSX text run or lead/title/description literal over 40 chars) or if
+  the markdown stops rendering any copy string from the data files. The
+  one deliberate difference per page is an `agentNote` field, the markdown
+  stand-in for a form or dialog that needs a browser.
+- `npm run agent:check [-- --base http://localhost:3005]` — live checks
+  listed at the top of `scripts/agent-check.mjs`; runs weekly after
+  `seo-check` in `.github/workflows/seo-check.yml`.
+- `Vary: Accept` on HTML is an `info` line, not a failure (see 3).
+  `seo-check` passes every page except the stub's fake image host.

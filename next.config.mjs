@@ -33,6 +33,29 @@ const nextConfig = {
     ],
   },
 
+  // Every public page has a markdown twin negotiated on the Accept header
+  // (proxy.ts + app/markdown). Vary: Accept tells CDNs to cache the HTML
+  // and markdown variants separately. It only lands on static files and
+  // /sitemap.xml: anything Next renders (pages, /llms.txt) writes its own
+  // Vary, and both `next start` and Vercel keep that one. The value repeats
+  // Next's router headers (app-router-headers) in case a host does replace.
+  // The markdown route sets Vary: Accept itself, and proxy.ts picks the
+  // variant before Vercel's cache, so the two are never served crossed.
+  async headers() {
+    return [
+      {
+        source: '/:path((?!_next/|nothings/|api/|admin).*)',
+        headers: [
+          {
+            key: 'Vary',
+            value:
+              'Accept, rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch',
+          },
+        ],
+      },
+    ]
+  },
+
   // Reverse proxy for PostHog so analytics requests are first-party and
   // survive ad blockers. The
   // path is deliberately not "/analytics"-ish — blockers target those.

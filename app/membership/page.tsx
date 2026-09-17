@@ -6,18 +6,17 @@ import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
 import { membershipCopy, membershipTiers } from '@/data/membership'
+import { PAGE_META } from '@/data/site'
 
 export async function generateMetadata(
   _props: unknown,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { openGraph } = await parent
-  const pathname = '/membership'
+  const pathname = '/membership' as const
 
   return {
-    title: 'Membership',
-    description:
-      'Join the club, at your level - member, associate, or friend. Apply anytime to join the waitlist; onboarding happens in waves as space opens up.',
+    ...PAGE_META[pathname],
     alternates: {
       canonical: pathname,
     },
@@ -30,10 +29,7 @@ export async function generateMetadata(
 
 export default function Membership() {
   return (
-    <PageShell
-      title='Membership'
-      lead={`Join the club, gain a community. ${membershipCopy.lead}`}
-    >
+    <PageShell title='Membership' lead={membershipCopy.lead}>
       {/* Tiers */}
       <SectionHeading
         title={membershipCopy.tiersTitle}
@@ -96,7 +92,7 @@ export default function Membership() {
           </div>
         </div>
         <OfferCard
-          title='Application'
+          title={membershipCopy.applicationTitle}
           className='mt-7 border-0 p-0 md:p-0 lg:pl-12'
         >
           <MembershipApplicationForm />

@@ -5,18 +5,17 @@ import { MenuBoard, MenuBoardRow } from '@/components/MenuBoard'
 import PageShell from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
 import { services, servicesCopy } from '@/data/services'
+import { PAGE_META } from '@/data/site'
 
 export async function generateMetadata(
   _props: unknown,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { openGraph } = await parent
-  const pathname = '/services'
+  const pathname = '/services' as const
 
   return {
-    title: 'Services',
-    description:
-      'You bring the project, we make it — photography, video, music production, zines, photo booths, pop-up cinema, and event production in Austin, TX.',
+    ...PAGE_META[pathname],
     alternates: {
       canonical: pathname,
     },
@@ -29,10 +28,7 @@ export async function generateMetadata(
 
 export default function Services() {
   return (
-    <PageShell
-      title='Services'
-      lead={`You bring the project. We make it. ${servicesCopy.lead}`}
-    >
+    <PageShell title='Services' lead={servicesCopy.lead}>
       {servicesCopy.categories.map(category => {
         const categoryServices = services.filter(
           service => service.category === category.key
@@ -59,7 +55,7 @@ export default function Services() {
                       triggerVariant='outline'
                       triggerSize='sm'
                       title={service.name}
-                      description="Tell us what you have in mind and we'll get back to you with a quote."
+                      description={servicesCopy.inquiryDescription}
                       submitLabel='Send'
                     />
                   }

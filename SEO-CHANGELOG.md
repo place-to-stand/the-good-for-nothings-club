@@ -195,15 +195,17 @@ Convex; `node scripts/agent-check.mjs` re-checks production weekly.
   rewritten to the markdown route, which answers `text/markdown;
   charset=utf-8` with `Vary: Accept` and `Content-Location`. HTML
   responses carry `Link: <…md>; rel="alternate"; type="text/markdown"`.
-  `Vary: Accept` on HTML is set through `next.config.mjs` headers (Vercel
-  applies these by replacement, so the value also repeats Next's own
-  router headers). Page titles/descriptions moved to `data/site.ts`
+  `Vary: Accept` on HTML is attempted through `next.config.mjs` headers,
+  but it only lands on static files and `/sitemap.xml`: Next writes its
+  own `Vary` on every page it renders and Vercel keeps that one (checked
+  on the preview, 2026-09-17). `proxy.ts` picks the variant before
+  Vercel's cache, so HTML and markdown are never served crossed; the gap
+  only matters to a shared cache between Vercel and the client. Page titles/descriptions moved to `data/site.ts`
   (`PAGE_META`) so HTML metadata, markdown, and llms.txt share one source.
 - Verify: `curl -sI -H 'Accept: text/markdown' https://thegoodfornothings.club/about`
-  shows `content-type: text/markdown` and `vary: Accept`; without the
-  header, `vary` still contains `Accept`. Note: `next start` re-sets Vary
-  on app pages after the config header, so that one check only passes on
-  Vercel.
+  shows `content-type: text/markdown` and `vary: Accept`. Without the
+  header the HTML `vary` lists only Next's router headers; `agent-check`
+  prints that as `info` and does not fail on it.
 
 ### 4. Agent instructions (llms.txt)
 
@@ -254,6 +256,5 @@ Convex; `node scripts/agent-check.mjs` re-checks production weekly.
 - `npm run agent:check [-- --base http://localhost:3005]` — live checks
   listed at the top of `scripts/agent-check.mjs`; runs weekly after
   `seo-check` in `.github/workflows/seo-check.yml`.
-- Local result: 96/107 agent checks pass; the 11 failures are the
-  `Vary: Accept`-on-HTML check that Next's own server cannot pass (see 3).
+- `Vary: Accept` on HTML is an `info` line, not a failure (see 3).
   `seo-check` passes every page except the stub's fake image host.

@@ -43,8 +43,10 @@ export default function Header() {
     <header className='relative font-sans md:px-8 md:pt-8 xl:px-16 xl:pt-16'>
       <div className='bg-background relative z-10 m-auto flex max-w-(--page-max-width) items-stretch border-b-2 border-black md:border-2'>
         <Sheet key={pathname}>
-          <SheetTrigger className='flex w-14 cursor-pointer items-center justify-center border-r-2 border-black transition-colors hover:bg-black/10 active:bg-black/20 lg:hidden'>
-            <Menu height='28px' width='28px' />
+          <SheetTrigger className='flex w-14 cursor-pointer items-center justify-center border-r-2 border-black transition-colors hover:bg-black/10 active:bg-black/20 md:w-[72px] lg:hidden'>
+            {/* The bars span 14/24 of the icon box, so these sizes put the
+                top and bottom bars on the wordmark's cap line and baseline. */}
+            <Menu className='size-[38px] md:size-12' />
           </SheetTrigger>
           <SheetContent side='left'>
             <SheetHeader>

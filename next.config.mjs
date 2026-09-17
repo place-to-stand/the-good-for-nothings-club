@@ -35,11 +35,12 @@ const nextConfig = {
 
   // Every public page has a markdown twin negotiated on the Accept header
   // (proxy.ts + app/markdown). Vary: Accept tells CDNs to cache the HTML
-  // and markdown variants separately. Vercel applies configured headers by
-  // replacing the function's value, so the value repeats the router headers
-  // Next itself varies on (app-router-headers) rather than dropping them.
-  // Next's own `next start` server re-sets Vary for app pages after this
-  // runs, so locally only route handlers and static files show it.
+  // and markdown variants separately. It only lands on static files and
+  // /sitemap.xml: anything Next renders (pages, /llms.txt) writes its own
+  // Vary, and both `next start` and Vercel keep that one. The value repeats
+  // Next's router headers (app-router-headers) in case a host does replace.
+  // The markdown route sets Vary: Accept itself, and proxy.ts picks the
+  // variant before Vercel's cache, so the two are never served crossed.
   async headers() {
     return [
       {

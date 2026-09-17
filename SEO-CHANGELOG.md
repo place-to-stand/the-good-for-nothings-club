@@ -161,8 +161,10 @@ Convex; `node scripts/agent-check.mjs` re-checks production weekly.
 - Files: `app/not-found.tsx`, `lib/markdown/site.ts` (`notFoundMarkdown`),
   `app/markdown/[[...path]]/route.ts`
 - What changed: unknown paths already returned a real 404; now the HTML
-  404 is a site page listing every section, `/llms.txt`, `/sitemap.xml`,
-  and the contact email. With `Accept: text/markdown` (or a `.md` URL) the
+  404 is a site page: the number set big in Rubik Glitch, one serif line,
+  "Back to the clubhouse" and "Email us" buttons, and a grid of section
+  tiles (from `SITE_PAGES` plus the shop card) whose descriptions fade in
+  on hover, with `/llms.txt` and `/sitemap.xml` in a "For robots" strip. With `Accept: text/markdown` (or a `.md` URL) the
   404 body is markdown with the same links. Unknown project/member slugs
   behave the same.
 - Verify: `curl -s -o /dev/null -w "%{http_code}" https://thegoodfornothings.club/some-path-that-does-not-exist`

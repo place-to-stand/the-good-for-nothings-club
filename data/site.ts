@@ -57,13 +57,18 @@ export type StaticPath = keyof typeof PAGE_META
 
 /**
  * 404 copy, shared by app/not-found.tsx (HTML) and lib/markdown/site.ts
- * (markdown 404 body).
+ * (markdown 404 body). The HTML page shows the number big, one serif
+ * line, two buttons, and a grid of section tiles whose descriptions
+ * (PAGE_META) appear on hover.
  */
 export const notFoundCopy = {
   title: '404',
+  caption: 'Good for nothing',
   markdownTitle: '404: Page not found',
-  lead: 'There is no page at this address. Nothing was moved here; the link is wrong or the page never existed.',
+  lead: 'There is no page at this address. The link is wrong, or the page never existed.',
+  backHome: 'Back to the clubhouse',
+  emailUs: 'Email us',
   nextTitle: 'Where to look next',
-  machineReadable: 'Looking for a machine-readable map?',
+  robotsLabel: 'For robots',
   stillStuck: 'Still stuck? Email',
 }

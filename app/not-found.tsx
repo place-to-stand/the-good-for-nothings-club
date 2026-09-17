@@ -43,6 +43,10 @@ const tiles = [
     : []),
 ]
 
+// A faint resting underline; hover or focus draws a solid one over it
+// from the left.
+const robotLink =
+  'relative pb-1 hover:no-underline before:absolute before:inset-x-0 before:bottom-0 before:h-0.5 before:bg-black/25 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-black after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 motion-reduce:after:transition-none'
 const card = 'bg-background border-2 border-black'
 // md:min-h-48 fits the longest description at the narrowest tile, so a
 // tile opening never pushes the rows around.
@@ -59,7 +63,7 @@ export default function NotFound() {
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
         <div className='mx-auto grid max-w-(--page-max-width) grid-cols-1 gap-8 xl:grid-cols-2'>
           <div
-            className={`${card} flex flex-col gap-8 border-x-0 px-4 py-6 md:border-x-2 md:px-12 md:py-10 lg:max-xl:flex-row lg:max-xl:items-end lg:max-xl:gap-16 xl:sticky xl:top-8 xl:self-start`}
+            className={`${card} flex flex-col gap-8 border-x-0 px-4 py-6 md:border-x-2 md:px-12 md:py-10 lg:max-xl:flex-row lg:max-xl:items-end lg:max-xl:gap-16`}
           >
             <h1 className='shrink-0 text-[112px] leading-[0.8] font-black tracking-[-0.04em] md:text-[200px]'>
               {notFoundCopy.title}
@@ -84,7 +88,7 @@ export default function NotFound() {
           </div>
 
           <div className={`${card} flex flex-col border-x-0 md:border-x-2`}>
-            <h2 className='border-b-2 border-black px-4 py-4 font-serif text-xl font-normal italic md:px-8 md:py-5 md:text-2xl'>
+            <h2 className='border-b-2 border-black px-4 py-4 font-serif text-xl font-normal normal-case italic md:px-8 md:py-5 md:text-2xl'>
               {notFoundCopy.nextTitle}
             </h2>
             <ul className='grid flex-1 auto-rows-fr grid-cols-2 font-sans'>
@@ -126,10 +130,10 @@ export default function NotFound() {
             <div className='flex items-center justify-between gap-4 border-t-2 border-black px-4 py-3.5 font-sans text-xs font-semibold tracking-[0.06em] uppercase md:px-8 md:text-[13px]'>
               <span className='text-black/60'>{notFoundCopy.robotsLabel}</span>
               <span className='flex gap-4'>
-                <a href='/llms.txt' className='underline underline-offset-4'>
+                <a href='/llms.txt' className={robotLink}>
                   llms.txt
                 </a>
-                <a href='/sitemap.xml' className='underline underline-offset-4'>
+                <a href='/sitemap.xml' className={robotLink}>
                   sitemap.xml
                 </a>
               </span>

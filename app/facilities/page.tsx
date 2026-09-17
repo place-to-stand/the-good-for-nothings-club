@@ -138,7 +138,7 @@ export default function Facilities() {
       </div>
 
       <div className='mt-14 md:mt-20'>
-        <FeatureBand label='The Clubhouse is stocked with' items={amenities} />
+        <FeatureBand label={facilitiesCopy.amenitiesTitle} items={amenities} />
       </div>
     </PageShell>
   )

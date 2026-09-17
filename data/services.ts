@@ -20,7 +20,13 @@ export type Service = {
 }
 
 export const servicesCopy = {
-  lead: 'Hire club members and their extended network of multimedia creatives to make your project happen.',
+  lead: 'You bring the project. We make it. Hire club members and their extended network of multimedia creatives to make your project happen.',
+  /** Inquiry dialog blurb on the services page. */
+  inquiryDescription:
+    "Tell us what you have in mind and we'll get back to you with a quote.",
+  /** Markdown view only: what replaces the inquiry dialogs for agents. */
+  agentNote:
+    'To start a project, use the inquiry form on the services page or email us with what you have in mind. We reply with a quote.',
   categories: [
     {
       key: 'visual' as const,

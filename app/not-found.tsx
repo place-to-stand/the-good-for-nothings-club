@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 import PageShell from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
-import { CONTACT_EMAIL } from '@/data/site'
+import { CONTACT_EMAIL, notFoundCopy } from '@/data/site'
 import { SITE_PAGES } from '@/lib/markdown/site'
 
 export const metadata: Metadata = {
@@ -18,11 +18,8 @@ export const metadata: Metadata = {
  */
 export default function NotFound() {
   return (
-    <PageShell
-      title='404'
-      lead='There is no page at this address. Nothing was moved here; the link is wrong or the page never existed.'
-    >
-      <SectionHeading title='Where to look next' />
+    <PageShell title={notFoundCopy.title} lead={notFoundCopy.lead}>
+      <SectionHeading title={notFoundCopy.nextTitle} />
       <ul className='mt-4 max-w-3xl list-disc space-y-2 pl-5 font-sans text-base leading-snug'>
         {SITE_PAGES.map(page => (
           <li key={page.path}>
@@ -34,7 +31,7 @@ export default function NotFound() {
         ))}
       </ul>
       <p className='mt-8 max-w-3xl font-sans text-base leading-snug'>
-        Looking for a machine-readable map? Try{' '}
+        {notFoundCopy.machineReadable} Try{' '}
         <a href='/llms.txt' className='font-bold'>
           /llms.txt
         </a>{' '}
@@ -42,7 +39,7 @@ export default function NotFound() {
         <a href='/sitemap.xml' className='font-bold'>
           /sitemap.xml
         </a>
-        . Still stuck? Email{' '}
+        . {notFoundCopy.stillStuck}{' '}
         <a href={`mailto:${CONTACT_EMAIL}`} className='font-bold'>
           {CONTACT_EMAIL}
         </a>

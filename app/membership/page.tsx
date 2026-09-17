@@ -29,10 +29,7 @@ export async function generateMetadata(
 
 export default function Membership() {
   return (
-    <PageShell
-      title='Membership'
-      lead={`Join the club, gain a community. ${membershipCopy.lead}`}
-    >
+    <PageShell title='Membership' lead={membershipCopy.lead}>
       {/* Tiers */}
       <SectionHeading
         title={membershipCopy.tiersTitle}
@@ -95,7 +92,7 @@ export default function Membership() {
           </div>
         </div>
         <OfferCard
-          title='Application'
+          title={membershipCopy.applicationTitle}
           className='mt-7 border-0 p-0 md:p-0 lg:pl-12'
         >
           <MembershipApplicationForm />

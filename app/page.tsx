@@ -4,23 +4,21 @@ import { Suspense } from 'react'
 import Link from 'next/link'
 import HeroBanner from '../components/HeroBanner'
 import { FaCaretRight } from 'react-icons/fa'
+import { homeCopy, homeOffering } from '@/data/home'
 
 export default function Home() {
   return (
     <main>
       <section className='py-14 text-center md:px-8 md:py-20 xl:px-16'>
         <div className='mx-auto max-w-(--page-max-width)'>
-          <h1 className='visually-hidden'>Good For Nothings</h1>
+          <h1 className='visually-hidden'>{homeCopy.heading}</h1>
           <HeroBanner />
         </div>
       </section>
       <section className='md:px-8 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
           <p className='font-serif text-2xl leading-tight sm:text-[36px] lg:text-[48px] lg:leading-[1.16]'>
-            <em>The Good for Nothings Club</em> is a creators club based in
-            Austin, TX made up of musicians, photographers, writers, filmmakers,
-            and engineers. Our clubhouse puts studios, rehearsal rooms, and
-            workspace under one roof. Good for nothings. Making everything.
+            <em>{homeCopy.introName}</em> {homeCopy.introBody}
           </p>
         </div>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black md:border-x-2'>
@@ -28,7 +26,7 @@ export default function Home() {
             className='group flex w-full items-center justify-center gap-0.5 py-4 text-center font-sans text-sm leading-none font-extrabold uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 md:text-base'
             href='/about'
           >
-            <span>Learn More</span>{' '}
+            <span>{homeCopy.learnMore}</span>{' '}
             <FaCaretRight className='size-4.5 transition-transform duration-500 group-hover:translate-x-1' />
           </Link>
         </div>
@@ -37,34 +35,7 @@ export default function Home() {
       {/* The offering */}
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black md:border-x-2'>
-          {[
-            {
-              href: '/facilities',
-              title: 'Facilities',
-              body: 'Rent the clubhouse by the month or by the hour.',
-            },
-            {
-              href: '/services',
-              title: 'Services',
-              body: 'You bring the project. We make it.',
-            },
-            {
-              href: '/events',
-              title: 'Events',
-              body: 'The clubhouse, in session - friends of the club welcome.',
-            },
-            {
-              href: '/membership',
-              title: 'Membership',
-              body: 'Join the club, at the level that makes sense for you.',
-            },
-            {
-              href: 'https://shop.thegoodfornothings.club/',
-              title: 'Shop',
-              body: 'Works and merch from members and friends of the club.',
-              external: true,
-            },
-          ].map(card => (
+          {homeOffering.map(card => (
             <Link
               key={card.href}
               href={card.href}
@@ -88,7 +59,7 @@ export default function Home() {
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
           <h2 className='pt-6 text-[32px] font-black tracking-[-0.04em] md:pt-4 md:text-[48px] lg:text-[64px]'>
-            Find Us Online
+            {homeCopy.findUsTitle}
           </h2>
           <div className='mt-10 grid grid-cols-1 gap-8 md:mt-14 lg:grid-cols-2'>
             <Suspense fallback={<div>Loading...</div>}>

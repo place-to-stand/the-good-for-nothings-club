@@ -54,3 +54,16 @@ export const PAGE_META = {
 } as const satisfies Record<string, { title: string; description: string }>
 
 export type StaticPath = keyof typeof PAGE_META
+
+/**
+ * 404 copy, shared by app/not-found.tsx (HTML) and lib/markdown/site.ts
+ * (markdown 404 body).
+ */
+export const notFoundCopy = {
+  title: '404',
+  markdownTitle: '404: Page not found',
+  lead: 'There is no page at this address. Nothing was moved here; the link is wrong or the page never existed.',
+  nextTitle: 'Where to look next',
+  machineReadable: 'Looking for a machine-readable map?',
+  stillStuck: 'Still stuck? Email',
+}

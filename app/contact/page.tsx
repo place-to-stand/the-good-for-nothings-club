@@ -8,6 +8,8 @@ import PageShell from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
 import SocialMediaLinks from '../../components/SocialMediaLinks'
 import type { Metadata, ResolvingMetadata } from 'next'
+import { contactCopy } from '@/data/contact'
+import { CONTACT_EMAIL } from '@/data/site'
 import { PAGE_META } from '@/data/site'
 
 export async function generateMetadata(
@@ -31,26 +33,23 @@ export async function generateMetadata(
 
 export default async function Contact() {
   return (
-    <PageShell
-      title='Contact'
-      lead='Say hello, ask a question, or start something.'
-    >
+    <PageShell title='Contact' lead={contactCopy.lead}>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-20'>
         <div>
-          <SectionHeading title='Email' />
+          <SectionHeading title={contactCopy.emailTitle} />
           <Link
-            href='mailto:hello@thegoodfornothings.club'
+            href={`mailto:${CONTACT_EMAIL}`}
             className='mt-4 inline-block font-sans text-xl font-normal'
           >
-            hello@thegoodfornothings.club
+            {CONTACT_EMAIL}
           </Link>
 
-          <SectionHeading title='Social' />
+          <SectionHeading title={contactCopy.socialTitle} />
           <div className='mt-4 text-[32px]'>
             <SocialMediaLinks />
           </div>
 
-          <SectionHeading title='Location' />
+          <SectionHeading title={contactCopy.locationTitle} />
           <Link
             href={clubhouseMapsUrl}
             target='_blank'
@@ -65,7 +64,7 @@ export default async function Contact() {
         </div>
 
         <OfferCard
-          title='Send a message'
+          title={contactCopy.formTitle}
           className='self-start border-0 p-0 md:p-0 lg:mt-20'
         >
           <InquiryForm defaultKind='general' />

@@ -70,9 +70,7 @@ describe('static page markdown', () => {
   it('contact carries the address and tells agents to email', () => {
     const md = contactMarkdown()
     expect(md).toContain('1800 W Koenig Ln, Austin, TX 78756')
-    expect(md).toContain(
-      'Automated clients should email hello@thegoodfornothings.club'
-    )
+    expect(md).toContain('Automated clients should email us instead')
   })
 
   it('about lists members when given them', () => {

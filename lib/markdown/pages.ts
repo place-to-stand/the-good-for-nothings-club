@@ -14,6 +14,9 @@ import {
   upcomingOccurrences,
 } from '@/data/events'
 import { leadershipCopy } from '@/data/leadership'
+import { homeCopy, homeOffering } from '@/data/home'
+import { aboutCopy, aboutItems } from '@/data/about'
+import { contactCopy } from '@/data/contact'
 import { clubhouseAddressLine, clubhouseMapsUrl } from '@/data/location'
 import {
   CONTACT_EMAIL,
@@ -48,53 +51,24 @@ function heading(title: string, description: string) {
   return [`# ${title}`, '', `> ${description}`, '']
 }
 
-/** Homepage sections in the order the HTML page shows them. */
-export const HOME_OFFERING = [
-  {
-    href: '/facilities',
-    title: 'Facilities',
-    body: 'Rent the clubhouse by the month or by the hour.',
-  },
-  {
-    href: '/services',
-    title: 'Services',
-    body: 'You bring the project. We make it.',
-  },
-  {
-    href: '/events',
-    title: 'Events',
-    body: 'The clubhouse, in session - friends of the club welcome.',
-  },
-  {
-    href: '/membership',
-    title: 'Membership',
-    body: 'Join the club, at the level that makes sense for you.',
-  },
-  {
-    href: SHOP_URL,
-    title: 'Shop',
-    body: 'Works and merch from members and friends of the club.',
-  },
-]
-
 export function homeMarkdown() {
   const lines = [
     `# ${SITE_NAME}`,
     '',
     `> ${PAGE_META['/'].description}`,
     '',
-    'The Good for Nothings Club is a creators club based in Austin, TX made up of musicians, photographers, writers, filmmakers, and engineers. Our clubhouse puts studios, rehearsal rooms, and workspace under one roof. Good for nothings. Making everything.',
+    `*${homeCopy.introName}* ${homeCopy.introBody}`,
     '',
-    `Learn more: ${abs('/about')}`,
+    `${homeCopy.learnMore}: ${abs('/about')}`,
     '',
-    '## What we offer',
+    `## ${homeCopy.offeringTitle}`,
     '',
-    ...HOME_OFFERING.map(card => {
+    ...homeOffering.map(card => {
       const url = card.href.startsWith('http') ? card.href : abs(card.href)
       return `- [${card.title}](${url}): ${card.body}`
     }),
     '',
-    '## Find us online',
+    `## ${homeCopy.findUsTitle}`,
     '',
     ...SOCIAL_PROFILES.map(profile => `- [${profile.label}](${profile.href})`),
     '',
@@ -151,11 +125,11 @@ export function facilitiesMarkdown() {
     '',
     storefrontCopy.description,
     '',
-    '## The clubhouse is stocked with',
+    `## ${facilitiesCopy.amenitiesTitle}`,
     '',
     ...amenities.map(item => `- ${item}`),
     '',
-    `Monthly rentals need a membership application; hourly rooms need an associate booking. Apply at ${abs('/membership')} or email ${CONTACT_EMAIL}.`,
+    `${facilitiesCopy.agentNote} Membership: ${abs('/membership')}. Email: ${CONTACT_EMAIL}.`,
     '',
     pageFooter('/facilities')
   )
@@ -163,12 +137,7 @@ export function facilitiesMarkdown() {
 }
 
 export function servicesMarkdown() {
-  const lines = [
-    ...heading(
-      'Services',
-      `You bring the project. We make it. ${servicesCopy.lead}`
-    ),
-  ]
+  const lines = [...heading('Services', servicesCopy.lead)]
   for (const category of servicesCopy.categories) {
     const categoryServices = services.filter(s => s.category === category.key)
     if (categoryServices.length === 0) continue
@@ -181,7 +150,7 @@ export function servicesMarkdown() {
     }
   }
   lines.push(
-    `To start a project, use the inquiry form at ${abs('/services')} or email ${CONTACT_EMAIL} with what you have in mind. We reply with a quote.`,
+    `${servicesCopy.agentNote} Services: ${abs('/services')}. Email: ${CONTACT_EMAIL}.`,
     '',
     pageFooter('/services')
   )
@@ -207,7 +176,7 @@ export function eventsMarkdown(now: Date = new Date()) {
   ].sort((a, b) => a.date.localeCompare(b.date))
 
   const lines = [
-    ...heading('Events', `The club, in session. ${eventsCopy.lead}`),
+    ...heading('Events', eventsCopy.lead),
     `## ${eventsCopy.calendarTitle}`,
     '',
     ...calendar.map(entry => {
@@ -216,7 +185,7 @@ export function eventsMarkdown(now: Date = new Date()) {
       return `- ${entry.date} (${when}): **${entry.name}**${rsvp}`
     }),
     '',
-    `${eventsCopy.friendNote} ${eventsCopy.friendCta}: ${abs('/membership')}. RSVP by email to ${CONTACT_EMAIL} with the event name and date.`,
+    `${eventsCopy.friendNote} ${eventsCopy.friendCta}: ${abs('/membership')}. ${eventsCopy.agentNote} Email: ${CONTACT_EMAIL}.`,
     '',
     `## ${eventsCopy.recurringTitle}`,
     '',
@@ -249,10 +218,7 @@ export function eventsMarkdown(now: Date = new Date()) {
 
 export function membershipMarkdown() {
   const lines = [
-    ...heading(
-      'Membership',
-      `Join the club, gain a community. ${membershipCopy.lead}`
-    ),
+    ...heading('Membership', membershipCopy.lead),
     `## ${membershipCopy.tiersTitle}`,
     '',
     membershipCopy.tiersLead,
@@ -273,9 +239,9 @@ export function membershipMarkdown() {
       ...step.points.map(point => `   - ${point}`),
     ]),
     '',
-    `Apply with the form at ${abs('/membership#apply')} or email ${CONTACT_EMAIL} with your name, the tier you want, and what you make.`,
+    `${membershipCopy.agentNote} ${membershipCopy.applicationTitle}: ${abs('/membership#apply')}. Email: ${CONTACT_EMAIL}.`,
     '',
-    '## Policies',
+    `## ${membershipCopy.policiesTitle}`,
     '',
     ...membershipCopy.policies.flatMap(policy => [
       `### ${policy.label}`,
@@ -295,22 +261,17 @@ export function aboutMarkdown(
   past: AboutMember[] = []
 ) {
   const lines = [
-    ...heading(
-      'About',
-      'The Good for Nothings Club is a creators club based in Austin, TX made up of musicians, photographers, writers, filmmakers, and engineers.'
-    ),
-    '## Overview',
+    ...heading('About', aboutCopy.lead),
+    `## ${aboutCopy.overviewTitle}`,
     '',
-    "The club started as a weekly accountability meeting between friends and grew into a clubhouse: studios, rehearsal rooms, and workspace under one roof. Today it runs as a members' creative space for Austin. Monthly members get keys and full run of the house, associates book the rooms by the hour, and friends of the club come out for the events. Membership isn't about who you know. It's about making things and contributing to the space. We accept applications in waves, so the community grows deliberately around people who actually show up, and each new wave has time to make the place their own. The point was never scale. It's keeping the space sustainable and the work flowing.",
+    aboutCopy.overview,
     '',
-    '## What happens here',
+    `## ${aboutCopy.happensTitle}`,
     '',
-    `- [The clubhouse](${abs('/facilities')}) rents desks, band practice slots, a photo studio, and a mixing control room.`,
-    `- [Club members take on client work](${abs('/services')}) for photo, video, music, print, and events.`,
-    `- [Regular events](${abs('/events')}), including a monthly show & tell for works in progress.`,
-    `- [Membership](${abs('/membership')}) at three levels: member, associate, and friend.`,
-    `- [The shop](${SHOP_URL}) carries works and merch from members and friends of the club.`,
-    `- [Got an idea?](${abs('/contact')}) Reach out to see if we can make it happen.`,
+    ...aboutItems.map(item => {
+      const url = item.href.startsWith('http') ? item.href : abs(item.href)
+      return `- [${item.link}](${url})${item.rest}`
+    }),
     '',
     `## ${leadershipCopy.title}`,
     '',
@@ -341,24 +302,24 @@ export function aboutMarkdown(
 
 export function contactMarkdown() {
   return [
-    ...heading('Contact', 'Say hello, ask a question, or start something.'),
-    '## Email',
+    ...heading('Contact', contactCopy.lead),
+    `## ${contactCopy.emailTitle}`,
     '',
-    `${CONTACT_EMAIL} — the one address for projects, bookings, membership, events, and press. Replies come from the founding members.`,
+    CONTACT_EMAIL,
     '',
-    '## Social',
+    `## ${contactCopy.socialTitle}`,
     '',
     ...SOCIAL_PROFILES.map(profile => `- [${profile.label}](${profile.href})`),
     '',
-    '## Location',
+    `## ${contactCopy.locationTitle}`,
     '',
-    `${clubhouseAddressLine}`,
+    clubhouseAddressLine,
     '',
     `Directions: ${clubhouseMapsUrl}`,
     '',
-    '## Send a message',
+    `## ${contactCopy.formTitle}`,
     '',
-    `The contact form at ${abs('/contact')} needs a browser (it runs a bot check). Automated clients should email ${CONTACT_EMAIL} instead, with a name, a reply address, and what the message is about.`,
+    `${contactCopy.agentNote} Form: ${abs('/contact')}. Email: ${CONTACT_EMAIL}.`,
     '',
     pageFooter('/contact'),
   ].join('\n')

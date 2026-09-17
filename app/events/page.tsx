@@ -123,7 +123,7 @@ export default function Events() {
                           href={event.url}
                           target='_blank'
                           rel='noopener noreferrer'
-                          className='whitespace-nowrap font-bold underline'
+                          className='font-bold whitespace-nowrap underline'
                         >
                           Invite ↗
                         </a>
@@ -139,11 +139,7 @@ export default function Events() {
   )
 
   return (
-    <PageShell
-      title='Events'
-      lead={`The club, in session. ${eventsCopy.lead}`}
-      after={pastSection}
-    >
+    <PageShell title='Events' lead={eventsCopy.lead} after={pastSection}>
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{

@@ -57,13 +57,15 @@ export type SpecialEvent = {
 }
 
 export const eventsCopy = {
-  lead: 'Regular happenings at the clubhouse - members, associates, and friends of the club welcome.',
+  lead: 'The club, in session. Regular happenings at the clubhouse - members, associates, and friends of the club welcome.',
   calendarTitle: 'Calendar',
   recurringTitle: 'Recurring',
   pastTitle: 'Past Events',
   pastLead: "Parties, markets, and screenings we've thrown around Austin.",
   friendNote: 'Events are for members, associates, and friends of the club.',
   friendCta: 'Apply to join',
+  /** Markdown view only: what replaces the RSVP dialogs for agents. */
+  agentNote: 'RSVP by email with the event name and date.',
 }
 
 // Listed in monthly order (1st, 2nd, 3rd Thursday) - the page renders

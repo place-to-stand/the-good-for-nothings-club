@@ -241,6 +241,14 @@ Convex; `node scripts/agent-check.mjs` re-checks production weekly.
   markdown from fixtures, llms.txt shape, 404 body, JSON-LD contactPoint +
   address, description length budget, the markdown route
   (200/404/503) and llms routes.
+- Copy lives in `data/*.ts` only: `data/home.ts`, `data/about.ts`,
+  `data/contact.ts`, and the existing facilities/services/membership/events
+  copy objects feed both the HTML pages and the markdown twins.
+  `tests/copySource.test.ts` fails if a page file carries prose of its own
+  (a JSX text run or lead/title/description literal over 40 chars) or if
+  the markdown stops rendering any copy string from the data files. The
+  one deliberate difference per page is an `agentNote` field, the markdown
+  stand-in for a form or dialog that needs a browser.
 - `npm run agent:check [-- --base http://localhost:3005]` — live checks
   listed at the top of `scripts/agent-check.mjs`; runs weekly after
   `seo-check` in `.github/workflows/seo-check.yml`.

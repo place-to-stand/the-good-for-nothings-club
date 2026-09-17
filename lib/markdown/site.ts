@@ -4,6 +4,7 @@ import {
   SHOP_URL,
   SITE_NAME,
   SITE_URL,
+  notFoundCopy,
 } from '@/data/site'
 import { SOCIAL_PROFILES } from '@/data/social'
 import { clubhouseAddressLine } from '@/data/location'
@@ -98,11 +99,11 @@ export function llmsTxt() {
 
 export function notFoundMarkdown(pathname: string) {
   return [
-    '# 404: Page not found',
+    `# ${notFoundCopy.markdownTitle}`,
     '',
-    `There is no page at \`${pathname}\` on ${SITE_URL}. Nothing was moved here; the address is wrong or the page never existed.`,
+    `Requested path: \`${pathname}\` on ${SITE_URL}. ${notFoundCopy.lead}`,
     '',
-    '## Where to look next',
+    `## ${notFoundCopy.nextTitle}`,
     '',
     `- Agent index (what this site is for and how to call it): ${abs('/llms.txt')}`,
     `- Sitemap with every live URL, including projects and members: ${abs('/sitemap.xml')}`,
@@ -112,7 +113,7 @@ export function notFoundMarkdown(pathname: string) {
     '',
     ...pageList(false),
     '',
-    `Still stuck? Email ${CONTACT_EMAIL}.`,
+    `${notFoundCopy.stillStuck} ${CONTACT_EMAIL}.`,
     '',
   ].join('\n')
 }

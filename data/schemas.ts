@@ -69,7 +69,15 @@ export const PIPELINE_STATUSES: Record<Pipeline, readonly InquiryStatus[]> = {
     'declined',
     'not_a_fit',
   ],
-  services: ['new', 'replied', 'vetted', 'future', 'joined', 'declined', 'not_a_fit'],
+  services: [
+    'new',
+    'replied',
+    'vetted',
+    'future',
+    'joined',
+    'declined',
+    'not_a_fit',
+  ],
   inbox: ['new', 'replied', 'closed'],
 }
 

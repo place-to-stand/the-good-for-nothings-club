@@ -28,10 +28,7 @@ export async function generateMetadata(
 
 export default function Services() {
   return (
-    <PageShell
-      title='Services'
-      lead={`You bring the project. We make it. ${servicesCopy.lead}`}
-    >
+    <PageShell title='Services' lead={servicesCopy.lead}>
       {servicesCopy.categories.map(category => {
         const categoryServices = services.filter(
           service => service.category === category.key
@@ -58,7 +55,7 @@ export default function Services() {
                       triggerVariant='outline'
                       triggerSize='sm'
                       title={service.name}
-                      description="Tell us what you have in mind and we'll get back to you with a quote."
+                      description={servicesCopy.inquiryDescription}
                       submitLabel='Send'
                     />
                   }

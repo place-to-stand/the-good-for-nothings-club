@@ -35,6 +35,10 @@ export const facilitiesCopy = {
   hourlyLead:
     'Standard booking hours are weekdays from 9-5. Evenings & weekends can typically be arranged with enough notice. Monthly members pay half the weekday rate, nights and weekends included.',
   plannedTitle: 'In the works',
+  amenitiesTitle: 'The Clubhouse is stocked with',
+  /** Markdown view only: what replaces the booking dialogs for agents. */
+  agentNote:
+    'Monthly rentals need a membership application; hourly rooms need an associate booking. Apply on the membership page or email us.',
 }
 
 export const storefrontCopy = {

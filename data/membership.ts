@@ -17,11 +17,16 @@ export type MembershipTier = {
 }
 
 export const membershipCopy = {
-  lead: 'Three levels, each with its own perks. Apply anytime to join the waitlist - onboarding happens in waves as space opens up.',
+  lead: 'Join the club, gain a community. Three levels, each with its own perks. Apply anytime to join the waitlist - onboarding happens in waves as space opens up.',
   tiersTitle: 'Tiers',
   tiersLead:
     "Apply anytime to join the waitlist - onboarding happens in waves as space opens up.  Since space is limited, acceptance isn't guaranteed.",
   joiningTitle: 'How to join',
+  applicationTitle: 'Application',
+  policiesTitle: 'Policies',
+  /** Markdown view only: what replaces the application form for agents. */
+  agentNote:
+    'Apply with the form on the membership page or email us with your name, the tier you want, and what you make.',
   joining: [
     {
       label: 'Apply',

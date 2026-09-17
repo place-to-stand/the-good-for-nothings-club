@@ -43,7 +43,7 @@ const tiles = [
 
 const card = 'bg-background border-2 border-black'
 const tile =
-  'group flex min-h-28 flex-col justify-center gap-1.5 px-5 py-4 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:px-7'
+  'group flex h-full min-h-28 flex-col justify-center gap-1.5 px-5 py-4 transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:px-7'
 
 export default function NotFound() {
   return (
@@ -51,15 +51,12 @@ export default function NotFound() {
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
         <div className='mx-auto grid max-w-(--page-max-width) grid-cols-1 gap-8 lg:grid-cols-2'>
           <div
-            className={`${card} flex flex-col justify-between gap-6 border-x-0 px-4 py-6 md:border-x-2 md:px-12 md:py-10`}
+            className={`${card} flex flex-col gap-8 border-x-0 px-4 py-6 md:border-x-2 md:px-12 md:py-10`}
           >
             <div>
               <h1 className='font-sans-glitch overflow-hidden text-[112px] leading-[0.85] tracking-[-0.03em] md:text-[200px]'>
                 {notFoundCopy.title}
               </h1>
-              <p className='mt-2 font-sans text-[13px] font-extrabold tracking-[0.06em] uppercase md:text-[15px]'>
-                {notFoundCopy.caption}
-              </p>
             </div>
             <div className='flex flex-col gap-6'>
               <p className='max-w-xl font-serif text-[22px] leading-tight md:text-[30px]'>
@@ -109,7 +106,7 @@ export default function NotFound() {
                         <FaCaretRight className='size-4 transition-transform duration-300 group-hover:translate-x-1 md:size-5' />
                       )}
                     </span>
-                    <span className='hidden font-serif text-[15px] leading-snug normal-case opacity-0 transition-opacity duration-200 group-hover:opacity-100 md:block'>
+                    <span className='hidden font-sans text-sm leading-snug font-normal tracking-normal normal-case opacity-0 transition-opacity duration-200 group-hover:opacity-100 md:block'>
                       {entry.description}
                     </span>
                   </Link>

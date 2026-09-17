@@ -63,7 +63,6 @@ export type StaticPath = keyof typeof PAGE_META
  */
 export const notFoundCopy = {
   title: '404',
-  caption: 'Good for nothing',
   markdownTitle: '404: Page not found',
   lead: 'There is no page at this address. The link is wrong, or the page never existed.',
   backHome: 'Back to the clubhouse',

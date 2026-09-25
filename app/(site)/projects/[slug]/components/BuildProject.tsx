@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { getImageUrl } from '../../../../data/client'
+import { getImageUrl } from '@/data/client'
 import ProjectMainMedia from './ProjectMainMedia'
-import { GFNC_project } from '../../../../types'
+import { GFNC_project } from '@/types'
 import Image from 'next/image'
 import { PortableText } from '@portabletext/react'
 import dynamic from 'next/dynamic'
@@ -13,11 +13,11 @@ import { getProjectStatusColor } from '@/lib/utils'
 const MediaPlayer = dynamic(() => import('@/components/MediaPlayer'))
 const PhotoGallery = dynamic(() => import('@/components/PhotoGallery'))
 
-type WebProjectProps = {
+type BuildProjectProps = {
   project: GFNC_project
 }
 
-export default function WebProject({ project }: WebProjectProps) {
+export default function BuildProject({ project }: BuildProjectProps) {
   const mainMedia =
     project.mainMedia.find(mainMedia => mainMedia._type === 'videoFile') ||
     project.mainMedia.find(mainMedia => mainMedia._type === 'image')

@@ -61,6 +61,9 @@ function NavContent() {
         : 'text-black hover:bg-black/10 active:bg-black/20'
     )
 
+  const footerLinkClassName =
+    'block px-3 py-2 text-left font-sans text-sm leading-tight font-medium whitespace-nowrap text-black/60 uppercase transition-colors hover:bg-black/10 hover:text-black hover:no-underline active:bg-black/20'
+
   const badge = (count: number | undefined, active: boolean) =>
     count !== undefined &&
     count > 0 && (
@@ -75,8 +78,19 @@ function NavContent() {
     )
 
   return (
-    <aside className='shrink-0 border-b-2 border-black md:w-48 md:border-r-2 md:border-b-0'>
-      <div className='flex items-center gap-1 overflow-x-auto px-2 py-2 md:sticky md:top-4 md:flex-col md:items-stretch md:gap-0 md:px-3 md:py-3'>
+    <aside className='bg-background sticky top-0 z-20 flex shrink-0 flex-col border-b-2 border-black md:h-full md:w-56 md:border-r-2 md:border-b-0'>
+      <div className='flex items-center gap-1 overflow-x-auto px-2 py-2 md:min-h-0 md:flex-1 md:flex-col md:items-stretch md:gap-0 md:overflow-x-visible md:overflow-y-auto md:px-3 md:py-0'>
+        <Link
+          href='/admin'
+          className='flex shrink-0 items-baseline gap-2 px-2 hover:no-underline md:-mx-3 md:mb-3 md:border-b-2 md:border-black md:px-6 md:py-5'
+        >
+          <span className='text-[22px] leading-none font-black tracking-[-0.02em] uppercase md:text-[32px]'>
+            GFNC
+          </span>
+          <span className='hidden font-sans text-[10px] font-semibold tracking-[1px] text-black/50 uppercase md:inline'>
+            Admin
+          </span>
+        </Link>
         <Link className={linkClassName(pathname === '/admin')} href='/admin'>
           Dashboard
         </Link>
@@ -106,14 +120,17 @@ function NavContent() {
             </Link>
           ))}
         </NavGroup>
-        <div className='md:mt-3 md:border-t-2 md:border-black/10 md:pt-3 md:pb-2'>
+        <div className='flex md:-mx-3 md:mt-auto md:flex-col md:border-t-2 md:border-black md:px-3 md:py-3'>
+          <Link href='/' className={footerLinkClassName}>
+            View site
+          </Link>
           <button
             type='button'
             onClick={async () => {
               await signOut()
               router.push('/admin/login')
             }}
-            className='block w-full px-3 py-2 text-left font-sans text-sm leading-tight font-medium whitespace-nowrap text-black/60 uppercase transition-colors hover:bg-black/10 hover:text-black active:bg-black/20'
+            className={footerLinkClassName}
           >
             Sign out
           </button>
@@ -124,8 +141,10 @@ function NavContent() {
 }
 
 /**
- * Left sidebar on desktop, horizontal scroller on mobile. Hidden entirely
- * when signed out, so the login page gets the full card width.
+ * Full-height left sidebar on desktop (brand on top, site/sign-out links
+ * pinned to the bottom, the link list scrolling between them if it ever
+ * outgrows the viewport); a sticky horizontal scroller on mobile. Hidden
+ * entirely when signed out, so the login page gets the whole screen.
  *
  * The badge query lives in NavContent rather than here on purpose: this nav
  * renders in the admin layout, which also wraps /admin/login. <Authenticated>

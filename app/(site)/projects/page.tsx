@@ -1,12 +1,12 @@
 import { fetchQuery } from 'convex/nextjs'
 import Link from 'next/link'
-import { cn } from '../../lib/utils'
-import { api } from '../../convex/_generated/api'
+import { cn } from '@/lib/utils'
+import { api } from '@/convex/_generated/api'
 import type {
   GFNC_memberCard,
   GFNC_projectListItem,
   GFNC_projectType,
-} from '../../types'
+} from '@/types'
 import type { Metadata, ResolvingMetadata } from 'next'
 import InProgressSection from './InProgressSection'
 import CompletedSection from './CompletedSection'

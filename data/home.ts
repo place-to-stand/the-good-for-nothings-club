@@ -3,7 +3,7 @@ import { SHOP_URL } from './site'
 /**
  * Homepage copy. Plain, version-controlled data (no CMS). Edit directly.
  *
- * Read by app/page.tsx (HTML) and lib/markdown/pages.ts (markdown), so
+ * Read by app/(site)/page.tsx (HTML) and lib/markdown/pages.ts (markdown), so
  * one edit updates both views. Keep prose here, not in the page file -
  * tests/copySource.test.ts fails the build if it finds prose in JSX.
  */

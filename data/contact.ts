@@ -1,7 +1,7 @@
 /**
  * Contact page copy. Plain, version-controlled data (no CMS). Edit directly.
  *
- * Read by app/contact/page.tsx (HTML) and lib/markdown/pages.ts (markdown).
+ * Read by app/(site)/contact/page.tsx (HTML) and lib/markdown/pages.ts (markdown).
  * `agentNote` is the markdown view's stand-in for the form, which needs a
  * browser (Vercel BotID). It is the one line the two views do not share,
  * and it lives here so that difference is deliberate and in one place.

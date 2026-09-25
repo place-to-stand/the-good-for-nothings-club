@@ -11,26 +11,23 @@ export const metadata: Metadata = {
 }
 
 /**
- * Admin frame: the same bordered card as PageShell, minus the display
- * title (which spent a screenful of space saying "Admin"), with the nav
- * as a left sidebar so the content column reads like a tool, not a page.
+ * Full-screen app shell, outside the (site) route group so none of the
+ * marketing Header, Footer, or page-width card applies. On desktop the
+ * shell is exactly one viewport tall: the sidebar stays put and the main
+ * column scrolls on its own. On mobile it falls back to normal document
+ * scrolling under a sticky nav bar.
  */
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <main>
-      <ConvexAuthNextjsServerProvider>
-        <AdminProviders>
-          {/* No bottom padding: the footer's own pt provides the gap, same as PageShell pages. */}
-          <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
-            <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black md:flex md:items-stretch md:border-x-2'>
-              <AdminNav />
-              <div className='min-w-0 flex-1 px-4 py-6 md:px-8 md:py-8'>
-                {children}
-              </div>
-            </div>
-          </section>
-        </AdminProviders>
-      </ConvexAuthNextjsServerProvider>
-    </main>
+    <ConvexAuthNextjsServerProvider>
+      <AdminProviders>
+        <div className='bg-background flex min-h-dvh flex-col md:h-dvh md:flex-row'>
+          <AdminNav />
+          <main className='min-w-0 flex-1 px-4 py-6 md:overflow-y-auto md:px-8 md:py-8'>
+            {children}
+          </main>
+        </div>
+      </AdminProviders>
+    </ConvexAuthNextjsServerProvider>
   )
 }

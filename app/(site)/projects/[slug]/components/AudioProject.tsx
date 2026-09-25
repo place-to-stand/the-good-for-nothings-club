@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { getImageUrl } from '../../../../data/client'
+import { getImageUrl } from '@/data/client'
 import ProjectMainMedia from './ProjectMainMedia'
-import { GFNC_project } from '../../../../types'
+import { GFNC_project } from '@/types'
 import Image from 'next/image'
 import { PortableText } from '@portabletext/react'
 import dynamic from 'next/dynamic'
@@ -9,29 +9,18 @@ import { Suspense } from 'react'
 import MemberAvatarStack from '@/components/MemberAvatarStack'
 import { Badge } from '@/components/ui/badge'
 import { getProjectStatusColor } from '@/lib/utils'
-import { Button } from '@/components/ui/Button'
 
 const MediaPlayer = dynamic(() => import('@/components/MediaPlayer'))
 const PhotoGallery = dynamic(() => import('@/components/PhotoGallery'))
 
-type EventProjectProps = {
+type AudioProjectProps = {
   project: GFNC_project
 }
 
-export default function EventProject({ project }: EventProjectProps) {
+export default function AudioProject({ project }: AudioProjectProps) {
   const mainMedia =
     project.mainMedia.find(mainMedia => mainMedia._type === 'videoFile') ||
     project.mainMedia.find(mainMedia => mainMedia._type === 'image')
-
-  const mainLinkHostname = project.mainLink
-    ? (() => {
-        try {
-          return new URL(project.mainLink).hostname.replace(/^www\./, '')
-        } catch {
-          return null
-        }
-      })()
-    : null
 
   if (!mainMedia) return null
 
@@ -58,27 +47,13 @@ export default function EventProject({ project }: EventProjectProps) {
               </div>
             </div>
             <div className='w-full max-w-[300px] space-y-6 md:space-y-12'>
-              {project.mainLink && (
-                <div className='space-y-2 md:space-y-6'>
-                  <h3>RSVP Here</h3>
-                  <Button asChild size='lg'>
-                    <Link
-                      href={project.mainLink}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                    >
-                      {mainLinkHostname
-                        ? `Visit ${mainLinkHostname}`
-                        : 'Open Link'}
-                    </Link>
-                  </Button>
-                </div>
-              )}
               <div className='space-y-2 md:space-y-6'>
                 <h3>Project Type</h3>
                 <div className='flex'>
-                  <Badge className='text-md hover:no-underline' asChild>
-                    <Link href={`/projects?type=${project.type}`}>
+                  <Badge className='hover:no-underline text-md' asChild>
+                    <Link
+                      href={`/projects?type=${project.type}`}
+                    >
                       {project.type}
                     </Link>
                   </Badge>
@@ -87,17 +62,28 @@ export default function EventProject({ project }: EventProjectProps) {
               <div className='space-y-2 md:space-y-6'>
                 <h3>Project Status</h3>
                 <div className='flex'>
-                  <Badge className='text-md flex items-center gap-2'>
-                    <div
-                      className={`h-3 w-3 rounded-full border border-black ${getProjectStatusColor(project.status)}`}
-                    ></div>
+                  <Badge className="text-md flex items-center gap-2">
+                    <div className={`h-3 w-3 rounded-full border border-black ${getProjectStatusColor(project.status)}`}></div>
                     {project.status}
                   </Badge>
                 </div>
               </div>
+              {project.dateStarted && (
+                <div className='space-y-2 md:space-y-6'>
+                  <h3>Date Started</h3>
+                  <div className='text-[20px] leading-none md:text-[24px]'>
+                    {new Date(project.dateStarted).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                      timeZone: 'UTC',
+                    })}
+                  </div>
+                </div>
+              )}
               {project.dateCompleted && (
                 <div className='space-y-2 md:space-y-6'>
-                  <h3>Event Date</h3>
+                  <h3>Date Ended</h3>
                   <div className='text-[20px] leading-none md:text-[24px]'>
                     {new Date(project.dateCompleted).toLocaleDateString(
                       'en-US',
@@ -111,18 +97,17 @@ export default function EventProject({ project }: EventProjectProps) {
                   </div>
                 </div>
               )}
-              {project.membersInvolved &&
-                project.membersInvolved.length > 0 && (
-                  <div className='space-y-2 md:space-y-6'>
-                    <h3>Members Involved</h3>
-                    <div className='space-y-4'>
-                      <MemberAvatarStack
-                        members={project.membersInvolved}
-                        size='md'
-                      />
-                    </div>
+              {project.membersInvolved && project.membersInvolved.length > 0 && (
+                <div className='space-y-2 md:space-y-6'>
+                  <h3>Members Involved</h3>
+                  <div className='space-y-4'>
+                    <MemberAvatarStack
+                      members={project.membersInvolved}
+                      size="md"
+                    />
                   </div>
-                )}
+                </div>
+              )}
             </div>
           </div>
           {project.photoGallery && (

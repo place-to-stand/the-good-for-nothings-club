@@ -10,8 +10,8 @@ import { Button } from '@/components/ui/Button'
  * /admin — most likely a Convex query rejecting because the session lapsed
  * mid-render — escapes to app/global-error.tsx, which throws away the root
  * layout and repaints the whole document as an unstyled "Something went
- * wrong!". Catching it here keeps the failure inside the admin card, keeps
- * the site chrome intact, and leaves a way back to the login page.
+ * wrong!". Catching it here keeps the failure inside the admin shell, keeps
+ * the sidebar intact, and leaves a way back to the login page.
  */
 export default function AdminError({
   error,

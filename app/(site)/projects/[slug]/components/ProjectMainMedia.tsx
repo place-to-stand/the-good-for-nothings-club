@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { getImageUrl } from '../../../../data/client'
+import { getImageUrl } from '@/data/client'
 import { getGifVideo } from '@/data/gifVideos'
 import GifVideo from '@/components/GifVideo'
-import type { Image as GFNC_image, VideoFile } from '../../../../types'
+import type { Image as GFNC_image, VideoFile } from '@/types'
 
 const MediaPlayer = dynamic(() => import('@/components/MediaPlayer'))
 

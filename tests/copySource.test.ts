@@ -35,15 +35,15 @@ import { notFoundMarkdown } from '@/lib/markdown/site'
  */
 
 const PAGE_FILES = [
-  'app/page.tsx',
-  'app/about/page.tsx',
-  'app/contact/page.tsx',
-  'app/facilities/page.tsx',
-  'app/services/page.tsx',
-  'app/membership/page.tsx',
-  'app/events/page.tsx',
-  'app/projects/page.tsx',
-  'app/not-found.tsx',
+  'app/(site)/page.tsx',
+  'app/(site)/about/page.tsx',
+  'app/(site)/contact/page.tsx',
+  'app/(site)/facilities/page.tsx',
+  'app/(site)/services/page.tsx',
+  'app/(site)/membership/page.tsx',
+  'app/(site)/events/page.tsx',
+  'app/(site)/projects/page.tsx',
+  'app/(site)/not-found.tsx',
 ]
 const PROSE_LIMIT = 40
 

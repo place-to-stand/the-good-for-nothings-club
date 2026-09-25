@@ -7,8 +7,6 @@ import { Analytics } from '@vercel/analytics/react'
 
 import '../styles/globals.css'
 import AttributionCapture from '@/components/AttributionCapture'
-import Header from '@/components/Header'
-import Footer from '../components/Footer'
 import Script from 'next/script'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -86,9 +84,7 @@ export default function RootLayout({
           }}
         />
         <AttributionCapture />
-        <Header />
         {children}
-        <Footer />
         <Analytics />
         <Script src='https://www.googletagmanager.com/gtag/js?id=G-RK8DQY3F32' />
         <Script id='google-analytics'>

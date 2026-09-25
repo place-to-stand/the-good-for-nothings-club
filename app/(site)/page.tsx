@@ -1,8 +1,8 @@
-import SpotifyPlaylistEmbed from '../components/SpotifyPlaylistEmbed'
+import SpotifyPlaylistEmbed from '@/components/SpotifyPlaylistEmbed'
 import InstagramFeed from '@/components/InstagramFeed'
 import { Suspense } from 'react'
 import Link from 'next/link'
-import HeroBanner from '../components/HeroBanner'
+import HeroBanner from '@/components/HeroBanner'
 import { FaCaretRight } from 'react-icons/fa'
 import { homeCopy, homeOffering } from '@/data/home'
 

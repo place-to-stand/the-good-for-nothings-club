@@ -56,7 +56,7 @@ export const PAGE_META = {
 export type StaticPath = keyof typeof PAGE_META
 
 /**
- * 404 copy, shared by app/not-found.tsx (HTML) and lib/markdown/site.ts
+ * 404 copy, shared by app/(site)/not-found.tsx (HTML) and lib/markdown/site.ts
  * (markdown 404 body). The HTML page shows the number big, one serif
  * line, two buttons, and a grid of section tiles whose descriptions
  * (PAGE_META) appear on hover.

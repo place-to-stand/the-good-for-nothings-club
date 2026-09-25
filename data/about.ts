@@ -3,7 +3,7 @@ import { SHOP_URL } from './site'
 /**
  * About page copy. Plain, version-controlled data (no CMS). Edit directly.
  *
- * Read by app/about/page.tsx (HTML) and lib/markdown/pages.ts (markdown).
+ * Read by app/(site)/about/page.tsx (HTML) and lib/markdown/pages.ts (markdown).
  * Keep prose here, not in the page file (see tests/copySource.test.ts).
  */
 export const aboutCopy = {

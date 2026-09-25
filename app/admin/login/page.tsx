@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuthActions } from '@convex-dev/auth/react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -37,7 +38,13 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className='mx-auto max-w-sm py-8 md:py-12'>
+    <div className='mx-auto flex min-h-full max-w-sm flex-col justify-center py-8'>
+      <Link
+        href='/'
+        className='mb-8 text-center text-[40px] leading-none font-black tracking-[-0.02em] uppercase hover:no-underline'
+      >
+        GFNC
+      </Link>
       <h2 className='mb-6 text-center text-[28px] font-black tracking-[-0.03em]'>
         {mode === 'signIn' ? 'Sign in' : 'Reset password'}
       </h2>

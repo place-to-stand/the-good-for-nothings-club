@@ -1,10 +1,10 @@
-import { getImageUrl } from '../../../data/client'
-import { GFNC_project, Image } from '../../../types'
+import { getImageUrl } from '@/data/client'
+import { GFNC_project, Image } from '@/types'
 import { toPlainText } from '@portabletext/toolkit'
 import { fetchQuery } from 'convex/nextjs'
 import { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
-import { api } from '../../../convex/_generated/api'
+import { api } from '@/convex/_generated/api'
 import {
   WebProject,
   VideoProject,

@@ -41,7 +41,7 @@ export default function PageShell({
             {title}
           </h1>
           {lead && (
-            <p className='mx-auto mt-1 max-w-3xl text-center font-serif text-xl leading-tight text-balance sm:text-2xl'>
+            <p className='mx-auto mt-1 max-w-3xl text-center font-serif text-xl leading-tight text-balance italic sm:text-2xl'>
               {lead}
             </p>
           )}

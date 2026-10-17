@@ -1,5 +1,7 @@
 import type { Occurrence } from '@/data/events'
-import { clubhouse } from '@/data/location'
+import { facilities } from '@/data/facilities'
+import { clubhouse, clubhouseMapsUrl } from '@/data/location'
+import { services } from '@/data/services'
 import { SOCIAL_PROFILES } from '@/data/social'
 
 /**
@@ -9,7 +11,44 @@ import { SOCIAL_PROFILES } from '@/data/social'
  * eligible for Google's event rich results.
  */
 
-import { CONTACT_EMAIL, SITE_URL } from '@/data/site'
+import { CONTACT_EMAIL, SITE_NAME, SITE_URL } from '@/data/site'
+
+/** Stable id so other nodes (WebSite, Event organizer) point at one entity. */
+const ORGANIZATION_ID = `${SITE_URL}/#organization`
+
+const austin = { '@type': 'City', name: 'Austin, TX' }
+
+/**
+ * What the club sells, as schema.org Offers. Search engines and AI
+ * assistants read this to match "photo studio rental Austin" or "music
+ * video production Austin" to the club. Built from the same data files as
+ * /facilities and /services, so a new room or service shows up here too.
+ * No prices: the site quotes on request.
+ */
+const offers = [
+  ...facilities
+    .filter(facility => facility.status !== 'planned')
+    .map(facility => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: `${facility.name} rental (${facility.model === 'monthly' ? 'monthly' : 'hourly'})`,
+        description: facility.description,
+        url: `${SITE_URL}/facilities#${facility.slug}`,
+        areaServed: austin,
+      },
+    })),
+  ...services.map(service => ({
+    '@type': 'Offer',
+    itemOffered: {
+      '@type': 'Service',
+      name: service.name,
+      description: service.blurb,
+      url: `${SITE_URL}/services#${service.slug}`,
+      areaServed: austin,
+    },
+  })),
+]
 
 const postalAddress = {
   '@type': 'PostalAddress',
@@ -25,7 +64,12 @@ const postalAddress = {
 export const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  name: 'The Good for Nothings Club',
+  '@id': ORGANIZATION_ID,
+  name: SITE_NAME,
+  // Look-alike names exist (goodfornothing.com, a clothing brand, films);
+  // the short forms plus the address keep this entity apart from them.
+  alternateName: ['Good for Nothings Club', 'GFNC'],
+  slogan: 'Good for nothings. Making everything.',
   description:
     'A creators club in Austin, TX made up of musicians, photographers, writers, filmmakers, and engineers. The clubhouse puts studios, rehearsal rooms, and workspace under one roof.',
   url: SITE_URL,
@@ -44,11 +88,36 @@ export const localBusinessJsonLd = {
   image: `${SITE_URL}/opengraph-image.png`,
   sameAs: SOCIAL_PROFILES.map(profile => profile.href),
   address: postalAddress,
+  hasMap: clubhouseMapsUrl,
+  areaServed: austin,
+  knowsAbout: [
+    'Photography',
+    'Video production',
+    'Music production',
+    'Band rehearsal space',
+    'Photo studio rental',
+    'Zines',
+    'Event production',
+    'Creative coworking',
+  ],
+  makesOffer: offers,
   geo: {
     '@type': 'GeoCoordinates',
     latitude: clubhouse.geo.lat,
     longitude: clubhouse.geo.lng,
   },
+}
+
+/** The site itself, tied to the business above (renders on every page). */
+export const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${SITE_URL}/#website`,
+  url: SITE_URL,
+  name: SITE_NAME,
+  alternateName: ['Good for Nothings Club', 'GFNC'],
+  publisher: { '@id': ORGANIZATION_ID },
+  inLanguage: 'en-US',
 }
 
 /** "7 PM" → 19; minutes tolerated ("7:30 PM" → hour 19, minute 30). */
@@ -95,7 +164,8 @@ export function eventsJsonLd(occurrences: Occurrence[]) {
         },
         organizer: {
           '@type': 'Organization',
-          name: 'The Good for Nothings Club',
+          '@id': ORGANIZATION_ID,
+          name: SITE_NAME,
           url: SITE_URL,
         },
       }

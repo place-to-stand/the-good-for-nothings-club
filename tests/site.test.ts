@@ -5,8 +5,8 @@ import {
   llmsTxt,
   notFoundMarkdown,
 } from '@/lib/markdown/site'
-import { localBusinessJsonLd } from '@/lib/structuredData'
-import { PAGE_META } from '@/data/site'
+import { localBusinessJsonLd, websiteJsonLd } from '@/lib/structuredData'
+import { PAGE_META, TITLE_SUFFIX } from '@/data/site'
 
 describe('llms.txt', () => {
   const txt = llmsTxt()
@@ -69,6 +69,10 @@ describe('page metadata', () => {
     for (const [path, meta] of Object.entries(PAGE_META)) {
       expect(meta.description.length, path).toBeLessThanOrEqual(158)
       expect(meta.title.length, path).toBeLessThanOrEqual(60)
+      // The home page title is used as is; the rest get TITLE_SUFFIX.
+      const shown =
+        path === '/' ? meta.searchTitle : meta.searchTitle + TITLE_SUFFIX
+      expect(shown.length, path).toBeLessThanOrEqual(60)
     }
   })
 })
@@ -92,5 +96,16 @@ describe('Organization JSON-LD', () => {
     })
     expect(localBusinessJsonLd.sameAs.length).toBeGreaterThanOrEqual(5)
     expect(JSON.stringify(localBusinessJsonLd)).not.toContain('undefined')
+  })
+
+  it('lists every bookable room and service as an offer', () => {
+    const names = localBusinessJsonLd.makesOffer.map(
+      offer => offer.itemOffered.name
+    )
+    expect(names).toContain('Photography')
+    expect(names.some(name => name.startsWith('Photo studio rental'))).toBe(
+      true
+    )
+    expect(websiteJsonLd.publisher['@id']).toBe(localBusinessJsonLd['@id'])
   })
 })

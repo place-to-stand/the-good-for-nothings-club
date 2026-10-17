@@ -12,7 +12,7 @@ import {
 } from '@/data/leadership'
 import { getListedMembers } from '@/lib/content'
 import { aboutCopy, aboutItems } from '@/data/about'
-import { PAGE_META } from '@/data/site'
+import { searchMeta } from '@/data/site'
 
 // Member list comes from cached Convex data (refreshed hourly, see
 // lib/content.ts); the rest of the page is static copy.
@@ -26,7 +26,7 @@ export async function generateMetadata(
   const pathname = '/about' as const
 
   return {
-    ...PAGE_META[pathname],
+    ...searchMeta(pathname),
     alternates: {
       canonical: pathname,
     },

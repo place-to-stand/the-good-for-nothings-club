@@ -5,7 +5,7 @@ import { MenuBoard, MenuBoardRow } from '@/components/MenuBoard'
 import PageShell from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
 import { services, servicesCopy } from '@/data/services'
-import { PAGE_META } from '@/data/site'
+import { searchMeta } from '@/data/site'
 
 export const ensureStatic = 'navigation'
 
@@ -17,7 +17,7 @@ export async function generateMetadata(
   const pathname = '/services' as const
 
   return {
-    ...PAGE_META[pathname],
+    ...searchMeta(pathname),
     alternates: {
       canonical: pathname,
     },

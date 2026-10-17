@@ -21,8 +21,8 @@ export default function Home() {
       </section>
       <section className='md:px-8 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
-          <h2 className='text-[44px] leading-[0.95] font-black tracking-[-0.04em] sm:text-[64px] lg:text-[96px]'>
-            {homeCopy.headline[0]}{' '}
+          <h2 className='text-center text-[44px] leading-[0.95] font-black tracking-[-0.04em] text-balance sm:text-[64px] lg:text-[88px] xl:text-[104px]'>
+            {homeCopy.headline[0]} <br className='hidden md:block' />
             <span className='font-sans-glitch font-normal tracking-normal whitespace-nowrap'>
               {homeCopy.headline[1]}
             </span>{' '}
@@ -30,19 +30,19 @@ export default function Home() {
           </h2>
         </div>
         <div className='bg-background mx-auto grid max-w-(--page-max-width) border-b-2 border-black md:border-x-2 lg:grid-cols-2'>
-          <div className='space-y-4 px-4 py-6 font-serif text-xl leading-snug sm:text-2xl md:px-12 md:py-12'>
-            <p className='pb-2 text-2xl leading-tight italic sm:text-[32px]'>
+          <div className='flex flex-col justify-center gap-4 px-4 py-6 font-sans text-lg leading-snug md:px-12 md:py-12 md:text-xl lg:text-[22px]'>
+            <p className='pb-2 font-serif text-2xl leading-tight italic sm:text-[32px] lg:text-[36px]'>
               {homeCopy.story[0]}
             </p>
             {homeCopy.story.slice(1).map(paragraph => (
               <p key={paragraph}>{paragraph}</p>
             ))}
             <p>
-              <em>{homeCopy.introName}</em> {homeCopy.introBody}
+              <strong>{homeCopy.introName}</strong> {homeCopy.introBody}
             </p>
           </div>
-          <div className='border-t-2 border-black bg-black px-4 py-6 text-white md:px-12 md:py-12 lg:border-t-0 lg:border-l-2'>
-            <p className='bg-background inline-block px-2 py-1 font-sans text-xs font-extrabold tracking-wide text-black uppercase md:text-sm'>
+          <div className='border-t-2 border-black px-4 py-6 md:px-12 md:py-12 lg:border-t-0 lg:border-l-2'>
+            <p className='inline-block bg-black px-2 py-1 font-sans text-xs font-extrabold tracking-wide text-white uppercase md:text-sm'>
               {homeCopy.proofLabel}
             </p>
             <div className='mt-4'>
@@ -54,16 +54,16 @@ export default function Home() {
             <p className='mt-5 font-sans text-[32px] leading-none font-black tracking-[-0.04em] uppercase md:text-[40px]'>
               {homeCopy.proofTitle}
             </p>
-            <p className='mt-2 font-serif text-xl leading-snug sm:text-2xl'>
+            <p className='mt-2 font-sans text-lg leading-snug md:text-xl'>
               {homeCopy.proof}
             </p>
-            <ul className='mt-4 space-y-1 font-sans text-sm text-white/75 md:text-base'>
+            <ul className='mt-4 space-y-1 font-sans text-sm text-black/70 md:text-base'>
               {homeCopy.proofCredits.map(credit => (
                 <li key={credit}>{credit}</li>
               ))}
             </ul>
             <a
-              className='group mt-5 inline-flex items-center gap-0.5 font-sans text-sm font-extrabold text-white uppercase hover:no-underline md:text-base'
+              className='group mt-5 inline-flex items-center gap-0.5 font-sans text-sm font-extrabold uppercase hover:no-underline md:text-base'
               href={homeCopy.proofUrl}
               rel='noopener noreferrer'
               target='_blank'

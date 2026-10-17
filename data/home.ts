@@ -31,6 +31,8 @@ export const homeCopy = {
   proofTitle: "It's Gone Viral",
   proof:
     'A music video for So Many Cults, made with the whole club pitching in.',
+  proofCta: 'Watch the video',
+  proofUrl: 'https://www.youtube.com/watch?v=C68S9tG0csA',
   offeringTitle: 'What we offer',
   findUsTitle: 'Find Us Online',
 }

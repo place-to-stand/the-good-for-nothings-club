@@ -46,7 +46,12 @@ export default function Home() {
             {homeCopy.tagline}
           </p>
         </div>
-        <div className='bg-background mx-auto flex max-w-(--page-max-width) flex-col gap-3 border-b-2 border-black px-4 py-6 md:flex-row md:items-center md:justify-between md:gap-8 md:border-x-2 md:px-12 md:py-10'>
+        <a
+          className='group bg-background mx-auto flex max-w-(--page-max-width) flex-col gap-3 border-b-2 border-black px-4 py-6 text-inherit transition-colors hover:bg-black/10 hover:no-underline md:flex-row md:items-center md:justify-between md:gap-8 md:border-x-2 md:px-12 md:py-10'
+          href={homeCopy.proofUrl}
+          rel='noopener noreferrer'
+          target='_blank'
+        >
           <div>
             <p className='inline-block bg-black px-2 py-1 font-sans text-xs font-extrabold tracking-wide text-white uppercase md:text-sm'>
               {homeCopy.proofLabel}
@@ -55,10 +60,16 @@ export default function Home() {
               {homeCopy.proofTitle}
             </p>
           </div>
-          <p className='font-serif text-xl leading-snug sm:text-2xl md:max-w-[34ch] md:text-right'>
-            {homeCopy.proof}
-          </p>
-        </div>
+          <div className='md:max-w-[34ch] md:text-right'>
+            <p className='font-serif text-xl leading-snug text-balance sm:text-2xl'>
+              {homeCopy.proof}
+            </p>
+            <p className='mt-3 inline-flex items-center gap-0.5 font-sans text-sm font-extrabold uppercase md:text-base'>
+              <span>{homeCopy.proofCta}</span>
+              <FaCaretRight className='size-4.5 transition-transform duration-500 group-hover:translate-x-1' />
+            </p>
+          </div>
+        </a>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black md:border-x-2'>
           <Link
             className='group flex w-full items-center justify-center gap-0.5 py-4 text-center font-sans text-sm leading-none font-extrabold uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 md:text-base'

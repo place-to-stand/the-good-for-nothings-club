@@ -10,8 +10,11 @@ import { SHOP_URL } from './site'
 export const homeCopy = {
   /** The visually hidden <h1>; the wordmark image carries it visually. */
   heading: 'Good For Nothings',
-  /** The first words under the wordmark (StoryCore primary headline). */
-  headline: 'You said you were going to make it.',
+  /**
+   * The first words under the wordmark (StoryCore primary headline), split
+   * so the HTML can set "going to" in the glitch face of the wordmark.
+   */
+  headline: ['You said you were', 'going to', 'make it.'] as const,
   /** Where the name comes from, then what the club does about it. */
   story: [
     "Somebody told you there's no money in it. The band, the film, the zine. Get a real job. Don't be a good-for-nothing.",
@@ -25,8 +28,9 @@ export const homeCopy = {
   learnMore: 'Learn More',
   /** Named proof: the latest thing the club made together. */
   proofLabel: 'Made here lately',
+  proofTitle: "It's Gone Viral",
   proof:
-    'So Many Cults made the music video for "It\'s Gone Viral", with the whole club pitching in.',
+    'A music video for So Many Cults, made with the whole club pitching in.',
   offeringTitle: 'What we offer',
   findUsTitle: 'Find Us Online',
 }

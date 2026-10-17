@@ -20,26 +20,42 @@ export default function Home() {
       </section>
       <section className='md:px-8 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
-          <h2 className='font-serif text-[40px] leading-[1.05] sm:text-[56px] lg:text-[80px]'>
-            {homeCopy.headline}
+          <h2 className='text-[44px] leading-[0.95] font-black tracking-[-0.04em] sm:text-[64px] lg:text-[96px]'>
+            {homeCopy.headline[0]}{' '}
+            <span className='font-sans-glitch font-normal tracking-normal whitespace-nowrap'>
+              {homeCopy.headline[1]}
+            </span>{' '}
+            {homeCopy.headline[2]}
           </h2>
-          <div className='mt-6 space-y-4 font-serif text-xl leading-snug sm:text-2xl md:mt-10 lg:text-[32px] lg:leading-[1.25]'>
-            {homeCopy.story.map(paragraph => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            <p>
-              <em>{homeCopy.introName}</em> {homeCopy.introBody}
+          <div className='mt-8 grid gap-6 font-serif md:mt-12 lg:grid-cols-[5fr_7fr] lg:gap-12'>
+            <p className='text-2xl leading-tight italic sm:text-[32px] lg:text-[40px]'>
+              {homeCopy.story[0]}
             </p>
+            <div className='space-y-4 text-xl leading-snug sm:text-2xl'>
+              {homeCopy.story.slice(1).map(paragraph => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+              <p>
+                <em>{homeCopy.introName}</em> {homeCopy.introBody}
+              </p>
+            </div>
           </div>
-          <p className='mt-6 font-sans text-lg font-extrabold uppercase md:mt-10 md:text-xl'>
+        </div>
+        <div className='mx-auto max-w-(--page-max-width) border-b-2 border-black bg-black px-4 py-5 text-center md:border-x-2 md:py-6'>
+          <p className='text-background font-sans text-xl font-black tracking-[-0.02em] uppercase sm:text-2xl lg:text-[32px]'>
             {homeCopy.tagline}
           </p>
         </div>
-        <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-8'>
-          <p className='font-sans text-sm font-extrabold uppercase md:text-base'>
-            {homeCopy.proofLabel}
-          </p>
-          <p className='mt-2 font-serif text-xl leading-snug sm:text-2xl'>
+        <div className='bg-background mx-auto flex max-w-(--page-max-width) flex-col gap-3 border-b-2 border-black px-4 py-6 md:flex-row md:items-center md:justify-between md:gap-8 md:border-x-2 md:px-12 md:py-10'>
+          <div>
+            <p className='inline-block bg-black px-2 py-1 font-sans text-xs font-extrabold tracking-wide text-white uppercase md:text-sm'>
+              {homeCopy.proofLabel}
+            </p>
+            <p className='mt-3 font-sans text-[32px] leading-none font-black tracking-[-0.04em] uppercase md:text-[40px]'>
+              {homeCopy.proofTitle}
+            </p>
+          </div>
+          <p className='font-serif text-xl leading-snug sm:text-2xl md:max-w-[34ch] md:text-right'>
             {homeCopy.proof}
           </p>
         </div>

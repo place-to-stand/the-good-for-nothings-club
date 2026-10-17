@@ -7,6 +7,7 @@ import { FaCaretRight } from 'react-icons/fa'
 import { homeCopy, homeOffering } from '@/data/home'
 import WidgetBoundary from '@/components/WidgetBoundary'
 import YouTubeFeature from '@/components/YouTubeFeature'
+import FillOnView from '@/components/FillOnView'
 
 export const ensureStatic = 'navigation'
 
@@ -26,19 +27,24 @@ export default function Home() {
             <span className='font-sans-glitch font-normal tracking-normal whitespace-nowrap'>
               {homeCopy.headline[1]}
             </span>{' '}
-            {homeCopy.headline[2]}
+            <FillOnView>{homeCopy.headline[2]}</FillOnView>
           </h2>
         </div>
         <div className='bg-background mx-auto grid max-w-(--page-max-width) border-b-2 border-black md:border-x-2 lg:grid-cols-2'>
-          <div className='flex flex-col justify-center gap-4 px-4 py-6 font-sans text-lg leading-snug md:px-12 md:py-12 md:text-xl lg:text-[22px]'>
-            <p className='pb-2 font-serif text-2xl leading-tight italic sm:text-[32px] lg:text-[36px]'>
-              {homeCopy.story[0]}
-            </p>
-            {homeCopy.story.slice(1).map(paragraph => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            <p>
-              <strong>{homeCopy.introName}</strong> {homeCopy.introBody}
+          <div className='flex flex-col justify-between gap-8 px-4 py-6 md:px-12 md:py-12'>
+            <div className='space-y-4 font-sans text-lg leading-snug md:text-xl lg:text-[22px]'>
+              <p className='pb-2 font-serif text-2xl leading-tight italic sm:text-[32px] lg:text-[36px]'>
+                {homeCopy.story[0]}
+              </p>
+              {homeCopy.story.slice(1).map(paragraph => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+              <p>
+                <strong>{homeCopy.introName}</strong> {homeCopy.introBody}
+              </p>
+            </div>
+            <p className='border-t-2 border-black pt-6 font-sans text-[32px] leading-[0.95] font-black tracking-[-0.04em] uppercase sm:text-[40px] lg:text-[48px]'>
+              {homeCopy.tagline}
             </p>
           </div>
           <div className='border-t-2 border-black px-4 py-6 md:px-12 md:py-12 lg:border-t-0 lg:border-l-2'>
@@ -72,11 +78,6 @@ export default function Home() {
               <FaCaretRight className='size-4.5 transition-transform duration-500 group-hover:translate-x-1' />
             </a>
           </div>
-        </div>
-        <div className='mx-auto max-w-(--page-max-width) border-b-2 border-black bg-black px-4 py-5 text-center md:border-x-2 md:py-6'>
-          <p className='text-background font-sans text-xl font-black tracking-[-0.02em] uppercase sm:text-2xl lg:text-[32px]'>
-            {homeCopy.tagline}
-          </p>
         </div>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black md:border-x-2'>
           <Link

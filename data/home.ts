@@ -24,13 +24,13 @@ export const homeCopy = {
   introName: 'The Good for Nothings Club',
   introBody:
     "is where that stops. It's a clubhouse in Austin, TX for musicians, photographers, writers, filmmakers, and engineers, with a photo and video studio, a mixing room, a band room, desks, and plenty of gear. Somebody always asks what you're working on, and the thing gets made.",
-  tagline: 'Good-for-nothings, making everything.',
+  tagline: 'Good for nothings, making everything.',
   learnMore: 'Learn More',
   /** Named proof: the latest thing the club made together. */
   proofLabel: 'Made here lately',
   proofTitle: "It's Gone Viral",
   proof:
-    'A music video for So Many Cults, made with the whole club pitching in.',
+    'The official music video for So Many Cults, premiered September 2026.',
   proofCta: 'Watch on YouTube',
   proofUrl: 'https://www.youtube.com/watch?v=C68S9tG0csA',
   proofVideoId: 'C68S9tG0csA',

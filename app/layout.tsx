@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { alegreya, rubik, rubikGlitch } from '../styles/fonts'
 import { cn } from '@/lib/utils'
-import { localBusinessJsonLd } from '@/lib/structuredData'
-import { PAGE_META } from '@/data/site'
+import { localBusinessJsonLd, websiteJsonLd } from '@/lib/structuredData'
+import { PAGE_META, TITLE_SUFFIX } from '@/data/site'
 import { Analytics } from '@vercel/analytics/react'
 
 import '../styles/globals.css'
@@ -14,8 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: {
-      template: '%s | The Good for Nothings Club',
-      default: PAGE_META['/'].title,
+      template: `%s${TITLE_SUFFIX}`,
+      default: PAGE_META['/'].searchTitle,
     },
     description: PAGE_META['/'].description,
     referrer: 'origin-when-cross-origin',
@@ -81,6 +81,12 @@ export default function RootLayout({
           type='application/ld+json'
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(localBusinessJsonLd),
+          }}
+        />
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd),
           }}
         />
         <AttributionCapture />

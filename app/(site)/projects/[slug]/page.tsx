@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import DetailFallback from '@/components/DetailFallback'
 import { getProject, getProjectsForSitemap } from '@/lib/content'
+import { TITLE_SUFFIX } from '@/data/site'
 import {
   WebProject,
   VideoProject,
@@ -47,7 +48,7 @@ export async function generateMetadata(
     mainMedia => mainMedia._type === 'image'
   ) as Image
 
-  // The root layout template appends "| The Good for Nothings Club", so club
+  // The root layout template appends TITLE_SUFFIX, so club
   // projects use the bare title (avoids the brand twice) and client projects
   // drop the template when the combined title would blow past ~60 chars.
   const isClubProject = project.clientName === 'The Good for Nothings Club'
@@ -55,7 +56,7 @@ export async function generateMetadata(
     ? project.title.trim()
     : `${project.title.trim()} – ${project.clientName}`
   const title =
-    baseTitle.length + ' | The Good for Nothings Club'.length <= 60
+    baseTitle.length + TITLE_SUFFIX.length <= 60
       ? baseTitle
       : { absolute: baseTitle }
 

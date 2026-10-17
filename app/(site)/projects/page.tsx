@@ -9,7 +9,7 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import InProgressSection from './InProgressSection'
 import CompletedSection from './CompletedSection'
 import ProjectCardSmall from '@/components/ProjectCardSmall'
-import { PAGE_META } from '@/data/site'
+import { searchMeta } from '@/data/site'
 import {
   FilteredListing,
   SelectedTypeMenu,
@@ -29,7 +29,7 @@ export async function generateMetadata(
   const pathname = '/projects' as const
 
   return {
-    ...PAGE_META[pathname],
+    ...searchMeta(pathname),
     alternates: {
       canonical: pathname,
     },

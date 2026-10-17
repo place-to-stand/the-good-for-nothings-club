@@ -11,7 +11,7 @@ import SocialMediaLinks from '@/components/SocialMediaLinks'
 import type { Metadata, ResolvingMetadata } from 'next'
 import { contactCopy } from '@/data/contact'
 import { CONTACT_EMAIL } from '@/data/site'
-import { PAGE_META } from '@/data/site'
+import { searchMeta } from '@/data/site'
 
 export const ensureStatic = 'navigation'
 
@@ -23,7 +23,7 @@ export async function generateMetadata(
   const pathname = '/contact' as const
 
   return {
-    ...PAGE_META[pathname],
+    ...searchMeta(pathname),
     alternates: {
       canonical: pathname,
     },

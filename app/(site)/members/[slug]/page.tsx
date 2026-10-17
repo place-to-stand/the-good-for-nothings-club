@@ -11,7 +11,7 @@ import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import DetailFallback from '@/components/DetailFallback'
 import ProjectCardSmall from '@/components/ProjectCardSmall'
-import { pastMemberSlugs } from '@/data/leadership'
+import { memberWebsites, pastMemberSlugs } from '@/data/leadership'
 import { FaCaretLeft } from 'react-icons/fa6'
 
 // Prerendered from cached Convex data (refreshed hourly, see
@@ -89,6 +89,8 @@ async function MemberContent({ params }: Pick<MemberProps, 'params'>) {
   // Then get the projects data using the member ID
   const projectsData = await getProjectsByMember(member._id)
 
+  const website = memberWebsites[slug]
+
   const objectPosition = `${(member.profilePicture.hotspot?.x || 1) * 100}% ${(member.profilePicture.hotspot?.y || 1) * 100}%`
 
   return (
@@ -151,6 +153,17 @@ async function MemberContent({ params }: Pick<MemberProps, 'params'>) {
                       })}
                     </p>
                   </div>
+
+                  {website && (
+                    <div className='md:col-span-2 lg:col-span-1 xl:col-span-2'>
+                      <h3 className='mb-2 text-xl font-bold'>Website</h3>
+                      <p className='text-xl'>
+                        <a href={website} className='underline'>
+                          {website.replace(/^https?:\/\//, '')}
+                        </a>
+                      </p>
+                    </div>
+                  )}
 
                   <div className='md:col-span-2 lg:col-span-1 xl:col-span-2'>
                     <h3 className='mb-2 text-xl font-bold'>Roles</h3>

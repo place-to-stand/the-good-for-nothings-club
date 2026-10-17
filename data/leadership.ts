@@ -16,6 +16,14 @@ export const leadershipSlugs = [
 
 export const pastMemberSlugs = ['eric-fenny']
 
+/**
+ * Members' own websites, shown on their profile page. A plain link from
+ * here helps search engines tie the member's site to their name.
+ */
+export const memberWebsites: Record<string, string> = {
+  'jason-desiderio': 'https://jasondesiderio.com',
+}
+
 export const leadershipCopy = {
   title: 'Founding Members',
   lead: 'The crew that runs the clubhouse.',

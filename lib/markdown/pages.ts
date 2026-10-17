@@ -66,8 +66,6 @@ export function homeMarkdown() {
     '',
     `**${homeCopy.proofLabel}: ${homeCopy.proofTitle}.** ${homeCopy.proof} ${homeCopy.proofCredits.join('. ')}. [${homeCopy.proofCta}](${homeCopy.proofUrl})`,
     '',
-    `${homeCopy.learnMore}: ${abs('/about')}`,
-    '',
     `## ${homeCopy.offeringTitle}`,
     '',
     ...homeOffering.map(card => {

@@ -48,7 +48,7 @@ export default function YouTubeFeature({
                 viewBox='0 0 24 24'
                 fill='currentColor'
                 aria-hidden='true'
-                className='ml-1 size-10 text-black md:size-12'
+                className='size-10 text-black md:size-12'
               >
                 <path d='M8 5v14l11-7z' />
               </svg>

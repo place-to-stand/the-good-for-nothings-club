@@ -90,7 +90,6 @@ describe('markdown renders every copy string from the data files', () => {
       homeCopy.proof,
       homeCopy.proofCta,
       ...homeCopy.proofCredits,
-      homeCopy.learnMore,
       homeCopy.offeringTitle,
       homeCopy.findUsTitle,
       ...homeOffering.flatMap(card => [card.title, card.body]),

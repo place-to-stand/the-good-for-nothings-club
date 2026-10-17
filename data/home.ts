@@ -25,7 +25,6 @@ export const homeCopy = {
   introBody:
     "is where that stops. It's a clubhouse in Austin, TX for musicians, photographers, writers, filmmakers, and engineers, with a photo and video studio, a mixing room, a band room, desks, and plenty of gear. Somebody always asks what you're working on, and the thing gets made.",
   tagline: 'Good for nothings, making everything.',
-  learnMore: 'Learn More',
   /** Named proof: the latest thing the club made together. */
   proofLabel: 'Made here lately',
   proofTitle: "It's Gone Viral",

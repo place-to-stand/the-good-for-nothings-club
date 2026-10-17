@@ -8,6 +8,7 @@ import { homeCopy, homeOffering } from '@/data/home'
 import WidgetBoundary from '@/components/WidgetBoundary'
 import YouTubeFeature from '@/components/YouTubeFeature'
 import FillOnView from '@/components/FillOnView'
+import { Button } from '@/components/ui/Button'
 
 export const ensureStatic = 'navigation'
 
@@ -68,25 +69,19 @@ export default function Home() {
                 <li key={credit}>{credit}</li>
               ))}
             </ul>
-            <a
-              className='group mt-5 inline-flex items-center gap-0.5 font-sans text-sm font-extrabold uppercase hover:no-underline md:text-base'
-              href={homeCopy.proofUrl}
-              rel='noopener noreferrer'
-              target='_blank'
+            <Button
+              asChild
+              className='mt-6 py-4 text-[14px] leading-none hover:no-underline'
             >
-              <span>{homeCopy.proofCta}</span>
-              <FaCaretRight className='size-4.5 transition-transform duration-500 group-hover:translate-x-1' />
-            </a>
+              <a
+                href={homeCopy.proofUrl}
+                rel='noopener noreferrer'
+                target='_blank'
+              >
+                {homeCopy.proofCta}
+              </a>
+            </Button>
           </div>
-        </div>
-        <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black md:border-x-2'>
-          <Link
-            className='group flex w-full items-center justify-center gap-0.5 py-4 text-center font-sans text-sm leading-none font-extrabold uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 md:text-base'
-            href='/about'
-          >
-            <span>{homeCopy.learnMore}</span>{' '}
-            <FaCaretRight className='size-4.5 transition-transform duration-500 group-hover:translate-x-1' />
-          </Link>
         </div>
       </section>
 

@@ -80,8 +80,13 @@ const expectAll = (markdown: string, strings: string[]) => {
 describe('markdown renders every copy string from the data files', () => {
   it('home', () => {
     expectAll(homeMarkdown(), [
+      homeCopy.headline,
+      ...homeCopy.story,
       homeCopy.introName,
       homeCopy.introBody,
+      homeCopy.tagline,
+      homeCopy.proofLabel,
+      homeCopy.proof,
       homeCopy.learnMore,
       homeCopy.offeringTitle,
       homeCopy.findUsTitle,

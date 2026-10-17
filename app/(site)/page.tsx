@@ -20,8 +20,27 @@ export default function Home() {
       </section>
       <section className='md:px-8 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
-          <p className='font-serif text-2xl leading-tight sm:text-[36px] lg:text-[48px] lg:leading-[1.16]'>
-            <em>{homeCopy.introName}</em> {homeCopy.introBody}
+          <h2 className='font-serif text-[40px] leading-[1.05] sm:text-[56px] lg:text-[80px]'>
+            {homeCopy.headline}
+          </h2>
+          <div className='mt-6 space-y-4 font-serif text-xl leading-snug sm:text-2xl md:mt-10 lg:text-[32px] lg:leading-[1.25]'>
+            {homeCopy.story.map(paragraph => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+            <p>
+              <em>{homeCopy.introName}</em> {homeCopy.introBody}
+            </p>
+          </div>
+          <p className='mt-6 font-sans text-lg font-extrabold uppercase md:mt-10 md:text-xl'>
+            {homeCopy.tagline}
+          </p>
+        </div>
+        <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-8'>
+          <p className='font-sans text-sm font-extrabold uppercase md:text-base'>
+            {homeCopy.proofLabel}
+          </p>
+          <p className='mt-2 font-serif text-xl leading-snug sm:text-2xl'>
+            {homeCopy.proof}
           </p>
         </div>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black md:border-x-2'>

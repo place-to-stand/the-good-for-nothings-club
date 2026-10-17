@@ -89,6 +89,7 @@ describe('markdown renders every copy string from the data files', () => {
       homeCopy.proofTitle,
       homeCopy.proof,
       homeCopy.proofCta,
+      ...homeCopy.proofCredits,
       homeCopy.learnMore,
       homeCopy.offeringTitle,
       homeCopy.findUsTitle,

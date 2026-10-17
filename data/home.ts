@@ -31,8 +31,14 @@ export const homeCopy = {
   proofTitle: "It's Gone Viral",
   proof:
     'A music video for So Many Cults, made with the whole club pitching in.',
-  proofCta: 'Watch the video',
+  proofCta: 'Watch on YouTube',
   proofUrl: 'https://www.youtube.com/watch?v=C68S9tG0csA',
+  proofVideoId: 'C68S9tG0csA',
+  proofCredits: [
+    'Directed and edited by Chris Donahue',
+    'Costumes, set, and choreography by Gabrielle Westfield',
+    'Produced by Dave Pokk and Jason Desiderio',
+  ],
   offeringTitle: 'What we offer',
   findUsTitle: 'Find Us Online',
 }

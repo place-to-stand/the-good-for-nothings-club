@@ -6,6 +6,7 @@ import HeroBanner from '@/components/HeroBanner'
 import { FaCaretRight } from 'react-icons/fa'
 import { homeCopy, homeOffering } from '@/data/home'
 import WidgetBoundary from '@/components/WidgetBoundary'
+import YouTubeFeature from '@/components/YouTubeFeature'
 
 export const ensureStatic = 'navigation'
 
@@ -27,18 +28,49 @@ export default function Home() {
             </span>{' '}
             {homeCopy.headline[2]}
           </h2>
-          <div className='mt-8 grid gap-6 font-serif md:mt-12 lg:grid-cols-[5fr_7fr] lg:gap-12'>
-            <p className='text-2xl leading-tight italic sm:text-[32px] lg:text-[40px]'>
+        </div>
+        <div className='bg-background mx-auto grid max-w-(--page-max-width) border-b-2 border-black md:border-x-2 lg:grid-cols-2'>
+          <div className='space-y-4 px-4 py-6 font-serif text-xl leading-snug sm:text-2xl md:px-12 md:py-12'>
+            <p className='pb-2 text-2xl leading-tight italic sm:text-[32px]'>
               {homeCopy.story[0]}
             </p>
-            <div className='space-y-4 text-xl leading-snug sm:text-2xl'>
-              {homeCopy.story.slice(1).map(paragraph => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-              <p>
-                <em>{homeCopy.introName}</em> {homeCopy.introBody}
-              </p>
+            {homeCopy.story.slice(1).map(paragraph => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+            <p>
+              <em>{homeCopy.introName}</em> {homeCopy.introBody}
+            </p>
+          </div>
+          <div className='border-t-2 border-black bg-black px-4 py-6 text-white md:px-12 md:py-12 lg:border-t-0 lg:border-l-2'>
+            <p className='bg-background inline-block px-2 py-1 font-sans text-xs font-extrabold tracking-wide text-black uppercase md:text-sm'>
+              {homeCopy.proofLabel}
+            </p>
+            <div className='mt-4'>
+              <YouTubeFeature
+                videoId={homeCopy.proofVideoId}
+                title={`So Many Cults, ${homeCopy.proofTitle}`}
+              />
             </div>
+            <p className='mt-5 font-sans text-[32px] leading-none font-black tracking-[-0.04em] uppercase md:text-[40px]'>
+              {homeCopy.proofTitle}
+            </p>
+            <p className='mt-2 font-serif text-xl leading-snug sm:text-2xl'>
+              {homeCopy.proof}
+            </p>
+            <ul className='mt-4 space-y-1 font-sans text-sm text-white/75 md:text-base'>
+              {homeCopy.proofCredits.map(credit => (
+                <li key={credit}>{credit}</li>
+              ))}
+            </ul>
+            <a
+              className='group mt-5 inline-flex items-center gap-0.5 font-sans text-sm font-extrabold text-white uppercase hover:no-underline md:text-base'
+              href={homeCopy.proofUrl}
+              rel='noopener noreferrer'
+              target='_blank'
+            >
+              <span>{homeCopy.proofCta}</span>
+              <FaCaretRight className='size-4.5 transition-transform duration-500 group-hover:translate-x-1' />
+            </a>
           </div>
         </div>
         <div className='mx-auto max-w-(--page-max-width) border-b-2 border-black bg-black px-4 py-5 text-center md:border-x-2 md:py-6'>
@@ -46,30 +78,6 @@ export default function Home() {
             {homeCopy.tagline}
           </p>
         </div>
-        <a
-          className='group bg-background mx-auto flex max-w-(--page-max-width) flex-col gap-3 border-b-2 border-black px-4 py-6 text-inherit transition-colors hover:bg-black/10 hover:no-underline md:flex-row md:items-center md:justify-between md:gap-8 md:border-x-2 md:px-12 md:py-10'
-          href={homeCopy.proofUrl}
-          rel='noopener noreferrer'
-          target='_blank'
-        >
-          <div>
-            <p className='inline-block bg-black px-2 py-1 font-sans text-xs font-extrabold tracking-wide text-white uppercase md:text-sm'>
-              {homeCopy.proofLabel}
-            </p>
-            <p className='mt-3 font-sans text-[32px] leading-none font-black tracking-[-0.04em] uppercase md:text-[40px]'>
-              {homeCopy.proofTitle}
-            </p>
-          </div>
-          <div className='md:max-w-[34ch] md:text-right'>
-            <p className='font-serif text-xl leading-snug text-balance sm:text-2xl'>
-              {homeCopy.proof}
-            </p>
-            <p className='mt-3 inline-flex items-center gap-0.5 font-sans text-sm font-extrabold uppercase md:text-base'>
-              <span>{homeCopy.proofCta}</span>
-              <FaCaretRight className='size-4.5 transition-transform duration-500 group-hover:translate-x-1' />
-            </p>
-          </div>
-        </a>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-b-2 border-black md:border-x-2'>
           <Link
             className='group flex w-full items-center justify-center gap-0.5 py-4 text-center font-sans text-sm leading-none font-extrabold uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 md:py-5 md:text-base'

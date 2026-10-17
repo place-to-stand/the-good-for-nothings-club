@@ -64,7 +64,7 @@ export function homeMarkdown() {
     '',
     homeCopy.tagline,
     '',
-    `**${homeCopy.proofLabel}: ${homeCopy.proofTitle}.** ${homeCopy.proof} [${homeCopy.proofCta}](${homeCopy.proofUrl})`,
+    `**${homeCopy.proofLabel}: ${homeCopy.proofTitle}.** ${homeCopy.proof} ${homeCopy.proofCredits.join('. ')}. [${homeCopy.proofCta}](${homeCopy.proofUrl})`,
     '',
     `${homeCopy.learnMore}: ${abs('/about')}`,
     '',

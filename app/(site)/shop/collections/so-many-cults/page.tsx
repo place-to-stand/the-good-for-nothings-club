@@ -36,9 +36,9 @@ export default async function SoManyCultsLanding() {
 
   return (
     <main>
-      {/* Branded hero: black card, glitch type. */}
+      {/* Branded hero: glitch type in the site's card. */}
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
-        <div className='mx-auto flex min-h-[50vh] max-w-(--page-max-width) flex-col items-center justify-center border-y-2 border-black bg-black px-4 py-16 text-center text-white md:border-x-2'>
+        <div className='bg-background mx-auto flex min-h-[50vh] max-w-(--page-max-width) flex-col items-center justify-center border-y-2 border-black px-4 py-16 text-center md:border-x-2'>
           <p className='text-sm font-bold tracking-[0.2em] uppercase'>
             Official merch
           </p>

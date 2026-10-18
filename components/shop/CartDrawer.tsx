@@ -41,7 +41,7 @@ export function CartButton({ className }: { className?: string }) {
       )}
       aria-label={`Open cart, ${count} ${count === 1 ? 'item' : 'items'}`}
     >
-      <BagIcon size={24} />
+      <BagIcon size={22} />
       {count > 0 && (
         <span className='flex h-6 min-w-6 items-center justify-center bg-black px-1 text-xs leading-none font-extrabold text-white'>
           {count}

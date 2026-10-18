@@ -8,7 +8,7 @@ type IconProps = { size?: number; className?: string }
 const stroke = {
   fill: 'none',
   stroke: 'currentColor',
-  strokeWidth: 2.75,
+  strokeWidth: 2.5,
   strokeLinecap: 'square',
   strokeLinejoin: 'miter',
 } as const
@@ -23,8 +23,8 @@ export function BagIcon({ size = 24, className }: IconProps) {
       className={className}
       {...stroke}
     >
-      <path d='M5.5 8.5h13v13h-13z' />
-      <path d='M9 8.5V3.5h6v5' />
+      <path d='M4.5 8.5h15v12h-15z' />
+      <path d='M8.5 8.5v-5h7v5' />
     </svg>
   )
 }
@@ -39,8 +39,8 @@ export function SearchIcon({ size = 24, className }: IconProps) {
       className={className}
       {...stroke}
     >
-      <circle cx='10' cy='10' r='6.5' />
-      <path d='m15 15 5.5 5.5' />
+      <circle cx='10.5' cy='10.5' r='6.5' />
+      <path d='m15.5 15.5 5 5' />
     </svg>
   )
 }

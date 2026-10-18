@@ -18,7 +18,7 @@ const buttonVariants = cva(
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-2 hover:underline',
+        link: 'link-line text-primary',
       },
       size: {
         default: 'h-10 px-6 py-3',
@@ -46,6 +46,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : 'button'
     return (
       <Comp
+        // Button-styled links never get the hover underline.
+        data-button={variant === 'link' ? undefined : ''}
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}

@@ -69,6 +69,45 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+  :root {
+    /* Damped spring: overshoots about 12%, then settles. */
+    --ease-spring: linear(
+      0,
+      0.039,
+      0.138,
+      0.272,
+      0.423,
+      0.575,
+      0.716,
+      0.839,
+      0.94,
+      1.017,
+      1.072,
+      1.106,
+      1.123,
+      1.126,
+      1.119,
+      1.105,
+      1.088,
+      1.068,
+      1.049,
+      1.032,
+      1.017,
+      1.005,
+      0.996,
+      0.99,
+      0.986,
+      0.984,
+      0.984,
+      0.985,
+      0.987,
+      0.989,
+      0.992,
+      0.994,
+      1
+    );
+  }
+
   *,
   ::after,
   ::before,
@@ -137,9 +176,51 @@
     @apply text-balance;
   }
 
-  a:hover {
-    @apply underline;
-    @apply underline-offset-2;
+  /*
+   * Hover underline: a 2px line that slides in from the right and settles
+   * with a little spring. It's drawn as a background so it can move and
+   * wraps with multi-line links. Links that manage their own underline
+   * (any underline / no-underline class), button-styled links, overlay
+   * links and image links opt out.
+   * .link-line adds it to text inside a card link (a.group).
+   */
+  a:not([class*='underline'], [data-button], .absolute, :has(img, svg)),
+  .link-line {
+    background-image: linear-gradient(
+      to right,
+      transparent 50%,
+      currentColor 50%
+    );
+    background-size: 200% 2px;
+    background-position: 0% 100%;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    transition: background-position 250ms ease-out;
+  }
+
+  /* Keep the line as long as the text when a link is stretched as a flex
+     or grid item. */
+  a:not([class*='underline'], [data-button], .absolute, :has(img, svg)) {
+    max-width: fit-content;
+  }
+
+  a:not([class*='underline'], [data-button], .absolute, :has(img, svg)):hover,
+  .link-line:hover,
+  .group:hover .link-line {
+    background-position: 100% 100%;
+    transition: background-position 700ms var(--ease-spring);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a:not([class*='underline'], [data-button], .absolute, :has(img, svg)),
+    .link-line,
+    a:not([class*='underline'], [data-button], .absolute, :has(img, svg)):hover,
+    .link-line:hover,
+    .group:hover .link-line {
+      transition: none;
+    }
   }
 
   button {

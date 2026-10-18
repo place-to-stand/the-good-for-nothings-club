@@ -59,8 +59,8 @@ export default function ProductCard({
         )}
       </div>
       <div className='flex flex-1 flex-col gap-1 p-3 md:p-4'>
-        <h3 className='text-base leading-tight font-extrabold tracking-[-0.01em] group-hover:underline md:text-lg'>
-          {product.title}
+        <h3 className='text-base leading-tight font-extrabold tracking-[-0.01em] md:text-lg'>
+          <span className='link-line'>{product.title}</span>
         </h3>
         <p className='mt-auto text-sm font-semibold md:text-base'>
           {priceLabel(product)}

@@ -33,8 +33,8 @@ export default function CollectionTiles({
                 </span>
               )}
             </div>
-            <h3 className='p-3 text-base font-extrabold group-hover:underline md:p-4 md:text-lg'>
-              {collection.title}
+            <h3 className='p-3 text-base font-extrabold md:p-4 md:text-lg'>
+              <span className='link-line'>{collection.title}</span>
             </h3>
           </Link>
         </li>

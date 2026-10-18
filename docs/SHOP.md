@@ -15,13 +15,17 @@ the site reads the catalog through the Storefront API (`lib/shopify`).
 
 Each has a markdown twin (`/shop.md`, `/shop/products/<handle>.md`, …).
 
+The shop bar's search box suggests products, collections and searches as
+you type, from `/api/shop/suggest?q=` (Shopify predictive search).
+
 ## A custom landing page for a collection
 
 1. Find the collection's handle: the last part of its URL in Shopify.
 2. Copy `app/(site)/shop/collections/so-many-cults/` to a folder named
    after that handle.
 3. Change `HANDLE` and design the page. Reuse `CollectionBrowser` for the
-   product grid so prices, stock and sorting keep working.
+   product grid so prices, stock and sorting keep working, or `Carousel`
+   for a single scrolling row of `ProductCard`s.
 
 Next serves the named folder instead of the standard page. Delete the
 folder to go back to the standard page.

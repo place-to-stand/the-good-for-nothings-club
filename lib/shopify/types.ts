@@ -110,3 +110,10 @@ export type Cart = {
   }
   lines: CartLine[]
 }
+
+/** Search-as-you-type results for the shop bar's search box. */
+export type PredictiveResults = {
+  queries: string[]
+  products: ProductCard[]
+  collections: { handle: string; title: string; image: ShopImage | null }[]
+}

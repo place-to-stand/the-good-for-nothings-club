@@ -44,3 +44,71 @@ export function SearchIcon({ size = 24, className }: IconProps) {
     </svg>
   )
 }
+
+export function CloseIcon({ size = 24, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox='0 0 24 24'
+      aria-hidden='true'
+      className={className}
+      {...stroke}
+    >
+      <path d='m6 6 12 12M18 6 6 18' />
+    </svg>
+  )
+}
+
+export function ArrowIcon({
+  size = 24,
+  className,
+  direction = 'right',
+}: IconProps & { direction?: 'left' | 'right' }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox='0 0 24 24'
+      aria-hidden='true'
+      className={className}
+      {...stroke}
+    >
+      {direction === 'right' ? (
+        <path d='M4 12h15M13 6l6 6-6 6' />
+      ) : (
+        <path d='M20 12H5M11 6l-6 6 6 6' />
+      )}
+    </svg>
+  )
+}
+
+export function PlusIcon({ size = 24, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox='0 0 24 24'
+      aria-hidden='true'
+      className={className}
+      {...stroke}
+    >
+      <path d='M12 5v14M5 12h14' />
+    </svg>
+  )
+}
+
+export function MinusIcon({ size = 24, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox='0 0 24 24'
+      aria-hidden='true'
+      className={className}
+      {...stroke}
+    >
+      <path d='M5 12h14' />
+    </svg>
+  )
+}

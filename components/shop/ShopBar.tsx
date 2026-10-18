@@ -1,7 +1,6 @@
 'use client'
 
 import { ChevronDown } from 'lucide-react'
-import Form from 'next/form'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useRef, useState } from 'react'
@@ -10,7 +9,7 @@ import { shopPaths } from '@/lib/shopify/format'
 import { cn } from '@/lib/utils'
 
 import { CartButton } from './CartDrawer'
-import { SearchIcon } from './icons'
+import SearchBox from './SearchBox'
 
 /**
  * Second header row on shop pages: shop links, a Collections dropdown,
@@ -26,30 +25,12 @@ export default function ShopBar({
 }: {
   collections: { handle: string; title: string }[]
 }) {
-  const pathname = usePathname()
-  const links = [
-    { href: shopPaths.home, text: 'Featured' },
-    { href: shopPaths.all, text: 'All Products' },
-  ]
-
   return (
     <div className='relative z-20 font-sans md:px-8 xl:px-16'>
       <div className='bg-background relative m-auto flex max-w-(--page-max-width) flex-col border-b-2 border-black md:border-x-2 lg:flex-row lg:items-stretch'>
         <div className='flex flex-1 items-stretch'>
           <nav aria-label='Shop' className='flex flex-1 items-center'>
-            {links.map(link => (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={pathname === link.href ? 'page' : undefined}
-                className={cn(
-                  linkClass,
-                  pathname === link.href && 'bg-black/10'
-                )}
-              >
-                {link.text}
-              </Link>
-            ))}
+            <NavLink href={shopPaths.home} text='Featured' />
             {collections.length > 0 && (
               <Dropdown
                 label='Collections'
@@ -59,15 +40,29 @@ export default function ShopBar({
                 }))}
               />
             )}
+            <NavLink href={shopPaths.all} text='All Products' />
           </nav>
           <CartButton className='border-l-2 border-black lg:hidden' />
         </div>
-        <Suspense fallback={<SearchForm />}>
-          <SearchFormWithQuery />
+        <Suspense fallback={<SearchBox className={searchClass} />}>
+          <SearchWithQuery />
         </Suspense>
         <CartButton className='hidden border-l-2 border-black lg:flex' />
       </div>
     </div>
+  )
+}
+
+function NavLink({ href, text }: { href: string; text: string }) {
+  const current = usePathname() === href
+  return (
+    <Link
+      href={href}
+      aria-current={current ? 'page' : undefined}
+      className={cn(linkClass, current && 'bg-black/10')}
+    >
+      {text}
+    </Link>
   )
 }
 
@@ -201,36 +196,10 @@ function Dropdown({
   )
 }
 
-function SearchFormWithQuery() {
-  const query = useSearchParams().get('q') ?? ''
-  return <SearchForm key={query} defaultValue={query} />
-}
+const searchClass =
+  'border-t-2 border-black lg:w-80 lg:border-t-0 lg:border-l-2'
 
-function SearchForm({ defaultValue = '' }: { defaultValue?: string }) {
-  return (
-    <Form
-      action={shopPaths.search()}
-      role='search'
-      className='flex items-stretch border-t-2 border-black lg:w-72 lg:border-t-0 lg:border-l-2'
-    >
-      <label htmlFor='shop-search' className='sr-only'>
-        Search the shop
-      </label>
-      <input
-        id='shop-search'
-        name='q'
-        type='search'
-        defaultValue={defaultValue}
-        placeholder='Search the shop'
-        className='min-w-0 flex-1 bg-transparent px-4 py-3 text-sm placeholder:text-black/50 focus:bg-white focus:outline-none'
-      />
-      <button
-        type='submit'
-        className='flex w-12 cursor-pointer items-center justify-center border-l-2 border-black hover:bg-black/10'
-        aria-label='Search'
-      >
-        <SearchIcon size={22} />
-      </button>
-    </Form>
-  )
+function SearchWithQuery() {
+  const query = useSearchParams().get('q') ?? ''
+  return <SearchBox key={query} defaultValue={query} className={searchClass} />
 }

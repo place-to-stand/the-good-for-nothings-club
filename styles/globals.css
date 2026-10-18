@@ -70,6 +70,8 @@
 */
 @layer base {
   :root {
+    /* Fast start, long soft stop. No overshoot. */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     /* Damped spring: overshoots about 12%, then settles. */
     --ease-spring: linear(
       0,
@@ -177,8 +179,8 @@
   }
 
   /*
-   * Hover underline: a 2px line that slides in from the right and settles
-   * with a little spring. It's drawn as a background so it can move and
+   * Hover underline: a 2px line that slides in from the left and eases to
+   * a stop. It's drawn as a background so it can move and
    * wraps with multi-line links. Links that manage their own underline
    * (any underline / no-underline class), button-styled links, overlay
    * links and image links opt out.
@@ -188,11 +190,11 @@
   .link-line {
     background-image: linear-gradient(
       to right,
-      transparent 50%,
-      currentColor 50%
+      currentColor 50%,
+      transparent 50%
     );
     background-size: 200% 2px;
-    background-position: 0% 100%;
+    background-position: 100% 100%;
     background-repeat: no-repeat;
     background-origin: content-box;
     -webkit-box-decoration-break: clone;
@@ -209,8 +211,8 @@
   a:not([class*='underline'], [data-button], .absolute, :has(img, svg)):hover,
   .link-line:hover,
   .group:hover .link-line {
-    background-position: 100% 100%;
-    transition: background-position 700ms var(--ease-spring);
+    background-position: 0% 100%;
+    transition: background-position 450ms var(--ease-out-expo);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -365,6 +367,25 @@
 ::view-transition-image-pair(.morph) {
   animation-name: via-blur;
 }
+/* Cart badge pop and the floating cart's slide-in (both use the spring). */
+@keyframes badge-pop {
+  from {
+    transform: scale(0.3);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes cart-float-in {
+  from {
+    transform: translateX(calc(100% + 3rem));
+  }
+  to {
+    transform: none;
+  }
+}
+
 @keyframes via-blur {
   30% {
     filter: blur(3px);

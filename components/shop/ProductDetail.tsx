@@ -1,7 +1,13 @@
 'use client'
 
+import 'yet-another-react-lightbox/styles.css'
+import 'yet-another-react-lightbox/plugins/counter.css'
+
 import Image from 'next/image'
-import { useState, type ReactNode } from 'react'
+import { useMemo, useRef, useState, type ReactNode } from 'react'
+import Lightbox from 'yet-another-react-lightbox'
+import Counter from 'yet-another-react-lightbox/plugins/counter'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 
 import { Button } from '@/components/ui/Button'
 import { formatMoney } from '@/lib/shopify/format'
@@ -9,6 +15,7 @@ import type { Product, ProductVariant, ShopImage } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
 
 import { useCart } from './CartProvider'
+import { ArrowIcon, CloseIcon } from './icons'
 
 type Selection = Record<string, string>
 
@@ -172,6 +179,10 @@ export default function ProductDetail({
   )
 }
 
+/** Shopify's CDN resizes on the fly: ask for a width, keep other params. */
+const sized = (url: string, width: number) =>
+  `${url}${url.includes('?') ? '&' : '?'}width=${width}`
+
 function Gallery({
   images,
   current,
@@ -183,9 +194,32 @@ function Gallery({
   title: string
   onSelect: (url: string) => void
 }) {
+  const [lightboxIndex, setLightboxIndex] = useState(-1)
+  const viewed = useRef(0)
+  // Stable slides: a new array would send the lightbox back to the start.
+  const slides = useMemo(
+    () =>
+      images.map(image => ({
+        src: sized(image.url, 2400),
+        alt: image.altText ?? title,
+        width: image.width ?? undefined,
+        height: image.height ?? undefined,
+      })),
+    [images, title]
+  )
+  const currentIndex = Math.max(
+    0,
+    images.findIndex(i => i.url === current?.url)
+  )
+
   return (
     <div>
-      <div className='relative aspect-square border-2 border-black bg-white'>
+      <button
+        type='button'
+        onClick={() => current && setLightboxIndex(currentIndex)}
+        aria-label={`Enlarge image ${currentIndex + 1} of ${images.length}`}
+        className='group relative block aspect-square w-full cursor-zoom-in overflow-hidden border-2 border-black bg-white'
+      >
         {current && (
           <Image
             src={current.url}
@@ -193,10 +227,10 @@ function Gallery({
             fill
             priority
             sizes='(min-width: 768px) 45vw, 100vw'
-            className='object-contain'
+            className='object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03]'
           />
         )}
-      </div>
+      </button>
       {images.length > 1 && (
         <ul className='mt-3 grid grid-cols-5 gap-2'>
           {images.map((image, i) => (
@@ -225,6 +259,42 @@ function Gallery({
           ))}
         </ul>
       )}
+      <Lightbox
+        open={lightboxIndex > -1}
+        index={lightboxIndex}
+        // Leave the page showing whichever photo was last viewed.
+        on={{
+          view: ({ index }) => {
+            viewed.current = index
+          },
+        }}
+        close={() => {
+          const last = images[viewed.current]
+          if (last) onSelect(last.url)
+          setLightboxIndex(-1)
+        }}
+        plugins={[Counter, Zoom]}
+        slides={slides}
+        carousel={{ finite: images.length < 3 }}
+        controller={{ closeOnBackdropClick: true }}
+        counter={{
+          container: {
+            className: 'font-sans',
+            style: { top: 'auto', bottom: 0, left: 'auto', right: 0 },
+          },
+        }}
+        render={{
+          iconPrev: () => <ArrowIcon direction='left' size={32} />,
+          iconNext: () => <ArrowIcon size={32} />,
+          iconClose: () => <CloseIcon size={28} />,
+          iconZoomIn: () => null,
+          iconZoomOut: () => null,
+          ...(images.length < 2 && {
+            buttonPrev: () => null,
+            buttonNext: () => null,
+          }),
+        }}
+      />
     </div>
   )
 }

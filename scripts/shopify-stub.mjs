@@ -217,6 +217,18 @@ const answers = {
     )
     return { search: { totalCount: hits.length, ...edges(hits) } }
   },
+  predictiveSearch: v => {
+    const q = v.query.toLowerCase()
+    return {
+      predictiveSearch: {
+        queries: [{ text: v.query }],
+        products: products.filter(p => p.title.toLowerCase().includes(q)).slice(0, 5),
+        collections: collections
+          .filter(c => c.title.toLowerCase().includes(q))
+          .map(({ handle, title, image }) => ({ handle, title, image })),
+      },
+    }
+  },
   getCart: v => ({ cart: cartView(v.cartId) }),
   createCart: v => {
     const id = `gid://shopify/Cart/stub-${Date.now()}`

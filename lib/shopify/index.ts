@@ -9,6 +9,7 @@ import {
   getProductQuery,
   getProductRecommendationsQuery,
   getProductsQuery,
+  predictiveSearchQuery,
   removeFromCartMutation,
   searchProductsQuery,
   updateCartMutation,
@@ -17,6 +18,7 @@ import type {
   Cart,
   Collection,
   CollectionWithProducts,
+  PredictiveResults,
   Product,
   ProductCard,
   ShopImage,
@@ -252,6 +254,34 @@ export async function searchProducts(query: string): Promise<ProductCard[]> {
   return nodes(data.search)
     .filter((node): node is RawProductCard => 'handle' in node)
     .map(reshapeCard)
+}
+
+/**
+ * Search-as-you-type suggestions: matching searches, products and
+ * collections. Uses Shopify's predictive search, so Search & Discovery
+ * synonyms apply here too.
+ */
+export async function predictiveSearch(
+  query: string
+): Promise<PredictiveResults> {
+  'use cache'
+  cached()
+  const empty = { queries: [], products: [], collections: [] }
+  if (!isShopifyConfigured() || !query.trim()) return empty
+  const data = await shopifyFetch<{
+    predictiveSearch: {
+      queries: { text: string }[]
+      products: RawProductCard[]
+      collections: PredictiveResults['collections']
+    } | null
+  }>({ query: predictiveSearchQuery, variables: { query } })
+  const result = data.predictiveSearch
+  if (!result) return empty
+  return {
+    queries: result.queries.map(q => q.text),
+    products: result.products.map(reshapeCard),
+    collections: result.collections,
+  }
 }
 
 // Cart. Never cached: each cart belongs to one buyer.

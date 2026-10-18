@@ -10,6 +10,10 @@ export const shopCopy = {
   /** Collection whose products fill the shop home grid. */
   featuredCollection: 'bestsellers',
   collectionsTitle: 'Collections',
+  justDropped: 'Just dropped',
+  newTitle: 'New arrivals',
+  shopIt: 'Shop it',
+  seeAll: 'See all',
   shopAll: 'Shop all',
   offline:
     'The shop is taking a nap. Check back soon, or email us about anything you saw.',

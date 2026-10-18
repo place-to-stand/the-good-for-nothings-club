@@ -326,3 +326,30 @@ export const removeFromCartMutation = /* GraphQL */ `
   }
   ${cart}
 `
+
+export const predictiveSearchQuery = /* GraphQL */ `
+  query predictiveSearch($query: String!) {
+    predictiveSearch(
+      query: $query
+      limit: 5
+      limitScope: EACH
+      types: [QUERY, PRODUCT, COLLECTION]
+      unavailableProducts: LAST
+    ) {
+      queries {
+        text
+      }
+      products {
+        ...productCard
+      }
+      collections {
+        handle
+        title
+        image {
+          ...image
+        }
+      }
+    }
+  }
+  ${productCard}
+`

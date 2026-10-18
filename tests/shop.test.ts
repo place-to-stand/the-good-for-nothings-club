@@ -13,6 +13,7 @@ import {
   getCollection,
   getProduct,
   isShopifyConfigured,
+  predictiveSearch,
   searchProducts,
 } from '@/lib/shopify'
 import { compareAtLabel, formatMoney, priceLabel } from '@/lib/shopify/format'
@@ -228,6 +229,28 @@ describe('Storefront API client', () => {
     const all = await getCollection('all')
     expect(all?.title).toBe('All Products')
     expect(all?.products.map(p => p.handle)).toEqual(['monster-tee'])
+  })
+
+  it('flattens predictive search and skips blank queries', async () => {
+    expect(await predictiveSearch('  ')).toEqual({
+      queries: [],
+      products: [],
+      collections: [],
+    })
+    expect(fetchMock).not.toHaveBeenCalled()
+    respond({
+      predictiveSearch: {
+        queries: [{ text: 'tee shirt' }],
+        products: [{ ...card, images: { edges: [] } }],
+        collections: [
+          { handle: 'so-many-cults', title: 'So Many Cults', image: null },
+        ],
+      },
+    })
+    const result = await predictiveSearch('tee')
+    expect(result.queries).toEqual(['tee shirt'])
+    expect(result.products.map(p => p.handle)).toEqual(['monster-tee'])
+    expect(result.collections[0].handle).toBe('so-many-cults')
   })
 
   it('keeps only products from search results', async () => {

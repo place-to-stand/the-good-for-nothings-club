@@ -14,7 +14,6 @@ import {
 import { Menu } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { Button } from './ui/Button'
-import { CartButton } from './shop/CartDrawer'
 
 // The wordmark is the Home link; the Join chip is a second door to
 // /membership. Projects stays out of the nav for now (route still live).
@@ -103,11 +102,6 @@ export default function Header() {
         </nav>
 
         <div className='flex-1 lg:hidden' />
-
-        {/* Shop pages carry the cart in the shop bar below. */}
-        {!pathname.startsWith('/shop') && (
-          <CartButton className='border-l-2 border-black' />
-        )}
 
         {/* Membership CTA */}
         <div className='flex items-center px-3 md:px-4 xl:px-5'>

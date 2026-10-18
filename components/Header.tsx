@@ -106,7 +106,7 @@ export default function Header() {
 
         {/* Shop pages carry the cart in the shop bar below. */}
         {!pathname.startsWith('/shop') && (
-          <CartButton className='w-14 border-l-2 border-black' />
+          <CartButton className='border-l-2 border-black' />
         )}
 
         {/* Membership CTA */}

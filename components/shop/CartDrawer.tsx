@@ -1,6 +1,6 @@
 'use client'
 
-import { Minus, Plus, ShoppingBag } from 'lucide-react'
+import { Minus, Plus } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -19,6 +19,7 @@ import type { CartLine } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
 
 import { useCart } from './CartProvider'
+import { BagIcon } from './icons'
 
 /**
  * Header cart button. Shows on shop pages, and anywhere else once the
@@ -35,14 +36,14 @@ export function CartButton({ className }: { className?: string }) {
       type='button'
       onClick={() => setOpen(true)}
       className={cn(
-        'relative flex cursor-pointer items-center justify-center transition-colors hover:bg-black/10 active:bg-black/20',
+        'flex min-w-14 cursor-pointer items-center justify-center gap-1.5 px-3 transition-colors hover:bg-black/10 active:bg-black/20',
         className
       )}
       aria-label={`Open cart, ${count} ${count === 1 ? 'item' : 'items'}`}
     >
-      <ShoppingBag height='26px' width='26px' />
+      <BagIcon size={24} />
       {count > 0 && (
-        <span className='absolute top-2 right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-black px-1 text-[11px] leading-none font-bold text-white'>
+        <span className='flex h-6 min-w-6 items-center justify-center bg-black px-1 text-xs leading-none font-extrabold text-white'>
           {count}
         </span>
       )}

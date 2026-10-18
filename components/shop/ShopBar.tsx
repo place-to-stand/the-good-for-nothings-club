@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronDown, Search } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import Form from 'next/form'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
@@ -10,6 +10,7 @@ import { shopPaths } from '@/lib/shopify/format'
 import { cn } from '@/lib/utils'
 
 import { CartButton } from './CartDrawer'
+import { SearchIcon } from './icons'
 
 /**
  * Second header row on shop pages: shop links, a Collections dropdown,
@@ -18,7 +19,7 @@ import { CartButton } from './CartDrawer'
  */
 
 const linkClass =
-  'shrink-0 px-2 py-3 text-xs font-extrabold tracking-[0.06em] whitespace-nowrap uppercase transition-colors hover:bg-black/10 hover:no-underline xl:px-3 xl:text-sm'
+  'shrink-0 px-3 py-3 text-xs font-extrabold tracking-[0.06em] whitespace-nowrap uppercase transition-colors hover:bg-black/10 hover:no-underline xl:px-4 xl:text-sm'
 
 export default function ShopBar({
   collections,
@@ -27,7 +28,7 @@ export default function ShopBar({
 }) {
   const pathname = usePathname()
   const links = [
-    { href: shopPaths.home, text: 'Shop' },
+    { href: shopPaths.home, text: 'Featured' },
     { href: shopPaths.all, text: 'All' },
   ]
 
@@ -35,10 +36,7 @@ export default function ShopBar({
     <div className='relative z-20 font-sans md:px-8 xl:px-16'>
       <div className='bg-background relative m-auto flex max-w-(--page-max-width) flex-col border-b-2 border-black md:border-x-2 lg:flex-row lg:items-stretch'>
         <div className='flex flex-1 items-stretch'>
-          <nav
-            aria-label='Shop'
-            className='flex flex-1 items-center px-2 lg:px-4'
-          >
+          <nav aria-label='Shop' className='flex flex-1 items-center'>
             {links.map(link => (
               <Link
                 key={link.href}
@@ -62,12 +60,12 @@ export default function ShopBar({
               />
             )}
           </nav>
-          <CartButton className='w-14 border-l-2 border-black lg:hidden' />
+          <CartButton className='border-l-2 border-black lg:hidden' />
         </div>
         <Suspense fallback={<SearchForm />}>
           <SearchFormWithQuery />
         </Suspense>
-        <CartButton className='hidden w-14 border-l-2 border-black lg:flex' />
+        <CartButton className='hidden border-l-2 border-black lg:flex' />
       </div>
     </div>
   )
@@ -114,6 +112,7 @@ function Dropdown({
       >
         {label}
         <ChevronDown
+          strokeWidth={3}
           size={14}
           className={cn('transition-transform', open && 'rotate-180')}
         />
@@ -169,7 +168,7 @@ function SearchForm({ defaultValue = '' }: { defaultValue?: string }) {
         className='flex w-12 cursor-pointer items-center justify-center border-l-2 border-black hover:bg-black/10'
         aria-label='Search'
       >
-        <Search size={18} />
+        <SearchIcon size={20} />
       </button>
     </Form>
   )

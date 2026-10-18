@@ -104,7 +104,10 @@ export default function Header() {
 
         <div className='flex-1 lg:hidden' />
 
-        <CartButton className='w-14 border-l-2 border-black' />
+        {/* Shop pages carry the cart in the shop bar below. */}
+        {!pathname.startsWith('/shop') && (
+          <CartButton className='w-14 border-l-2 border-black' />
+        )}
 
         {/* Membership CTA */}
         <div className='flex items-center px-3 md:px-4 xl:px-5'>

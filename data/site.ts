@@ -2,7 +2,9 @@
 export const SITE_URL = 'https://thegoodfornothings.club'
 export const SITE_NAME = 'The Good for Nothings Club'
 export const CONTACT_EMAIL = 'hello@thegoodfornothings.club'
-export const SHOP_URL = 'https://shop.thegoodfornothings.club/'
+/** The shop lives on this site at /shop (Shopify runs checkout only). */
+export const SHOP_PATH = '/shop'
+export const SHOP_URL = `${SITE_URL}${SHOP_PATH}`
 
 /**
  * Appended to every page's <title> except the home page (app/layout.tsx

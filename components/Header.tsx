@@ -14,6 +14,7 @@ import {
 import { Menu } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { Button } from './ui/Button'
+import { CartButton } from './shop/CartDrawer'
 
 // The wordmark is the Home link; the Join chip is a second door to
 // /membership. Projects stays out of the nav for now (route still live).
@@ -22,17 +23,14 @@ const NAV_ITEMS = [
   { href: '/services', text: 'Services' },
   { href: '/events', text: 'Events' },
   { href: '/membership', text: 'Membership' },
-  {
-    href: 'https://shop.thegoodfornothings.club/',
-    text: 'Shop',
-    external: true,
-  },
+  { href: '/shop', text: 'Shop' },
   { href: '/about', text: 'About' },
   { href: '/contact', text: 'Contact' },
 ]
 
-const externalLinkProps = (item: { external?: boolean }) =>
-  item.external ? { target: '_blank', rel: 'noopener noreferrer' } : undefined
+// Shop links stay lit on every /shop page, not just /shop itself.
+const isCurrent = (pathname: string, href: string) =>
+  href === '/shop' ? pathname.startsWith('/shop') : pathname === href
 
 const SHEET_ITEMS = [{ href: '/', text: 'Home' }, ...NAV_ITEMS]
 
@@ -57,8 +55,9 @@ export default function Header() {
                     <ScrollTopLink
                       href={item.href}
                       className='block'
-                      aria-current={pathname === item.href ? 'page' : undefined}
-                      {...externalLinkProps(item)}
+                      aria-current={
+                        isCurrent(pathname, item.href) ? 'page' : undefined
+                      }
                     >
                       {item.text}
                     </ScrollTopLink>
@@ -85,14 +84,13 @@ export default function Header() {
         {/* Desktop nav */}
         <nav className='hidden flex-1 items-center px-2 lg:flex xl:gap-1 xl:px-4'>
           {NAV_ITEMS.map(item => {
-            const isActive = pathname === item.href
+            const isActive = isCurrent(pathname, item.href)
 
             return (
               <ScrollTopLink
                 key={item.href}
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
-                {...externalLinkProps(item)}
                 className={cn(
                   'px-2 py-3 text-sm font-extrabold tracking-[0.06em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 xl:px-3 xl:text-[15px]',
                   isActive && 'bg-black/10'
@@ -105,6 +103,8 @@ export default function Header() {
         </nav>
 
         <div className='flex-1 lg:hidden' />
+
+        <CartButton className='w-14 border-l-2 border-black' />
 
         {/* Membership CTA */}
         <div className='flex items-center px-3 md:px-4 xl:px-5'>

@@ -44,6 +44,10 @@ const PAGE_FILES = [
   'app/(site)/events/page.tsx',
   'app/(site)/projects/page.tsx',
   'app/(site)/not-found.tsx',
+  'app/(site)/shop/page.tsx',
+  'app/(site)/shop/search/page.tsx',
+  'app/(site)/shop/collections/[handle]/page.tsx',
+  'app/(site)/shop/products/[handle]/page.tsx',
 ]
 const PROSE_LIMIT = 40
 

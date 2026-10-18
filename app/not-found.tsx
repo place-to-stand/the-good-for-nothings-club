@@ -1,5 +1,7 @@
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
+import CartDrawer from '@/components/shop/CartDrawer'
+import CartProvider from '@/components/shop/CartProvider'
 import { copyrightYear } from '@/lib/copyrightYear'
 
 import SiteNotFound from './(site)/not-found'
@@ -14,10 +16,11 @@ export { metadata } from './(site)/not-found'
  */
 export default async function NotFound() {
   return (
-    <>
+    <CartProvider>
       <Header />
       <SiteNotFound />
       <Footer year={await copyrightYear()} />
-    </>
+      <CartDrawer />
+    </CartProvider>
   )
 }

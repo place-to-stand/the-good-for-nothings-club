@@ -1,4 +1,4 @@
-import { SHOP_URL } from './site'
+import { SHOP_PATH } from './site'
 
 /**
  * Homepage copy. Plain, version-controlled data (no CMS). Edit directly.
@@ -49,9 +49,8 @@ export const homeOffering: HomeOffering[] = [
     body: 'Join the club, at the level that makes sense for you.',
   },
   {
-    href: SHOP_URL,
+    href: SHOP_PATH,
     title: 'Shop',
     body: 'Works and merch from members and friends of the club.',
-    external: true,
   },
 ]

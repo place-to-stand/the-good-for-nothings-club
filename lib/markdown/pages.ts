@@ -21,7 +21,6 @@ import { clubhouseAddressLine, clubhouseMapsUrl } from '@/data/location'
 import {
   CONTACT_EMAIL,
   PAGE_META,
-  SHOP_URL,
   SITE_NAME,
   SITE_URL,
 } from '@/data/site'

@@ -1,4 +1,4 @@
-import { SHOP_URL } from './site'
+import { SHOP_PATH } from './site'
 
 /**
  * About page copy. Plain, version-controlled data (no CMS). Edit directly.
@@ -46,10 +46,9 @@ export const aboutItems: AboutItem[] = [
     rest: ' at three levels: member, associate, and friend.',
   },
   {
-    href: SHOP_URL,
+    href: SHOP_PATH,
     link: 'The shop',
     rest: ' carries works and merch from members and friends of the club.',
-    external: true,
   },
   {
     href: '/contact',

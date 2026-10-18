@@ -1,4 +1,7 @@
 import { MetadataRoute } from 'next'
+import { HIDDEN_COLLECTION_TILES } from '@/data/shop'
+import { SHOPIFY_TAG, getCollections, getProducts } from '@/lib/shopify'
+import { shopPaths } from '@/lib/shopify/format'
 import { cacheLife, cacheTag } from 'next/cache'
 import {
   CONTENT_TAG,
@@ -67,12 +70,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // captured when the entry is built.
   'use cache'
   cacheLife('hours')
-  cacheTag(CONTENT_TAG)
+  cacheTag(CONTENT_TAG, SHOPIFY_TAG)
 
-  const [projectsData, membersData] = await Promise.all([
+  const [projectsData, membersData, collections, products] = await Promise.all([
     getProjectsForSitemap(),
     getMembersForSitemap(),
+    // The sitemap shouldn't fail because Shopify did.
+    getCollections().catch(() => []),
+    getProducts().catch(() => []),
   ])
+
+  const shopPages: MetadataRoute.Sitemap = [
+    {
+      url: `https://thegoodfornothings.club${shopPaths.home}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    ...collections
+      .filter(c => !HIDDEN_COLLECTION_TILES.includes(c.handle))
+      .map(c => ({
+        url: `https://thegoodfornothings.club${shopPaths.collection(c.handle)}`,
+        lastModified: new Date(c.updatedAt),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      })),
+    ...products.map(p => ({
+      url: `https://thegoodfornothings.club${shopPaths.product(p.handle)}`,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    })),
+  ]
 
   const projectPages: MetadataRoute.Sitemap = projectsData.map(project => ({
     url: `https://thegoodfornothings.club/projects/${project.slug.current}`,
@@ -94,6 +122,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     servicesPage,
     eventsPage,
     membershipPage,
+    ...shopPages,
     projectsIndexPage,
     ...projectPages,
     ...memberPages,

@@ -152,44 +152,47 @@ export default function SearchBox({
       <label htmlFor={`${id}-input`} className='sr-only'>
         Search the shop
       </label>
-      <input
-        ref={inputRef}
-        id={`${id}-input`}
-        name='q'
-        type='search'
-        role='combobox'
-        aria-expanded={expanded}
-        aria-controls={listId}
-        aria-autocomplete='list'
-        aria-activedescendant={
-          expanded && active >= 0 ? optionId(active) : undefined
-        }
-        autoComplete='off'
-        value={value}
-        onChange={e => {
-          setValue(e.target.value)
-          setActive(-1)
-          setOpen(true)
-        }}
-        onFocus={() => setOpen(true)}
-        onKeyDown={onKeyDown}
-        placeholder='Search the shop'
-        className='min-w-0 flex-1 bg-transparent px-4 py-3 text-sm placeholder:text-black/50 focus:bg-white focus:outline-none [&::-webkit-search-cancel-button]:appearance-none'
-      />
-      {value && (
-        <button
-          type='button'
-          aria-label='Clear search'
-          onClick={() => {
-            setValue('')
-            setResults(EMPTY)
-            inputRef.current?.focus()
+      {/* Input and clear button share one field: white while either has focus. */}
+      <div className='flex min-w-0 flex-1 focus-within:bg-white'>
+        <input
+          ref={inputRef}
+          id={`${id}-input`}
+          name='q'
+          type='search'
+          role='combobox'
+          aria-expanded={expanded}
+          aria-controls={listId}
+          aria-autocomplete='list'
+          aria-activedescendant={
+            expanded && active >= 0 ? optionId(active) : undefined
+          }
+          autoComplete='off'
+          value={value}
+          onChange={e => {
+            setValue(e.target.value)
+            setActive(-1)
+            setOpen(true)
           }}
-          className='flex w-10 items-center justify-center bg-white hover:bg-black/10'
-        >
-          <CloseIcon size={16} />
-        </button>
-      )}
+          onFocus={() => setOpen(true)}
+          onKeyDown={onKeyDown}
+          placeholder='Search the shop'
+          className='min-w-0 flex-1 bg-transparent px-4 py-3 text-sm placeholder:text-black/50 focus:outline-none [&::-webkit-search-cancel-button]:appearance-none'
+        />
+        {value && (
+          <button
+            type='button'
+            aria-label='Clear search'
+            onClick={() => {
+              setValue('')
+              setResults(EMPTY)
+              inputRef.current?.focus()
+            }}
+            className='flex w-10 cursor-pointer items-center justify-center hover:bg-black/10 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-black'
+          >
+            <CloseIcon size={16} />
+          </button>
+        )}
+      </div>
       <button
         type='submit'
         className='flex w-14 shrink-0 cursor-pointer items-center justify-center border-l-2 border-black hover:bg-black/10'

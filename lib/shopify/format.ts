@@ -41,3 +41,45 @@ export const shopPaths = {
   search: (query?: string) =>
     query ? `/shop/search?q=${encodeURIComponent(query)}` : '/shop/search',
 }
+
+const ENTITIES: Record<string, string> = {
+  amp: '&',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  apos: "'",
+  nbsp: ' ',
+  times: '×',
+  ndash: '–',
+  mdash: '—',
+  lsquo: '‘',
+  rsquo: '’',
+  ldquo: '“',
+  rdquo: '”',
+  hellip: '…',
+  deg: '°',
+  reg: '®',
+  copy: '©',
+  trade: '™',
+}
+
+/**
+ * Plain text from Shopify's description HTML. Shopify's own `description`
+ * field glues block elements together ("sidesOVERALL SIZE"), so tags become
+ * spaces here before they're stripped.
+ */
+export function htmlToText(html: string) {
+  return html
+    .replace(/<(script|style)[\s\S]*?<\/\1>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (match, code: string) => {
+      if (code[0] !== '#') return ENTITIES[code.toLowerCase()] ?? match
+      const n =
+        code[1] === 'x' || code[1] === 'X'
+          ? parseInt(code.slice(2), 16)
+          : parseInt(code.slice(1), 10)
+      return Number.isFinite(n) ? String.fromCodePoint(n) : match
+    })
+    .replace(/\s+/g, ' ')
+    .trim()
+}

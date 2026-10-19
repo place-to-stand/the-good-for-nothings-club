@@ -26,6 +26,7 @@ import type {
   ShopImage,
 } from './types'
 import { readFilters, type RawFilter } from './filters'
+import { htmlToText } from './format'
 
 /**
  * Shopify Storefront API client for the shop pages (/shop).
@@ -135,7 +136,7 @@ function reshapeCard(raw: RawProductCard): ProductCard {
 function reshapeProduct(raw: RawProduct): Product {
   return {
     ...reshapeCard(raw),
-    description: raw.description,
+    description: htmlToText(raw.descriptionHtml ?? '') || raw.description,
     descriptionHtml: raw.descriptionHtml,
     updatedAt: raw.updatedAt,
     seo: raw.seo,

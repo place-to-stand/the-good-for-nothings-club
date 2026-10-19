@@ -28,7 +28,7 @@ export async function collectionMetadata(
     description: clip(
       collection.seo.description ||
         collection.description ||
-        `${collection.title} at the ${SITE_NAME} shop.`
+        `Shop ${collection.title} from ${SITE_NAME}, a creators club in Austin, TX.`
     ),
     alternates: { canonical: url },
     openGraph: {
@@ -58,6 +58,33 @@ export async function productMetadata(
 }
 
 /**
+ * Print-on-demand apps set themselves as the vendor. They make the goods,
+ * but the brand people know is the club's, so they don't count as one.
+ */
+const FULFILLERS = new Set(['printful', 'up the wall'])
+
+export function brandName(vendor: string) {
+  const name = vendor.trim()
+  return name && !FULFILLERS.has(name.toLowerCase()) ? name : SITE_NAME
+}
+
+/** schema.org BreadcrumbList: Shop › … › this page. */
+export function breadcrumbJsonLd(trail: { name: string; path: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [{ name: 'Shop', path: shopPaths.home }, ...trail].map(
+      (crumb, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: crumb.name,
+        item: `${SITE_URL}${crumb.path}`,
+      })
+    ),
+  }
+}
+
+/**
  * schema.org Product with one Offer per variant, for Google's product
  * results and AI shopping answers.
  */
@@ -70,7 +97,7 @@ export function productJsonLd(product: Product) {
     description: product.description,
     url,
     image: product.images.map(image => image.url),
-    brand: { '@type': 'Brand', name: product.vendor || SITE_NAME },
+    brand: { '@type': 'Brand', name: brandName(product.vendor) },
     offers: product.variants.map(variant => ({
       '@type': 'Offer',
       name: variant.title === 'Default Title' ? product.title : variant.title,

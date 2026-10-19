@@ -23,7 +23,13 @@ import {
   mergeFilters,
   readFilters,
 } from '@/lib/shopify/filters'
-import { clip, productJsonLd } from '@/lib/shopify/metadata'
+import {
+  brandName,
+  breadcrumbJsonLd,
+  clip,
+  productJsonLd,
+} from '@/lib/shopify/metadata'
+import { htmlToText } from '@/lib/shopify/format'
 import type { Product, ProductCard } from '@/lib/shopify/types'
 
 const usd = (amount: string) => ({ amount, currencyCode: 'USD' })
@@ -379,6 +385,43 @@ describe('merging filters', () => {
     expect(merged.map(f => f.id)).toEqual([
       'filter.v.option.size',
       'filter.v.price',
+    ])
+  })
+})
+
+describe('shop search text', () => {
+  it('keeps words apart when Shopify description HTML has block tags', () => {
+    expect(
+      htmlToText(
+        '<p>PRINT SIZE: 8&quot; &times; 12&quot;</p><p>OVERALL SIZE: 10&#8243;</p>'
+      )
+    ).toBe('PRINT SIZE: 8" × 12" OVERALL SIZE: 10″')
+  })
+
+  it('uses the club as the brand for print-on-demand vendors', () => {
+    expect(brandName('Up The Wall')).toBe('The Good for Nothings Club')
+    expect(brandName('Printful')).toBe('The Good for Nothings Club')
+    expect(brandName('')).toBe('The Good for Nothings Club')
+    expect(brandName('So Many Cults')).toBe('So Many Cults')
+  })
+
+  it('builds breadcrumbs from the shop home', () => {
+    const ld = breadcrumbJsonLd([
+      { name: 'Monster T-shirt', path: '/shop/products/monster-tee' },
+    ])
+    expect(ld.itemListElement).toEqual([
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Shop',
+        item: 'https://thegoodfornothings.club/shop',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Monster T-shirt',
+        item: 'https://thegoodfornothings.club/shop/products/monster-tee',
+      },
     ])
   })
 })

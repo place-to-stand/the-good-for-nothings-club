@@ -13,7 +13,12 @@ import {
   getProductRecommendations,
   getProducts,
 } from '@/lib/shopify'
-import { productJsonLd, productMetadata } from '@/lib/shopify/metadata'
+import { shopPaths } from '@/lib/shopify/format'
+import {
+  breadcrumbJsonLd,
+  productJsonLd,
+  productMetadata,
+} from '@/lib/shopify/metadata'
 
 export const ensureStatic = 'navigation'
 
@@ -61,10 +66,12 @@ async function ProductContent({ params }: Pick<Props, 'params'>) {
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd(product)).replace(
-            /</g,
-            '\\u003c'
-          ),
+          __html: JSON.stringify([
+            productJsonLd(product),
+            breadcrumbJsonLd([
+              { name: product.title, path: shopPaths.product(product.handle) },
+            ]),
+          ]).replace(/</g, '\\u003c'),
         }}
       />
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>

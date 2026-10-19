@@ -10,7 +10,8 @@ import {
   getCollection,
   getCollections,
 } from '@/lib/shopify'
-import { collectionMetadata } from '@/lib/shopify/metadata'
+import { shopPaths } from '@/lib/shopify/format'
+import { breadcrumbJsonLd, collectionMetadata } from '@/lib/shopify/metadata'
 
 /**
  * The standard collection page. A collection that wants its own branded
@@ -61,6 +62,19 @@ async function CollectionContent({ params }: Pick<Props, 'params'>) {
       title={collection.title}
       lead={collection.description || undefined}
     >
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              {
+                name: collection.title,
+                path: shopPaths.collection(collection.handle),
+              },
+            ])
+          ).replace(/</g, '\\u003c'),
+        }}
+      />
       <CollectionBrowser
         products={collection.products}
         filters={collection.filters}

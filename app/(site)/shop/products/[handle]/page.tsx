@@ -72,7 +72,7 @@ async function ProductContent({ params }: Pick<Props, 'params'>) {
             {product.descriptionHtml && (
               // Written by the club in Shopify's product editor.
               <div
-                className='prose prose-headings:font-sans prose-headings:text-black prose-p:text-black prose-li:text-black prose-strong:text-black prose-table:text-sm prose-td:text-black prose-th:text-black mt-8 max-w-none border-t-2 border-black pt-6 font-sans text-black'
+                className='prose prose-headings:font-sans prose-headings:text-black prose-p:text-black prose-li:text-black prose-strong:text-black prose-table:text-sm prose-td:text-black prose-th:text-black prose-li:my-1 prose-ul:pl-5 mt-8 max-w-none font-sans text-black [--tw-prose-bullets:black] [--tw-prose-counters:black]'
                 dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
               />
             )}

@@ -220,16 +220,24 @@ function Gallery({
         aria-label={`Enlarge image ${currentIndex + 1} of ${images.length}`}
         className='group relative block aspect-square w-full cursor-zoom-in overflow-hidden border-2 border-black bg-white'
       >
-        {current && (
+        {/* Every photo is loaded up front and stacked; switching only changes
+            which one shows, so clicking through the strip is instant. */}
+        {images.map((image, i) => (
           <Image
-            src={current.url}
-            alt={current.altText ?? title}
+            key={image.url}
+            src={image.url}
+            alt={image === current ? (image.altText ?? title) : ''}
             fill
-            priority
+            priority={i === 0}
+            loading={i === 0 ? undefined : 'eager'}
+            fetchPriority={i === 0 ? 'high' : 'low'}
             sizes='(min-width: 768px) 45vw, 100vw'
-            className='object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03]'
+            className={cn(
+              'object-contain transition-[scale] duration-700 ease-out group-hover:scale-[1.03]',
+              image === current ? 'opacity-100' : 'opacity-0'
+            )}
           />
-        )}
+        ))}
       </button>
       {images.length > 1 && (
         <ul className='mt-3 grid grid-cols-5 gap-2'>

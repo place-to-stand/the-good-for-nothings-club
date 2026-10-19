@@ -81,7 +81,7 @@ function offeringConfig(tier: string) {
   return null
 }
 
-/** Black title bleeding past the form edge, with a hairline running to the far edge. */
+/** Small caps title with a hairline running to the form's right edge. */
 function SectionLabel({
   className,
   children,
@@ -90,7 +90,7 @@ function SectionLabel({
   children: React.ReactNode
 }) {
   return (
-    <div className={cn('-mx-2 mb-1.5 flex items-center gap-3', className)}>
+    <div className={cn('mb-1.5 flex items-center gap-3', className)}>
       <span className='font-sans text-xs font-extrabold tracking-[0.08em] uppercase'>
         {children}
       </span>
@@ -546,7 +546,7 @@ function SocialLinks() {
               append({ handle: '' })
             }
           }}
-          className='mt-2 ml-2 cursor-pointer font-sans text-xs font-bold tracking-[0.08em] uppercase'
+          className='mt-2 cursor-pointer font-sans text-xs font-bold tracking-[0.08em] uppercase'
         >
           +{' '}
           <span className='underline underline-offset-2 hover:no-underline'>
@@ -573,7 +573,7 @@ function SocialLinksFallback() {
       </div>
       <button
         type='button'
-        className='mt-2 ml-2 cursor-pointer font-sans text-xs font-bold tracking-[0.08em] uppercase'
+        className='mt-2 cursor-pointer font-sans text-xs font-bold tracking-[0.08em] uppercase'
       >
         +{' '}
         <span className='underline underline-offset-2 hover:no-underline'>

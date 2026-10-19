@@ -37,7 +37,10 @@ export default function AudioProject({ project }: AudioProjectProps) {
             </h2>
           </div>
           <div className='flex items-center justify-center border-y-2 border-black'>
-            <ProjectMainMedia mainMedia={mainMedia} slug={project.slug.current} />
+            <ProjectMainMedia
+              mainMedia={mainMedia}
+              slug={project.slug.current}
+            />
           </div>
           <div className='mx-4 my-6 flex flex-col justify-between gap-6 md:mx-12 md:my-12 md:gap-16 lg:flex-row'>
             <div className='space-y-2 md:space-y-6'>
@@ -50,10 +53,8 @@ export default function AudioProject({ project }: AudioProjectProps) {
               <div className='space-y-2 md:space-y-6'>
                 <h3>Project Type</h3>
                 <div className='flex'>
-                  <Badge className='hover:no-underline text-md' asChild>
-                    <Link
-                      href={`/projects?type=${project.type}`}
-                    >
+                  <Badge className='text-md hover:no-underline' asChild>
+                    <Link href={`/projects?type=${project.type}`}>
                       {project.type}
                     </Link>
                   </Badge>
@@ -62,8 +63,10 @@ export default function AudioProject({ project }: AudioProjectProps) {
               <div className='space-y-2 md:space-y-6'>
                 <h3>Project Status</h3>
                 <div className='flex'>
-                  <Badge className="text-md flex items-center gap-2">
-                    <div className={`h-3 w-3 rounded-full border border-black ${getProjectStatusColor(project.status)}`}></div>
+                  <Badge className='text-md flex items-center gap-2'>
+                    <div
+                      className={`h-3 w-3 rounded-full border border-black ${getProjectStatusColor(project.status)}`}
+                    ></div>
                     {project.status}
                   </Badge>
                 </div>
@@ -97,17 +100,18 @@ export default function AudioProject({ project }: AudioProjectProps) {
                   </div>
                 </div>
               )}
-              {project.membersInvolved && project.membersInvolved.length > 0 && (
-                <div className='space-y-2 md:space-y-6'>
-                  <h3>Members Involved</h3>
-                  <div className='space-y-4'>
-                    <MemberAvatarStack
-                      members={project.membersInvolved}
-                      size="md"
-                    />
+              {project.membersInvolved &&
+                project.membersInvolved.length > 0 && (
+                  <div className='space-y-2 md:space-y-6'>
+                    <h3>Members Involved</h3>
+                    <div className='space-y-4'>
+                      <MemberAvatarStack
+                        members={project.membersInvolved}
+                        size='md'
+                      />
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
           </div>
           {project.photoGallery && (

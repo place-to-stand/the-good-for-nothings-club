@@ -113,12 +113,15 @@ function StatusSelect({
     <select
       value={value}
       onChange={event =>
-        setStatus({ id: inquiry._id, status: event.target.value as InquiryStatus })
+        setStatus({
+          id: inquiry._id,
+          status: event.target.value as InquiryStatus,
+        })
       }
       onClick={event => event.stopPropagation()}
       className={cn(
         selectClassName,
-        'h-8 w-auto px-1.5 py-0 text-xs font-semibold uppercase',
+        'h-8 w-auto py-0 pr-8 pl-1.5 text-xs font-semibold uppercase',
         className
       )}
       aria-label='Inquiry status'
@@ -156,7 +159,7 @@ function DateField({
     <label className='flex items-center justify-between gap-2'>
       <span
         className={cn(
-          'font-sans text-xs font-semibold uppercase tracking-[1px]',
+          'font-sans text-xs font-semibold tracking-[1px] uppercase',
           overdue ? 'text-red-600' : 'text-black/60'
         )}
       >
@@ -219,14 +222,24 @@ function sourceLabel(attribution: {
   utmCampaign?: string
 }) {
   if (attribution.utmSource) {
-    return [attribution.utmSource, attribution.utmMedium, attribution.utmCampaign]
+    return [
+      attribution.utmSource,
+      attribution.utmMedium,
+      attribution.utmCampaign,
+    ]
       .filter(Boolean)
       .join(' / ')
   }
   return attribution.referrer || 'direct'
 }
 
-function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
+function DetailRow({
+  label,
+  value,
+}: {
+  label: string
+  value: React.ReactNode
+}) {
   return (
     <div className='flex gap-2 font-sans text-sm'>
       <dt className='shrink-0 font-semibold'>{label}:</dt>
@@ -240,7 +253,7 @@ function RoleSelect({ inquiry }: { inquiry: Doc<'inquiries'> }) {
 
   return (
     <label className='flex items-center justify-between gap-2'>
-      <span className='font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
+      <span className='font-sans text-xs font-semibold tracking-[1px] text-black/60 uppercase'>
         Role
       </span>
       <select
@@ -253,7 +266,7 @@ function RoleSelect({ inquiry }: { inquiry: Doc<'inquiries'> }) {
         }
         className={cn(
           selectClassName,
-          'h-8 w-36 px-1.5 py-0 text-xs font-semibold uppercase'
+          'h-8 w-36 py-0 pr-8 pl-1.5 text-xs font-semibold uppercase'
         )}
         aria-label='Member role'
       >
@@ -285,10 +298,10 @@ function InquirySheetBody({ id }: { id: Id<'inquiries'> }) {
   return (
     <div className='flex flex-col gap-5'>
       <div>
-        <SheetTitle className='font-sans text-xl font-black uppercase tracking-[-0.02em]'>
+        <SheetTitle className='font-sans text-xl font-black tracking-[-0.02em] uppercase'>
           {inquiry.name}
           {inquiry.manual && (
-            <span className='ml-2 inline-block border border-black/30 px-1 py-0.5 align-middle text-[10px] font-semibold uppercase tracking-[1px] text-black/60'>
+            <span className='ml-2 inline-block border border-black/30 px-1 py-0.5 align-middle text-[10px] font-semibold tracking-[1px] text-black/60 uppercase'>
               manual
             </span>
           )}
@@ -302,13 +315,13 @@ function InquirySheetBody({ id }: { id: Id<'inquiries'> }) {
 
       <div className='flex flex-wrap items-center gap-x-6 gap-y-2'>
         <div className='flex items-center gap-3'>
-          <span className='font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
+          <span className='font-sans text-xs font-semibold tracking-[1px] text-black/60 uppercase'>
             Stage
           </span>
           <StatusSelect inquiry={inquiry} />
         </div>
         {status === 'waitlisted' && inquiry.waitlistRank !== undefined && (
-          <span className='font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
+          <span className='font-sans text-xs font-semibold tracking-[1px] text-black/60 uppercase'>
             Waitlist #{inquiry.waitlistRank}
           </span>
         )}
@@ -353,7 +366,7 @@ function InquirySheetBody({ id }: { id: Id<'inquiries'> }) {
 
       {inquiry.statusHistory && inquiry.statusHistory.length > 0 && (
         <div className='border-t-2 border-black/10 pt-4'>
-          <h3 className='mb-2 font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
+          <h3 className='mb-2 font-sans text-xs font-semibold tracking-[1px] text-black/60 uppercase'>
             History
           </h3>
           <ol className='flex flex-col'>
@@ -367,15 +380,18 @@ function InquirySheetBody({ id }: { id: Id<'inquiries'> }) {
                     aria-hidden
                     className='ml-[3px] flex items-center gap-2.5 border-l-2 border-black/15 py-1 pl-4'
                   >
-                    <span className='font-sans text-[10px] uppercase tracking-[1px] text-black/40'>
+                    <span className='font-sans text-[10px] tracking-[1px] text-black/40 uppercase'>
                       {stageGap(trail[index - 1].at, entry.at)}
                     </span>
                   </div>
                 )}
                 <div className='flex items-baseline gap-2.5'>
                   <span className='h-2 w-2 shrink-0 self-center bg-black' />
-                  <span className='font-sans text-xs font-bold uppercase tracking-[1px]'>
-                    {statusLabel(normalizeInquiryStatus(entry.status), pipeline)}
+                  <span className='font-sans text-xs font-bold tracking-[1px] uppercase'>
+                    {statusLabel(
+                      normalizeInquiryStatus(entry.status),
+                      pipeline
+                    )}
                   </span>
                   <span className='ml-auto font-sans text-xs text-black/50'>
                     {formatDay(entry.at)}
@@ -388,55 +404,63 @@ function InquirySheetBody({ id }: { id: Id<'inquiries'> }) {
       )}
 
       <div className='border-t-2 border-black/10 pt-4'>
-        <h3 className='mb-2 font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
+        <h3 className='mb-2 font-sans text-xs font-semibold tracking-[1px] text-black/60 uppercase'>
           From the inquiry
         </h3>
         {inquiry.message && (
-          <p className='mb-3 whitespace-pre-wrap border-l-2 border-black/20 pl-3 font-sans text-sm'>
+          <p className='mb-3 border-l-2 border-black/20 pl-3 font-sans text-sm whitespace-pre-wrap'>
             {inquiry.message}
           </p>
         )}
         <dl className='flex flex-col gap-1'>
-        <DetailRow
-          label='Email'
-          value={
-            <a href={`mailto:${inquiry.email}`} className='underline'>
-              {inquiry.email}
-            </a>
-          }
-        />
-        {inquiry.phone && <DetailRow label='Phone' value={inquiry.phone} />}
-        {inquiry.portfolio && (
           <DetailRow
-            label='Portfolio'
+            label='Email'
             value={
-              <a
-                href={inquiry.portfolio}
-                target='_blank'
-                rel='noreferrer'
-                className='underline'
-              >
-                {inquiry.portfolio}
+              <a href={`mailto:${inquiry.email}`} className='underline'>
+                {inquiry.email}
               </a>
             }
           />
-        )}
-        {inquiry.socials && inquiry.socials.length > 0 && (
-          <DetailRow label='Socials' value={inquiry.socials.join(', ')} />
-        )}
-        {inquiry.references && (
-          <DetailRow label='References' value={inquiry.references} />
-        )}
-        {inquiry.referralSource && (
-          <DetailRow label='Heard via' value={inquiry.referralSource} />
-        )}
-        {inquiry.mailingList && <DetailRow label='Mailing list' value='Yes' />}
-        {inquiry.attribution && (
-          <DetailRow label='Source' value={sourceLabel(inquiry.attribution)} />
-        )}
-        {inquiry.attribution?.landingPage && (
-          <DetailRow label='Landed on' value={inquiry.attribution.landingPage} />
-        )}
+          {inquiry.phone && <DetailRow label='Phone' value={inquiry.phone} />}
+          {inquiry.portfolio && (
+            <DetailRow
+              label='Portfolio'
+              value={
+                <a
+                  href={inquiry.portfolio}
+                  target='_blank'
+                  rel='noreferrer'
+                  className='underline'
+                >
+                  {inquiry.portfolio}
+                </a>
+              }
+            />
+          )}
+          {inquiry.socials && inquiry.socials.length > 0 && (
+            <DetailRow label='Socials' value={inquiry.socials.join(', ')} />
+          )}
+          {inquiry.references && (
+            <DetailRow label='References' value={inquiry.references} />
+          )}
+          {inquiry.referralSource && (
+            <DetailRow label='Heard via' value={inquiry.referralSource} />
+          )}
+          {inquiry.mailingList && (
+            <DetailRow label='Mailing list' value='Yes' />
+          )}
+          {inquiry.attribution && (
+            <DetailRow
+              label='Source'
+              value={sourceLabel(inquiry.attribution)}
+            />
+          )}
+          {inquiry.attribution?.landingPage && (
+            <DetailRow
+              label='Landed on'
+              value={inquiry.attribution.landingPage}
+            />
+          )}
           <DetailRow
             label='Received'
             value={new Date(inquiry._creationTime).toLocaleString()}
@@ -500,7 +524,7 @@ function AddInquirySheetBody({
       }}
     >
       <div>
-        <SheetTitle className='font-sans text-xl font-black uppercase tracking-[-0.02em]'>
+        <SheetTitle className='font-sans text-xl font-black tracking-[-0.02em] uppercase'>
           Add inquiry
         </SheetTitle>
         <SheetDescription className='font-sans text-sm text-black/70'>
@@ -563,7 +587,7 @@ function AddInquirySheetBody({
       </div>
       {pipeline === 'membership' && (
         <label className='flex items-center justify-between gap-2'>
-          <span className='font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
+          <span className='font-sans text-xs font-semibold tracking-[1px] text-black/60 uppercase'>
             Tour booked for
           </span>
           <input
@@ -576,7 +600,7 @@ function AddInquirySheetBody({
         </label>
       )}
       <label className='flex items-center justify-between gap-2'>
-        <span className='font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
+        <span className='font-sans text-xs font-semibold tracking-[1px] text-black/60 uppercase'>
           Follow up on
         </span>
         <input
@@ -631,7 +655,8 @@ function NextCell({ inquiry }: { inquiry: Doc<'inquiries'> }) {
     return (
       <span className='font-bold'>
         #{inquiry.waitlistRank ?? '–'}
-        {inquiry.followUpAt !== undefined && ` · ${formatDay(inquiry.followUpAt)}`}
+        {inquiry.followUpAt !== undefined &&
+          ` · ${formatDay(inquiry.followUpAt)}`}
       </span>
     )
   }
@@ -670,7 +695,7 @@ export function InquiriesTable({
     // tables (the dashboard's to-do sections) align with each other.
     <table className='w-full table-fixed border-collapse'>
       <thead>
-        <tr className='border-b-2 border-black text-left font-sans text-xs font-semibold uppercase tracking-[1px] text-black/60'>
+        <tr className='border-b-2 border-black text-left font-sans text-xs font-semibold tracking-[1px] text-black/60 uppercase'>
           {waitlistControls && (
             <th className='w-24 py-2 pr-3 font-semibold'>Order</th>
           )}
@@ -729,7 +754,7 @@ export function InquiriesTable({
                 </span>
               </td>
             )}
-            <td className='break-words py-2.5 pr-3 align-top'>
+            <td className='py-2.5 pr-3 align-top break-words'>
               <span className='font-bold'>
                 {inquiry.name}
                 {inquiry.notes && (
@@ -739,18 +764,18 @@ export function InquiriesTable({
                 )}
               </span>
               {inquiry.manual && (
-                <span className='ml-2 border border-black/30 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-[1px] text-black/60'>
+                <span className='ml-2 border border-black/30 px-1 py-0.5 text-[10px] font-semibold tracking-[1px] text-black/60 uppercase'>
                   manual
                 </span>
               )}
-              <span className='block break-all text-xs text-black/60'>
+              <span className='block text-xs break-all text-black/60'>
                 {inquiry.email}
               </span>
             </td>
             <td className='hidden py-2.5 pr-3 align-top md:table-cell'>
               {inquiry.item}
               {inquiry.offering && ` — ${inquiry.offering}`}
-              <span className='block text-xs uppercase tracking-[1px] text-black/50'>
+              <span className='block text-xs tracking-[1px] text-black/50 uppercase'>
                 {inquiry.kind}
               </span>
             </td>
@@ -780,9 +805,7 @@ export function InquiriesTable({
 }
 
 export type InquirySheetState =
-  | { type: 'add' }
-  | { type: 'inquiry'; id: Id<'inquiries'> }
-  | null
+  { type: 'add' } | { type: 'inquiry'; id: Id<'inquiries'> } | null
 
 /** The slide-out panel hosting both the detail view and the add form. */
 export function InquirySheet({

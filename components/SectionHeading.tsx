@@ -17,7 +17,7 @@ export default function SectionHeading({
     <>
       <h2
         className={cn(
-          'mt-14 text-[28px] font-black tracking-[-0.03em] md:mt-20 md:text-[40px]',
+          'mt-12 text-[28px] font-black tracking-[-0.03em] md:mt-16 md:text-[40px]',
           className
         )}
       >

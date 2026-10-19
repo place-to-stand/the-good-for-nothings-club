@@ -1,28 +1,23 @@
 import Link from 'next/link'
-import {
-  FaGithub,
-  FaInstagram,
-  FaSpotify,
-  FaTiktok,
-  FaThreads,
-} from 'react-icons/fa6'
+import { FaInstagram, FaSpotify } from 'react-icons/fa6'
 import type { IconType } from 'react-icons'
 
 import { SOCIAL_PROFILES, type SocialLabel } from '@/data/social'
 
-const ICONS: Record<SocialLabel, IconType> = {
+/**
+ * Profiles shown as icons. The rest (Threads, TikTok, GitHub) stay in
+ * data/social.ts for search engines (sameAs) but get no icon.
+ */
+const ICONS: Partial<Record<SocialLabel, IconType>> = {
   Instagram: FaInstagram,
-  Threads: FaThreads,
-  TikTok: FaTiktok,
   Spotify: FaSpotify,
-  GitHub: FaGithub,
 }
 
-/** Canonical club profiles (data/social.ts) paired with their icons. */
-export const SOCIAL_LINKS = SOCIAL_PROFILES.map(profile => ({
-  ...profile,
-  Icon: ICONS[profile.label],
-}))
+/** Canonical club profiles (data/social.ts) that have an icon. */
+export const SOCIAL_LINKS = SOCIAL_PROFILES.flatMap(profile => {
+  const Icon = ICONS[profile.label]
+  return Icon ? [{ ...profile, Icon }] : []
+})
 
 export default function SocialMediaLinks() {
   return (

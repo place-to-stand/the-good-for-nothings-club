@@ -77,10 +77,6 @@ export default async function ShopHome() {
         )
       }
     >
-      <p className='text-center font-sans text-sm font-semibold tracking-[0.06em] uppercase'>
-        {shopCopy.sublead}
-      </p>
-
       {spotlight && <Spotlight product={spotlight} />}
 
       {bestsellers.length > 0 && (

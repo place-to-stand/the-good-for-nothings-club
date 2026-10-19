@@ -63,7 +63,9 @@ export async function generateMetadata(
     openGraph: {
       ...openGraph,
       url: pathname,
-      images: [getImageUrl(member.profilePicture).width(1200).quality(90).url()],
+      images: [
+        getImageUrl(member.profilePicture).width(1200).quality(90).url(),
+      ],
     },
   }
 }
@@ -114,9 +116,14 @@ async function MemberContent({ params }: Pick<MemberProps, 'params'>) {
               {/* Profile image */}
               <div className='flex-shrink-0 lg:w-1/3'>
                 <Image
-                  src={getImageUrl(member.profilePicture).width(800).quality(90).url()}
+                  src={getImageUrl(member.profilePicture)
+                    .width(800)
+                    .quality(90)
+                    .url()}
                   width={member.profilePicture.asset.metadata.dimensions.width}
-                  height={member.profilePicture.asset.metadata.dimensions.height}
+                  height={
+                    member.profilePicture.asset.metadata.dimensions.height
+                  }
                   alt={member.profilePicture.caption}
                   sizes='(min-width: 1024px) 33vw, 100vw'
                   className='w-full border-2 border-black object-cover'
@@ -139,7 +146,9 @@ async function MemberContent({ params }: Pick<MemberProps, 'params'>) {
                 <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2'>
                   <div>
                     <h3 className='mb-2 text-xl font-bold'>Member Number</h3>
-                    <p className='text-xl'>#{String(member.memberNumber).padStart(3, '0')}</p>
+                    <p className='text-xl'>
+                      #{String(member.memberNumber).padStart(3, '0')}
+                    </p>
                   </div>
 
                   <div>
@@ -190,11 +199,14 @@ async function MemberContent({ params }: Pick<MemberProps, 'params'>) {
         <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
           <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
             <h2 className='text-[32px] leading-none font-black tracking-[-0.04em] md:text-[48px] lg:text-[64px]'>
-              Projects <span className="font-normal text-3xl align-middle">({projectsData.length})</span>
+              Projects{' '}
+              <span className='align-middle text-3xl font-normal'>
+                ({projectsData.length})
+              </span>
             </h2>
             <div className='mt-8 md:mt-12'>
               <div className='grid grid-cols-1 gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3'>
-                {projectsData.map((project) => (
+                {projectsData.map(project => (
                   <ProjectCardSmall key={project._id} project={project} />
                 ))}
               </div>

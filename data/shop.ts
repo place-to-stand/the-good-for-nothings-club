@@ -4,8 +4,7 @@
  */
 export const shopCopy = {
   title: 'Shop',
-  lead: 'Oddball goods from restless minds.',
-  sublead: 'New drops appear whenever inspiration (or boredom) strikes.',
+  lead: 'Oddball goods from restless minds. New drops appear whenever inspiration (or boredom) strikes.',
   featuredTitle: 'Bestsellers',
   /** Collection whose products fill the shop home grid. */
   featuredCollection: 'bestsellers',

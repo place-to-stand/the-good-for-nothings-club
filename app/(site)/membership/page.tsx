@@ -57,7 +57,7 @@ export default function Membership() {
         id='apply'
         className='mt-6 grid scroll-mt-28 grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-0 lg:divide-x lg:divide-black/10'
       >
-        <div className='lg:pr-12'>
+        <div className='lg:pr-8'>
           <ol className='space-y-10'>
             {membershipCopy.joining.map((step, i) => (
               <li key={step.label} className='font-sans'>
@@ -93,7 +93,7 @@ export default function Membership() {
           </div>
         </div>
         {/* Same row height as the numbered steps, so the two line up. */}
-        <section className='lg:pl-12'>
+        <section className='lg:pl-8'>
           <h3 className='flex min-h-8 items-center font-sans text-2xl font-extrabold tracking-wide uppercase'>
             {membershipCopy.applicationTitle}
           </h3>

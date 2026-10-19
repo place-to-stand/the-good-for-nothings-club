@@ -10,6 +10,12 @@ type PageShellProps = {
 }
 
 /**
+ * The two-column grid every page body uses, so right-hand columns line up
+ * with the header's lead from page to page.
+ */
+export const pageColumns = 'grid grid-cols-1 lg:grid-cols-2 lg:gap-x-16'
+
+/**
  * A bordered card section matching the main PageShell card - use inside
  * `after` to split content into its own card, homepage-style.
  */
@@ -38,12 +44,12 @@ export default function PageShell({
     <main>
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 pt-5 pb-6 md:border-x-2 md:px-12 md:pt-8 md:pb-12'>
-          <header className='flex flex-col gap-2 md:flex-row md:items-end md:justify-between md:gap-12'>
+          <header className='grid grid-cols-1 gap-2 md:min-h-20 md:grid-cols-2 md:items-end md:gap-x-16'>
             <h1 className='text-[32px] leading-[0.9] font-black tracking-[-0.04em] md:text-[48px] lg:text-[64px]'>
               {title}
             </h1>
             {lead && (
-              <p className='max-w-xl font-serif text-lg leading-tight text-balance sm:text-xl md:pb-1 md:text-right'>
+              <p className='max-w-xl font-serif text-lg leading-tight text-pretty sm:text-xl md:line-clamp-3 md:pb-1'>
                 {lead}
               </p>
             )}

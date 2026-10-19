@@ -31,7 +31,7 @@ export function shopIndexMarkdown(
     '',
     `> ${SHOP_META.description}`,
     '',
-    `${shopCopy.lead} ${shopCopy.sublead} Checkout runs on Shopify; ask questions at ${CONTACT_EMAIL}.`,
+    `${shopCopy.lead} Checkout runs on Shopify; ask questions at ${CONTACT_EMAIL}.`,
     '',
     `## ${shopCopy.collectionsTitle}`,
     '',

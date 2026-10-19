@@ -4,13 +4,14 @@ import InquiryForm from '@/components/InquiryForm'
 import { clubhouseAddressLine, clubhouseMapsUrl } from '@/data/location'
 import Map from '@/components/Map'
 import WidgetBoundary from '@/components/WidgetBoundary'
-import PageShell from '@/components/PageShell'
+import PageShell, { pageColumns } from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
 import SocialMediaLinks from '@/components/SocialMediaLinks'
 import type { Metadata, ResolvingMetadata } from 'next'
 import { contactCopy } from '@/data/contact'
 import { CONTACT_EMAIL } from '@/data/site'
 import { searchMeta } from '@/data/site'
+import { cn } from '@/lib/utils'
 
 export const ensureStatic = 'navigation'
 
@@ -36,7 +37,7 @@ export async function generateMetadata(
 export default async function Contact() {
   return (
     <PageShell title='Contact' lead={contactCopy.lead}>
-      <div className='grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-20'>
+      <div className={cn(pageColumns, 'gap-y-8')}>
         <div>
           <SectionHeading title={contactCopy.emailTitle} />
           <Link

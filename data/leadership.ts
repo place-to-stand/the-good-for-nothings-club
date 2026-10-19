@@ -26,7 +26,7 @@ export const memberWebsites: Record<string, string> = {
 }
 
 export const leadershipCopy = {
-  title: 'Founding Members',
+  title: 'Current Members',
   lead: 'The crew that runs the clubhouse.',
   pastTitle: 'Past Members',
 }

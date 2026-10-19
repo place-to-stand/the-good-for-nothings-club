@@ -4,6 +4,7 @@ import {
   addToCartMutation,
   createCartMutation,
   getCartQuery,
+  getCollectionFilterIdsQuery,
   getCollectionQuery,
   getCollectionsQuery,
   getProductQuery,
@@ -21,8 +22,10 @@ import type {
   PredictiveResults,
   Product,
   ProductCard,
+  ShopFilter,
   ShopImage,
 } from './types'
+import { readFilters, type RawFilter } from './filters'
 
 /**
  * Shopify Storefront API client for the shop pages (/shop).
@@ -97,13 +100,15 @@ export async function shopifyFetch<T>({
 type Connection<T> = { edges: { node: T }[] }
 
 const nodes = <T>(connection: Connection<T> | null | undefined): T[] =>
-  connection?.edges.map(edge => edge.node) ?? []
+  connection?.edges?.map(edge => edge.node) ?? []
 
-type RawProductCard = Omit<ProductCard, 'images'> & {
+type RawProductCard = Omit<ProductCard, 'images' | 'quickVariants'> & {
   images: Connection<ShopImage>
+  quickVariants?: Connection<ProductCard['quickVariants'][number]>
 }
 
-type RawProduct = Omit<Product, 'images' | 'variants'> & {
+type RawProduct = Omit<Product, 'images' | 'variants' | 'quickVariants'> & {
+  quickVariants?: Connection<ProductCard['quickVariants'][number]>
   images: Connection<ShopImage>
   allImages: Connection<ShopImage>
   variants: Connection<Product['variants'][number]>
@@ -121,6 +126,9 @@ function reshapeCard(raw: RawProductCard): ProductCard {
     compareAtPriceRange: raw.compareAtPriceRange,
     featuredImage: raw.featuredImage,
     images: nodes(raw.images),
+    vendor: raw.vendor ?? '',
+    tags: raw.tags ?? [],
+    quickVariants: nodes(raw.quickVariants),
   }
 }
 
@@ -129,8 +137,6 @@ function reshapeProduct(raw: RawProduct): Product {
     ...reshapeCard(raw),
     description: raw.description,
     descriptionHtml: raw.descriptionHtml,
-    vendor: raw.vendor,
-    tags: raw.tags,
     updatedAt: raw.updatedAt,
     seo: raw.seo,
     options: raw.options,
@@ -179,19 +185,43 @@ export async function getCollection(
       seo: { title: null, description: null },
       updatedAt: new Date().toISOString(),
       products: await getProducts(),
+      filters: [],
     }
   }
 
   const data = await shopifyFetch<{
-    collection: (Collection & { products: Connection<RawProductCard> }) | null
+    collection:
+      | (Collection & {
+          products: Connection<RawProductCard> & { filters?: RawFilter[] }
+        })
+      | null
   }>({ query: getCollectionQuery, variables: { handle } })
 
   if (!data.collection) return null
+  const { products, ...collection } = data.collection
   return {
-    ...data.collection,
-    products: nodes(data.collection.products).map(reshapeCard),
+    ...collection,
+    products: nodes(products).map(reshapeCard),
+    filters: await readFilters(products.filters ?? [], input =>
+      collectionIdsMatching(handle, input)
+    ),
   }
 }
+
+/** Product ids in a collection that match one filter input. */
+async function collectionIdsMatching(handle: string, input: unknown) {
+  'use cache'
+  cached()
+  const data = await shopifyFetch<{
+    collection: { products: Connection<{ id: string }> } | null
+  }>({
+    query: getCollectionFilterIdsQuery,
+    variables: { handle, filters: [input] },
+  })
+  return nodes(data.collection?.products).map(p => p.id)
+}
+
+export type { ShopFilter }
 
 /** Every product, newest first. */
 export async function getProducts(): Promise<ProductCard[]> {

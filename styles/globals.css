@@ -185,13 +185,14 @@
    * one line being drawn; on the way out it pulls back toward the end.
    * Links that manage their own underline (any underline / no-underline
    * class), button-styled links, overlay links and image links opt out.
-   * .link-line adds it to text inside a card link (a.group).
+   * .link-line adds it to text inside a card link (a.group). Big headings
+   * set --line-size and --line-y for a heavier line nearer the baseline.
    */
   a:not([class*='underline'], [data-button], .absolute, :has(img, svg)),
   .link-line {
     background-image: linear-gradient(currentColor, currentColor);
-    background-size: 0% 2px;
-    background-position: 100% 100%;
+    background-size: 0% var(--line-size, 2px);
+    background-position: 100% var(--line-y, 100%);
     background-repeat: no-repeat;
     background-origin: content-box;
     transition: background-size 300ms var(--ease-out-expo);
@@ -203,12 +204,15 @@
     max-width: fit-content;
   }
 
-  a:not([class*='underline'], [data-button], .absolute, :has(img, svg)):hover,
-  .link-line:hover,
-  .group:hover .link-line {
-    background-size: 100% 2px;
-    background-position: 0% 100%;
-    transition: background-size 650ms var(--ease-out-quint);
+  /* Mouse only: on touch screens :hover sticks after a tap. */
+  @media (hover: hover) {
+    a:not([class*='underline'], [data-button], .absolute, :has(img, svg)):hover,
+    .link-line:hover,
+    .group:hover .link-line {
+      background-size: 100% var(--line-size, 2px);
+      background-position: 0% var(--line-y, 100%);
+      transition: background-size 650ms var(--ease-out-quint);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

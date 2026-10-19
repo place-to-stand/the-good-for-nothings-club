@@ -46,7 +46,7 @@ function product({ handle, title, type, price, sizes, soldOut = [], pics }) {
     images: edges(images.slice(0, 2)),
     allImages: edges(images),
     description: `${title}, from the club.`,
-    descriptionHtml: `<p>${title}, from the club.</p><ul><li>100% cotton</li><li>Printed in Austin</li></ul>`,
+    descriptionHtml: `<p>${title}, from the club.</p><ul><li>100% cotton</li><li>Printed in Austin</li></ul><h4>Size guide</h4><table><thead><tr><th></th><th>WIDTH (inches)</th><th>LENGTH (inches)</th></tr></thead><tbody><tr><td><strong>S</strong></td><td>18 ¼</td><td>26 ⅝</td></tr><tr><td><strong>M</strong></td><td>20 ¼</td><td>28</td></tr><tr><td><strong>L</strong></td><td>22</td><td>29 ⅜</td></tr></tbody></table>`,
     vendor: 'The Good for Nothings Club',
     tags: [],
     seo: { title: null, description: null },
@@ -58,6 +58,14 @@ function product({ handle, title, type, price, sizes, soldOut = [], pics }) {
       },
     ],
     variants: edges(variants),
+    quickVariants: edges(
+      variants.map(({ id, title, availableForSale, selectedOptions }) => ({
+        id,
+        title,
+        availableForSale,
+        selectedOptions,
+      }))
+    ),
   }
 }
 
@@ -103,6 +111,67 @@ const products = [
   }),
 ]
 
+// Shaped like Search & Discovery's filters on the real store.
+const stubFilters = [
+  {
+    id: 'filter.v.availability',
+    label: 'Availability',
+    type: 'LIST',
+    values: [
+      {
+        id: 'filter.v.availability.1',
+        label: 'In stock',
+        input: '{"available":true}',
+      },
+    ],
+  },
+  {
+    id: 'filter.v.price',
+    label: 'Price',
+    type: 'PRICE_RANGE',
+    values: [
+      {
+        id: 'filter.v.price',
+        label: 'Price',
+        input: '{"price":{"min":0,"max":29}}',
+      },
+    ],
+  },
+  {
+    id: 'filter.p.product_type',
+    label: 'Product type',
+    type: 'LIST',
+    values: ['T-Shirt', 'Hat', 'Zine', 'Print'].map(t => ({
+      id: `filter.p.product_type.${t}`,
+      label: t,
+      input: JSON.stringify({ productType: t }),
+    })),
+  },
+  {
+    id: 'filter.v.option.size',
+    label: 'Size',
+    type: 'LIST',
+    values: ['S', 'M', 'L', 'XL'].map(v => ({
+      id: `filter.v.option.size.${v}`,
+      label: v,
+      input: JSON.stringify({ variantOption: { name: 'size', value: v } }),
+    })),
+  },
+  {
+    id: 'filter.p.m.custom.color',
+    label: 'Color',
+    type: 'LIST',
+    values: [
+      {
+        id: 'filter.p.m.custom.color.black',
+        label: 'Black',
+        input:
+          '{"productMetafield":{"namespace":"custom","key":"color","value":"Black"}}',
+      },
+    ],
+  },
+]
+
 const collection = (handle, title, list, description = '') => ({
   id: `gid://shopify/Collection/${handle}`,
   handle,
@@ -115,7 +184,7 @@ const collection = (handle, title, list, description = '') => ({
     title
   ),
   seo: { title: null, description: null },
-  products: edges(list),
+  products: { ...edges(list), filters: stubFilters },
 })
 
 const collections = [
@@ -198,6 +267,12 @@ const answers = {
   getCollections: () => ({
     collections: edges(collections.map(c => ({ ...c, products: undefined }))),
   }),
+  getCollectionFilterIds: () => ({
+    // Stub: the black things are the dark tee and the hat.
+    collection: {
+      products: edges([products[1], products[3]].map(p => ({ id: p.id }))),
+    },
+  }),
   getCollection: v => ({
     collection: collections.find(c => c.handle === v.handle) ?? null,
   }),
@@ -222,7 +297,9 @@ const answers = {
     return {
       predictiveSearch: {
         queries: [{ text: v.query }],
-        products: products.filter(p => p.title.toLowerCase().includes(q)).slice(0, 5),
+        products: products
+          .filter(p => p.title.toLowerCase().includes(q))
+          .slice(0, 5),
         collections: collections
           .filter(c => c.title.toLowerCase().includes(q))
           .map(({ handle, title, image }) => ({ handle, title, image })),

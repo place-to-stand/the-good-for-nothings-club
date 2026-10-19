@@ -36,7 +36,20 @@ export default function Footer({ year }: { year: number }) {
             >
               GFNC
             </ScrollTopLink>
-            <nav className='mt-10 grid grid-flow-col grid-rows-4 justify-start gap-x-14 gap-y-2'>
+            {/* The pin sits outside the link so the link keeps its hover
+                underline. */}
+            <p className='mt-4 flex items-start gap-1.5 text-sm leading-snug'>
+              <PinIcon />
+              <a
+                href={clubhouseMapsUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                {clubhouse.street}, {clubhouse.city}, {clubhouse.state}{' '}
+                {clubhouse.zip}
+              </a>
+            </p>
+            <nav className='mt-8 grid grid-flow-col grid-rows-4 justify-start gap-x-14 gap-y-2'>
               {FOOTER_LINKS.map(link => (
                 <ScrollTopLink
                   key={link.href}
@@ -72,15 +85,6 @@ export default function Footer({ year }: { year: number }) {
               <NewsletterSignUpForm />
             </div>
           </div>
-          <a
-            href={clubhouseMapsUrl}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='text-sm leading-snug lg:col-span-3'
-          >
-            {clubhouse.street}, {clubhouse.city}, {clubhouse.state}{' '}
-            {clubhouse.zip}
-          </a>
         </div>
         <div className='flex flex-col-reverse items-center justify-between gap-4 border-t-2 border-black px-4 py-5 md:flex-row md:px-12'>
           <div className='text-center text-sm'>
@@ -92,5 +96,26 @@ export default function Footer({ year }: { year: number }) {
         </div>
       </div>
     </footer>
+  )
+}
+
+/** Map pin, drawn like the shop icons: heavy stroke, square ends. */
+function PinIcon() {
+  return (
+    <svg
+      width={16}
+      height={16}
+      viewBox='0 0 24 24'
+      aria-hidden='true'
+      className='mt-px shrink-0'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth={2.5}
+      strokeLinecap='square'
+      strokeLinejoin='miter'
+    >
+      <path d='M12 21.5s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12Z' />
+      <circle cx='12' cy='9.5' r='2.5' />
+    </svg>
   )
 }

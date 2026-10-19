@@ -41,7 +41,7 @@ export default function OfferCard({
     <article
       id={id}
       className={cn(
-        'flex scroll-mt-28 flex-col border-2 border-black',
+        'flex scroll-mt-28 flex-col border-2 border-black bg-white',
         className
       )}
     >

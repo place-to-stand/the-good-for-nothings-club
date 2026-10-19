@@ -42,7 +42,7 @@ export default function PageShell({
     <main>
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 pt-5 pb-6 md:border-x-2 md:px-12 md:pt-8 md:pb-12'>
-          <header className='flex flex-col gap-2 md:min-h-16 md:flex-row md:items-center md:justify-between md:gap-12'>
+          <header className='flex flex-col gap-4 md:min-h-16 md:flex-row md:items-center md:justify-between md:gap-12'>
             <h1 className='text-[32px] leading-[0.9] font-black tracking-[-0.04em] [text-box:trim-both_cap_alphabetic] md:text-[48px] lg:text-[64px]'>
               {title}
             </h1>

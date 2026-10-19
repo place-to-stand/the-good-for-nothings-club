@@ -55,13 +55,51 @@ export type ProductCard = {
   featuredImage: ShopImage | null
   /** First two images: the card swaps to the second on hover. */
   images: ShopImage[]
+  vendor: string
+  tags: string[]
+  /** Just enough of each variant for quick add and the size filters. */
+  quickVariants: QuickVariant[]
 }
+
+export type QuickVariant = {
+  id: string
+  title: string
+  availableForSale: boolean
+  selectedOptions: SelectedOption[]
+}
+
+/**
+ * A filter group from Search & Discovery (or built from the products when
+ * there is none), e.g. Size with S, M and L. The browser does the
+ * filtering, so each value says how to match a product.
+ */
+export type ShopFilter = {
+  /** Shopify's filter id, e.g. filter.v.option.size. Used in the URL. */
+  id: string
+  label: string
+  type: 'LIST' | 'PRICE_RANGE'
+  values: ShopFilterValue[]
+}
+
+export type ShopFilterValue = {
+  /** Short key for the URL, e.g. "m" in filter.v.option.size=m. */
+  key: string
+  label: string
+  match: FilterMatch
+}
+
+export type FilterMatch =
+  | { kind: 'type'; value: string }
+  | { kind: 'vendor'; value: string }
+  | { kind: 'tag'; value: string }
+  | { kind: 'option'; name: string; value: string }
+  /** Anything else (metafields, categories): the products Shopify says match. */
+  | { kind: 'ids'; ids: string[] }
+  | { kind: 'none' }
 
 export type Product = ProductCard & {
   description: string
   descriptionHtml: string
-  vendor: string
-  tags: string[]
   updatedAt: string
   seo: SEO
   options: ProductOption[]
@@ -81,6 +119,8 @@ export type Collection = {
 
 export type CollectionWithProducts = Collection & {
   products: ProductCard[]
+  /** Search & Discovery filters; empty when the store has none set. */
+  filters: ShopFilter[]
 }
 
 export type CartLine = {

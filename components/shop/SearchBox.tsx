@@ -206,7 +206,7 @@ export default function SearchBox({
         role='listbox'
         aria-label='Suggestions'
         className={cn(
-          'bg-background absolute top-full right-0 left-0 z-30 -mx-0.5 max-h-[70vh] overflow-y-auto border-2 border-black py-2 transition-[opacity,translate,visibility] duration-200 ease-out lg:left-auto lg:w-[26rem]',
+          'bg-background absolute top-full right-0 left-0 z-30 max-h-[70vh] overflow-y-auto border-2 border-black py-2 transition-[opacity,translate,visibility] duration-200 ease-out md:-mx-0.5 lg:left-auto lg:w-[26rem]',
           expanded
             ? 'visible translate-y-0 opacity-100'
             : 'invisible -translate-y-1 opacity-0'

@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/Button'
 import {
@@ -51,6 +51,7 @@ export function CartButton({ className }: { className?: string }) {
     <button
       type='button'
       onClick={() => setOpen(true)}
+      data-cart-target
       className={cn(
         'flex w-14 cursor-pointer items-center justify-center transition-colors hover:bg-black/10 active:bg-black/20',
         className
@@ -66,14 +67,37 @@ export function CartButton({ className }: { className?: string }) {
  * Off the shop pages, a cart with something in it floats in the bottom
  * right corner, sliding in from the edge.
  */
+/**
+ * Whether the shop bar (which has its own cart button) is on screen. On
+ * shop pages the floating cart only shows once it scrolls away, so there
+ * is always one cart to hand without two at once.
+ */
+function useShopBarInView(pathname: string) {
+  const [inView, setInView] = useState(false)
+  useEffect(() => {
+    const bar = document.querySelector('[data-shop-bar]')
+    if (!bar) return
+    const observer = new IntersectionObserver(([entry]) =>
+      setInView(entry.isIntersecting)
+    )
+    observer.observe(bar)
+    return () => {
+      observer.disconnect()
+      setInView(false)
+    }
+  }, [pathname])
+  return inView
+}
+
 export function FloatingCart() {
   const { cart, isOpen, setOpen } = useCart()
   const pathname = usePathname()
+  const barInView = useShopBarInView(pathname)
   const count = cart?.totalQuantity ?? 0
   if (!count) return null
-  // Stays mounted so it can slide out (onto the shop pages, or while the
-  // drawer is open) as well as spring back in.
-  const hidden = isOpen || pathname.startsWith('/shop')
+  // Stays mounted so it can slide out (while the shop bar and its cart
+  // are on screen, or while the drawer is open) as well as spring back in.
+  const hidden = isOpen || barInView
 
   return (
     <button
@@ -81,6 +105,7 @@ export function FloatingCart() {
       onClick={() => setOpen(true)}
       aria-label={cartLabel(count)}
       aria-hidden={hidden || undefined}
+      data-cart-target
       tabIndex={hidden ? -1 : undefined}
       className={cn(
         'bg-background fixed right-4 bottom-4 z-40 flex size-16 cursor-pointer items-center justify-center border-2 border-black transition-colors hover:bg-[color-mix(in_oklab,var(--background),black_10%)] md:right-8 md:bottom-8',

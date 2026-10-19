@@ -18,7 +18,7 @@ export function CollectionTile({ collection }: { collection: Collection }) {
             alt={collection.image.altText ?? collection.title}
             fill
             sizes='(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
-            className='object-cover transition-transform duration-500 group-hover:scale-105'
+            className='object-cover transition-transform duration-700 ease-out group-hover:scale-105'
           />
         ) : (
           <span className='p-4 text-center text-2xl font-black text-white uppercase'>

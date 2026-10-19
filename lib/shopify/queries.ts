@@ -47,6 +47,22 @@ const productCard = /* GraphQL */ `
         }
       }
     }
+    vendor
+    tags
+    # Aliased so it can't clash with the full product's variants field.
+    quickVariants: variants(first: 50) {
+      edges {
+        node {
+          id
+          title
+          availableForSale
+          selectedOptions {
+            name
+            value
+          }
+        }
+      }
+    }
   }
   ${image}
 `
@@ -142,6 +158,17 @@ export const getCollectionQuery = /* GraphQL */ `
     collection(handle: $handle) {
       ...collection
       products(first: 100, sortKey: COLLECTION_DEFAULT) {
+        # Search & Discovery's filters for this collection.
+        filters {
+          id
+          label
+          type
+          values {
+            id
+            label
+            input
+          }
+        }
         edges {
           node {
             ...productCard
@@ -352,4 +379,19 @@ export const predictiveSearchQuery = /* GraphQL */ `
     }
   }
   ${productCard}
+`
+
+/** Which products in a collection match one Search & Discovery filter value. */
+export const getCollectionFilterIdsQuery = /* GraphQL */ `
+  query getCollectionFilterIds($handle: String!, $filters: [ProductFilter!]) {
+    collection(handle: $handle) {
+      products(first: 250, filters: $filters) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
 `

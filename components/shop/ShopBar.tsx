@@ -18,7 +18,7 @@ import SearchBox from './SearchBox'
  */
 
 const linkClass =
-  'shrink-0 px-3 py-2 text-xs font-extrabold tracking-[0.06em] whitespace-nowrap uppercase transition-colors hover:bg-black/10 hover:no-underline xl:px-4 xl:text-sm'
+  'shrink-0 px-2 py-2 sm:px-3 text-xs font-extrabold tracking-[0.06em] whitespace-nowrap uppercase transition-colors hover:bg-black/10 hover:no-underline xl:px-4 xl:text-sm'
 
 export default function ShopBar({
   collections,
@@ -26,14 +26,14 @@ export default function ShopBar({
   collections: { handle: string; title: string }[]
 }) {
   return (
-    <div className='relative z-20 font-sans md:px-8 xl:px-16'>
+    <div data-shop-bar className='relative z-20 font-sans md:px-8 xl:px-16'>
       {/* Inset on both sides so it reads as nested under the header. */}
       <div className='m-auto max-w-(--page-max-width) md:px-6'>
         <div className='bg-background relative flex flex-col border-b-2 border-black md:border-x-2 lg:flex-row lg:items-stretch'>
           <div className='flex flex-1 items-stretch'>
             <nav
               aria-label='Shop'
-              className='flex flex-1 items-center gap-1 px-1.5 py-1.5 xl:px-2'
+              className='flex min-w-0 flex-1 items-center gap-1 px-1.5 py-1.5 xl:px-2'
             >
               <NavLink href={shopPaths.home} text='Featured' />
               {collections.length > 0 && (
@@ -45,7 +45,15 @@ export default function ShopBar({
                   }))}
                 />
               )}
-              <NavLink href={shopPaths.all} text='All Products' />
+              {/* "All" on phones so the row fits beside the cart. */}
+              <NavLink
+                href={shopPaths.all}
+                text={
+                  <>
+                    All<span className='hidden sm:inline'> Products</span>
+                  </>
+                }
+              />
             </nav>
             <CartButton className='border-l-2 border-black lg:hidden' />
           </div>
@@ -59,7 +67,7 @@ export default function ShopBar({
   )
 }
 
-function NavLink({ href, text }: { href: string; text: string }) {
+function NavLink({ href, text }: { href: string; text: React.ReactNode }) {
   const current = usePathname() === href
   return (
     <Link

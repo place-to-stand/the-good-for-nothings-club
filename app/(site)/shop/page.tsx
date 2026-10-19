@@ -6,6 +6,7 @@ import PageShell, { PageShellSection } from '@/components/PageShell'
 import Carousel from '@/components/shop/Carousel'
 import { CollectionTile } from '@/components/shop/CollectionTiles'
 import ProductCard from '@/components/shop/ProductCard'
+import ProductDescription from '@/components/shop/ProductDescription'
 import ShopOffline from '@/components/shop/ShopOffline'
 import { Button } from '@/components/ui/Button'
 import { HIDDEN_COLLECTION_TILES, SHOP_META, shopCopy } from '@/data/shop'
@@ -121,7 +122,7 @@ function Spotlight({ product }: { product: Product }) {
   const href = shopPaths.product(product.handle)
 
   return (
-    <section className='mt-8 grid items-center gap-6 md:mt-12 md:grid-cols-2 md:gap-12'>
+    <section className='mt-12 grid items-center gap-6 md:mt-16 md:grid-cols-2 md:gap-12'>
       <Link
         href={href}
         className='group relative block aspect-square overflow-hidden border-2 border-black bg-white'
@@ -141,14 +142,18 @@ function Spotlight({ product }: { product: Product }) {
         <p className='inline-block bg-black px-2 py-1 text-xs font-bold tracking-[0.1em] text-white uppercase'>
           {shopCopy.justDropped}
         </p>
-        <h2 className='mt-4 text-[36px] font-black tracking-[-0.04em] md:text-[56px]'>
-          <Link href={href}>{product.title}</Link>
+        <h2 className='mt-4 text-[36px] leading-[0.95] font-black tracking-[-0.04em] md:text-[56px]'>
+          {/* Heavier line that sits on the baseline at this size. */}
+          <Link href={href} className='[--line-size:0.06em] [--line-y:88%]'>
+            {product.title}
+          </Link>
         </h2>
         <p className='mt-3 text-xl font-bold'>{priceLabel(product)}</p>
-        {product.description && (
-          <p className='mt-4 line-clamp-4 max-w-prose font-sans leading-snug'>
-            {product.description}
-          </p>
+        {product.descriptionHtml && (
+          <ProductDescription
+            html={product.descriptionHtml}
+            className='mt-4 max-w-prose'
+          />
         )}
         <Button asChild size='lg' className='mt-6'>
           <Link href={href}>{shopCopy.shopIt}</Link>

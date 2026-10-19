@@ -91,7 +91,8 @@ export default function Header() {
                 href={item.href}
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
-                  'px-2 py-3 text-sm font-extrabold tracking-[0.06em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 xl:px-3 xl:text-[15px]',
+                  // Tighter below xl so the seven links and the button fit at 1024px.
+                  'px-1.5 py-3 text-[13px] font-extrabold tracking-[0.04em] uppercase transition-colors hover:bg-black/10 hover:no-underline active:bg-black/20 xl:px-3 xl:text-[15px] xl:tracking-[0.06em]',
                   isActive && 'bg-black/10'
                 )}
               >

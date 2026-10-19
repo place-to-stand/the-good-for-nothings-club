@@ -27,7 +27,9 @@ type CartContextValue = {
   /** True while a cart change is on its way to Shopify. */
   isPending: boolean
   error: string | null
-  addItem: (variantId: string) => Promise<boolean>
+  /** Opens the cart after adding unless `open` is false (the item flew
+   *  into the cart icon instead). */
+  addItem: (variantId: string, options?: { open?: boolean }) => Promise<boolean>
   setQuantity: (lineId: string, quantity: number) => void
 }
 
@@ -64,11 +66,11 @@ export default function CartProvider({ children }: { children: ReactNode }) {
   }, [apply])
 
   const addItem = useCallback(
-    (variantId: string) =>
+    (variantId: string, { open = true }: { open?: boolean } = {}) =>
       new Promise<boolean>(resolve => {
         startTransition(async () => {
           const ok = apply(await addItemAction(variantId))
-          if (ok) setOpen(true)
+          if (ok && open) setOpen(true)
           resolve(ok)
         })
       }),

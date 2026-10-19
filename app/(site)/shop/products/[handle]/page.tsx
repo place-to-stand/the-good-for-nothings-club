@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 import { PageShellSection } from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
 import { ProductGrid } from '@/components/shop/ProductCard'
+import ProductDescription from '@/components/shop/ProductDescription'
 import ProductDetail from '@/components/shop/ProductDetail'
 import ShopFallback from '@/components/shop/ShopFallback'
 import {
@@ -70,10 +71,9 @@ async function ProductContent({ params }: Pick<Props, 'params'>) {
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
           <ProductDetail product={product}>
             {product.descriptionHtml && (
-              // Written by the club in Shopify's product editor.
-              <div
-                className='prose prose-headings:font-sans prose-headings:text-black prose-p:text-black prose-li:text-black prose-strong:text-black prose-table:text-sm prose-td:text-black prose-th:text-black prose-li:my-1 prose-ul:pl-5 mt-8 max-w-none font-sans text-black [--tw-prose-bullets:black] [--tw-prose-counters:black]'
-                dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+              <ProductDescription
+                html={product.descriptionHtml}
+                className='mt-6'
               />
             )}
           </ProductDetail>

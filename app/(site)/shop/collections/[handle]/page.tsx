@@ -61,7 +61,10 @@ async function CollectionContent({ params }: Pick<Props, 'params'>) {
       title={collection.title}
       lead={collection.description || undefined}
     >
-      <CollectionBrowser products={collection.products} />
+      <CollectionBrowser
+        products={collection.products}
+        filters={collection.filters}
+      />
     </PageShell>
   )
 }

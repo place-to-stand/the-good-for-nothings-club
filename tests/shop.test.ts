@@ -17,6 +17,7 @@ import {
   searchProducts,
 } from '@/lib/shopify'
 import { compareAtLabel, formatMoney, priceLabel } from '@/lib/shopify/format'
+import { deriveFilters, matches, readFilters } from '@/lib/shopify/filters'
 import { clip, productJsonLd } from '@/lib/shopify/metadata'
 import type { Product, ProductCard } from '@/lib/shopify/types'
 
@@ -39,14 +40,15 @@ const card: ProductCard = {
   compareAtPriceRange: { minVariantPrice: usd('0.0') },
   featuredImage: image,
   images: [image],
+  vendor: 'So Many Cults',
+  tags: [],
+  quickVariants: [],
 }
 
 const product: Product = {
   ...card,
   description: 'Garment-dyed tee.',
   descriptionHtml: '<p>Garment-dyed tee.</p>',
-  vendor: 'So Many Cults',
-  tags: [],
   updatedAt: '2026-01-01T00:00:00Z',
   seo: { title: null, description: null },
   options: [
@@ -157,6 +159,7 @@ describe('shop markdown', () => {
       seo: { title: null, description: null },
       updatedAt: '2026-01-01T00:00:00Z',
       products: [card],
+      filters: [],
     })
     expect(md).toContain('> Band merch.')
     expect(md).toContain('## Products (1)')
@@ -263,5 +266,80 @@ describe('Storefront API client', () => {
     expect((await searchProducts('tee')).map(p => p.handle)).toEqual([
       'monster-tee',
     ])
+  })
+})
+
+describe('shop filters', () => {
+  const tee = {
+    ...card,
+    quickVariants: ['S', 'M'].map(size => ({
+      id: `v-${size}`,
+      title: size,
+      availableForSale: true,
+      selectedOptions: [{ name: 'Size', value: size }],
+    })),
+  }
+  const hat = { ...card, id: 'hat', productType: 'Hat', vendor: 'GFNC' }
+
+  it('builds type, size and brand filters from products', () => {
+    const ids = deriveFilters([tee, hat]).map(f => f.id)
+    expect(ids).toEqual([
+      'filter.p.product_type',
+      'filter.v.option.size',
+      'filter.p.vendor',
+    ])
+  })
+
+  it('matches option values without caring about case', () => {
+    expect(matches(tee, { kind: 'option', name: 'size', value: 'm' })).toBe(
+      true
+    )
+    expect(matches(hat, { kind: 'option', name: 'Size', value: 'M' })).toBe(
+      false
+    )
+  })
+
+  it('reads Search & Discovery filters, dropping availability', async () => {
+    const filters = await readFilters(
+      [
+        {
+          id: 'filter.v.availability',
+          label: 'Availability',
+          type: 'LIST',
+          values: [],
+        },
+        {
+          id: 'filter.v.option.size',
+          label: 'Size',
+          type: 'LIST',
+          values: [
+            {
+              id: 'filter.v.option.size.m',
+              label: 'M',
+              input: '{"variantOption":{"name":"size","value":"M"}}',
+            },
+          ],
+        },
+        {
+          id: 'filter.p.m.custom.color',
+          label: 'Color',
+          type: 'LIST',
+          values: [
+            {
+              id: 'filter.p.m.custom.color.black',
+              label: 'Black',
+              input: '{"productMetafield":{}}',
+            },
+          ],
+        },
+      ],
+      async () => ['hat']
+    )
+    expect(filters.map(f => f.id)).toEqual([
+      'filter.v.option.size',
+      'filter.p.m.custom.color',
+    ])
+    expect(filters[0].values[0].key).toBe('m')
+    expect(filters[1].values[0].match).toEqual({ kind: 'ids', ids: ['hat'] })
   })
 })

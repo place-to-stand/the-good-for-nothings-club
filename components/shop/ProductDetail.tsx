@@ -15,6 +15,7 @@ import type { Product, ProductVariant, ShopImage } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
 
 import { useCart } from './CartProvider'
+import { flyToCart } from './flyToCart'
 import { ArrowIcon, CloseIcon } from './icons'
 
 type Selection = Record<string, string>
@@ -83,8 +84,15 @@ export default function ProductDetail({
   const [added, setAdded] = useState(false)
   async function add() {
     if (!variant) return
+    // Fly the photo to the cart while the request runs; it lands about
+    // when the count updates.
+    const flew = flyToCart(
+      document.querySelector<HTMLImageElement>(
+        '[data-product-photo] img[data-current]'
+      )
+    )
     setAdded(false)
-    setAdded(await addItem(variant.id))
+    setAdded(await addItem(variant.id, { open: !flew }))
   }
 
   const price = variant?.price ?? product.priceRange.minVariantPrice
@@ -218,22 +226,24 @@ function Gallery({
         type='button'
         onClick={() => current && setLightboxIndex(currentIndex)}
         aria-label={`Enlarge image ${currentIndex + 1} of ${images.length}`}
+        data-product-photo
         className='group relative block aspect-square w-full cursor-zoom-in overflow-hidden border-2 border-black bg-white'
       >
-        {/* Every photo is loaded up front and stacked; switching only changes
-            which one shows, so clicking through the strip is instant. */}
+        {/* Every photo is loaded up front and stacked; switching cross-fades
+            to the one picked, so clicking through the strip never waits. */}
         {images.map((image, i) => (
           <Image
             key={image.url}
             src={image.url}
             alt={image === current ? (image.altText ?? title) : ''}
+            data-current={image === current || undefined}
             fill
             priority={i === 0}
             loading={i === 0 ? undefined : 'eager'}
             fetchPriority={i === 0 ? 'high' : 'low'}
             sizes='(min-width: 768px) 45vw, 100vw'
             className={cn(
-              'object-contain transition-[scale] duration-700 ease-out group-hover:scale-[1.03]',
+              'object-contain transition-[opacity,scale] duration-[250ms,700ms] ease-out group-hover:scale-[1.03]',
               image === current ? 'opacity-100' : 'opacity-0'
             )}
           />

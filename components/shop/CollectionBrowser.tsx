@@ -203,7 +203,7 @@ function Browser({
         <p className='ml-auto hidden text-sm font-bold sm:block'>
           {shown.length} {shown.length === 1 ? 'product' : 'products'}
         </p>
-        <label className='ml-auto flex h-10 items-center border-2 border-black bg-white pl-3 text-sm sm:ml-0'>
+        <label className='bg-input/10 hover:border-input/30 has-focus-visible:border-input ml-auto flex h-10 items-center border-2 border-transparent pl-3 text-sm transition-colors sm:ml-0'>
           <span className='shrink-0'>Sort by:</span>
           <select
             value={state.sort}

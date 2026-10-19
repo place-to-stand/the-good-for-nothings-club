@@ -95,8 +95,8 @@ export default function CartDrawer() {
         side='right'
         className='flex w-full flex-col gap-0 border-l-2 border-black p-0 sm:max-w-md'
       >
-        <SheetHeader className='border-b-2 border-black p-5 text-left'>
-          <SheetTitle className='text-2xl font-black uppercase'>
+        <SheetHeader className='h-19 shrink-0 justify-center space-y-0 border-b-2 border-black px-5 text-left'>
+          <SheetTitle className='text-2xl font-black uppercase [text-box:trim-both_cap_alphabetic]'>
             {shopCopy.cart.title}
           </SheetTitle>
           <SheetDescription className='sr-only'>

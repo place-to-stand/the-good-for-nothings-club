@@ -192,7 +192,7 @@ export default function SearchBox({
       )}
       <button
         type='submit'
-        className='flex w-12 cursor-pointer items-center justify-center border-l-2 border-black hover:bg-black/10'
+        className='flex w-14 shrink-0 cursor-pointer items-center justify-center border-l-2 border-black hover:bg-black/10'
         aria-label='Search'
       >
         <SearchIcon size={22} />

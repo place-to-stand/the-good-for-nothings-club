@@ -15,7 +15,8 @@ import { collectionMetadata } from '@/lib/shopify/metadata'
 /**
  * The standard collection page. A collection that wants its own branded
  * landing page gets a folder next to this one named after its Shopify
- * handle (see ../so-many-cults); Next serves that folder instead.
+ * handle (start from docs/examples/collection-landing-page.tsx); Next
+ * serves that folder instead.
  */
 
 export const ensureStatic = 'navigation'

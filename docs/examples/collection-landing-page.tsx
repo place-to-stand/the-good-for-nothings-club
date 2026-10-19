@@ -6,15 +6,14 @@ import { getCollection } from '@/lib/shopify'
 import { collectionMetadata } from '@/lib/shopify/metadata'
 
 /**
- * Example of a custom collection landing page.
+ * Example of a custom collection landing page. Not a live route.
  *
  * Any folder in app/(site)/shop/collections/ named after a Shopify
- * collection handle replaces the standard page (../[handle]) for that one
- * collection. Copy this folder, rename it to the handle (the last part of
- * the collection's URL in Shopify), and design the page however you like.
- * Products, prices and stock still come from Shopify.
- *
- * Delete this folder to put So Many Cults back on the standard page.
+ * collection handle replaces the standard page ([handle]) for that one
+ * collection. Copy this file to app/(site)/shop/collections/<handle>/page.tsx,
+ * set HANDLE (the last part of the collection's URL in Shopify), and design
+ * the page however you like. Products, prices and stock still come from
+ * Shopify. Delete the folder to go back to the standard page.
  */
 
 const HANDLE = 'so-many-cults'

@@ -21,8 +21,8 @@ you type, from `/api/shop/suggest?q=` (Shopify predictive search).
 ## A custom landing page for a collection
 
 1. Find the collection's handle: the last part of its URL in Shopify.
-2. Copy `app/(site)/shop/collections/so-many-cults/` to a folder named
-   after that handle.
+2. Copy `docs/examples/collection-landing-page.tsx` to
+   `app/(site)/shop/collections/<handle>/page.tsx`.
 3. Change `HANDLE` and design the page. Reuse `CollectionBrowser` for the
    product grid so prices, stock and sorting keep working, or `Carousel`
    for a single scrolling row of `ProductCard`s.

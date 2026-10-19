@@ -179,7 +179,7 @@ export async function getCollection(
       id: ALL_PRODUCTS_HANDLE,
       handle: ALL_PRODUCTS_HANDLE,
       title: 'All Products',
-      description: 'Everything in the shop, newest first.',
+      description: 'Everything in the shop, all in one place.',
       descriptionHtml: '',
       image: null,
       seo: { title: null, description: null },

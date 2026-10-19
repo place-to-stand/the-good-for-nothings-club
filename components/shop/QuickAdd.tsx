@@ -69,7 +69,7 @@ export default function QuickAdd({ product }: { product: ProductCard }) {
           slideFillClassName,
           'bg-background flex size-10 cursor-pointer items-center justify-center border-2 border-black',
           // Hidden until the card is hovered; always shown on touch.
-          'translate-y-1 opacity-0 transition-[opacity,translate,color,background-size] group-hover:translate-y-0 group-hover:opacity-100 focus-visible:translate-y-0 focus-visible:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100',
+          'translate-y-1 opacity-0 [transition:opacity_300ms,translate_300ms,color_500ms_ease-out_250ms,background-size_500ms_ease-out_250ms,background-position_0s_250ms] group-hover:translate-y-0 group-hover:opacity-100 focus-visible:translate-y-0 focus-visible:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100',
           (adding || added) && 'translate-y-0 opacity-100',
           added && 'bg-black text-white'
         )}

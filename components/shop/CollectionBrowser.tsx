@@ -186,7 +186,43 @@ function Browser({
 
   return (
     <div className='pt-4 lg:grid lg:grid-cols-[13rem_1fr] lg:gap-x-10'>
-      <aside aria-label='Filters' className='hidden lg:block'>
+      {/* Top row: the Filters heading over the sidebar, and the count and
+          sort over the grid, on one line. */}
+      <h2 className='hidden self-center text-2xl font-black uppercase [text-box:trim-both_cap_alphabetic] lg:block'>
+        Filters
+      </h2>
+      <div className='flex items-center gap-4 pb-4 lg:pb-0'>
+        <Button
+          type='button'
+          variant='outline'
+          onClick={() => setSheetOpen(true)}
+          className='h-10 lg:hidden'
+        >
+          Filters{activeCount > 0 && ` (${activeCount})`}
+        </Button>
+        <p className='ml-auto hidden text-sm font-bold sm:block'>
+          {shown.length} {shown.length === 1 ? 'product' : 'products'}
+        </p>
+        <label className='ml-auto flex h-10 items-center border-2 border-black bg-white pl-3 text-sm sm:ml-0'>
+          <span className='shrink-0'>Sort by:</span>
+          <select
+            value={state.sort}
+            onChange={e => update({ sort: e.target.value as Sort })}
+            className={cn(
+              selectClassName,
+              'h-full w-auto border-0 bg-transparent pl-1.5 font-bold hover:border-0'
+            )}
+          >
+            {Object.entries(SORTS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <aside aria-label='Filters' className='hidden lg:mt-6 lg:block'>
         <div className='pb-8'>
           {panel}
           {activeCount > 0 && (
@@ -201,40 +237,7 @@ function Browser({
         </div>
       </aside>
 
-      <div className='min-w-0'>
-        <div className='flex items-center gap-4 pb-4'>
-          <Button
-            type='button'
-            variant='outline'
-            onClick={() => setSheetOpen(true)}
-            className='h-10 lg:hidden'
-          >
-            Filters{activeCount > 0 && ` (${activeCount})`}
-          </Button>
-          <p className='hidden text-sm font-semibold lg:block'>
-            {shown.length} {shown.length === 1 ? 'product' : 'products'}
-          </p>
-          <label
-            className={cn(
-              fieldLabelClassName,
-              'ml-auto flex items-center gap-2'
-            )}
-          >
-            <span className='hidden sm:inline'>Sort</span>
-            <select
-              value={state.sort}
-              onChange={e => update({ sort: e.target.value as Sort })}
-              className={cn(selectClassName, 'w-auto font-normal')}
-            >
-              {Object.entries(SORTS).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
+      <div className='min-w-0 lg:mt-6'>
         {shown.length ? (
           <ProductGrid products={shown} className='lg:grid-cols-3' />
         ) : (

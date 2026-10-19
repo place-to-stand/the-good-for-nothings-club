@@ -413,3 +413,32 @@
   background-position: right 0.75rem center;
   background-size: 1rem;
 }
+
+/*
+ * Button hover wipe: a slanted fill grows in from the left and leaves to
+ * the right, the same path as the link underline. It's a background
+ * image, not a layer behind the text, so the text always paints on top.
+ * Set --wipe to the fill colour; buttons set the transition (color and
+ * background-size) and the hover text colour.
+ */
+@layer components {
+  .wipe {
+    background-image: linear-gradient(
+      102deg,
+      transparent 0.5rem,
+      var(--wipe, black) 0.5rem,
+      var(--wipe, black) calc(100% - 0.5rem),
+      transparent calc(100% - 0.5rem)
+    );
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    background-position: calc(100% + 1rem) 0;
+  }
+
+  @media (hover: hover) {
+    .wipe:not(:disabled):hover {
+      background-size: calc(100% + 2rem) 100%;
+      background-position: -1rem 0;
+    }
+  }
+}

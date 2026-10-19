@@ -32,7 +32,8 @@ export function PageShellSection({ children }: { children: ReactNode }) {
 /**
  * The standard page frame: bordered section, a compact header with the
  * title on the left and the serif lead on the right, then a divider.
- * Content renders below the divider.
+ * Title and lead are trimmed to cap height and baseline, so the space
+ * above and below them is equal and the title sits centred.
  */
 export default function PageShell({
   title,
@@ -44,12 +45,12 @@ export default function PageShell({
     <main>
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 pt-5 pb-6 md:border-x-2 md:px-12 md:pt-8 md:pb-12'>
-          <header className='grid grid-cols-1 gap-2 md:min-h-20 md:grid-cols-2 md:items-end md:gap-x-16'>
-            <h1 className='text-[32px] leading-[0.9] font-black tracking-[-0.04em] md:text-[48px] lg:text-[64px]'>
+          <header className='grid grid-cols-1 gap-2 md:min-h-16 md:grid-cols-2 md:items-center md:gap-x-16'>
+            <h1 className='text-[32px] leading-[0.9] font-black tracking-[-0.04em] [text-box:trim-both_cap_alphabetic] md:text-[48px] lg:text-[64px]'>
               {title}
             </h1>
             {lead && (
-              <p className='max-w-xl font-serif text-lg leading-tight text-pretty sm:text-xl md:line-clamp-3 md:pb-1'>
+              <p className='max-w-xl font-serif text-lg leading-tight text-pretty [text-box:trim-both_cap_alphabetic] sm:text-xl'>
                 {lead}
               </p>
             )}

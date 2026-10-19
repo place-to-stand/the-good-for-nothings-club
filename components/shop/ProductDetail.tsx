@@ -11,20 +11,18 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 
 import { Button } from '@/components/ui/Button'
 import { formatMoney } from '@/lib/shopify/format'
-import type { Product, ProductVariant, ShopImage } from '@/lib/shopify/types'
+import type { Product, ShopImage } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
 
 import { useCart } from './CartProvider'
 import { flyToCart } from './flyToCart'
 import { ArrowIcon, CloseIcon } from './icons'
-
-type Selection = Record<string, string>
-
-const matches = (variant: ProductVariant, selection: Selection) =>
-  variant.selectedOptions.every(o => selection[o.name] === o.value)
-
-const selectionOf = (variant: ProductVariant): Selection =>
-  Object.fromEntries(variant.selectedOptions.map(o => [o.name, o.value]))
+import {
+  OptionPicker,
+  selectionOf,
+  useAddedFlash,
+  useVariantSelection,
+} from './VariantOptions'
 
 /**
  * Product page body: image gallery, option pickers, price, add to cart.
@@ -39,30 +37,22 @@ export default function ProductDetail({
 }) {
   const { addItem, isPending, error } = useCart()
 
-  const firstVariant =
-    product.variants.find(v => v.availableForSale) ?? product.variants[0]
-  const [selection, setSelection] = useState<Selection>(() =>
-    firstVariant ? selectionOf(firstVariant) : {}
-  )
-  const variant = product.variants.find(v => matches(v, selection))
+  const { selection, setSelection, variant, choose, isAvailable } =
+    useVariantSelection(product.variants)
 
   // Google Shopping links to ?variant=<id>; start on that variant. Read
   // after load so the page itself can stay static.
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get('variant')
     const linked = id && product.variants.find(v => v.id.endsWith(`/${id}`))
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (linked) setSelection(selectionOf(linked))
-  }, [product.variants])
+  }, [product.variants, setSelection])
 
-  // A product with one variant has a single "Title: Default Title" option.
-  const options = product.options.filter(
-    o =>
-      !(
-        o.optionValues.length === 1 &&
-        o.optionValues[0].name === 'Default Title'
-      )
-  )
+  // Shopify's option order, without the "Default Title" of one-variant
+  // products.
+  const options = product.options
+    .map(o => ({ name: o.name, values: o.optionValues.map(v => v.name) }))
+    .filter(o => !(o.values.length === 1 && o.values[0] === 'Default Title'))
 
   const images = product.images.length
     ? product.images
@@ -72,25 +62,12 @@ export default function ProductDetail({
   const [imageUrl, setImageUrl] = useState(images[0]?.url)
   const current = images.find(i => i.url === imageUrl) ?? images[0]
 
-  function choose(name: string, value: string) {
-    const next = { ...selection, [name]: value }
-    // If that combination doesn't exist, keep the new value and take the
-    // first variant that has it.
-    const exact = product.variants.find(v => matches(v, next))
-    const fallback = product.variants.find(v =>
-      v.selectedOptions.some(o => o.name === name && o.value === value)
-    )
-    const picked = exact ?? fallback
-    setSelection(picked ? selectionOf(picked) : next)
+  function pick(name: string, value: string) {
+    const picked = choose(name, value)
     if (picked?.image) setImageUrl(picked.image.url)
   }
 
-  const isAvailable = (name: string, value: string) =>
-    product.variants.some(
-      v => v.availableForSale && matches(v, { ...selection, [name]: value })
-    )
-
-  const [added, setAdded] = useState(false)
+  const [added, flashAdded] = useAddedFlash()
   async function add() {
     if (!variant) return
     // Fly the photo to the cart while the request runs; it lands about
@@ -100,8 +77,7 @@ export default function ProductDetail({
         '[data-product-photo] img[data-current]'
       )
     )
-    setAdded(false)
-    setAdded(await addItem(variant.id, { open: !flew }))
+    if (await addItem(variant.id, { open: !flew })) flashAdded()
   }
 
   const price = variant?.price ?? product.priceRange.minVariantPrice
@@ -133,40 +109,13 @@ export default function ProductDetail({
           )}
         </p>
 
-        {options.map(option => (
-          <fieldset key={option.id} className='mt-6'>
-            <legend className='text-sm font-bold tracking-[0.06em] uppercase'>
-              {option.name}
-              <span className='ml-2 font-normal normal-case'>
-                {selection[option.name]}
-              </span>
-            </legend>
-            <div className='mt-2 flex flex-wrap gap-2'>
-              {option.optionValues.map(({ name: value }) => {
-                const selected = selection[option.name] === value
-                const available = isAvailable(option.name, value)
-                return (
-                  <button
-                    key={value}
-                    type='button'
-                    aria-pressed={selected}
-                    onClick={() => choose(option.name, value)}
-                    className={cn(
-                      'min-w-12 cursor-pointer border-2 border-black px-3 py-2 text-sm font-bold uppercase transition-colors',
-                      selected
-                        ? 'bg-black text-white'
-                        : 'bg-white hover:bg-black/10',
-                      !available && 'text-black/40 line-through',
-                      !available && selected && 'text-white/60'
-                    )}
-                  >
-                    {value}
-                  </button>
-                )
-              })}
-            </div>
-          </fieldset>
-        ))}
+        <OptionPicker
+          options={options}
+          selection={selection}
+          choose={pick}
+          isAvailable={isAvailable}
+          className='mt-6'
+        />
 
         <Button
           size='lg'
@@ -178,17 +127,17 @@ export default function ProductDetail({
             ? 'Unavailable'
             : !variant.availableForSale
               ? 'Sold out'
-              : isPending
-                ? 'Adding…'
-                : 'Add to cart'}
+              : added
+                ? 'Added ✓'
+                : isPending
+                  ? 'Adding…'
+                  : 'Add to cart'}
         </Button>
-        <p aria-live='polite' className='mt-2 min-h-5 text-sm font-semibold'>
-          {error ? (
-            <span className='text-red-700'>{error}</span>
-          ) : added ? (
-            'Added to your cart.'
-          ) : null}
-        </p>
+        {error && (
+          <p role='alert' className='mt-2 text-sm font-semibold text-red-700'>
+            {error}
+          </p>
+        )}
 
         {children}
       </div>

@@ -67,6 +67,7 @@ export type QuickVariant = {
   title: string
   availableForSale: boolean
   selectedOptions: SelectedOption[]
+  price: Money
 }
 
 /**

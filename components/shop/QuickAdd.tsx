@@ -1,115 +1,163 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+import { useRef, useState } from 'react'
 
-import type { QuickVariant } from '@/lib/shopify/types'
+import { Button, slideFillClassName } from '@/components/ui/Button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { formatMoney, priceLabel } from '@/lib/shopify/format'
+import type { ProductCard } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
 
 import { useCart } from './CartProvider'
 import { flyToCart } from './flyToCart'
 import { CheckIcon, PlusIcon } from './icons'
+import {
+  OptionPicker,
+  optionsOf,
+  useAddedFlash,
+  useVariantSelection,
+} from './VariantOptions'
 
 /**
  * The + in the corner of a product card's photo. One variant: adds it.
- * Several (sizes): opens a row of choices first. Shows on hover, and
- * always on touch screens.
+ * Several (sizes, colours): opens a small window to choose first. Shows
+ * on hover, and always on touch screens.
  */
-export default function QuickAdd({
-  title,
-  variants,
-}: {
-  title: string
-  variants: QuickVariant[]
-}) {
+export default function QuickAdd({ product }: { product: ProductCard }) {
   const { addItem } = useCart()
   const [open, setOpen] = useState(false)
-  const [state, setState] = useState<'idle' | 'adding' | 'added'>('idle')
+  const [adding, setAdding] = useState(false)
+  const [added, flashAdded] = useAddedFlash()
   const root = useRef<HTMLDivElement>(null)
 
-  const single = variants.length === 1
-  const showChoices = open && !single
-
-  useEffect(() => {
-    if (!open) return
-    const onDown = (e: PointerEvent) => {
-      if (!root.current?.contains(e.target as Node)) setOpen(false)
-    }
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
-    document.addEventListener('pointerdown', onDown)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('pointerdown', onDown)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [open])
+  const variants = product.quickVariants
+  const options = optionsOf(variants)
+  const single = options.length === 0
 
   if (!variants.some(v => v.availableForSale)) return null
 
-  async function add(variantId: string) {
+  async function add(variantId: string, from: Element | null) {
+    setAdding(true)
     setOpen(false)
-    setState('adding')
-    const flew = flyToCart(root.current?.closest('[data-card]') ?? null)
+    const flew = flyToCart(from)
     const ok = await addItem(variantId, { open: !flew })
-    setState(ok ? 'added' : 'idle')
-    if (ok) setTimeout(() => setState('idle'), 1500)
+    setAdding(false)
+    if (ok) flashAdded()
   }
 
   return (
-    <div
-      ref={root}
-      // Spans the photo so the size row can use its full width on small
-      // cards; only the buttons take clicks.
-      className='absolute inset-x-2 bottom-2 flex flex-col items-end gap-2 *:pointer-events-auto'
-      // Moving the mouse away closes the size row. Mouse only: a touch
-      // "leaves" as each tap ends, which would close it mid-tap.
-      onPointerLeave={e => e.pointerType === 'mouse' && setOpen(false)}
-    >
-      {showChoices && (
-        <div
-          role='group'
-          aria-label={`Choose ${title}`}
-          className='bg-background grid w-full grid-cols-[repeat(auto-fit,minmax(2.25rem,1fr))] gap-1 border-2 border-black p-1'
-        >
-          {variants.map(v => (
-            <button
-              key={v.id}
-              type='button'
-              disabled={!v.availableForSale}
-              onClick={() => add(v.id)}
-              className='cursor-pointer border-2 border-black bg-white px-1 py-1.5 text-xs font-bold uppercase transition-colors hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:text-black/40 disabled:line-through disabled:hover:bg-white'
-            >
-              {v.title}
-            </button>
-          ))}
-        </div>
-      )}
+    <div ref={root} className='pointer-events-auto absolute right-2 bottom-2'>
       <button
         type='button'
         aria-label={
-          single ? `Add ${title} to cart` : `Choose a size of ${title}`
+          single ? `Add ${product.title} to cart` : `Choose ${product.title}`
         }
-        aria-expanded={single ? undefined : open}
-        disabled={state === 'adding'}
-        onClick={() => (single ? add(variants[0].id) : setOpen(o => !o))}
+        aria-haspopup={single ? undefined : 'dialog'}
+        disabled={adding}
+        onClick={() =>
+          single
+            ? add(variants[0].id, root.current?.closest('[data-card]') ?? null)
+            : setOpen(true)
+        }
         className={cn(
-          'bg-background flex size-10 cursor-pointer items-center justify-center border-2 border-black transition-[opacity,translate,background-color] duration-200 ease-out hover:bg-black hover:text-white',
-          'translate-y-1 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 focus-visible:translate-y-0 focus-visible:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100',
-          (open || state !== 'idle') && 'translate-y-0 opacity-100',
-          state === 'added' && 'bg-black text-white'
+          slideFillClassName,
+          'bg-background flex size-10 cursor-pointer items-center justify-center border-2 border-black',
+          // Hidden until the card is hovered; always shown on touch.
+          'translate-y-1 opacity-0 transition-[opacity,translate,color] group-hover:translate-y-0 group-hover:opacity-100 focus-visible:translate-y-0 focus-visible:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100',
+          (adding || added) && 'translate-y-0 opacity-100',
+          added && 'bg-black text-white'
         )}
       >
-        {state === 'added' ? (
-          <CheckIcon size={20} />
-        ) : (
-          <PlusIcon
-            size={20}
-            className={cn(
-              'transition-transform duration-200',
-              showChoices && 'rotate-45'
-            )}
-          />
-        )}
+        {added ? <CheckIcon size={20} /> : <PlusIcon size={20} />}
       </button>
+
+      {!single && (
+        <Choose
+          product={product}
+          options={options}
+          open={open}
+          onOpenChange={setOpen}
+          onAdd={add}
+        />
+      )}
     </div>
+  )
+}
+
+function Choose({
+  product,
+  options,
+  open,
+  onOpenChange,
+  onAdd,
+}: {
+  product: ProductCard
+  options: ReturnType<typeof optionsOf>
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onAdd: (variantId: string, from: Element | null) => void
+}) {
+  const { selection, variant, choose, isAvailable } = useVariantSelection(
+    product.quickVariants
+  )
+  const photo = useRef<HTMLDivElement>(null)
+  const image = product.featuredImage
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className='max-h-[90vh] overflow-y-auto rounded-none border-2 border-black p-0 sm:max-w-md'>
+        <div className='flex gap-4 border-b-2 border-black p-5 pr-14'>
+          {image && (
+            <div
+              ref={photo}
+              className='relative size-20 shrink-0 border-2 border-black bg-white'
+            >
+              <Image
+                src={image.url}
+                alt=''
+                fill
+                sizes='80px'
+                className='object-cover'
+              />
+            </div>
+          )}
+          <div>
+            <DialogTitle className='font-sans text-lg leading-tight font-black uppercase'>
+              {product.title}
+            </DialogTitle>
+            <DialogDescription className='mt-1 text-base font-bold'>
+              {variant ? formatMoney(variant.price) : priceLabel(product)}
+            </DialogDescription>
+          </div>
+        </div>
+        <div className='p-5'>
+          <OptionPicker
+            options={options}
+            selection={selection}
+            choose={choose}
+            isAvailable={isAvailable}
+            className='mb-5'
+          />
+          <Button
+            size='lg'
+            className='w-full'
+            disabled={!variant?.availableForSale}
+            onClick={() => variant && onAdd(variant.id, photo.current)}
+          >
+            {!variant
+              ? 'Unavailable'
+              : variant.availableForSale
+                ? 'Add to cart'
+                : 'Sold out'}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }

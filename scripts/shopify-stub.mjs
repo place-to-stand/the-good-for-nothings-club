@@ -21,13 +21,42 @@ const img = (name, alt = null) => ({
 })
 const edges = list => ({ edges: list.map(node => ({ node })) })
 
-function product({ handle, title, type, price, sizes, soldOut = [], pics }) {
-  const variants = (sizes ?? ['Default Title']).map((size, i) => ({
+// Copied from the live store so tables and spacing render as they will.
+const realDescriptions = {
+  'so-many-cults-monster-t-shirt':
+    '<ul>\n<li>Comfort Colors styles are garment dyed for that lived in feel and almost no shrinkage at home</li>\n<li>Made with 100% soft ring spun U.S. cotton fabric and cotton threads</li>\n<li>Topstitched, classic width, rib collar</li>\n<li>Relaxed fit, seamless body</li>\n<li>Signature twill label and shoulder to shoulder twill tape</li>\n<li>Proud member of the U.S. Cotton Trust Protocol</li>\n<li>Made with OEKO-TEX certified low-impact dyes</li>\n<li>Clean pigment dye colors are salt free</li>\n<li>Reduce plastic waste by the removal of polybags from all products except color White</li>\n</ul>\n<p><br></p>\n<p><strong class="size-guide-title">Size guide</strong></p>\n<table style="width: 97.7625%; height: 225px;">\n<colgroup>\n<col style="width: 11.9217%;">\n<col style="width: 16.548%;">\n<col style="width: 19.2171%;">\n<col style="width: 51.2456%;">\n</colgroup>\n<thead class="silk-table-thead">\n<tr style="height: 35.5938px;">\n<th class="silk-table-cell" style="width: 9.21739%; height: 35.5938px;">\n<p>Size</p>\n</th>\n<th class="silk-table-cell" style="width: 12.8696%; height: 35.5938px;">\n<p>Width\u00a0(in)</p>\n</th>\n<th class="silk-table-cell" style="width: 14.9565%; height: 35.5938px;">\n<p>Length\u00a0(in)</p>\n</th>\n<th class="silk-table-cell" style="width: 39.6522%; height: 35.5938px;">\n<p>Sleeve center back\u00a0(in)</p>\n</th>\n</tr>\n</thead>\n<tbody class="silk-table-tbody">\n<tr class="silk-table-row silk-table-row-level-0" style="height: 19.5938px;">\n<td class="silk-table-cell" style="width: 9.21739%; height: 19.5938px;">S</td>\n<td class="silk-table-cell" style="width: 12.8696%; height: 19.5938px;">18.25</td>\n<td class="silk-table-cell" style="width: 14.9565%; height: 19.5938px;">26.625</td>\n<td class="silk-table-cell" style="width: 39.6522%; height: 19.5938px;">16.25</td>\n</tr>\n<tr class="silk-table-row silk-table-row-level-0" style="height: 19.5938px;">\n<td class="silk-table-cell" style="width: 9.21739%; height: 19.5938px;">M</td>\n<td class="silk-table-cell" style="width: 12.8696%; height: 19.5938px;">20.25</td>\n<td class="silk-table-cell" style="width: 14.9565%; height: 19.5938px;">28</td>\n<td class="silk-table-cell" style="width: 39.6522%; height: 19.5938px;">17.75</td>\n</tr>\n<tr class="silk-table-row silk-table-row-level-0" style="height: 19.5938px;">\n<td class="silk-table-cell" style="width: 9.21739%; height: 19.5938px;">L</td>\n<td class="silk-table-cell" style="width: 12.8696%; height: 19.5938px;">22</td>\n<td class="silk-table-cell" style="width: 14.9565%; height: 19.5938px;">29.375</td>\n<td class="silk-table-cell" style="width: 39.6522%; height: 19.5938px;">19</td>\n</tr>\n<tr class="silk-table-row silk-table-row-level-0" style="height: 19.5938px;">\n<td class="silk-table-cell" style="width: 9.21739%; height: 19.5938px;">XL</td>\n<td class="silk-table-cell" style="width: 12.8696%; height: 19.5938px;">24</td>\n<td class="silk-table-cell" style="width: 14.9565%; height: 19.5938px;">30.75</td>\n<td class="silk-table-cell" style="width: 39.6522%; height: 19.5938px;">20.5</td>\n</tr>\n<tr class="silk-table-row silk-table-row-level-0" style="height: 19.5938px;">\n<td class="silk-table-cell" style="width: 9.21739%; height: 19.5938px;">2XL</td>\n<td class="silk-table-cell" style="width: 12.8696%; height: 19.5938px;">26</td>\n<td class="silk-table-cell" style="width: 14.9565%; height: 19.5938px;">31.625</td>\n<td class="silk-table-cell" style="width: 39.6522%; height: 19.5938px;">21.75</td>\n</tr>\n<tr class="silk-table-row silk-table-row-level-0" style="height: 19.5938px;">\n<td class="silk-table-cell" style="width: 9.21739%; height: 19.5938px;">3XL</td>\n<td class="silk-table-cell" style="width: 12.8696%; height: 19.5938px;">27.75</td>\n<td class="silk-table-cell" style="width: 14.9565%; height: 19.5938px;">32.5</td>\n<td class="silk-table-cell" style="width: 39.6522%; height: 19.5938px;">23.25</td>\n</tr>\n<tr class="silk-table-row silk-table-row-level-0" style="height: 19.5938px;">\n<td class="silk-table-cell" style="width: 9.21739%; height: 19.5938px;">4XL</td>\n<td class="silk-table-cell" style="width: 12.8696%; height: 19.5938px;">29.75</td>\n<td class="silk-table-cell" style="width: 14.9565%; height: 19.5938px;">33.5</td>\n<td class="silk-table-cell" style="width: 39.6522%; height: 19.5938px;">24.625</td>\n</tr>\n</tbody>\n</table>',
+}
+
+// Vendors as on the live store ("Brand" filter).
+const vendors = {
+  'so-many-cults-monster-t-shirt': 'So many cults',
+  'plead-the-fifth-volume-02-issue-05': 'LIMO zine',
+  'headless-witches': 'Chris Donahue Photo',
+}
+
+function product({
+  handle,
+  title,
+  type,
+  price,
+  sizes,
+  colors,
+  soldOut = [],
+  pics,
+}) {
+  // Colour x size when colours are given, like the band tees.
+  const combos = (sizes ?? ['Default Title']).flatMap(size =>
+    (colors ?? [null]).map(color => ({ size, color }))
+  )
+  const variants = combos.map(({ size, color }, i) => ({
     id: `gid://shopify/ProductVariant/${handle}-${i}`,
-    title: size,
-    sku: `${handle}-${size}`.toUpperCase(),
-    availableForSale: !soldOut.includes(size),
-    selectedOptions: [{ name: sizes ? 'Size' : 'Title', value: size }],
+    title: color ? `${color} / ${size}` : size,
+    sku: `${handle}-${color ?? ''}-${size}`.toUpperCase(),
+    availableForSale: !soldOut.includes(color ? `${color} / ${size}` : size),
+    selectedOptions: [
+      ...(color ? [{ name: 'Color', value: color }] : []),
+      { name: sizes ? 'Size' : 'Title', value: size },
+    ],
     price: usd(price),
     compareAtPrice: null,
     image: null,
@@ -47,11 +76,22 @@ function product({ handle, title, type, price, sizes, soldOut = [], pics }) {
     images: edges(images.slice(0, 2)),
     allImages: edges(images),
     description: `${title}, from the club.`,
-    descriptionHtml: `<p>${title}, from the club.</p><ul><li>100% cotton</li><li>Printed in Austin</li></ul><h4>Size guide</h4><table><thead><tr><th></th><th>WIDTH (inches)</th><th>LENGTH (inches)</th></tr></thead><tbody><tr><td><strong>S</strong></td><td>18 ¼</td><td>26 ⅝</td></tr><tr><td><strong>M</strong></td><td>20 ¼</td><td>28</td></tr><tr><td><strong>L</strong></td><td>22</td><td>29 ⅜</td></tr></tbody></table>`,
-    vendor: 'The Good for Nothings Club',
+    descriptionHtml:
+      realDescriptions[handle] ??
+      `<p>${title}, from the club.</p><p>Art by <a href="https://somanycults.com">So Many Cults</a>.</p><ul><li>100% cotton</li><li>Printed in Austin</li></ul><h4>Size guide</h4><table><thead><tr><th></th><th>WIDTH (inches)</th><th>LENGTH (inches)</th></tr></thead><tbody><tr><td><strong>S</strong></td><td>18 ¼</td><td>26 ⅝</td></tr><tr><td><strong>M</strong></td><td>20 ¼</td><td>28</td></tr><tr><td><strong>L</strong></td><td>22</td><td>29 ⅜</td></tr></tbody></table>`,
+    vendor: vendors[handle] ?? 'The Good for Nothings Club',
     tags: [],
     seo: { title: null, description: null },
     options: [
+      ...(colors
+        ? [
+            {
+              id: `${handle}-color`,
+              name: 'Color',
+              optionValues: colors.map(name => ({ name })),
+            },
+          ]
+        : []),
       {
         id: `${handle}-opt`,
         name: sizes ? 'Size' : 'Title',
@@ -60,12 +100,15 @@ function product({ handle, title, type, price, sizes, soldOut = [], pics }) {
     ],
     variants: edges(variants),
     quickVariants: edges(
-      variants.map(({ id, title, availableForSale, selectedOptions }) => ({
-        id,
-        title,
-        availableForSale,
-        selectedOptions,
-      }))
+      variants.map(
+        ({ id, title, availableForSale, selectedOptions, price }) => ({
+          id,
+          title,
+          availableForSale,
+          selectedOptions,
+          price,
+        })
+      )
     ),
   }
 }
@@ -77,7 +120,8 @@ const products = [
     type: 'T-Shirt',
     price: '29.0',
     sizes: ['S', 'M', 'L', 'XL'],
-    soldOut: ['XL'],
+    colors: ['Black', 'Crimson'],
+    soldOut: ['Black / XL', 'Crimson / S'],
     pics: ['band-room', 'recording-studio'],
   }),
   product({

@@ -60,6 +60,10 @@ const productCard = /* GraphQL */ `
             name
             value
           }
+          price {
+            amount
+            currencyCode
+          }
         }
       }
     }

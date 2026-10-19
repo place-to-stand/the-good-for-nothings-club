@@ -174,3 +174,29 @@ export function matches(product: ProductCard, match: FilterMatch) {
       return false
   }
 }
+
+/**
+ * Search & Discovery's filters plus any the products call for that it
+ * left out (the Storefront API may only send Availability and Price), so
+ * every collection gets type, option and brand filters. Search &
+ * Discovery wins where both have the same filter; price goes last.
+ */
+export function mergeFilters(
+  fromShopify: ShopFilter[],
+  derived: ShopFilter[]
+): ShopFilter[] {
+  // Shopify's own filter wins when both cover the same thing (same id or
+  // same label, e.g. a colour metafield and the Color option).
+  const ids = new Set(fromShopify.map(f => f.id))
+  const labels = new Set(fromShopify.map(f => f.label.toLowerCase()))
+  const all = [
+    ...derived.filter(
+      f => !ids.has(f.id) && !labels.has(f.label.toLowerCase())
+    ),
+    ...fromShopify,
+  ]
+  const isPrice = (f: ShopFilter) => f.type === 'PRICE_RANGE'
+  // One price filter, at the end.
+  const price = all.find(isPrice)
+  return [...all.filter(f => !isPrice(f)), ...(price ? [price] : [])]
+}

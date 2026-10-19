@@ -57,4 +57,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = 'Button'
 
+/**
+ * The outline button's hover (a black fill sliding in from the left) for
+ * square icon buttons outside <Button>: carousel arrows, quick add.
+ * Disabled buttons don't fill.
+ */
+export const slideFillClassName =
+  'relative isolate overflow-hidden transition-colors duration-500 ease-out before:absolute before:inset-y-0 before:-inset-x-4 before:-z-10 before:-translate-x-[115%] before:-skew-x-12 before:bg-black before:transition-transform before:duration-500 before:ease-out hover:text-white hover:before:translate-x-0 disabled:before:hidden'
+
 export { Button, buttonVariants }

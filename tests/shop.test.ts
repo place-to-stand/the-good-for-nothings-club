@@ -17,7 +17,12 @@ import {
   searchProducts,
 } from '@/lib/shopify'
 import { compareAtLabel, formatMoney, priceLabel } from '@/lib/shopify/format'
-import { deriveFilters, matches, readFilters } from '@/lib/shopify/filters'
+import {
+  deriveFilters,
+  matches,
+  mergeFilters,
+  readFilters,
+} from '@/lib/shopify/filters'
 import { clip, productJsonLd } from '@/lib/shopify/metadata'
 import type { Product, ProductCard } from '@/lib/shopify/types'
 
@@ -288,6 +293,7 @@ describe('shop filters', () => {
       title: size,
       availableForSale: true,
       selectedOptions: [{ name: 'Size', value: size }],
+      price: usd('29.0'),
     })),
   }
   const hat = { ...card, id: 'hat', productType: 'Hat', vendor: 'GFNC' }
@@ -352,5 +358,27 @@ describe('shop filters', () => {
     ])
     expect(filters[0].values[0].key).toBe('m')
     expect(filters[1].values[0].match).toEqual({ kind: 'ids', ids: ['hat'] })
+  })
+})
+
+describe('merging filters', () => {
+  it('adds derived filters Shopify left out and keeps one price, last', () => {
+    const price = {
+      id: 'filter.v.price',
+      label: 'Price',
+      type: 'PRICE_RANGE' as const,
+      values: [],
+    }
+    const size = {
+      id: 'filter.v.option.size',
+      label: 'Size',
+      type: 'LIST' as const,
+      values: [],
+    }
+    const merged = mergeFilters([price], [size, { ...price }])
+    expect(merged.map(f => f.id)).toEqual([
+      'filter.v.option.size',
+      'filter.v.price',
+    ])
   })
 })

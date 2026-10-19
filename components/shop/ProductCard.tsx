@@ -77,7 +77,7 @@ export default function ProductCard({
       </Link>
       {/* Same box as the photo, so the + lands in its bottom-right corner. */}
       <div className='pointer-events-none absolute inset-x-0.5 top-0.5 aspect-square'>
-        <QuickAdd title={product.title} variants={product.quickVariants} />
+        <QuickAdd product={product} />
       </div>
     </div>
   )

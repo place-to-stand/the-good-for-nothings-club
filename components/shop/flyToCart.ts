@@ -26,7 +26,9 @@ export function flyToCart(from: Element | null): boolean {
       r.width > 0 &&
       r.bottom > 0 &&
       r.top < window.innerHeight &&
-      !el.closest('[aria-hidden="true"]')
+      // The floating cart marks itself hidden while it's slid away. (Not
+      // closest(): an open dialog marks the rest of the page hidden too.)
+      el.getAttribute('aria-hidden') !== 'true'
     )
   })
   if (!target) return false

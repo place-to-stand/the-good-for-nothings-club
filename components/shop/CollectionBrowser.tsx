@@ -1,5 +1,6 @@
 'use client'
 
+import { ChevronDown } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useMemo, useState } from 'react'
 
@@ -18,7 +19,7 @@ import {
   selectClassName,
 } from '@/components/ui/fieldStyles'
 import { shopCopy } from '@/data/shop'
-import { deriveFilters, matches } from '@/lib/shopify/filters'
+import { deriveFilters, matches, mergeFilters } from '@/lib/shopify/filters'
 import type { ProductCard, ShopFilter } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
 
@@ -63,7 +64,7 @@ export default function CollectionBrowser({
   filters?: ShopFilter[]
 }) {
   const groups = useMemo(
-    () => (filters?.length ? filters : deriveFilters(products)),
+    () => mergeFilters(filters ?? [], deriveFilters(products)),
     [filters, products]
   )
   // Reading the URL needs a Suspense boundary; the static page shows the
@@ -186,7 +187,8 @@ function Browser({
   return (
     <div className='pt-4 lg:grid lg:grid-cols-[13rem_1fr] lg:gap-x-10'>
       <aside aria-label='Filters' className='hidden lg:block'>
-        <div className='sticky top-28 pb-8'>
+        {/* Scrolls on its own when the filters run taller than the screen. */}
+        <div className='sticky top-6 max-h-[calc(100vh-3rem)] [scrollbar-width:thin] overflow-y-auto overscroll-contain pr-2 pb-8'>
           {panel}
           {activeCount > 0 && (
             <button
@@ -293,7 +295,7 @@ function FilterPanel({
   update: (change: Partial<State>) => void
 }) {
   return (
-    <div className='space-y-6'>
+    <div className='space-y-5'>
       <label
         className={cn(
           fieldLabelClassName,
@@ -312,8 +314,7 @@ function FilterPanel({
       {groups.map(g => {
         if (g.type === 'PRICE_RANGE')
           return (
-            <fieldset key={g.id}>
-              <Legend>{g.label}</Legend>
+            <Group key={g.id} label={g.label}>
               <div className='flex items-center gap-2'>
                 <Input
                   type='number'
@@ -335,7 +336,7 @@ function FilterPanel({
                   onChange={e => update({ priceMax: e.target.value })}
                 />
               </div>
-            </fieldset>
+            </Group>
           )
 
         // Hide values nothing here matches, and groups left with nothing.
@@ -348,12 +349,16 @@ function FilterPanel({
         if (!values.length) return null
         const picked = state.picked[g.id] ?? []
         return (
-          <fieldset key={g.id}>
-            <Legend>{g.label}</Legend>
-            <ul className='space-y-2'>
-              {values.map(v => (
+          <Group key={g.id} label={g.label} count={picked.length}>
+            <ShowMore
+              items={values}
+              // Keep ticked values in view when the list is cut short.
+              keep={v => picked.includes(v.key)}
+              render={v => (
                 <li key={v.key}>
-                  <label className='flex cursor-pointer items-center gap-2 text-sm'>
+                  {/* Box and count line up with the first line when a long
+                      name wraps. */}
+                  <label className='grid cursor-pointer grid-cols-[auto_1fr_auto] items-start gap-x-2 text-sm leading-snug'>
                     <input
                       type='checkbox'
                       checked={picked.includes(v.key)}
@@ -367,25 +372,77 @@ function FilterPanel({
                           },
                         })
                       }
-                      className={checkboxClassName}
+                      className={cn(checkboxClassName, 'mt-0.5')}
                     />
-                    {v.label}
+                    <span>{v.label}</span>
                     <span className='text-black/50'>({v.count})</span>
                   </label>
                 </li>
-              ))}
-            </ul>
-          </fieldset>
+              )}
+            />
+          </Group>
         )
       })}
     </div>
   )
 }
 
-function Legend({ children }: { children: React.ReactNode }) {
+/** A filter group that folds shut, open to start with. */
+function Group({
+  label,
+  count = 0,
+  children,
+}: {
+  label: string
+  /** Ticked values, shown beside the label when it's folded. */
+  count?: number
+  children: React.ReactNode
+}) {
   return (
-    <legend className='mb-3 text-xs font-extrabold tracking-[0.08em] uppercase'>
-      {children}
-    </legend>
+    <details open className='details-animated group/filter'>
+      <summary className='flex cursor-pointer list-none items-center justify-between gap-2 py-1 text-xs font-extrabold tracking-[0.08em] uppercase [&::-webkit-details-marker]:hidden'>
+        <span>
+          {label}
+          {count > 0 && <span className='ml-1.5 text-black/50'>({count})</span>}
+        </span>
+        <ChevronDown
+          size={16}
+          strokeWidth={3}
+          className='transition-transform duration-200 group-open/filter:rotate-180'
+        />
+      </summary>
+      <div className='pt-2'>{children}</div>
+    </details>
+  )
+}
+
+const SHOW = 5
+
+/** The first few values, then a "Show N more" link for the rest. */
+function ShowMore<T>({
+  items,
+  keep,
+  render,
+}: {
+  items: T[]
+  keep: (item: T) => boolean
+  render: (item: T) => React.ReactNode
+}) {
+  const [all, setAll] = useState(false)
+  const cut = !all && items.length > SHOW + 1
+  const shown = cut ? items.filter((item, i) => i < SHOW || keep(item)) : items
+  return (
+    <>
+      <ul className='space-y-2'>{shown.map(render)}</ul>
+      {items.length > SHOW + 1 && (
+        <button
+          type='button'
+          onClick={() => setAll(a => !a)}
+          className='mt-2 cursor-pointer text-sm font-bold underline underline-offset-2'
+        >
+          {all ? 'Show less' : `Show ${items.length - shown.length} more`}
+        </button>
+      )}
+    </>
   )
 }

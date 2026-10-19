@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from 'react'
 
+import { slideFillClassName } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 
 import { ArrowIcon } from './icons'
@@ -87,7 +88,10 @@ export default function Carousel({
                 }}
                 disabled={direction === -1 ? edges.start : edges.end}
                 aria-label={direction === -1 ? 'Scroll back' : 'Scroll on'}
-                className='flex size-10 cursor-pointer items-center justify-center border-2 border-black bg-white transition-colors hover:bg-black hover:text-white disabled:cursor-default disabled:border-black/20 disabled:bg-transparent disabled:text-black/30'
+                className={cn(
+                  slideFillClassName,
+                  'flex size-10 cursor-pointer items-center justify-center border-2 border-black bg-white disabled:cursor-default disabled:border-black/20 disabled:bg-transparent disabled:text-black/30'
+                )}
               >
                 <ArrowIcon
                   direction={direction === -1 ? 'left' : 'right'}

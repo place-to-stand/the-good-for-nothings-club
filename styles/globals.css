@@ -72,6 +72,7 @@
   :root {
     /* Fast start, long soft stop. No overshoot. */
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
     /* Damped spring: overshoots about 12%, then settles. */
     --ease-spring: linear(
       0,
@@ -179,27 +180,21 @@
   }
 
   /*
-   * Hover underline: a 2px line that slides in from the left and eases to
-   * a stop. It's drawn as a background so it can move and
-   * wraps with multi-line links. Links that manage their own underline
-   * (any underline / no-underline class), button-styled links, overlay
-   * links and image links opt out.
+   * Hover underline: a 2px line drawn from the left. It's a background, so
+   * on a link that wraps it runs along the first line, then the next, like
+   * one line being drawn; on the way out it pulls back toward the end.
+   * Links that manage their own underline (any underline / no-underline
+   * class), button-styled links, overlay links and image links opt out.
    * .link-line adds it to text inside a card link (a.group).
    */
   a:not([class*='underline'], [data-button], .absolute, :has(img, svg)),
   .link-line {
-    background-image: linear-gradient(
-      to right,
-      currentColor 50%,
-      transparent 50%
-    );
-    background-size: 200% 2px;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 2px;
     background-position: 100% 100%;
     background-repeat: no-repeat;
     background-origin: content-box;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-    transition: background-position 250ms ease-out;
+    transition: background-size 300ms var(--ease-out-expo);
   }
 
   /* Keep the line as long as the text when a link is stretched as a flex
@@ -211,8 +206,9 @@
   a:not([class*='underline'], [data-button], .absolute, :has(img, svg)):hover,
   .link-line:hover,
   .group:hover .link-line {
+    background-size: 100% 2px;
     background-position: 0% 100%;
-    transition: background-position 450ms var(--ease-out-expo);
+    transition: background-size 650ms var(--ease-out-quint);
   }
 
   @media (prefers-reduced-motion: reduce) {

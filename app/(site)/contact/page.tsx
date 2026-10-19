@@ -4,7 +4,6 @@ import InquiryForm from '@/components/InquiryForm'
 import { clubhouseAddressLine, clubhouseMapsUrl } from '@/data/location'
 import Map from '@/components/Map'
 import WidgetBoundary from '@/components/WidgetBoundary'
-import OfferCard from '@/components/OfferCard'
 import PageShell from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
 import SocialMediaLinks from '@/components/SocialMediaLinks'
@@ -73,12 +72,13 @@ export default async function Contact() {
           </div>
         </div>
 
-        <OfferCard
-          title={contactCopy.formTitle}
-          className='self-start border-0 p-0 md:p-0 lg:mt-20'
-        >
-          <InquiryForm defaultKind='general' />
-        </OfferCard>
+        {/* Same heading as the left column, so the two line up. */}
+        <section className='self-start'>
+          <SectionHeading title={contactCopy.formTitle} />
+          <div className='mt-6'>
+            <InquiryForm defaultKind='general' />
+          </div>
+        </section>
       </div>
     </PageShell>
   )

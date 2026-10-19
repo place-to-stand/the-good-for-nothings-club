@@ -112,3 +112,18 @@ export function MinusIcon({ size = 24, className }: IconProps) {
     </svg>
   )
 }
+
+export function TrashIcon({ size = 24, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox='0 0 24 24'
+      aria-hidden='true'
+      className={className}
+      {...stroke}
+    >
+      <path d='M4 6.5h16M9 6.5v-3h6v3M6 6.5l1 14h10l1-14M10 10.5v6M14 10.5v6' />
+    </svg>
+  )
+}

@@ -415,9 +415,9 @@
 }
 
 /*
- * Button hover wipe: a slanted fill grows in from the left and leaves to
- * the right, the same path as the link underline. It's a background
- * image, not a layer behind the text, so the text always paints on top.
+ * Button hover wipe: a slanted fill slides in from the left and back out
+ * the same way. It's a background image, not a layer behind the text, so
+ * the text always paints on top.
  * Set --wipe to the fill colour; buttons set the transition (color and
  * background-size) and the hover text colour.
  */
@@ -432,13 +432,12 @@
     );
     background-repeat: no-repeat;
     background-size: 0% 100%;
-    background-position: calc(100% + 1rem) 0;
+    background-position: -1rem 0;
   }
 
   @media (hover: hover) {
     .wipe:not(:disabled):hover {
       background-size: calc(100% + 2rem) 100%;
-      background-position: -1rem 0;
     }
   }
 }

@@ -4,13 +4,8 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { forwardRef } from 'react'
 
-/**
- * Hover wipe (see .wipe in globals.css); text colour fades with it. The
- * way out waits 250ms, so a quick pass in and out doesn't swipe twice;
- * coming back in that time just keeps the fill.
- */
-const wipe =
-  'wipe [transition:color_500ms_ease-out_250ms,background-size_500ms_ease-out_250ms,background-position_0s_250ms] hover:[transition-delay:0s]'
+/** Hover wipe (see .wipe in globals.css); text colour fades with it. */
+const wipe = 'wipe transition-[color,background-size] duration-500 ease-out'
 
 const buttonVariants = cva(
   'text-sm font-sans tracking-[1px] uppercase inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',

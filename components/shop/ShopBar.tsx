@@ -175,7 +175,7 @@ function Dropdown({
       <ul
         ref={panelRef}
         className={cn(
-          'bg-background absolute top-full left-0 z-30 min-w-56 origin-top border-2 border-black py-1 transition-[opacity,translate,visibility] duration-200 ease-out',
+          'bg-background absolute top-full left-0 z-30 w-max min-w-56 origin-top border-2 border-black py-1 transition-[opacity,translate,visibility] duration-200 ease-out',
           open
             ? 'visible translate-y-0 opacity-100'
             : 'invisible -translate-y-1 opacity-0'
@@ -189,7 +189,7 @@ function Dropdown({
               tabIndex={open ? undefined : -1}
               onClick={() => hide()}
               className={cn(
-                'block px-4 py-2 text-xs font-extrabold tracking-[0.06em] uppercase hover:bg-black/10 hover:no-underline xl:text-sm',
+                'block px-4 py-2 text-xs font-extrabold tracking-[0.06em] whitespace-nowrap uppercase hover:bg-black/10 hover:no-underline xl:text-sm',
                 pathname === item.href && 'bg-black/10'
               )}
             >

@@ -2,6 +2,11 @@
 
 import { useMemo, useState } from 'react'
 
+import {
+  checkboxClassName,
+  fieldLabelClassName,
+  selectClassName,
+} from '@/components/ui/fieldStyles'
 import { shopCopy } from '@/data/shop'
 import type { ProductCard } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
@@ -74,21 +79,26 @@ export default function CollectionBrowser({
         )}
 
         <div className='ml-auto flex flex-wrap items-center gap-4'>
-          <label className='flex cursor-pointer items-center gap-2 text-sm font-semibold uppercase'>
+          <label
+            className={cn(
+              fieldLabelClassName,
+              'flex cursor-pointer items-center gap-2'
+            )}
+          >
             <input
               type='checkbox'
               checked={inStockOnly}
               onChange={e => setInStockOnly(e.target.checked)}
-              className='h-4 w-4 accent-black'
+              className={checkboxClassName}
             />
             In stock
           </label>
-          <label className='flex items-center gap-2 text-sm font-semibold uppercase'>
+          <label className={cn(fieldLabelClassName, 'flex items-center gap-2')}>
             Sort
             <select
               value={sort}
               onChange={e => setSort(e.target.value as Sort)}
-              className='cursor-pointer border-2 border-black bg-white px-2 py-1 font-sans text-sm normal-case'
+              className={cn(selectClassName, 'w-auto font-normal')}
             >
               {Object.entries(SORTS).map(([value, label]) => (
                 <option key={value} value={value}>

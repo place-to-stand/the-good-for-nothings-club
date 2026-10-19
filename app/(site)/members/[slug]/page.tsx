@@ -138,7 +138,7 @@ async function MemberContent({ params }: Pick<MemberProps, 'params'>) {
               {/* Member info */}
               <div className='flex-1 space-y-8'>
                 <div>
-                  <h1 className='text-[32px] leading-none font-black tracking-[-0.04em] md:text-[48px] lg:text-[64px]'>
+                  <h1 className='text-[44px] leading-none font-black tracking-[-0.04em] md:text-[48px] lg:text-[64px]'>
                     {member.fullName}
                   </h1>
                 </div>

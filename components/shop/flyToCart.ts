@@ -1,8 +1,8 @@
 /**
  * Sends a copy of a product photo flying into the cart icon, so shoppers
  * see where their item went. The cart badge pops when the count changes.
- * Returns false when it didn't fly (reduced motion, no cart icon on
- * screen), so the caller can open the cart instead.
+ * Returns false when it didn't fly (reduced motion, no photo), so the
+ * caller can open the cart instead.
  */
 export function flyToCart(from: Element | null): boolean {
   if (!from || window.matchMedia('(prefers-reduced-motion: reduce)').matches)
@@ -31,10 +31,10 @@ export function flyToCart(from: Element | null): boolean {
       el.getAttribute('aria-hidden') !== 'true'
     )
   })
-  if (!target) return false
-
   const box = photo.getBoundingClientRect()
-  const to = target.getBoundingClientRect()
+  // With no cart icon on screen (scrolled past the shop bar, cart still
+  // empty), land where the floating cart springs in.
+  const to = target?.getBoundingClientRect() ?? floatingCartSpot()
   const size = Math.min(box.width, box.height)
   const end = 28
   const scale = end / size
@@ -78,11 +78,20 @@ export function flyToCart(from: Element | null): boolean {
   )
   flight.onfinish = () => {
     ghost.remove()
-    target.animate([{ scale: '1' }, { scale: '1.18' }, { scale: '1' }], {
+    target?.animate([{ scale: '1' }, { scale: '1.18' }, { scale: '1' }], {
       duration: 380,
       easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
     })
   }
   flight.oncancel = () => ghost.remove()
   return true
+}
+
+/** Where FloatingCart sits: 64px square, 16px in (32px from md up). */
+function floatingCartSpot() {
+  const inset = window.matchMedia('(min-width: 768px)').matches ? 32 : 16
+  const size = 64
+  const left = document.documentElement.clientWidth - inset - size
+  const top = window.innerHeight - inset - size
+  return { left, top, width: size, height: size }
 }

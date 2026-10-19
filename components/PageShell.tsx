@@ -41,18 +41,18 @@ export default function PageShell({
   return (
     <main>
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
-        <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 pt-5 pb-6 md:border-x-2 md:px-12 md:pt-8 md:pb-12'>
-          <header className='flex flex-col gap-4 md:min-h-16 md:flex-row md:items-center md:justify-between md:gap-12'>
-            <h1 className='text-[32px] leading-[0.9] font-black tracking-[-0.04em] [text-box:trim-both_cap_alphabetic] md:text-[48px] lg:text-[64px]'>
+        <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 pt-7 pb-6 md:border-x-2 md:px-12 md:pt-8 md:pb-12'>
+          <header className='flex flex-col gap-5 md:min-h-16 md:flex-row md:items-center md:justify-between md:gap-12'>
+            <h1 className='text-[44px] leading-[0.9] font-black tracking-[-0.04em] [text-box:trim-both_cap_alphabetic] md:text-[48px] lg:text-[64px]'>
               {title}
             </h1>
             {lead && (
-              <p className='max-w-xl font-serif text-lg leading-tight text-balance [text-box:trim-both_cap_alphabetic] sm:text-xl md:text-right lg:max-w-3xl'>
+              <p className='max-w-xl font-serif text-xl leading-snug text-pretty [text-box:trim-both_cap_alphabetic] md:text-right md:leading-tight md:text-balance lg:max-w-3xl'>
                 {lead}
               </p>
             )}
           </header>
-          <div className='mt-5 border-t-2 border-black pt-2 md:mt-8'>
+          <div className='mt-7 border-t-2 border-black pt-2 md:mt-8'>
             {children}
           </div>
         </div>

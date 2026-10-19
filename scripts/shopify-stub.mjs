@@ -119,7 +119,7 @@ const products = [
     title: 'So Many Cults Monster T-shirt',
     type: 'T-Shirt',
     price: '29.0',
-    sizes: ['S', 'M', 'L', 'XL'],
+    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
     colors: ['Black', 'Crimson'],
     soldOut: ['Black / XL', 'Crimson / S'],
     pics: ['band-room', 'recording-studio'],

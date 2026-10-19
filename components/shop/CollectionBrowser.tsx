@@ -187,8 +187,7 @@ function Browser({
   return (
     <div className='pt-4 lg:grid lg:grid-cols-[13rem_1fr] lg:gap-x-10'>
       <aside aria-label='Filters' className='hidden lg:block'>
-        {/* Scrolls on its own when the filters run taller than the screen. */}
-        <div className='sticky top-6 max-h-[calc(100vh-3rem)] [scrollbar-width:thin] overflow-y-auto overscroll-contain pr-2 pb-8'>
+        <div className='pb-8'>
           {panel}
           {activeCount > 0 && (
             <button
@@ -418,7 +417,10 @@ function Group({
 
 const SHOW = 5
 
-/** The first few values, then a "Show N more" link for the rest. */
+/**
+ * The first few values, then a "Show N more" link that slides the rest
+ * open. Ticked values always stay in view.
+ */
 function ShowMore<T>({
   items,
   keep,
@@ -429,18 +431,34 @@ function ShowMore<T>({
   render: (item: T) => React.ReactNode
 }) {
   const [all, setAll] = useState(false)
-  const cut = !all && items.length > SHOW + 1
-  const shown = cut ? items.filter((item, i) => i < SHOW || keep(item)) : items
+  if (items.length <= SHOW + 1)
+    return <ul className='space-y-2'>{items.map(render)}</ul>
+
+  const first = items.filter((item, i) => i < SHOW || keep(item))
+  const rest = items.filter(item => !first.includes(item))
   return (
     <>
-      <ul className='space-y-2'>{shown.map(render)}</ul>
-      {items.length > SHOW + 1 && (
+      <ul className='space-y-2'>{first.map(render)}</ul>
+      {/* Grid rows animate between 0 and the list's full height. */}
+      <div
+        className={cn(
+          'grid transition-[grid-template-rows] duration-300 ease-out',
+          all ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+        )}
+        inert={!all}
+      >
+        <div className='min-h-0 overflow-hidden'>
+          <ul className='space-y-2 pt-2'>{rest.map(render)}</ul>
+        </div>
+      </div>
+      {rest.length > 0 && (
         <button
           type='button'
           onClick={() => setAll(a => !a)}
+          aria-expanded={all}
           className='mt-2 cursor-pointer text-sm font-bold underline underline-offset-2'
         >
-          {all ? 'Show less' : `Show ${items.length - shown.length} more`}
+          {all ? 'Show less' : `Show ${rest.length} more`}
         </button>
       )}
     </>

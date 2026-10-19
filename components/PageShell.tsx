@@ -9,10 +9,7 @@ type PageShellProps = {
   after?: ReactNode
 }
 
-/**
- * The two-column grid every page body uses, so right-hand columns line up
- * with the header's lead from page to page.
- */
+/** The two-column grid every page body uses, so columns match page to page. */
 export const pageColumns = 'grid grid-cols-1 lg:grid-cols-2 lg:gap-x-16'
 
 /**
@@ -45,12 +42,12 @@ export default function PageShell({
     <main>
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 pt-5 pb-6 md:border-x-2 md:px-12 md:pt-8 md:pb-12'>
-          <header className='grid grid-cols-1 gap-2 md:min-h-16 md:grid-cols-2 md:items-center md:gap-x-16'>
+          <header className='flex flex-col gap-2 md:min-h-16 md:flex-row md:items-center md:justify-between md:gap-12'>
             <h1 className='text-[32px] leading-[0.9] font-black tracking-[-0.04em] [text-box:trim-both_cap_alphabetic] md:text-[48px] lg:text-[64px]'>
               {title}
             </h1>
             {lead && (
-              <p className='max-w-xl font-serif text-lg leading-tight text-pretty [text-box:trim-both_cap_alphabetic] sm:text-xl'>
+              <p className='max-w-xl font-serif text-lg leading-tight text-balance [text-box:trim-both_cap_alphabetic] sm:text-xl md:text-right lg:max-w-3xl'>
                 {lead}
               </p>
             )}

@@ -56,8 +56,9 @@ const product: Product = {
   ],
   variants: [
     {
-      id: 'v1',
+      id: 'gid://shopify/ProductVariant/11',
       title: 'S',
+      sku: 'MONSTER-S',
       availableForSale: true,
       selectedOptions: [{ name: 'Size', value: 'S' }],
       price: usd('29.0'),
@@ -65,8 +66,9 @@ const product: Product = {
       image: null,
     },
     {
-      id: 'v2',
+      id: 'gid://shopify/ProductVariant/12',
       title: 'M',
+      sku: null,
       availableForSale: false,
       selectedOptions: [{ name: 'Size', value: 'M' }],
       price: usd('29.0'),
@@ -119,6 +121,12 @@ describe('shop metadata', () => {
       'https://schema.org/InStock',
       'https://schema.org/OutOfStock',
     ])
+    // Each offer links to its variant, as Google Merchant Center does.
+    expect(ld.offers[0]).toMatchObject({
+      url: 'https://thegoodfornothings.club/shop/products/monster-tee?variant=11',
+      sku: 'MONSTER-S',
+    })
+    expect(ld.offers[1]).not.toHaveProperty('sku')
   })
 })
 
@@ -213,7 +221,10 @@ describe('Storefront API client', () => {
     expect(url).toBe('https://gfnc.myshopify.com/api/2026-10/graphql.json')
     expect(init.headers['X-Shopify-Storefront-Access-Token']).toBe('token')
     expect(result?.images).toHaveLength(2)
-    expect(result?.variants.map(v => v.id)).toEqual(['v1', 'v2'])
+    expect(result?.variants.map(v => v.id)).toEqual([
+      'gid://shopify/ProductVariant/11',
+      'gid://shopify/ProductVariant/12',
+    ])
   })
 
   it('throws on GraphQL errors', async () => {

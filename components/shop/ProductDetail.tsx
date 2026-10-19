@@ -4,7 +4,7 @@ import 'yet-another-react-lightbox/styles.css'
 import 'yet-another-react-lightbox/plugins/counter.css'
 
 import Image from 'next/image'
-import { useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import Lightbox from 'yet-another-react-lightbox'
 import Counter from 'yet-another-react-lightbox/plugins/counter'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
@@ -45,6 +45,15 @@ export default function ProductDetail({
     firstVariant ? selectionOf(firstVariant) : {}
   )
   const variant = product.variants.find(v => matches(v, selection))
+
+  // Google Shopping links to ?variant=<id>; start on that variant. Read
+  // after load so the page itself can stay static.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get('variant')
+    const linked = id && product.variants.find(v => v.id.endsWith(`/${id}`))
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (linked) setSelection(selectionOf(linked))
+  }, [product.variants])
 
   // A product with one variant has a single "Title: Default Title" option.
   const options = product.options.filter(

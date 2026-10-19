@@ -35,6 +35,7 @@ export type ProductOption = {
 export type ProductVariant = {
   id: string
   title: string
+  sku: string | null
   availableForSale: boolean
   selectedOptions: SelectedOption[]
   price: Money

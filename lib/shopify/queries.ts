@@ -98,6 +98,7 @@ const product = /* GraphQL */ `
         node {
           id
           title
+          sku
           availableForSale
           selectedOptions {
             name

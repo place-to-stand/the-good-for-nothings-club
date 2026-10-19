@@ -74,7 +74,9 @@ export function productJsonLd(product: Product) {
     offers: product.variants.map(variant => ({
       '@type': 'Offer',
       name: variant.title === 'Default Title' ? product.title : variant.title,
-      url,
+      // Google Merchant Center links each variant this way.
+      url: `${url}?variant=${variant.id.split('/').pop()}`,
+      ...(variant.sku && { sku: variant.sku }),
       price: variant.price.amount,
       priceCurrency: variant.price.currencyCode,
       availability: variant.availableForSale

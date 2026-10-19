@@ -25,6 +25,7 @@ function product({ handle, title, type, price, sizes, soldOut = [], pics }) {
   const variants = (sizes ?? ['Default Title']).map((size, i) => ({
     id: `gid://shopify/ProductVariant/${handle}-${i}`,
     title: size,
+    sku: `${handle}-${size}`.toUpperCase(),
     availableForSale: !soldOut.includes(size),
     selectedOptions: [{ name: sizes ? 'Size' : 'Title', value: size }],
     price: usd(price),

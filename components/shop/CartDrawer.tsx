@@ -70,14 +70,24 @@ export function FloatingCart() {
   const { cart, isOpen, setOpen } = useCart()
   const pathname = usePathname()
   const count = cart?.totalQuantity ?? 0
-  if (!count || isOpen || pathname.startsWith('/shop')) return null
+  if (!count) return null
+  // Stays mounted so it can slide out (onto the shop pages, or while the
+  // drawer is open) as well as spring back in.
+  const hidden = isOpen || pathname.startsWith('/shop')
 
   return (
     <button
       type='button'
       onClick={() => setOpen(true)}
       aria-label={cartLabel(count)}
-      className='bg-background fixed right-4 bottom-4 z-40 flex size-16 cursor-pointer items-center justify-center border-2 border-black transition-colors hover:bg-[color-mix(in_oklab,var(--background),black_10%)] motion-safe:animate-[cart-float-in_800ms_var(--ease-spring)] md:right-8 md:bottom-8'
+      aria-hidden={hidden || undefined}
+      tabIndex={hidden ? -1 : undefined}
+      className={cn(
+        'bg-background fixed right-4 bottom-4 z-40 flex size-16 cursor-pointer items-center justify-center border-2 border-black transition-colors hover:bg-[color-mix(in_oklab,var(--background),black_10%)] md:right-8 md:bottom-8',
+        hidden
+          ? 'pointer-events-none translate-x-[calc(100%+3rem)] transition-[translate] duration-300 ease-in'
+          : 'motion-safe:animate-[cart-float-in_800ms_var(--ease-spring)]'
+      )}
     >
       <BagWithCount count={count} />
     </button>

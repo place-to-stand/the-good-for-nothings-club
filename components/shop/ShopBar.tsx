@@ -27,8 +27,8 @@ export default function ShopBar({
 }) {
   return (
     <div className='relative z-20 font-sans md:px-8 xl:px-16'>
-      {/* Inset to the page's content gutter so it reads as nested under the header. */}
-      <div className='m-auto max-w-(--page-max-width) md:px-12'>
+      {/* Inset on both sides so it reads as nested under the header. */}
+      <div className='m-auto max-w-(--page-max-width) md:px-6'>
         <div className='bg-background relative flex flex-col border-b-2 border-black md:border-x-2 lg:flex-row lg:items-stretch'>
           <div className='flex flex-1 items-stretch'>
             <nav

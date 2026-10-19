@@ -64,10 +64,6 @@ export function CartButton({ className }: { className?: string }) {
 }
 
 /**
- * Off the shop pages, a cart with something in it floats in the bottom
- * right corner, sliding in from the edge.
- */
-/**
  * Whether the shop bar (which has its own cart button) is on screen. On
  * shop pages the floating cart only shows once it scrolls away, so there
  * is always one cart to hand without two at once.
@@ -89,12 +85,18 @@ function useShopBarInView(pathname: string) {
   return inView
 }
 
+/**
+ * A cart floating in the bottom right corner, sliding in from the edge.
+ */
 export function FloatingCart() {
   const { cart, isOpen, setOpen } = useCart()
   const pathname = usePathname()
   const barInView = useShopBarInView(pathname)
   const count = cart?.totalQuantity ?? 0
-  if (!count) return null
+  // On shop pages it's always there (even empty) once the shop bar scrolls
+  // away; elsewhere only when something is in it.
+  const onShop = pathname === '/shop' || pathname.startsWith('/shop/')
+  if (!count && !onShop) return null
   // Stays mounted so it can slide out (while the shop bar and its cart
   // are on screen, or while the drawer is open) as well as spring back in.
   const hidden = isOpen || barInView

@@ -193,7 +193,7 @@ function Browser({
             <button
               type='button'
               onClick={clear}
-              className='mt-6 cursor-pointer text-sm font-bold underline underline-offset-2'
+              className='link-line mt-6 cursor-pointer text-sm font-bold'
             >
               Clear filters
             </button>
@@ -456,7 +456,7 @@ function ShowMore<T>({
           type='button'
           onClick={() => setAll(a => !a)}
           aria-expanded={all}
-          className='mt-2 cursor-pointer text-sm font-bold underline underline-offset-2'
+          className='link-line mt-2 cursor-pointer text-sm font-bold'
         >
           {all ? 'Show less' : `Show ${rest.length} more`}
         </button>

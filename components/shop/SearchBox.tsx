@@ -295,7 +295,7 @@ export default function SearchBox({
         <Link
           href={shopPaths.search(value.trim())}
           onClick={() => setOpen(false)}
-          className='mt-1 block border-t-2 border-black px-4 pt-3 pb-1 text-xs font-extrabold tracking-[0.06em] uppercase hover:no-underline'
+          className='mt-1 -mb-2 block border-t-2 border-black px-4 py-3 text-xs font-extrabold tracking-[0.06em] uppercase hover:bg-black/10 hover:no-underline'
         >
           See all results for “{value.trim()}”
         </Link>

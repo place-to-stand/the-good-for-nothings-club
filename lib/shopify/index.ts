@@ -103,6 +103,33 @@ type Connection<T> = { edges: { node: T }[] }
 const nodes = <T>(connection: Connection<T> | null | undefined): T[] =>
   connection?.edges?.map(edge => edge.node) ?? []
 
+type Page<T> = Connection<T> & {
+  pageInfo?: { hasNextPage: boolean; endCursor: string | null }
+}
+
+/** Safety stop so a cursor bug can't loop forever (20 × 100 = 2,000 items). */
+const MAX_PAGES = 20
+
+/**
+ * Every node across a paginated connection. Takes the first page (callers
+ * fetch it themselves so they keep its other fields) and fetches the rest
+ * with `next(cursor)` until Shopify says there are no more.
+ */
+async function allNodes<T>(
+  first: Page<T> | null | undefined,
+  next: (after: string) => Promise<Page<T> | null | undefined>
+): Promise<T[]> {
+  const items = nodes(first)
+  let page = first
+  for (let i = 1; i < MAX_PAGES; i++) {
+    const cursor = page?.pageInfo?.hasNextPage && page.pageInfo.endCursor
+    if (!cursor) break
+    page = await next(cursor)
+    items.push(...nodes(page))
+  }
+  return items
+}
+
 type RawProductCard = Omit<ProductCard, 'images' | 'quickVariants'> & {
   images: Connection<ShopImage>
   quickVariants?: Connection<ProductCard['quickVariants'][number]>
@@ -161,10 +188,12 @@ export async function getCollections(): Promise<Collection[]> {
   'use cache'
   cached()
   if (!isShopifyConfigured()) return []
-  const data = await shopifyFetch<{ collections: Connection<Collection> }>({
-    query: getCollectionsQuery,
-  })
-  return nodes(data.collections)
+  const page = (after?: string) =>
+    shopifyFetch<{ collections: Page<Collection> }>({
+      query: getCollectionsQuery,
+      variables: { after },
+    }).then(data => data.collections)
+  return allNodes(await page(), page)
 }
 
 /** A collection and its products in the order set in Shopify. */
@@ -190,19 +219,24 @@ export async function getCollection(
     }
   }
 
-  const data = await shopifyFetch<{
-    collection:
-      | (Collection & {
-          products: Connection<RawProductCard> & { filters?: RawFilter[] }
-        })
-      | null
-  }>({ query: getCollectionQuery, variables: { handle } })
+  const fetchCollection = (after?: string) =>
+    shopifyFetch<{
+      collection:
+        | (Collection & {
+            products: Page<RawProductCard> & { filters?: RawFilter[] }
+          })
+        | null
+    }>({ query: getCollectionQuery, variables: { handle, after } })
 
+  const data = await fetchCollection()
   if (!data.collection) return null
   const { products, ...collection } = data.collection
+  const allProducts = await allNodes(products, after =>
+    fetchCollection(after).then(next => next.collection?.products)
+  )
   return {
     ...collection,
-    products: nodes(products).map(reshapeCard),
+    products: allProducts.map(reshapeCard),
     filters: await readFilters(products.filters ?? [], input =>
       collectionIdsMatching(handle, input)
     ),
@@ -213,13 +247,14 @@ export async function getCollection(
 async function collectionIdsMatching(handle: string, input: unknown) {
   'use cache'
   cached()
-  const data = await shopifyFetch<{
-    collection: { products: Connection<{ id: string }> } | null
-  }>({
-    query: getCollectionFilterIdsQuery,
-    variables: { handle, filters: [input] },
-  })
-  return nodes(data.collection?.products).map(p => p.id)
+  const page = (after?: string) =>
+    shopifyFetch<{
+      collection: { products: Page<{ id: string }> } | null
+    }>({
+      query: getCollectionFilterIdsQuery,
+      variables: { handle, filters: [input], after },
+    }).then(data => data.collection?.products)
+  return (await allNodes(await page(), page)).map(p => p.id)
 }
 
 export type { ShopFilter }
@@ -229,11 +264,12 @@ export async function getProducts(): Promise<ProductCard[]> {
   'use cache'
   cached()
   if (!isShopifyConfigured()) return []
-  const data = await shopifyFetch<{ products: Connection<RawProductCard> }>({
-    query: getProductsQuery,
-    variables: { sortKey: 'CREATED_AT', reverse: true },
-  })
-  return nodes(data.products).map(reshapeCard)
+  const page = (after?: string) =>
+    shopifyFetch<{ products: Page<RawProductCard> }>({
+      query: getProductsQuery,
+      variables: { sortKey: 'CREATED_AT', reverse: true, after },
+    }).then(data => data.products)
+  return (await allNodes(await page(), page)).map(reshapeCard)
 }
 
 export async function getProduct(handle: string): Promise<Product | null> {
@@ -279,10 +315,13 @@ export async function searchProducts(query: string): Promise<ProductCard[]> {
   'use cache'
   cached()
   if (!isShopifyConfigured() || !query.trim()) return []
-  const data = await shopifyFetch<{
-    search: Connection<RawProductCard | Record<string, never>>
-  }>({ query: searchProductsQuery, variables: { query } })
-  return nodes(data.search)
+  const page = (after?: string) =>
+    shopifyFetch<{
+      search: Page<RawProductCard | Record<string, never>>
+    }>({ query: searchProductsQuery, variables: { query, after } }).then(
+      data => data.search
+    )
+  return (await allNodes(await page(), page))
     .filter((node): node is RawProductCard => 'handle' in node)
     .map(reshapeCard)
 }

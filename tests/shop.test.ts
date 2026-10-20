@@ -256,6 +256,48 @@ describe('Storefront API client', () => {
     expect(all?.products.map(p => p.handle)).toEqual(['monster-tee'])
   })
 
+  it('follows pages until Shopify says there are no more', async () => {
+    const node = (handle: string) => ({
+      node: { ...card, handle, images: { edges: [] } },
+    })
+    respond({
+      products: {
+        pageInfo: { hasNextPage: true, endCursor: 'c1' },
+        edges: [node('one'), node('two')],
+      },
+    })
+    respond({
+      products: {
+        pageInfo: { hasNextPage: false, endCursor: 'c2' },
+        edges: [node('three')],
+      },
+    })
+    const all = await getCollection('all')
+    expect(all?.products.map(p => p.handle)).toEqual(['one', 'two', 'three'])
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    const second = JSON.parse(fetchMock.mock.calls[1][1].body)
+    expect(second.variables.after).toBe('c1')
+  })
+
+  it('keeps the first page of a collection for its title and filters', async () => {
+    const page = (handle: string, hasNextPage: boolean) => ({
+      collection: {
+        handle: 'tees',
+        title: 'Tees',
+        products: {
+          pageInfo: { hasNextPage, endCursor: 'c1' },
+          filters: [],
+          edges: [{ node: { ...card, handle, images: { edges: [] } } }],
+        },
+      },
+    })
+    respond(page('one', true))
+    respond(page('two', false))
+    const tees = await getCollection('tees')
+    expect(tees?.title).toBe('Tees')
+    expect(tees?.products.map(p => p.handle)).toEqual(['one', 'two'])
+  })
+
   it('flattens predictive search and skips blank queries', async () => {
     expect(await predictiveSearch('  ')).toEqual({
       queries: [],

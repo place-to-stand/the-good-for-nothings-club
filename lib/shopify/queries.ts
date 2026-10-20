@@ -145,8 +145,12 @@ const collection = /* GraphQL */ `
 `
 
 export const getCollectionsQuery = /* GraphQL */ `
-  query getCollections {
-    collections(first: 100, sortKey: TITLE) {
+  query getCollections($after: String) {
+    collections(first: 100, after: $after, sortKey: TITLE) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       edges {
         node {
           ...collection
@@ -159,10 +163,14 @@ export const getCollectionsQuery = /* GraphQL */ `
 `
 
 export const getCollectionQuery = /* GraphQL */ `
-  query getCollection($handle: String!) {
+  query getCollection($handle: String!, $after: String) {
     collection(handle: $handle) {
       ...collection
-      products(first: 100, sortKey: COLLECTION_DEFAULT) {
+      products(first: 100, after: $after, sortKey: COLLECTION_DEFAULT) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
         # Search & Discovery's filters for this collection.
         filters {
           id
@@ -187,8 +195,16 @@ export const getCollectionQuery = /* GraphQL */ `
 `
 
 export const getProductsQuery = /* GraphQL */ `
-  query getProducts($sortKey: ProductSortKeys, $reverse: Boolean) {
-    products(first: 100, sortKey: $sortKey, reverse: $reverse) {
+  query getProducts(
+    $sortKey: ProductSortKeys
+    $reverse: Boolean
+    $after: String
+  ) {
+    products(first: 100, after: $after, sortKey: $sortKey, reverse: $reverse) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       edges {
         node {
           ...productCard
@@ -221,14 +237,19 @@ export const getProductRecommendationsQuery = /* GraphQL */ `
 `
 
 export const searchProductsQuery = /* GraphQL */ `
-  query searchProducts($query: String!) {
+  query searchProducts($query: String!, $after: String) {
     search(
       query: $query
       first: 50
+      after: $after
       types: [PRODUCT]
       unavailableProducts: LAST
     ) {
       totalCount
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       edges {
         node {
           ... on Product {
@@ -388,9 +409,17 @@ export const predictiveSearchQuery = /* GraphQL */ `
 
 /** Which products in a collection match one Search & Discovery filter value. */
 export const getCollectionFilterIdsQuery = /* GraphQL */ `
-  query getCollectionFilterIds($handle: String!, $filters: [ProductFilter!]) {
+  query getCollectionFilterIds(
+    $handle: String!
+    $filters: [ProductFilter!]
+    $after: String
+  ) {
     collection(handle: $handle) {
-      products(first: 250, filters: $filters) {
+      products(first: 250, after: $after, filters: $filters) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
         edges {
           node {
             id

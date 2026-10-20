@@ -21,6 +21,21 @@ const img = (name, alt = null) => ({
 })
 const edges = list => ({ edges: list.map(node => ({ node })) })
 
+// Small pages so local runs go through the client's page-following loop.
+// The cursor is just the index to start from.
+const PAGE_SIZE = 4
+const paged = (list, after) => {
+  const start = after ? Number(after) : 0
+  const end = start + PAGE_SIZE
+  return {
+    ...edges(list.slice(start, end)),
+    pageInfo: {
+      hasNextPage: end < list.length,
+      endCursor: String(Math.min(end, list.length)),
+    },
+  }
+}
+
 // Copied from the live store so tables and spacing render as they will.
 const realDescriptions = {
   'so-many-cults-monster-t-shirt':
@@ -318,10 +333,18 @@ const answers = {
       products: edges([products[1], products[3]].map(p => ({ id: p.id }))),
     },
   }),
-  getCollection: v => ({
-    collection: collections.find(c => c.handle === v.handle) ?? null,
-  }),
-  getProducts: () => ({ products: edges(products) }),
+  getCollection: v => {
+    const c = collections.find(c => c.handle === v.handle)
+    if (!c) return { collection: null }
+    const list = c.products.edges.map(e => e.node)
+    return {
+      collection: {
+        ...c,
+        products: { ...paged(list, v.after), filters: stubFilters },
+      },
+    }
+  },
+  getProducts: v => ({ products: paged(products, v.after) }),
   getProduct: v => ({
     product: products.find(p => p.handle === v.handle) ?? null,
   }),

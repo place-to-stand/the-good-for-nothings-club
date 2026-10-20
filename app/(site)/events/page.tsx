@@ -243,7 +243,7 @@ export default async function Events() {
 
       <p className='mt-12 text-center font-sans leading-snug'>
         {eventsCopy.friendNote}{' '}
-        <Link href='/membership' className='font-bold underline'>
+        <Link href='/membership' className='font-bold'>
           {eventsCopy.friendCta}
         </Link>
       </p>

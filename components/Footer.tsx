@@ -2,7 +2,7 @@
 
 import { Button } from './ui/Button'
 import NewsletterSignUpForm from './NewsletterSignUpForm'
-import SocialMediaLinks from './SocialMediaLinks'
+import { SOCIAL_LINKS } from './SocialMediaLinks'
 import ScrollTopLink from './ScrollTopLink'
 import { clubhouse, clubhouseMapsUrl } from '../data/location'
 import { POLICIES, policyPath } from '../data/policies'
@@ -38,34 +38,46 @@ export default function Footer({ year }: { year: number }) {
             >
               GFNC
             </ScrollTopLink>
-            {/* Icon and text share one link; hovering underlines only the
-                text (.link-line). */}
-            <p className='mt-4 text-sm leading-snug'>
-              <a
-                href={clubhouseMapsUrl}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='group inline-flex items-start gap-1.5'
-              >
-                <PinIcon />
-                <span className='link-line'>
-                  {clubhouse.street}, {clubhouse.city}, {clubhouse.state}{' '}
-                  {clubhouse.zip}
-                </span>
-              </a>
-            </p>
-            <p className='mt-2 text-sm leading-snug'>
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
-                className='group inline-flex items-start gap-1.5'
-              >
-                <MailIcon />
-                <span className='link-line'>{CONTACT_EMAIL}</span>
-              </a>
-            </p>
-            <div className='mt-4 text-xl'>
-              <SocialMediaLinks />
-            </div>
+            {/* One list so the icons line up. Icon and text share one
+                link; hovering underlines only the text (.link-line). */}
+            <ul className='mt-4 space-y-2 text-sm leading-snug'>
+              <li>
+                <a
+                  href={clubhouseMapsUrl}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='group inline-flex items-start gap-1.5'
+                >
+                  <PinIcon />
+                  <span className='link-line'>
+                    {clubhouse.street}, {clubhouse.city}, {clubhouse.state}{' '}
+                    {clubhouse.zip}
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className='group inline-flex items-start gap-1.5'
+                >
+                  <MailIcon />
+                  <span className='link-line'>{CONTACT_EMAIL}</span>
+                </a>
+              </li>
+              {SOCIAL_LINKS.map(({ href, label, Icon }) => (
+                <li key={href}>
+                  <a
+                    href={href}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='group inline-flex items-start gap-1.5'
+                  >
+                    <Icon aria-hidden className='mt-px size-4 shrink-0' />
+                    <span className='link-line'>{label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
             <nav className='mt-8 grid grid-flow-col grid-rows-4 justify-start gap-x-14 gap-y-2'>
               {FOOTER_LINKS.map(link => (
                 <ScrollTopLink

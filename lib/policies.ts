@@ -12,6 +12,23 @@ export type ResolvedPolicy = PolicyInfo & {
 const escapeHtml = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
+const BR = String.raw`<br\s*\/?>\s*`
+
+/**
+ * Shopify's policy editor spaces sections with <br>s: a pair inside a
+ * paragraph, one at its end and one between paragraphs. On top of the
+ * paragraph margins they leave wide gaps, so pairs become real paragraph
+ * breaks and the rest go.
+ */
+export function tidyPolicyHtml(html: string) {
+  return html
+    .replace(new RegExp(`(?:${BR})+</p>`, 'gi'), '</p>')
+    .replace(new RegExp(`</p>\\s*(?:${BR})+`, 'gi'), '</p>')
+    .replace(new RegExp(`<p>\\s*(?:${BR})+`, 'gi'), '<p>')
+    .replace(new RegExp(`(?:${BR}){2,}`, 'gi'), '</p><p>')
+    .replace(/<p>\s*<\/p>/gi, '')
+}
+
 /** Shopify's HTML split into plain paragraphs at block boundaries. */
 function htmlParagraphs(html: string) {
   return html
@@ -29,8 +46,10 @@ export function resolvePolicy(
   policies: ShopPolicies
 ): ResolvedPolicy | null {
   const body = policies[info.shopifyField]?.body ?? ''
-  if (htmlToText(body))
-    return { ...info, html: body, paragraphs: htmlParagraphs(body) }
+  if (htmlToText(body)) {
+    const html = tidyPolicyHtml(body)
+    return { ...info, html, paragraphs: htmlParagraphs(html) }
+  }
   if (info.fallback?.length)
     return {
       ...info,

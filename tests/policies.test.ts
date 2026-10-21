@@ -54,3 +54,14 @@ describe('store policies', () => {
     })
   })
 })
+
+describe('tidyPolicyHtml', () => {
+  it('turns Shopify <br> spacing into plain paragraphs', async () => {
+    const { tidyPolicyHtml } = await import('@/lib/policies')
+    const html =
+      '<p>One. <br><br>Two. <br></p>\n<br>\n<p><strong>Head</strong> <br>Body</p><p><br></p>'
+    expect(tidyPolicyHtml(html)).toBe(
+      '<p>One. </p><p>Two. </p><p><strong>Head</strong> <br>Body</p>'
+    )
+  })
+})

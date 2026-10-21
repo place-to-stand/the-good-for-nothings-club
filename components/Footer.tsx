@@ -55,6 +55,9 @@ export default function Footer({ year }: { year: number }) {
               <MailIcon />
               <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
             </p>
+            <div className='mt-4 text-xl'>
+              <SocialMediaLinks />
+            </div>
             <nav className='mt-8 grid grid-flow-col grid-rows-4 justify-start gap-x-14 gap-y-2'>
               {FOOTER_LINKS.map(link => (
                 <ScrollTopLink
@@ -92,25 +95,20 @@ export default function Footer({ year }: { year: number }) {
             </div>
           </div>
         </div>
-        <div className='flex flex-col-reverse items-center justify-between gap-4 border-t-2 border-black px-4 py-5 md:flex-row md:px-12'>
-          <div className='flex flex-col items-center gap-2 text-center text-sm md:items-start md:text-left'>
-            <div>
-              &copy; {year} The Good for Nothings Club LLC. All rights reserved.
-            </div>
-            <nav
-              aria-label='Store policies'
-              className='flex flex-wrap justify-center gap-x-4 gap-y-1'
-            >
-              {POLICIES.map(policy => (
-                <ScrollTopLink key={policy.slug} href={policyPath(policy.slug)}>
-                  {policy.label}
-                </ScrollTopLink>
-              ))}
-            </nav>
+        <div className='flex flex-col items-center justify-between gap-2 border-t-2 border-black px-4 py-5 text-center text-sm md:flex-row md:gap-4 md:px-12 md:text-left'>
+          <div>
+            &copy; {year} The Good for Nothings Club LLC. All rights reserved.
           </div>
-          <div className='text-xl'>
-            <SocialMediaLinks />
-          </div>
+          <nav
+            aria-label='Store policies'
+            className='flex flex-wrap justify-center gap-x-4 gap-y-1'
+          >
+            {POLICIES.map(policy => (
+              <ScrollTopLink key={policy.slug} href={policyPath(policy.slug)}>
+                {policy.label}
+              </ScrollTopLink>
+            ))}
+          </nav>
         </div>
       </div>
     </footer>

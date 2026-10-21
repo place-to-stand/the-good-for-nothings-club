@@ -38,22 +38,30 @@ export default function Footer({ year }: { year: number }) {
             >
               GFNC
             </ScrollTopLink>
-            {/* The pin sits outside the link so the link keeps its hover
-                underline. */}
-            <p className='mt-4 flex items-start gap-1.5 text-sm leading-snug'>
-              <PinIcon />
+            {/* Icon and text share one link; hovering underlines only the
+                text (.link-line). */}
+            <p className='mt-4 text-sm leading-snug'>
               <a
                 href={clubhouseMapsUrl}
                 target='_blank'
                 rel='noopener noreferrer'
+                className='group inline-flex items-start gap-1.5'
               >
-                {clubhouse.street}, {clubhouse.city}, {clubhouse.state}{' '}
-                {clubhouse.zip}
+                <PinIcon />
+                <span className='link-line'>
+                  {clubhouse.street}, {clubhouse.city}, {clubhouse.state}{' '}
+                  {clubhouse.zip}
+                </span>
               </a>
             </p>
-            <p className='mt-2 flex items-start gap-1.5 text-sm leading-snug'>
-              <MailIcon />
-              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            <p className='mt-2 text-sm leading-snug'>
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className='group inline-flex items-start gap-1.5'
+              >
+                <MailIcon />
+                <span className='link-line'>{CONTACT_EMAIL}</span>
+              </a>
             </p>
             <div className='mt-4 text-xl'>
               <SocialMediaLinks />

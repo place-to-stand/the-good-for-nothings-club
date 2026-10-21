@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next'
+import { POLICIES, policyPath } from '@/data/policies'
 import { HIDDEN_COLLECTION_TILES } from '@/data/shop'
 import { SHOPIFY_TAG, getCollections, getProducts } from '@/lib/shopify'
 import { shopPaths } from '@/lib/shopify/format'
@@ -102,6 +103,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ]
 
+  const policyPages: MetadataRoute.Sitemap = POLICIES.map(policy => ({
+    url: `https://thegoodfornothings.club${policyPath(policy.slug)}`,
+    changeFrequency: 'yearly',
+    priority: 0.3,
+  }))
+
   const projectPages: MetadataRoute.Sitemap = projectsData.map(project => ({
     url: `https://thegoodfornothings.club/projects/${project.slug.current}`,
     lastModified: new Date(project._updatedAt),
@@ -128,5 +135,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...memberPages,
     aboutPage,
     contactPage,
+    ...policyPages,
   ]
 }

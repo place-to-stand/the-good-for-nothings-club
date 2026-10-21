@@ -392,6 +392,21 @@ const answers = {
     }
     return { cartLinesUpdate: payload(v.cartId) }
   },
+  // Refund text set, shipping blank: the site shows its own shipping text.
+  getShopPolicies: () => ({
+    shop: {
+      refundPolicy: {
+        title: 'Refund policy',
+        body: '<p>We have a 30-day return policy.</p><p>Email us to start a return.</p>',
+      },
+      shippingPolicy: null,
+      privacyPolicy: {
+        title: 'Privacy policy',
+        body: '<h2>Privacy</h2><p>We collect what we need to fill your order.</p>',
+      },
+      termsOfService: { title: 'Terms of service', body: '' },
+    },
+  }),
   removeFromCart: v => {
     carts.set(
       v.cartId,

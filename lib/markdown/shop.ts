@@ -1,3 +1,5 @@
+import { policyPath } from '@/data/policies'
+import type { ResolvedPolicy } from '@/lib/policies'
 import { SHOP_META, shopCopy } from '@/data/shop'
 import { CONTACT_EMAIL } from '@/data/site'
 import { formatMoney, priceLabel, shopPaths } from '@/lib/shopify/format'
@@ -112,4 +114,18 @@ export function productMarkdown(product: Product) {
     pageFooter(shopPaths.product(product.handle))
   )
   return lines.join('\n')
+}
+
+export function policyMarkdown(policy: ResolvedPolicy) {
+  return [
+    `# ${policy.title}`,
+    '',
+    `> ${policy.description}`,
+    '',
+    ...policy.paragraphs.flatMap(p => [p, '']),
+    `Questions? Email ${CONTACT_EMAIL}.`,
+    '',
+    pageFooter(policyPath(policy.slug)),
+    '',
+  ].join('\n')
 }

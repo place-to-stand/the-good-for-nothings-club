@@ -429,3 +429,30 @@ export const getCollectionFilterIdsQuery = /* GraphQL */ `
     }
   }
 `
+
+const policy = /* GraphQL */ `
+  fragment policy on ShopPolicy {
+    title
+    body
+  }
+`
+
+export const getShopPoliciesQuery = /* GraphQL */ `
+  query getShopPolicies {
+    shop {
+      refundPolicy {
+        ...policy
+      }
+      shippingPolicy {
+        ...policy
+      }
+      privacyPolicy {
+        ...policy
+      }
+      termsOfService {
+        ...policy
+      }
+    }
+  }
+  ${policy}
+`

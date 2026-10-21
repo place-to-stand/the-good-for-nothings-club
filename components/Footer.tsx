@@ -2,9 +2,11 @@
 
 import { Button } from './ui/Button'
 import NewsletterSignUpForm from './NewsletterSignUpForm'
-import SocialMediaLinks from './SocialMediaLinks'
+import { SOCIAL_LINKS } from './SocialMediaLinks'
 import ScrollTopLink from './ScrollTopLink'
 import { clubhouse, clubhouseMapsUrl } from '../data/location'
+import { POLICIES, policyPath } from '../data/policies'
+import { CONTACT_EMAIL } from '../data/site'
 
 // Site map, two columns. The wordmark covers Home. (/projects is still
 // live, just unlinked.)
@@ -36,19 +38,46 @@ export default function Footer({ year }: { year: number }) {
             >
               GFNC
             </ScrollTopLink>
-            {/* The pin sits outside the link so the link keeps its hover
-                underline. */}
-            <p className='mt-4 flex items-start gap-1.5 text-sm leading-snug'>
-              <PinIcon />
-              <a
-                href={clubhouseMapsUrl}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                {clubhouse.street}, {clubhouse.city}, {clubhouse.state}{' '}
-                {clubhouse.zip}
-              </a>
-            </p>
+            {/* One list so the icons line up. Icon and text share one
+                link; hovering underlines only the text (.link-line). */}
+            <ul className='mt-4 space-y-2 text-sm leading-snug'>
+              <li>
+                <a
+                  href={clubhouseMapsUrl}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='group inline-flex items-start gap-1.5'
+                >
+                  <PinIcon />
+                  <span className='link-line'>
+                    {clubhouse.street}, {clubhouse.city}, {clubhouse.state}{' '}
+                    {clubhouse.zip}
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className='group inline-flex items-start gap-1.5'
+                >
+                  <MailIcon />
+                  <span className='link-line'>{CONTACT_EMAIL}</span>
+                </a>
+              </li>
+              {SOCIAL_LINKS.map(({ href, label, Icon }) => (
+                <li key={href}>
+                  <a
+                    href={href}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='group inline-flex items-start gap-1.5'
+                  >
+                    <Icon aria-hidden className='mt-px size-4 shrink-0' />
+                    <span className='link-line'>{label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
             <nav className='mt-8 grid grid-flow-col grid-rows-4 justify-start gap-x-14 gap-y-2'>
               {FOOTER_LINKS.map(link => (
                 <ScrollTopLink
@@ -86,13 +115,20 @@ export default function Footer({ year }: { year: number }) {
             </div>
           </div>
         </div>
-        <div className='flex flex-col-reverse items-center justify-between gap-4 border-t-2 border-black px-4 py-5 md:flex-row md:px-12'>
-          <div className='text-center text-sm'>
+        <div className='flex flex-col items-center justify-between gap-2 border-t-2 border-black px-4 py-5 text-center text-sm md:flex-row md:gap-4 md:px-12 md:text-left'>
+          <div>
             &copy; {year} The Good for Nothings Club LLC. All rights reserved.
           </div>
-          <div className='text-xl'>
-            <SocialMediaLinks />
-          </div>
+          <nav
+            aria-label='Store policies'
+            className='flex flex-wrap justify-center gap-x-4 gap-y-1'
+          >
+            {POLICIES.map(policy => (
+              <ScrollTopLink key={policy.slug} href={policyPath(policy.slug)}>
+                {policy.label}
+              </ScrollTopLink>
+            ))}
+          </nav>
         </div>
       </div>
     </footer>
@@ -116,6 +152,26 @@ function PinIcon() {
     >
       <path d='M12 21.5s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12Z' />
       <circle cx='12' cy='9.5' r='2.5' />
+    </svg>
+  )
+}
+
+function MailIcon() {
+  return (
+    <svg
+      width={16}
+      height={16}
+      viewBox='0 0 24 24'
+      aria-hidden='true'
+      className='mt-px shrink-0'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth={2.5}
+      strokeLinecap='square'
+      strokeLinejoin='miter'
+    >
+      <path d='M3 5.5h18v13H3z' />
+      <path d='m3 6 9 7 9-7' />
     </svg>
   )
 }

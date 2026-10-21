@@ -87,6 +87,7 @@ export function llmsTxt() {
     '## Shop',
     '',
     `- [Shop](${abs('/shop.md')}): every collection and product with prices and stock. Collections are at /shop/collections/<handle>.md and products at /shop/products/<handle>.md.`,
+    `- [Store policies](${abs('/policies/returns.md')}): returns, shipping, privacy and terms, at /policies/<returns|shipping|privacy|terms>.md.`,
     '',
     '## Machine-readable',
     '',

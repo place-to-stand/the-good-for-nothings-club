@@ -203,14 +203,14 @@ function Browser({
         <p className='ml-auto hidden text-sm font-bold sm:block'>
           {shown.length} {shown.length === 1 ? 'product' : 'products'}
         </p>
-        <label className='bg-input/10 hover:border-input/30 has-focus-visible:border-input ml-auto flex h-10 items-center border-2 border-transparent pl-3 text-sm transition-colors sm:ml-0'>
+        <label className='bg-input/10 hover:border-input/30 has-focus-visible:border-input ml-auto flex h-10 min-w-0 items-center border-2 border-transparent pl-3 text-sm transition-colors sm:ml-0 pointer-coarse:text-base'>
           <span className='shrink-0'>Sort by:</span>
           <select
             value={state.sort}
             onChange={e => update({ sort: e.target.value as Sort })}
             className={cn(
               selectClassName,
-              'h-full w-auto border-0 bg-transparent pl-1.5 font-bold hover:border-0'
+              'h-full w-auto min-w-0 border-0 bg-transparent pl-1.5 font-bold hover:border-0'
             )}
           >
             {Object.entries(SORTS).map(([value, label]) => (

@@ -8,7 +8,7 @@ import { clubhouse, clubhouseMapsUrl } from '../data/location'
 import { POLICIES, policyPath } from '../data/policies'
 import { CONTACT_EMAIL } from '../data/site'
 
-// Site map, two columns. The wordmark covers Home. (/projects is still
+// Site map, in its own strip above the legal bar. The wordmark covers Home. (/projects is still
 // live, just unlinked.)
 const FOOTER_LINKS = [
   { href: '/facilities', text: 'Facilities' },
@@ -78,17 +78,6 @@ export default function Footer({ year }: { year: number }) {
                 </li>
               ))}
             </ul>
-            <nav className='mt-8 grid grid-flow-col grid-rows-4 justify-start gap-x-14 gap-y-2'>
-              {FOOTER_LINKS.map(link => (
-                <ScrollTopLink
-                  key={link.href}
-                  href={link.href}
-                  className='text-[15px] font-extrabold tracking-[0.06em] uppercase'
-                >
-                  {link.text}
-                </ScrollTopLink>
-              ))}
-            </nav>
           </div>
           <div>
             <h3 className='text-[20px] font-black tracking-[0.06em] uppercase'>
@@ -115,6 +104,22 @@ export default function Footer({ year }: { year: number }) {
             </div>
           </div>
         </div>
+        {/* Site map strip, ruled like the legal bar below it. Two columns
+            on phones, one spread-out row from md up. */}
+        <nav
+          aria-label='Site'
+          className='grid grid-cols-2 gap-x-4 gap-y-2 border-t-2 border-black px-4 py-5 md:flex md:flex-wrap md:justify-between md:gap-x-6 md:px-12'
+        >
+          {FOOTER_LINKS.map(link => (
+            <ScrollTopLink
+              key={link.href}
+              href={link.href}
+              className='text-[15px] font-extrabold tracking-[0.06em] uppercase'
+            >
+              {link.text}
+            </ScrollTopLink>
+          ))}
+        </nav>
         <div className='flex flex-col items-center justify-between gap-2 border-t-2 border-black px-4 py-5 text-center text-sm md:flex-row md:gap-4 md:px-12 md:text-left'>
           <div>
             &copy; {year} The Good for Nothings Club LLC. All rights reserved.

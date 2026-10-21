@@ -10,6 +10,7 @@ import {
   getProductQuery,
   getProductRecommendationsQuery,
   getProductsQuery,
+  getShopPoliciesQuery,
   predictiveSearchQuery,
   removeFromCartMutation,
   searchProductsQuery,
@@ -181,6 +182,25 @@ function reshapeProduct(raw: RawProduct): Product {
 function cached() {
   cacheLife('minutes')
   cacheTag(SHOPIFY_TAG)
+}
+
+export type ShopPolicy = { title: string; body: string }
+export type ShopPolicies = Partial<
+  Record<
+    'refundPolicy' | 'shippingPolicy' | 'privacyPolicy' | 'termsOfService',
+    ShopPolicy | null
+  >
+>
+
+/** Store policies from Settings > Policies. Empty when Shopify isn't configured. */
+export async function getShopPolicies(): Promise<ShopPolicies> {
+  'use cache'
+  cached()
+  if (!isShopifyConfigured()) return {}
+  const data = await shopifyFetch<{ shop: ShopPolicies }>({
+    query: getShopPoliciesQuery,
+  })
+  return data.shop
 }
 
 /** Every collection, A to Z. Empty when Shopify isn't configured. */

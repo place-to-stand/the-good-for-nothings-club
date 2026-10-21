@@ -1,6 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 
 import { SITE_NAME, SITE_URL, TITLE_SUFFIX } from '@/data/site'
+import { merchantReturnPolicyJsonLd } from '@/lib/structuredData'
 
 import { shopPaths } from './format'
 import type { Collection, Product } from './types'
@@ -110,6 +111,7 @@ export function productJsonLd(product: Product) {
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock',
       seller: { '@id': `${SITE_URL}/#organization` },
+      hasMerchantReturnPolicy: merchantReturnPolicyJsonLd,
     })),
   }
 }

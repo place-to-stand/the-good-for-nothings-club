@@ -15,10 +15,12 @@ import {
 import { notFoundMarkdown } from '@/lib/markdown/site'
 import {
   collectionMarkdown,
+  policyMarkdown,
   productMarkdown,
   shopIndexMarkdown,
 } from '@/lib/markdown/shop'
 import { HIDDEN_COLLECTION_TILES } from '@/data/shop'
+import { getPolicy } from '@/lib/policies'
 import {
   getCollection,
   getCollections,
@@ -93,6 +95,14 @@ export async function GET(
       const project = await getProject(segments[1])
       if (project)
         return markdown(projectMarkdown(project), 200, {
+          'Content-Location': canonical,
+        })
+    }
+
+    if (segments.length === 2 && segments[0] === 'policies') {
+      const policy = await getPolicy(segments[1])
+      if (policy)
+        return markdown(policyMarkdown(policy), 200, {
           'Content-Location': canonical,
         })
     }

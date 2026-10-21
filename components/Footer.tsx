@@ -5,6 +5,8 @@ import NewsletterSignUpForm from './NewsletterSignUpForm'
 import SocialMediaLinks from './SocialMediaLinks'
 import ScrollTopLink from './ScrollTopLink'
 import { clubhouse, clubhouseMapsUrl } from '../data/location'
+import { POLICIES, policyPath } from '../data/policies'
+import { CONTACT_EMAIL } from '../data/site'
 
 // Site map, two columns. The wordmark covers Home. (/projects is still
 // live, just unlinked.)
@@ -49,6 +51,10 @@ export default function Footer({ year }: { year: number }) {
                 {clubhouse.zip}
               </a>
             </p>
+            <p className='mt-2 flex items-start gap-1.5 text-sm leading-snug'>
+              <MailIcon />
+              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            </p>
             <nav className='mt-8 grid grid-flow-col grid-rows-4 justify-start gap-x-14 gap-y-2'>
               {FOOTER_LINKS.map(link => (
                 <ScrollTopLink
@@ -87,8 +93,20 @@ export default function Footer({ year }: { year: number }) {
           </div>
         </div>
         <div className='flex flex-col-reverse items-center justify-between gap-4 border-t-2 border-black px-4 py-5 md:flex-row md:px-12'>
-          <div className='text-center text-sm'>
-            &copy; {year} The Good for Nothings Club LLC. All rights reserved.
+          <div className='flex flex-col items-center gap-2 text-center text-sm md:items-start md:text-left'>
+            <div>
+              &copy; {year} The Good for Nothings Club LLC. All rights reserved.
+            </div>
+            <nav
+              aria-label='Store policies'
+              className='flex flex-wrap justify-center gap-x-4 gap-y-1'
+            >
+              {POLICIES.map(policy => (
+                <ScrollTopLink key={policy.slug} href={policyPath(policy.slug)}>
+                  {policy.label}
+                </ScrollTopLink>
+              ))}
+            </nav>
           </div>
           <div className='text-xl'>
             <SocialMediaLinks />
@@ -116,6 +134,26 @@ function PinIcon() {
     >
       <path d='M12 21.5s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12Z' />
       <circle cx='12' cy='9.5' r='2.5' />
+    </svg>
+  )
+}
+
+function MailIcon() {
+  return (
+    <svg
+      width={16}
+      height={16}
+      viewBox='0 0 24 24'
+      aria-hidden='true'
+      className='mt-px shrink-0'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth={2.5}
+      strokeLinecap='square'
+      strokeLinejoin='miter'
+    >
+      <path d='M3 5.5h18v13H3z' />
+      <path d='m3 6 9 7 9-7' />
     </svg>
   )
 }

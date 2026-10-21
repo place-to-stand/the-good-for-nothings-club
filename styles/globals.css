@@ -441,3 +441,27 @@
     }
   }
 }
+
+/*
+ * iPhone Safari zooms the page in when you tap a field whose text is under
+ * 16px, and leaves it zoomed. Keep typed text at 16px or more on touch
+ * screens so that never happens. Pinch-zoom still works. This sits outside
+ * any layer on purpose, so it wins over text-sm and friends.
+ */
+@media (pointer: coarse) {
+  input:not(
+    [type='checkbox'],
+    [type='radio'],
+    [type='range'],
+    [type='file'],
+    [type='button'],
+    [type='submit'],
+    [type='reset'],
+    [type='image'],
+    [type='color']
+  ),
+  select,
+  textarea {
+    font-size: max(16px, 1em);
+  }
+}

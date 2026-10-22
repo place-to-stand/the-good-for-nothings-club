@@ -48,7 +48,7 @@ export default function Projects() {
       <section className='pt-8 md:px-8 md:pt-16 xl:px-16'>
         <div className='bg-background mx-auto max-w-(--page-max-width) border-y-2 border-black px-4 py-6 md:border-x-2 md:px-12 md:py-12'>
           <div className='flex flex-col items-center justify-between gap-8 pt-6 md:pt-8'>
-            <h1 className='text-[32px] leading-none font-black tracking-[-0.04em] md:text-[48px] lg:text-[96px]'>
+            <h1 className='text-[44px] leading-none font-black tracking-[-0.04em] md:text-[48px] lg:text-[96px]'>
               Projects
             </h1>
             <Suspense fallback={<TypeMenu />}>

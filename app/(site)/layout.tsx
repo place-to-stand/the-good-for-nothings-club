@@ -2,6 +2,8 @@ import type { ReactNode } from 'react'
 
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
+import CartDrawer, { FloatingCart } from '@/components/shop/CartDrawer'
+import CartProvider from '@/components/shop/CartProvider'
 import { copyrightYear } from '@/lib/copyrightYear'
 
 // Floor for every public route: the App Shell and per-link prefetches must
@@ -20,10 +22,12 @@ export default async function SiteLayout({
   children: ReactNode
 }) {
   return (
-    <>
+    <CartProvider>
       <Header />
       {children}
       <Footer year={await copyrightYear()} />
-    </>
+      <CartDrawer />
+      <FloatingCart />
+    </CartProvider>
   )
 }

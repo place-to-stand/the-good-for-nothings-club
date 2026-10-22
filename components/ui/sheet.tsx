@@ -3,7 +3,7 @@
 import * as React from 'react'
 import * as SheetPrimitive from '@radix-ui/react-dialog'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { X } from 'lucide-react'
+import { CloseIcon } from '@/components/shop/icons'
 
 import { cn } from '@/lib/utils'
 
@@ -21,7 +21,7 @@ const SheetOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Overlay
     className={cn(
-      'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80 ease-[cubic-bezier(0.32,0.72,0,1)] data-[state=open]:duration-500 data-[state=closed]:duration-300',
+      'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80 ease-[cubic-bezier(0.32,0.72,0,1)] data-[state=closed]:duration-300 data-[state=open]:duration-500',
       className
     )}
     {...props}
@@ -53,7 +53,8 @@ const sheetVariants = cva(
 )
 
 interface SheetContentProps
-  extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
+  extends
+    React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
     VariantProps<typeof sheetVariants> {}
 
 const SheetContent = React.forwardRef<
@@ -68,8 +69,8 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className='ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-5 right-4.5 cursor-pointer rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:pointer-events-none'>
-        <X className='h-6 w-6' />
+      <SheetPrimitive.Close className='absolute top-5 right-4 flex size-9 cursor-pointer items-center justify-center transition-colors hover:bg-black/10 focus-visible:outline-2 focus-visible:outline-black disabled:pointer-events-none'>
+        <CloseIcon size={22} />
         <span className='sr-only'>Close</span>
       </SheetPrimitive.Close>
     </SheetPrimitive.Content>

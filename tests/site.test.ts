@@ -21,6 +21,7 @@ describe('llms.txt', () => {
       '## How to call this site',
       '## Pages',
       '## Projects and members',
+      '## Shop',
       '## Machine-readable',
       '## Optional',
     ])

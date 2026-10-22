@@ -1,6 +1,7 @@
 import type { Occurrence } from '@/data/events'
 import { facilities } from '@/data/facilities'
 import { clubhouse, clubhouseMapsUrl } from '@/data/location'
+import { policyPath, RETURN_POLICY } from '@/data/policies'
 import { services } from '@/data/services'
 import { SOCIAL_PROFILES } from '@/data/social'
 
@@ -59,6 +60,22 @@ const postalAddress = {
   addressCountry: 'US',
 }
 
+/**
+ * The shop's return terms (data/policies.ts) for Google's merchant
+ * listings: 30 days, by mail, free return label, full refund.
+ */
+export const merchantReturnPolicyJsonLd = {
+  '@type': 'MerchantReturnPolicy',
+  applicableCountry: RETURN_POLICY.country,
+  returnPolicyCountry: RETURN_POLICY.country,
+  returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+  merchantReturnDays: RETURN_POLICY.days,
+  returnMethod: 'https://schema.org/ReturnByMail',
+  returnFees: 'https://schema.org/FreeReturn',
+  refundType: 'https://schema.org/FullRefund',
+  merchantReturnLink: `${SITE_URL}${policyPath('returns')}`,
+}
+
 // Matching the Google Business Profile so search engines connect the
 // site, the listing, the socials, and the address into one entity.
 export const localBusinessJsonLd = {
@@ -101,6 +118,7 @@ export const localBusinessJsonLd = {
     'Creative coworking',
   ],
   makesOffer: offers,
+  hasMerchantReturnPolicy: merchantReturnPolicyJsonLd,
   geo: {
     '@type': 'GeoCoordinates',
     latitude: clubhouse.geo.lat,

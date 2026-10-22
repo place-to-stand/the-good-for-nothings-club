@@ -5,7 +5,10 @@ import { cacheLife } from 'next/cache'
 import GroupLabel from '@/components/GroupLabel'
 import InquiryDialog from '@/components/InquiryDialog'
 import OfferCard from '@/components/OfferCard'
-import PageShell, { PageShellSection } from '@/components/PageShell'
+import PageShell, {
+  PageShellSection,
+  pageColumns,
+} from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
 import { Button } from '@/components/ui/Button'
 import {
@@ -17,6 +20,7 @@ import {
 } from '@/data/events'
 import { eventsJsonLd } from '@/lib/structuredData'
 import { searchMeta } from '@/data/site'
+import { cn } from '@/lib/utils'
 
 export const ensureStatic = 'navigation'
 
@@ -150,7 +154,7 @@ export default async function Events() {
           __html: JSON.stringify(eventsJsonLd(recurring)),
         }}
       />
-      <div className='grid grid-cols-1 gap-6 md:gap-16 lg:grid-cols-2'>
+      <div className={cn(pageColumns, 'gap-y-6')}>
         <div>
           <SectionHeading title={eventsCopy.calendarTitle} />
           {/* Each date carries its own RSVP so it's always clear which
@@ -239,7 +243,7 @@ export default async function Events() {
 
       <p className='mt-12 text-center font-sans leading-snug'>
         {eventsCopy.friendNote}{' '}
-        <Link href='/membership' className='font-bold underline'>
+        <Link href='/membership' className='font-bold'>
           {eventsCopy.friendCta}
         </Link>
       </p>

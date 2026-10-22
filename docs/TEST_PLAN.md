@@ -86,7 +86,7 @@ Membership `/membership`
 
 About `/about`
 
-- [ ] Founding Members grid renders with photos, member #, since date, roles
+- [ ] Current Members grid renders with photos, member #, since date, roles
 - [ ] Past Members accordion: loads closed, opens smoothly, shows Eric Fenny, hairlines darken on hover
 - [ ] "What happens here" bullets incl. Shop and "Got an idea?" → /contact link
 

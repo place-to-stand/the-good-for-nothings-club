@@ -3,7 +3,7 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import { FaCaretDown } from 'react-icons/fa'
 
 import MemberProfilePicture from '@/components/MemberProfilePicture'
-import PageShell from '@/components/PageShell'
+import PageShell, { pageColumns } from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
 import {
   leadershipCopy,
@@ -49,7 +49,7 @@ export default async function About() {
 
   return (
     <PageShell title='About' lead={aboutCopy.lead}>
-      <div className='grid grid-cols-1 gap-x-12 lg:grid-cols-[1fr_minmax(300px,26rem)]'>
+      <div className={pageColumns}>
         <div>
           <SectionHeading title={aboutCopy.overviewTitle} />
           <div className='mt-4 max-w-3xl space-y-4 font-sans text-lg leading-snug'>

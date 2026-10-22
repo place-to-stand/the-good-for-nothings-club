@@ -13,6 +13,21 @@ import {
   projectsIndexMarkdown,
 } from '@/lib/markdown/dynamic'
 import { notFoundMarkdown } from '@/lib/markdown/site'
+import {
+  collectionMarkdown,
+  policyMarkdown,
+  productMarkdown,
+  shopIndexMarkdown,
+} from '@/lib/markdown/shop'
+import { HIDDEN_COLLECTION_TILES } from '@/data/shop'
+import { getPolicy } from '@/lib/policies'
+import {
+  getCollection,
+  getCollections,
+  getProduct,
+  getProducts,
+  isShopifyConfigured,
+} from '@/lib/shopify'
 
 /**
  * Markdown twin of every public page. Not linked directly: proxy.ts
@@ -82,6 +97,47 @@ export async function GET(
         return markdown(projectMarkdown(project), 200, {
           'Content-Location': canonical,
         })
+    }
+
+    if (segments.length === 2 && segments[0] === 'policies') {
+      const policy = await getPolicy(segments[1])
+      if (policy)
+        return markdown(policyMarkdown(policy), 200, {
+          'Content-Location': canonical,
+        })
+    }
+
+    if (segments[0] === 'shop' && isShopifyConfigured()) {
+      if (segments.length === 1) {
+        const [collections, products] = await Promise.all([
+          getCollections(),
+          getProducts(),
+        ])
+        return markdown(
+          shopIndexMarkdown(
+            collections.filter(
+              c => !HIDDEN_COLLECTION_TILES.includes(c.handle)
+            ),
+            products
+          ),
+          200,
+          { 'Content-Location': canonical }
+        )
+      }
+      if (segments.length === 3 && segments[1] === 'collections') {
+        const collection = await getCollection(segments[2])
+        if (collection)
+          return markdown(collectionMarkdown(collection), 200, {
+            'Content-Location': canonical,
+          })
+      }
+      if (segments.length === 3 && segments[1] === 'products') {
+        const product = await getProduct(segments[2])
+        if (product)
+          return markdown(productMarkdown(product), 200, {
+            'Content-Location': canonical,
+          })
+      }
     }
 
     if (segments.length === 2 && segments[0] === 'members') {

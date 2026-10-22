@@ -4,14 +4,14 @@ import InquiryForm from '@/components/InquiryForm'
 import { clubhouseAddressLine, clubhouseMapsUrl } from '@/data/location'
 import Map from '@/components/Map'
 import WidgetBoundary from '@/components/WidgetBoundary'
-import OfferCard from '@/components/OfferCard'
-import PageShell from '@/components/PageShell'
+import PageShell, { pageColumns } from '@/components/PageShell'
 import SectionHeading from '@/components/SectionHeading'
 import SocialMediaLinks from '@/components/SocialMediaLinks'
 import type { Metadata, ResolvingMetadata } from 'next'
 import { contactCopy } from '@/data/contact'
 import { CONTACT_EMAIL } from '@/data/site'
 import { searchMeta } from '@/data/site'
+import { cn } from '@/lib/utils'
 
 export const ensureStatic = 'navigation'
 
@@ -37,7 +37,7 @@ export async function generateMetadata(
 export default async function Contact() {
   return (
     <PageShell title='Contact' lead={contactCopy.lead}>
-      <div className='grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-20'>
+      <div className={cn(pageColumns, 'gap-y-8')}>
         <div>
           <SectionHeading title={contactCopy.emailTitle} />
           <Link
@@ -73,12 +73,13 @@ export default async function Contact() {
           </div>
         </div>
 
-        <OfferCard
-          title={contactCopy.formTitle}
-          className='self-start border-0 p-0 md:p-0 lg:mt-20'
-        >
-          <InquiryForm defaultKind='general' />
-        </OfferCard>
+        {/* Same heading as the left column, so the two line up. */}
+        <section className='self-start'>
+          <SectionHeading title={contactCopy.formTitle} />
+          <div className='mt-6'>
+            <InquiryForm defaultKind='general' />
+          </div>
+        </section>
       </div>
     </PageShell>
   )

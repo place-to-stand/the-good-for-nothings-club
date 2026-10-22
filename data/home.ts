@@ -1,4 +1,4 @@
-import { SHOP_URL } from './site'
+import { SHOP_PATH } from './site'
 
 /**
  * Homepage copy. Plain, version-controlled data (no CMS). Edit directly.
@@ -75,9 +75,8 @@ export const homeOffering: HomeOffering[] = [
     body: 'Rent a room by the hour or the month.',
   },
   {
-    href: SHOP_URL,
+    href: SHOP_PATH,
     title: 'Shop',
     body: 'Records, zines, and merch from the club.',
-    external: true,
   },
 ]

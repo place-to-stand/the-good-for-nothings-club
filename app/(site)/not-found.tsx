@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import SiteNotFound, { type NotFoundTile } from '@/components/SiteNotFound'
 import { homeOffering } from '@/data/home'
-import { SHOP_URL } from '@/data/site'
+import { SHOP_PATH } from '@/data/site'
 import { SITE_PAGES } from '@/lib/markdown/site'
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
  * from the homepage, so the markdown 404 in lib/markdown/site.ts lists
  * the same places.
  */
-const shop = homeOffering.find(card => card.href === SHOP_URL)
+const shop = homeOffering.find(card => card.href === SHOP_PATH)
 
 const tiles: NotFoundTile[] = [
   ...SITE_PAGES.filter(page => page.path !== '/').map(page => ({
@@ -34,7 +34,7 @@ const tiles: NotFoundTile[] = [
           href: shop.href,
           title: shop.title,
           description: shop.body,
-          external: true,
+          external: false,
         },
       ]
     : []),

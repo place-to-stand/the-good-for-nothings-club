@@ -406,6 +406,36 @@
   }
 }
 
+/* Home headline: "make it." starts hollow and fills in solid on view. */
+.fill-on-view {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #000;
+  background-image: linear-gradient(#000, #000);
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition:
+    background-size 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.3s,
+    -webkit-text-stroke-color 0.2s linear 1.7s;
+}
+@media (min-width: 1024px) {
+  .fill-on-view {
+    -webkit-text-stroke-width: 2px;
+  }
+}
+.fill-on-view[data-filled='true'] {
+  background-size: 100% 100%;
+  -webkit-text-stroke-color: transparent;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fill-on-view {
+    transition: none;
+    background-size: 100% 100%;
+    -webkit-text-stroke-color: transparent;
+  }
+}
+
 /* Heavy square chevron for native selects, drawn like components/shop/icons. */
 .select-chevron {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='square' stroke-linejoin='miter'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");

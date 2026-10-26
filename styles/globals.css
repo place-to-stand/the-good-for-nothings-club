@@ -406,7 +406,12 @@
   }
 }
 
-/* Home headline: "make it." starts hollow and fills in solid on view. */
+/*
+ * Home headline: "make it." is hollow and fills in solid as you scroll down
+ * to it, then empties again as you scroll back up. Browsers with
+ * scroll-driven animations tie the fill to the scroll position; others
+ * fill on entering view and empty on leaving (FillOnView sets data-filled).
+ */
 .fill-on-view {
   color: transparent;
   -webkit-text-stroke: 1.5px #000;
@@ -416,8 +421,8 @@
   -webkit-background-clip: text;
   background-clip: text;
   transition:
-    background-size 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.3s,
-    -webkit-text-stroke-color 0.2s linear 1.7s;
+    background-size 1s cubic-bezier(0.65, 0, 0.35, 1),
+    -webkit-text-stroke-color 0.2s linear;
 }
 @media (min-width: 1024px) {
   .fill-on-view {
@@ -427,10 +432,37 @@
 .fill-on-view[data-filled='true'] {
   background-size: 100% 100%;
   -webkit-text-stroke-color: transparent;
+  transition:
+    background-size 1s cubic-bezier(0.65, 0, 0.35, 1),
+    -webkit-text-stroke-color 0.2s linear 0.9s;
+}
+@keyframes fill-on-scroll {
+  0% {
+    background-size: 0% 100%;
+    -webkit-text-stroke-color: #000;
+  }
+  95% {
+    -webkit-text-stroke-color: #000;
+  }
+  100% {
+    background-size: 100% 100%;
+    -webkit-text-stroke-color: transparent;
+  }
+}
+@supports (animation-timeline: view()) {
+  .fill-on-view,
+  .fill-on-view[data-filled] {
+    transition: none;
+    animation: fill-on-scroll linear both;
+    animation-timeline: view();
+    animation-range: cover 57% cover 85%;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .fill-on-view {
+  .fill-on-view,
+  .fill-on-view[data-filled] {
     transition: none;
+    animation: none;
     background-size: 100% 100%;
     -webkit-text-stroke-color: transparent;
   }

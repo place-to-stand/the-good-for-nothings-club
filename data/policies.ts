@@ -43,7 +43,7 @@ export const POLICIES: PolicyInfo[] = [
       `You have ${RETURN_POLICY.days} days from delivery to ask for a return. Items must be unworn or unused, with tags, in their original packaging, with a receipt or proof of purchase.`,
       `To start a return, email ${CONTACT_EMAIL}. If we accept it, we send you a prepaid return label, so return shipping is free. Items sent back without asking first won't be accepted.`,
       'Sale items and gift cards can’t be returned. To exchange an item, return it and place a new order.',
-      `Please check your order when it arrives and email us right away if anything is damaged, defective or wrong. Once we receive and inspect a return, we tell you whether the refund is approved. Approved refunds go back to your original payment method within ${RETURN_POLICY.refundBusinessDays} business days.`,
+      `Please check your order when it arrives and email us right away if anything is damaged, defective, or wrong. Once we receive and inspect a return, we tell you whether the refund is approved. Approved refunds go back to your original payment method within ${RETURN_POLICY.refundBusinessDays} business days.`,
     ],
   },
   {
@@ -63,7 +63,7 @@ export const POLICIES: PolicyInfo[] = [
     title: 'Privacy Policy',
     label: 'Privacy',
     description:
-      'How The Good for Nothings Club collects, uses and shares personal information.',
+      'How The Good for Nothings Club collects, uses, and shares personal information.',
     shopifyField: 'privacyPolicy',
   },
   {

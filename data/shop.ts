@@ -39,5 +39,5 @@ export const HIDDEN_COLLECTION_TILES = ['bestsellers', 'frontpage']
 export const SHOP_META = {
   searchTitle: 'Shop Zines, Tees & Prints from Austin',
   description:
-    'Zines, tees, hats and photo prints from members and friends of The Good for Nothings Club, an Austin, TX creators club. New drops whenever.',
+    'Zines, tees, hats, and photo prints from members and friends of The Good for Nothings Club, an Austin, TX creators club. New drops whenever.',
 }

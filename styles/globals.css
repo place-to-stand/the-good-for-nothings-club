@@ -455,7 +455,15 @@
     transition: none;
     animation: fill-on-scroll linear both;
     animation-timeline: view();
-    animation-range: cover 57% cover 85%;
+    animation-range: cover 50% cover 82%;
+  }
+  /* On phones the words already sit mid-screen at the top of the page, so
+     start a little later to keep them hollow until you scroll. */
+  @media (max-width: 767px) {
+    .fill-on-view,
+    .fill-on-view[data-filled] {
+      animation-range: cover 57% cover 82%;
+    }
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -5,7 +5,11 @@ import {
   llmsTxt,
   notFoundMarkdown,
 } from '@/lib/markdown/site'
-import { localBusinessJsonLd, websiteJsonLd } from '@/lib/structuredData'
+import {
+  localBusinessJsonLd,
+  projectJsonLd,
+  websiteJsonLd,
+} from '@/lib/structuredData'
 import { PAGE_META, TITLE_SUFFIX } from '@/data/site'
 
 describe('llms.txt', () => {
@@ -108,5 +112,79 @@ describe('Organization JSON-LD', () => {
       true
     )
     expect(websiteJsonLd.publisher['@id']).toBe(localBusinessJsonLd['@id'])
+  })
+})
+
+describe('projectJsonLd', () => {
+  const project = {
+    _id: 'p1',
+    _updatedAt: '2025-05-05T00:00:00Z',
+    title: 'Turbopedal ',
+    clientName: 'Acme Records',
+    slug: { current: 'turbopedal' },
+    seoDescription: null,
+    type: 'Build',
+    status: 'Completed',
+    mainLink: 'https://example.com/turbopedal',
+    dateStarted: '2025-01-01',
+    dateCompleted: '2025-05-01',
+    mainMedia: [
+      { _type: 'videoFile', asset: { url: 'https://cdn.test/v.mp4' } },
+      { _type: 'image', asset: { url: 'https://cdn.test/a.jpg' } },
+    ],
+    summary: [
+      {
+        _type: 'block',
+        _key: 'a',
+        children: [{ _type: 'span', _key: 'b', text: 'A guitar pedal.' }],
+      },
+    ],
+    overview: [],
+    photoGallery: [],
+    caseStudy: [],
+    membersInvolved: [
+      { fullName: 'Jason Desiderio', slug: { current: 'jason-desiderio' } },
+    ],
+  } as unknown as Parameters<typeof projectJsonLd>[0]
+
+  const [work, crumbs] = projectJsonLd(project)['@graph']
+
+  it('marks a project as a CreativeWork, not a Product', () => {
+    expect(work['@type']).toBe('CreativeWork')
+    expect(work).toMatchObject({
+      name: 'Turbopedal',
+      url: 'https://thegoodfornothings.club/projects/turbopedal',
+      description: 'A guitar pedal.',
+      image: 'https://cdn.test/a.jpg',
+      dateCreated: '2025-01-01',
+      datePublished: '2025-05-01',
+      sameAs: 'https://example.com/turbopedal',
+      funder: { '@type': 'Organization', name: 'Acme Records' },
+    })
+    expect(work.creator).toEqual([
+      { '@id': 'https://thegoodfornothings.club/#organization' },
+      {
+        '@type': 'Person',
+        name: 'Jason Desiderio',
+        url: 'https://thegoodfornothings.club/members/jason-desiderio',
+      },
+    ])
+    expect(JSON.stringify(work)).not.toContain('Offer')
+  })
+
+  it('leaves out the client on club projects', () => {
+    const [clubWork] = projectJsonLd({
+      ...project,
+      clientName: 'The Good for Nothings Club',
+    })['@graph']
+    expect(clubWork).not.toHaveProperty('funder')
+  })
+
+  it('adds Projects › title breadcrumbs', () => {
+    expect(crumbs['@type']).toBe('BreadcrumbList')
+    expect(crumbs.itemListElement.map(c => c.name)).toEqual([
+      'Projects',
+      'Turbopedal',
+    ])
   })
 })

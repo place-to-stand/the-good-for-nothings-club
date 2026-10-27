@@ -1,5 +1,5 @@
 import { getImageUrl } from '@/data/client'
-import { Image } from '@/types'
+import { GFNC_project, Image } from '@/types'
 import { toPlainText } from '@portabletext/toolkit'
 import { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -7,6 +7,7 @@ import { Suspense } from 'react'
 import DetailFallback from '@/components/DetailFallback'
 import { getProject, getProjectsForSitemap } from '@/lib/content'
 import { TITLE_SUFFIX } from '@/data/site'
+import { projectJsonLd } from '@/lib/structuredData'
 import {
   WebProject,
   VideoProject,
@@ -92,7 +93,24 @@ async function ProjectContent({ params }: Pick<ProjectProps, 'params'>) {
 
   if (!project) notFound()
 
-  // Route to the appropriate component based on project type
+  return (
+    <>
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(projectJsonLd(project)).replace(
+            /</g,
+            '\\u003c'
+          ),
+        }}
+      />
+      <ProjectLayout project={project} />
+    </>
+  )
+}
+
+// Route to the appropriate component based on project type
+function ProjectLayout({ project }: { project: GFNC_project }) {
   switch (project.type) {
     case 'Web':
       return <WebProject project={project} />

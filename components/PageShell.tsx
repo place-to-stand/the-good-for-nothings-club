@@ -47,7 +47,7 @@ export default function PageShell({
               {title}
             </h1>
             {lead && (
-              <p className='max-w-xl font-serif text-xl leading-snug text-pretty [text-box:trim-both_cap_alphabetic] md:text-right md:leading-tight md:text-balance lg:max-w-3xl'>
+              <p className='max-w-xl font-serif text-xl leading-snug text-pretty italic [text-box:trim-both_cap_alphabetic] md:text-right md:leading-tight md:text-balance lg:max-w-3xl'>
                 {lead}
               </p>
             )}

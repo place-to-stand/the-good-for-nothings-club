@@ -38,6 +38,9 @@ export default function Footer({ year }: { year: number }) {
             >
               GFNC
             </ScrollTopLink>
+            {/* Spells out the short name so search engines tie "GFNC"
+                to the club on every page. */}
+            <p className='mt-2 text-sm font-bold'>The Good for Nothings Club</p>
             {/* One list so the icons line up. Icon and text share one
                 link; hovering underlines only the text (.link-line). */}
             <ul className='mt-4 space-y-2 text-sm leading-snug'>

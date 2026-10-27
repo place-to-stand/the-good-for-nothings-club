@@ -406,6 +406,76 @@
   }
 }
 
+/*
+ * Home headline: "make it." is hollow and fills in solid as you scroll down
+ * to it, then empties again as you scroll back up. Browsers with
+ * scroll-driven animations tie the fill to the scroll position; others
+ * fill on entering view and empty on leaving (FillOnView sets data-filled).
+ */
+.fill-on-view {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #000;
+  background-image: linear-gradient(#000, #000);
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition:
+    background-size 1s cubic-bezier(0.65, 0, 0.35, 1),
+    -webkit-text-stroke-color 0.2s linear;
+}
+@media (min-width: 1024px) {
+  .fill-on-view {
+    -webkit-text-stroke-width: 2px;
+  }
+}
+.fill-on-view[data-filled='true'] {
+  background-size: 100% 100%;
+  -webkit-text-stroke-color: transparent;
+  transition:
+    background-size 1s cubic-bezier(0.65, 0, 0.35, 1),
+    -webkit-text-stroke-color 0.2s linear 0.9s;
+}
+@keyframes fill-on-scroll {
+  0% {
+    background-size: 0% 100%;
+    -webkit-text-stroke-color: #000;
+  }
+  95% {
+    -webkit-text-stroke-color: #000;
+  }
+  100% {
+    background-size: 100% 100%;
+    -webkit-text-stroke-color: transparent;
+  }
+}
+@supports (animation-timeline: view()) {
+  .fill-on-view,
+  .fill-on-view[data-filled] {
+    transition: none;
+    animation: fill-on-scroll linear both;
+    animation-timeline: view();
+    animation-range: cover 50% cover 82%;
+  }
+  /* On phones the words already sit mid-screen at the top of the page, so
+     start a little later to keep them hollow until you scroll. */
+  @media (max-width: 767px) {
+    .fill-on-view,
+    .fill-on-view[data-filled] {
+      animation-range: cover 57% cover 82%;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fill-on-view,
+  .fill-on-view[data-filled] {
+    transition: none;
+    animation: none;
+    background-size: 100% 100%;
+    -webkit-text-stroke-color: transparent;
+  }
+}
+
 /* Heavy square chevron for native selects, drawn like components/shop/icons. */
 .select-chevron {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='square' stroke-linejoin='miter'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");

@@ -26,7 +26,7 @@ export const PAGE_META = {
     title: 'Austin Creators Club & Studios | The Good for Nothings Club',
     searchTitle: 'Austin Creators Club & Studios | The Good for Nothings Club',
     description:
-      'A creators club in Austin, TX — musicians, photographers, writers, filmmakers, and engineers with studios, rehearsal rooms, and workspace under one roof.',
+      'The Good for Nothings Club (GFNC) is a creators club in Austin, TX, with studios, rehearsal rooms, and workspace for musicians, photographers, and filmmakers.',
   },
   '/facilities': {
     title: 'Facilities',

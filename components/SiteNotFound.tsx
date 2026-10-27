@@ -43,7 +43,7 @@ export default function SiteNotFound({ tiles }: { tiles: NotFoundTile[] }) {
               {notFoundCopy.title}
             </h1>
             <div className='flex min-w-0 flex-col gap-6'>
-              <p className='max-w-xl font-serif text-[22px] leading-tight md:text-[30px]'>
+              <p className='max-w-xl font-serif text-[22px] leading-tight italic md:text-[30px]'>
                 {notFoundCopy.lead}
               </p>
               <div className='flex flex-col gap-2.5 sm:flex-row sm:flex-wrap'>

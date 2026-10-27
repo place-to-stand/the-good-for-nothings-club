@@ -10,11 +10,34 @@ import { SHOP_PATH } from './site'
 export const homeCopy = {
   /** The visually hidden <h1>; the wordmark image carries it visually. */
   heading: 'Good For Nothings',
-  /** Intro sentence, split so the HTML can set the club name in italics. */
+  /**
+   * The first words under the wordmark (StoryCore primary headline), split
+   * so the HTML can set "going to" in the glitch face of the wordmark.
+   */
+  headline: ['You said you were', 'going to', 'make it.'] as const,
+  /** Where the name comes from, then what the club does about it. */
+  story: [
+    "But they said there's no money in it. The band, the film, the zine. Just get a real job and quit being a good for nothing.",
+    "So the idea waited. As a line in your notebook, a message from last month, a riff in a voice memo. Not for lack of talent, because alone at home there's always a reason to wait until tomorrow.",
+  ],
+  /** Final story paragraph, split so the HTML can set the club name in italics. */
   introName: 'The Good for Nothings Club',
   introBody:
-    'is a creators club based in Austin, TX made up of musicians, photographers, writers, filmmakers, and engineers. Our clubhouse puts studios, rehearsal rooms, and workspace under one roof. Good for nothings. Making everything.',
-  learnMore: 'Learn More',
+    "is where you get work done today. It's a clubhouse in Austin, TX for musicians, photographers, writers, filmmakers, and engineers, with a photo and video studio, a mixing room, a practice space, desks, and plenty of gear. Somebody always asks what you're working on, and the thing gets made.",
+  tagline: 'Good for nothings, making everything.',
+  /** Named proof: the latest thing the club made together. */
+  proofLabel: 'Made here lately',
+  proofTitle: "It's Gone Viral",
+  proof:
+    'The official music video for So Many Cults, premiered September 2026.',
+  proofCta: 'Watch on YouTube',
+  proofUrl: 'https://www.youtube.com/watch?v=C68S9tG0csA',
+  proofVideoId: 'C68S9tG0csA',
+  proofCredits: [
+    'Directed and edited by Chris Donahue',
+    'Costumes, set, and choreography by Gabrielle Westfield',
+    'Produced by Dave Pokk and Jason Desiderio',
+  ],
   offeringTitle: 'What we offer',
   findUsTitle: 'Find Us Online',
 }
@@ -26,31 +49,34 @@ export type HomeOffering = {
   external?: boolean
 }
 
-/** The offering cards, in display order. */
+/**
+ * The offering cards, in display order: hire us, join, come to an event,
+ * then the rooms and the shop. Each speaks to someone StoryCore names.
+ */
 export const homeOffering: HomeOffering[] = [
-  {
-    href: '/facilities',
-    title: 'Facilities',
-    body: 'Rent the clubhouse by the month or by the hour.',
-  },
   {
     href: '/services',
     title: 'Services',
-    body: 'You bring the project. We make it.',
-  },
-  {
-    href: '/events',
-    title: 'Events',
-    body: 'The clubhouse, in session - friends of the club welcome.',
+    body: "Photo, video, music, zines, and events, made by people who won't make you feel small for asking.",
   },
   {
     href: '/membership',
     title: 'Membership',
-    body: 'Join the club, at the level that makes sense for you.',
+    body: "A key, a desk, or a band slot, and people who ask what you're working on.",
+  },
+  {
+    href: '/events',
+    title: 'Events',
+    body: "Come by, meet the gang, and see what's getting made.",
+  },
+  {
+    href: '/facilities',
+    title: 'Facilities',
+    body: 'Rent a room by the hour or the month.',
   },
   {
     href: SHOP_PATH,
     title: 'Shop',
-    body: 'Works and merch from members and friends of the club.',
+    body: 'Records, zines, and merch from the club.',
   },
 ]

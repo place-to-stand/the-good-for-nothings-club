@@ -1,3 +1,5 @@
+import { toPlainText } from '@portabletext/toolkit'
+
 import type { Occurrence } from '@/data/events'
 import { facilities } from '@/data/facilities'
 import { clubhouse, clubhouseMapsUrl } from '@/data/location'
@@ -13,6 +15,7 @@ import { SOCIAL_PROFILES } from '@/data/social'
  */
 
 import { CONTACT_EMAIL, SITE_NAME, SITE_URL } from '@/data/site'
+import type { GFNC_project, Image } from '@/types'
 
 /** Stable id so other nodes (WebSite, Event organizer) point at one entity. */
 const ORGANIZATION_ID = `${SITE_URL}/#organization`
@@ -188,5 +191,68 @@ export function eventsJsonLd(occurrences: Occurrence[]) {
         },
       }
     }),
+  }
+}
+
+/**
+ * One project page as a schema.org CreativeWork, made by the members
+ * involved and published by the club. Without its own type, a project page
+ * only carries the site-wide LocalBusiness (with the shop's return policy),
+ * and crawlers like Ahrefs mistake it for a product page with no Product.
+ */
+export function projectJsonLd(project: GFNC_project) {
+  const url = `${SITE_URL}/projects/${project.slug.current}`
+  const image = [
+    ...project.mainMedia.filter(
+      (media): media is Image => media._type === 'image'
+    ),
+    ...project.photoGallery,
+  ][0]
+  const isClubProject = project.clientName === SITE_NAME
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CreativeWork',
+        '@id': `${url}#work`,
+        name: project.title.trim(),
+        url,
+        description:
+          project.seoDescription || toPlainText(project.summary ?? []),
+        genre: project.type,
+        creativeWorkStatus: project.status,
+        ...(image && { image: image.asset.url }),
+        ...(project.dateStarted && { dateCreated: project.dateStarted }),
+        ...(project.dateCompleted && {
+          datePublished: project.dateCompleted,
+        }),
+        ...(project.mainLink && { sameAs: project.mainLink }),
+        creator: [
+          { '@id': ORGANIZATION_ID },
+          ...(project.membersInvolved ?? []).map(member => ({
+            '@type': 'Person',
+            name: member.fullName,
+            url: `${SITE_URL}/members/${member.slug.current}`,
+          })),
+        ],
+        publisher: { '@id': ORGANIZATION_ID },
+        // Client work names the client who paid for it.
+        ...(!isClubProject && {
+          funder: { '@type': 'Organization', name: project.clientName },
+        }),
+        isPartOf: { '@id': `${SITE_URL}/#website` },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { name: 'Projects', item: `${SITE_URL}/projects` },
+          { name: project.title.trim(), item: url },
+        ].map((crumb, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          ...crumb,
+        })),
+      },
+    ] as const,
   }
 }

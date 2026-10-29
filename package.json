@@ -27,6 +27,7 @@
     "@radix-ui/react-tooltip": "^1.4.1",
     "@types/lodash.debounce": "^4.0.9",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "@vis.gl/react-google-maps": "^1.10.1",
     "botid": "^1.5.11",
     "class-variance-authority": "^0.7.1",

@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils'
 import { localBusinessJsonLd, websiteJsonLd } from '@/lib/structuredData'
 import { PAGE_META, TITLE_SUFFIX } from '@/data/site'
 import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 
 import '../styles/globals.css'
 import AttributionCapture from '@/components/AttributionCapture'
@@ -93,7 +92,6 @@ export default function RootLayout({
         <AttributionCapture />
         {children}
         <Analytics />
-        <SpeedInsights />
         <GoogleAnalytics gaId='G-RK8DQY3F32' />
       </body>
     </html>

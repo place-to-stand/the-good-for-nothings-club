@@ -2,12 +2,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { compareAtLabel, priceLabel, shopPaths } from '@/lib/shopify/format'
-import { isColorName, swatchOf } from '@/lib/shopify/swatches'
 import type { ProductCard as ProductCardData } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
 
+import CardSwatches from './CardSwatches'
 import QuickAdd from './QuickAdd'
-import { SwatchTip } from './VariantOptions'
 
 /** A product tile: image (second image on hover), title, price. */
 export default function ProductCard({
@@ -83,48 +82,6 @@ export default function ProductCard({
         <QuickAdd product={product} />
       </div>
     </div>
-  )
-}
-
-const MAX_SWATCHES = 5
-
-/** The product's colors as small squares, each named on hover. */
-function CardSwatches({ product }: { product: ProductCardData }) {
-  const colors = [
-    ...new Set(
-      product.quickVariants.flatMap(v =>
-        v.selectedOptions.filter(o => isColorName(o.name)).map(o => o.value)
-      )
-    ),
-  ]
-  const shown = colors.filter(c => swatchOf(c))
-  if (shown.length < 2) return null
-  const extra = colors.length - Math.min(shown.length, MAX_SWATCHES)
-  return (
-    <ul
-      aria-label={`${colors.length} colors: ${colors.join(', ')}`}
-      className='mt-1 flex flex-wrap items-center gap-1.5'
-    >
-      {shown.slice(0, MAX_SWATCHES).map(color => (
-        <li
-          key={color}
-          aria-hidden
-          style={{ backgroundColor: swatchOf(color) }}
-          className='group/swatch relative size-4 border-[1.5px] border-black'
-        >
-          {/* Below the swatch so the price stays in view, and from its
-              left edge so it can't spill past the card on the left. */}
-          <SwatchTip className='top-full bottom-auto left-0 mt-1.5 mb-0 translate-x-0'>
-            {color}
-          </SwatchTip>
-        </li>
-      ))}
-      {extra > 0 && (
-        <li aria-hidden className='text-xs font-semibold text-black/60'>
-          +{extra}
-        </li>
-      )}
-    </ul>
   )
 }
 

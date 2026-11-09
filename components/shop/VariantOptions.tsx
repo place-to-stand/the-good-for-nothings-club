@@ -73,31 +73,6 @@ export function useVariantSelection<V extends VariantLike>(variants: V[]) {
 const swatches = (option: OptionGroup) =>
   isColorName(option.name) && option.values.every(v => swatchOf(v))
 
-/**
- * The color's name in a black label above a swatch, on mouse hover or
- * keyboard focus. Touch screens skip it; the name shows elsewhere.
- * Put it inside an element with the group/swatch class.
- */
-export function SwatchTip({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        'pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 bg-black px-2 py-1 text-xs font-bold tracking-[0.06em] whitespace-nowrap text-white uppercase opacity-0 transition-opacity duration-150 group-focus-visible/swatch:opacity-100 pointer-fine:group-hover/swatch:opacity-100',
-        className
-      )}
-    >
-      {children}
-    </span>
-  )
-}
-
 /** A row of square buttons per option, as on the product page. */
 export function OptionPicker({
   options,
@@ -112,12 +87,17 @@ export function OptionPicker({
   isAvailable: (name: string, value: string) => boolean
   className?: string
 }) {
+  // The swatch under the mouse or keyboard focus: its name shows in the
+  // label in place of the picked one.
+  const [peek, setPeek] = useState<{ name: string; value: string } | null>(null)
   return options.map(option => (
     <fieldset key={option.name} className={className}>
       <legend className='text-sm font-bold tracking-[0.06em] uppercase'>
         {option.name}
         <span className='ml-2 font-normal normal-case'>
-          {selection[option.name]}
+          {peek?.name === option.name
+            ? `${peek.value}${isAvailable(option.name, peek.value) ? '' : ' (sold out)'}`
+            : selection[option.name]}
         </span>
       </legend>
       <div className='mt-2 flex flex-wrap gap-2'>
@@ -132,18 +112,26 @@ export function OptionPicker({
                 aria-pressed={selected}
                 aria-label={available ? value : `${value}, sold out`}
                 onClick={() => choose(option.name, value)}
+                onPointerEnter={e =>
+                  e.pointerType === 'mouse' &&
+                  setPeek({ name: option.name, value })
+                }
+                onPointerLeave={() => setPeek(null)}
+                onFocus={e =>
+                  e.target.matches(':focus-visible') &&
+                  setPeek({ name: option.name, value })
+                }
+                onBlur={() => setPeek(null)}
                 style={{ backgroundColor: swatchOf(value) }}
                 className={cn(
-                  'group/swatch relative size-11 cursor-pointer border-2 border-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black focus-visible:outline-dashed',
+                  'relative size-11 cursor-pointer border-2 border-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black focus-visible:outline-dashed',
                   selected &&
                     'outline-2 outline-offset-2 outline-black outline-solid',
                   // Sold out: a slash corner to corner.
                   !available &&
                     'after:absolute after:inset-0 after:bg-[linear-gradient(to_top_right,transparent_calc(50%-1.5px),black_calc(50%-1.5px),black_calc(50%+1.5px),transparent_calc(50%+1.5px))]'
                 )}
-              >
-                <SwatchTip>{value}</SwatchTip>
-              </button>
+              />
             )
           return (
             <button

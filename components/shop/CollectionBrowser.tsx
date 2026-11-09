@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/fieldStyles'
 import { shopCopy } from '@/data/shop'
 import { deriveFilters, matches, mergeFilters } from '@/lib/shopify/filters'
+import { isColorName, isLight, swatchOf } from '@/lib/shopify/swatches'
 import type { ProductCard, ShopFilter } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
 
@@ -361,20 +362,21 @@ function FilterPanel({
                   {/* Box and count line up with the first line when a long
                       name wraps. */}
                   <label className='grid cursor-pointer grid-cols-[auto_1fr_auto] items-start gap-x-2 text-sm leading-snug'>
-                    <input
-                      type='checkbox'
+                    <ColorCheckbox
+                      color={
+                        isColorName(g.label) ? swatchOf(v.label) : undefined
+                      }
                       checked={picked.includes(v.key)}
-                      onChange={e =>
+                      onChange={checked =>
                         update({
                           picked: {
                             ...state.picked,
-                            [g.id]: e.target.checked
+                            [g.id]: checked
                               ? [...picked, v.key]
                               : picked.filter(k => k !== v.key),
                           },
                         })
                       }
-                      className={cn(checkboxClassName, 'mt-0.5')}
                     />
                     <span>{v.label}</span>
                     <span className='text-black/50'>({v.count})</span>
@@ -386,6 +388,54 @@ function FilterPanel({
         )
       })}
     </div>
+  )
+}
+
+/**
+ * A filter checkbox. For a color with a swatch, the box is filled with
+ * that color and a check mark shows on top when ticked.
+ */
+function ColorCheckbox({
+  color,
+  checked,
+  onChange,
+}: {
+  color?: string
+  checked: boolean
+  onChange: (checked: boolean) => void
+}) {
+  const input = (
+    <input
+      type='checkbox'
+      checked={checked}
+      onChange={e => onChange(e.target.checked)}
+      className={cn(color ? 'peer sr-only' : checkboxClassName, 'mt-0.5')}
+    />
+  )
+  if (!color) return input
+  return (
+    <span className='mt-0.5 grid'>
+      {input}
+      <span
+        aria-hidden
+        style={{ backgroundColor: color }}
+        className={cn(
+          'grid size-4 place-items-center border-2 border-black peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-black',
+          isLight(color) ? 'text-black' : 'text-white'
+        )}
+      >
+        {checked && (
+          <svg viewBox='0 0 12 12' className='size-2.5'>
+            <path
+              d='M1.5 6.5l3 3 6-7'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2.4'
+            />
+          </svg>
+        )}
+      </span>
+    </span>
   )
 }
 

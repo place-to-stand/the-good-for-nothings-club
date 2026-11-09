@@ -145,6 +145,8 @@ const products = [
     type: 'T-Shirt',
     price: '29.0',
     sizes: ['S', 'M', 'L'],
+    colors: ['Black', 'True Navy', 'Pepper', 'Denim'],
+    soldOut: ['Denim / S', 'Denim / M', 'Denim / L'],
     pics: ['photo-studio', 'permanent-desk'],
   }),
   product({
@@ -159,6 +161,7 @@ const products = [
     title: 'GFNC Block Letters Dad Hat - Light',
     type: 'Hat',
     price: '25.0',
+    colors: ['Stone', 'Pink', 'Light Blue', 'White'],
     pics: ['permanent-desk'],
   }),
   product({

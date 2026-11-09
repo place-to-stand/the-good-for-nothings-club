@@ -354,7 +354,7 @@ function FilterPanel({
           <Group key={g.id} label={g.label} count={picked.length}>
             <ShowMore
               items={values}
-              // Keep ticked values in view when the list is cut short.
+              // Start open when a ticked value sits past the cut.
               keep={v => picked.includes(v.key)}
               render={v => (
                 <li key={v.key}>
@@ -422,7 +422,8 @@ const SHOW = 5
 
 /**
  * The first few values, then a "Show N more" link that slides the rest
- * open. Ticked values always stay in view.
+ * open. Values never change places: if one past the cut is ticked when
+ * the page loads, the list starts open so it's in view.
  */
 function ShowMore<T>({
   items,
@@ -433,12 +434,14 @@ function ShowMore<T>({
   keep: (item: T) => boolean
   render: (item: T) => React.ReactNode
 }) {
-  const [all, setAll] = useState(false)
+  const [all, setAll] = useState(() =>
+    items.some((item, i) => i >= SHOW && keep(item))
+  )
   if (items.length <= SHOW + 1)
     return <ul className='space-y-2'>{items.map(render)}</ul>
 
-  const first = items.filter((item, i) => i < SHOW || keep(item))
-  const rest = items.filter(item => !first.includes(item))
+  const first = items.slice(0, SHOW)
+  const rest = items.slice(SHOW)
   return (
     <>
       <ul className='space-y-2'>{first.map(render)}</ul>
@@ -454,16 +457,14 @@ function ShowMore<T>({
           <ul className='space-y-2 pt-2'>{rest.map(render)}</ul>
         </div>
       </div>
-      {rest.length > 0 && (
-        <button
-          type='button'
-          onClick={() => setAll(a => !a)}
-          aria-expanded={all}
-          className='link-line mt-2 cursor-pointer text-sm font-bold'
-        >
-          {all ? 'Show less' : `Show ${rest.length} more`}
-        </button>
-      )}
+      <button
+        type='button'
+        onClick={() => setAll(a => !a)}
+        aria-expanded={all}
+        className='link-line mt-2 cursor-pointer text-sm font-bold'
+      >
+        {all ? 'Show less' : `Show ${rest.length} more`}
+      </button>
     </>
   )
 }

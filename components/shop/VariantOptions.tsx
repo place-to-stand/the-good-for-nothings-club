@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 
+import { isColorName, swatchOf } from '@/lib/shopify/swatches'
 import type { SelectedOption } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
 
@@ -68,6 +69,10 @@ export function useVariantSelection<V extends VariantLike>(variants: V[]) {
   return { selection, setSelection, variant, choose, isAvailable }
 }
 
+/** Colors show as swatches when every value has one. */
+const swatches = (option: OptionGroup) =>
+  isColorName(option.name) && option.values.every(v => swatchOf(v))
+
 /** A row of square buttons per option, as on the product page. */
 export function OptionPicker({
   options,
@@ -82,18 +87,52 @@ export function OptionPicker({
   isAvailable: (name: string, value: string) => boolean
   className?: string
 }) {
+  // The swatch under the mouse or keyboard focus: its name shows in the
+  // label in place of the picked one.
+  const [peek, setPeek] = useState<{ name: string; value: string } | null>(null)
   return options.map(option => (
     <fieldset key={option.name} className={className}>
       <legend className='text-sm font-bold tracking-[0.06em] uppercase'>
         {option.name}
         <span className='ml-2 font-normal normal-case'>
-          {selection[option.name]}
+          {peek?.name === option.name
+            ? `${peek.value}${isAvailable(option.name, peek.value) ? '' : ' (sold out)'}`
+            : selection[option.name]}
         </span>
       </legend>
       <div className='mt-2 flex flex-wrap gap-2'>
         {option.values.map(value => {
           const selected = selection[option.name] === value
           const available = isAvailable(option.name, value)
+          if (swatches(option))
+            return (
+              <button
+                key={value}
+                type='button'
+                aria-pressed={selected}
+                aria-label={available ? value : `${value}, sold out`}
+                onClick={() => choose(option.name, value)}
+                onPointerEnter={e =>
+                  e.pointerType === 'mouse' &&
+                  setPeek({ name: option.name, value })
+                }
+                onPointerLeave={() => setPeek(null)}
+                onFocus={e =>
+                  e.target.matches(':focus-visible') &&
+                  setPeek({ name: option.name, value })
+                }
+                onBlur={() => setPeek(null)}
+                style={{ backgroundColor: swatchOf(value) }}
+                className={cn(
+                  'relative size-11 cursor-pointer border-2 border-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black focus-visible:outline-dashed',
+                  selected &&
+                    'outline-2 outline-offset-2 outline-black outline-solid',
+                  // Sold out: a slash corner to corner.
+                  !available &&
+                    'after:absolute after:inset-0 after:bg-[linear-gradient(to_top_right,transparent_calc(50%-1.5px),black_calc(50%-1.5px),black_calc(50%+1.5px),transparent_calc(50%+1.5px))]'
+                )}
+              />
+            )
           return (
             <button
               key={value}

@@ -5,6 +5,7 @@ import { compareAtLabel, priceLabel, shopPaths } from '@/lib/shopify/format'
 import type { ProductCard as ProductCardData } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
 
+import CardSwatches from './CardSwatches'
 import QuickAdd from './QuickAdd'
 
 /** A product tile: image (second image on hover), title, price. */
@@ -73,6 +74,7 @@ export default function ProductCard({
               <s className='ml-2 font-normal text-black/50'>{compareAt}</s>
             )}
           </p>
+          <CardSwatches product={product} />
         </div>
       </Link>
       {/* Same box as the photo, so the + lands in its bottom-right corner. */}

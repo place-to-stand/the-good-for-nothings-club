@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/fieldStyles'
 import { shopCopy } from '@/data/shop'
 import { deriveFilters, matches, mergeFilters } from '@/lib/shopify/filters'
+import { isColorName, isLight, swatchOf } from '@/lib/shopify/swatches'
 import type { ProductCard, ShopFilter } from '@/lib/shopify/types'
 import { cn } from '@/lib/utils'
 
@@ -354,27 +355,28 @@ function FilterPanel({
           <Group key={g.id} label={g.label} count={picked.length}>
             <ShowMore
               items={values}
-              // Keep ticked values in view when the list is cut short.
+              // Start open when a ticked value sits past the cut.
               keep={v => picked.includes(v.key)}
               render={v => (
                 <li key={v.key}>
                   {/* Box and count line up with the first line when a long
                       name wraps. */}
                   <label className='grid cursor-pointer grid-cols-[auto_1fr_auto] items-start gap-x-2 text-sm leading-snug'>
-                    <input
-                      type='checkbox'
+                    <ColorCheckbox
+                      color={
+                        isColorName(g.label) ? swatchOf(v.label) : undefined
+                      }
                       checked={picked.includes(v.key)}
-                      onChange={e =>
+                      onChange={checked =>
                         update({
                           picked: {
                             ...state.picked,
-                            [g.id]: e.target.checked
+                            [g.id]: checked
                               ? [...picked, v.key]
                               : picked.filter(k => k !== v.key),
                           },
                         })
                       }
-                      className={cn(checkboxClassName, 'mt-0.5')}
                     />
                     <span>{v.label}</span>
                     <span className='text-black/50'>({v.count})</span>
@@ -386,6 +388,54 @@ function FilterPanel({
         )
       })}
     </div>
+  )
+}
+
+/**
+ * A filter checkbox. For a color with a swatch, the box is filled with
+ * that color and a check mark shows on top when ticked.
+ */
+function ColorCheckbox({
+  color,
+  checked,
+  onChange,
+}: {
+  color?: string
+  checked: boolean
+  onChange: (checked: boolean) => void
+}) {
+  const input = (
+    <input
+      type='checkbox'
+      checked={checked}
+      onChange={e => onChange(e.target.checked)}
+      className={cn(color ? 'peer sr-only' : checkboxClassName, 'mt-0.5')}
+    />
+  )
+  if (!color) return input
+  return (
+    <span className='mt-0.5 grid'>
+      {input}
+      <span
+        aria-hidden
+        style={{ backgroundColor: color }}
+        className={cn(
+          'grid size-4 place-items-center border-2 border-black peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-black',
+          isLight(color) ? 'text-black' : 'text-white'
+        )}
+      >
+        {checked && (
+          <svg viewBox='0 0 12 12' className='size-2.5'>
+            <path
+              d='M1.5 6.5l3 3 6-7'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2.4'
+            />
+          </svg>
+        )}
+      </span>
+    </span>
   )
 }
 
@@ -422,7 +472,8 @@ const SHOW = 5
 
 /**
  * The first few values, then a "Show N more" link that slides the rest
- * open. Ticked values always stay in view.
+ * open. Values never change places: if one past the cut is ticked when
+ * the page loads, the list starts open so it's in view.
  */
 function ShowMore<T>({
   items,
@@ -433,12 +484,14 @@ function ShowMore<T>({
   keep: (item: T) => boolean
   render: (item: T) => React.ReactNode
 }) {
-  const [all, setAll] = useState(false)
+  const [all, setAll] = useState(() =>
+    items.some((item, i) => i >= SHOW && keep(item))
+  )
   if (items.length <= SHOW + 1)
     return <ul className='space-y-2'>{items.map(render)}</ul>
 
-  const first = items.filter((item, i) => i < SHOW || keep(item))
-  const rest = items.filter(item => !first.includes(item))
+  const first = items.slice(0, SHOW)
+  const rest = items.slice(SHOW)
   return (
     <>
       <ul className='space-y-2'>{first.map(render)}</ul>
@@ -454,16 +507,14 @@ function ShowMore<T>({
           <ul className='space-y-2 pt-2'>{rest.map(render)}</ul>
         </div>
       </div>
-      {rest.length > 0 && (
-        <button
-          type='button'
-          onClick={() => setAll(a => !a)}
-          aria-expanded={all}
-          className='link-line mt-2 cursor-pointer text-sm font-bold'
-        >
-          {all ? 'Show less' : `Show ${rest.length} more`}
-        </button>
-      )}
+      <button
+        type='button'
+        onClick={() => setAll(a => !a)}
+        aria-expanded={all}
+        className='link-line mt-2 cursor-pointer text-sm font-bold'
+      >
+        {all ? 'Show less' : `Show ${rest.length} more`}
+      </button>
     </>
   )
 }
